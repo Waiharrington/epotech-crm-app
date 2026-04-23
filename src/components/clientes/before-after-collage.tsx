@@ -2,17 +2,25 @@
 
 import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Camera, Download, RotateCcw, ImageIcon, Plus, Check, Loader2 } from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Download, RotateCcw, ImageIcon, Plus, Check, Loader2, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+
+interface Photo {
+  id: string
+  url_foto: string
+  etiqueta: string
+}
 
 interface BeforeAfterCollageProps {
   clientId: string
+  existingPhotos?: Photo[]
 }
 
-export function BeforeAfterCollage({ clientId }: BeforeAfterCollageProps) {
+export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfterCollageProps) {
   const [beforeImage, setBeforeImage] = useState<string | null>(null)
   const [afterImage, setAfterImage] = useState<string | null>(null)
+  const [showPicker, setShowPicker] = useState<'before' | 'after' | null>(null)
   const [generating, setGenerating] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -95,7 +103,7 @@ export function BeforeAfterCollage({ clientId }: BeforeAfterCollageProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
       <div className="grid gap-6 md:grid-cols-2">
         {/* Before Slot */}
         <div className="space-y-3">
@@ -116,13 +124,15 @@ export function BeforeAfterCollage({ clientId }: BeforeAfterCollageProps) {
                     </div>
                 </>
             ) : (
-                <label className="flex flex-col items-center cursor-pointer">
+                <div 
+                  className="flex flex-col items-center cursor-pointer p-4 w-full h-full justify-center"
+                  onClick={() => setShowPicker('before')}
+                >
                     <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-2">
                         <Plus className="h-6 w-6 text-muted-foreground" />
                     </div>
-                    <span className="text-xs font-semibold">Subir Foto Antes</span>
-                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, 'before')} />
-                </label>
+                    <span className="text-xs font-semibold">Elegir de Galería</span>
+                </div>
             )}
           </div>
         </div>
@@ -146,17 +156,58 @@ export function BeforeAfterCollage({ clientId }: BeforeAfterCollageProps) {
                     </div>
                 </>
             ) : (
-                <label className="flex flex-col items-center cursor-pointer">
+                <div 
+                   className="flex flex-col items-center cursor-pointer p-4 w-full h-full justify-center"
+                   onClick={() => setShowPicker('after')}
+                >
                     <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-2">
                         <Plus className="h-6 w-6 text-muted-foreground" />
                     </div>
-                    <span className="text-xs font-semibold">Subir Foto Después</span>
-                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e, 'after')} />
-                </label>
+                    <span className="text-xs font-semibold">Elegir de Galería</span>
+                </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Picker Modal */}
+      {showPicker && (
+        <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+           <Card className="w-full max-w-2xl bg-background max-h-[80vh] flex flex-col">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Selecciona una foto</CardTitle>
+                  <CardDescription>Elige de las fotos que has subido para este cliente.</CardDescription>
+                </div>
+                <Button variant="ghost" size="icon" onClick={() => setShowPicker(null)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </CardHeader>
+              <CardContent className="overflow-y-auto grid grid-cols-3 gap-2 pb-6">
+                 {existingPhotos.length > 0 ? existingPhotos.map(photo => (
+                   <div 
+                    key={photo.id} 
+                    className="aspect-square rounded-lg overflow-hidden border cursor-pointer hover:border-primary transition-all relative group"
+                    onClick={() => {
+                      if (showPicker === 'before') setBeforeImage(photo.url_foto)
+                      else setAfterImage(photo.url_foto)
+                      setShowPicker(null)
+                    }}
+                   >
+                     <img src={photo.url_foto} className="w-full h-full object-cover" />
+                     <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <Check className="text-white h-8 w-8" />
+                     </div>
+                   </div>
+                 )) : (
+                   <div className="col-span-3 py-10 text-center text-muted-foreground italic">
+                     No hay fotos en la galería para seleccionar.
+                   </div>
+                 )}
+              </CardContent>
+           </Card>
+        </div>
+      )}
 
       <div className="flex flex-col items-center gap-4 py-6 border-t">
         <Button 

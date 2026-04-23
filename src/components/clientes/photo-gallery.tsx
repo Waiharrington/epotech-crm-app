@@ -118,7 +118,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
           </Button>
           <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Modo Creador de Collage</Badge>
         </div>
-        <BeforeAfterCollage clientId={clientId} />
+        <BeforeAfterCollage clientId={clientId} existingPhotos={photos} />
       </div>
     )
   }

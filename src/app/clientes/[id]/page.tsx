@@ -23,6 +23,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import Link from 'next/link'
 import { BeforeAfterCollage } from '@/components/clientes/before-after-collage'
+import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 
 type Cliente = Database['public']['Tables']['clientes']['Row']
 
@@ -33,9 +34,18 @@ export default function ClienteProfilePage() {
   const supabase = createClient()
   const [cliente, setCliente] = useState<Cliente | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showNewJobWizard, setShowNewJobWizard] = useState(false)
 
   useEffect(() => {
     fetchCliente()
+    
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search)
+      if (urlParams.get('action') === 'agendar') {
+        setShowNewJobWizard(true)
+        window.history.replaceState({}, '', `/clientes/${id}`)
+      }
+    }
   }, [id])
 
   const fetchCliente = async () => {
@@ -99,10 +109,10 @@ export default function ClienteProfilePage() {
             </div>
             
             <div className="flex gap-2">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => alert("Función de edición de perfil en desarrollo")}>
                 <Edit className="mr-2 h-4 w-4" /> Editar
               </Button>
-              <Button size="sm">
+              <Button size="sm" onClick={() => setShowNewJobWizard(true)}>
                 <Plus className="mr-2 h-4 w-4" /> Nuevo Servicio
               </Button>
             </div>
@@ -275,6 +285,17 @@ export default function ClienteProfilePage() {
           </TabsContent>
         </Tabs>
       </main>
+
+      {showNewJobWizard && (
+        <NewJobWizard 
+          initialClientId={id}
+          onClose={() => setShowNewJobWizard(false)}
+          onSuccess={() => {
+            setShowNewJobWizard(false)
+            alert('¡Servicio agendado exitosamente!')
+          }} 
+        />
+      )}
     </div>
   )
 }

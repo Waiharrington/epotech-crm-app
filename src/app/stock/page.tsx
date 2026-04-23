@@ -68,7 +68,7 @@ export default function StockPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    const { error } = await supabase.from('stock').insert([formData])
+    const { error } = await supabase.from('stock').insert([formData as any])
     if (!error) {
       setShowAddModal(false)
       fetchStock()

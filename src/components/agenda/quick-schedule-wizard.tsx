@@ -70,7 +70,7 @@ export function QuickScheduleWizard({ onClose, onSuccess }: QuickScheduleWizardP
         estado: 'proximo',
         prioridad: 'estandar',
         precio_acordado: serviceData?.precio_venta || 0
-      })
+      } as any)
 
     setLoading(false)
     if (!error) {

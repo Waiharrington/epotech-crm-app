@@ -83,7 +83,7 @@ export function NewQuoteWizard({ onClose, onSuccess }: NewQuoteWizardProps) {
         monto_descuento: descuento,
         monto_total: total,
         estado: 'pendiente'
-      })
+      } as any)
       .select()
 
     setLoading(false)

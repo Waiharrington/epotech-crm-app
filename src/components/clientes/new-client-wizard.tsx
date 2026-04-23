@@ -66,7 +66,7 @@ export function NewClientWizard({ onClose, onSuccess }: NewClientWizardProps) {
     setLoading(true)
     const { data, error } = await supabase
       .from('clientes')
-      .insert([formData as ClienteInsert])
+      .insert([formData as any])
       .select()
 
     setLoading(false)

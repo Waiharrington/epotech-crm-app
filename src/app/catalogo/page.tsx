@@ -62,7 +62,7 @@ export default function CatalogoPage() {
     if (editingService) {
       const { error } = await supabase
         .from('catalogo_servicios')
-        .update(formData)
+        .update(formData as any)
         .eq('id', editingService.id)
       
       if (!error) {
@@ -72,7 +72,7 @@ export default function CatalogoPage() {
     } else {
       const { error } = await supabase
         .from('catalogo_servicios')
-        .insert([formData])
+        .insert([formData as any])
       
       if (!error) {
         setShowModal(false)

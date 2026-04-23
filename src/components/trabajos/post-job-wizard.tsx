@@ -64,7 +64,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
         presion_agua: presionAgua,
         quimicos_aplicados: quimicos,
         completado_at: new Date().toISOString()
-      })
+      } as any)
       .eq('id', job.id)
 
     if (jobError) {
@@ -81,7 +81,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
       trabajo_id: job.id,
       notas: `Servicio ${job.catalogo_servicios?.nombre || ''} - ${job.clientes.nombre}`,
       es_automatico: true
-    })
+    } as any)
 
     // 3. Stock discount (Simulated for now)
     // In a real app, we would loop through materials and update stock levels

@@ -85,7 +85,7 @@ export function NewJobWizard({ onClose, onSuccess, initialClientId }: NewJobWiza
     setLoading(true)
     const { error } = await supabase
       .from('trabajos')
-      .insert([formData as TrabajoInsert])
+      .insert([formData as any])
     
     setLoading(false)
     if (!error) {

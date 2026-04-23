@@ -22,7 +22,7 @@ import {
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import Link from 'next/link'
-import { BeforeAfterCollage } from '@/components/clientes/before-after-collage'
+import { PhotoGallery } from '@/components/clientes/photo-gallery'
 import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 
 type Cliente = Database['public']['Tables']['clientes']['Row']
@@ -249,7 +249,7 @@ export default function ClienteProfilePage() {
                     </div>
                 </div>
                 
-                <BeforeAfterCollage clientId={id} />
+                <PhotoGallery clientId={id} />
                 
                 <div className="mt-8 pt-8 border-t">
                     <h4 className="text-sm font-bold uppercase text-muted-foreground mb-4">Fotos Individuales</h4>

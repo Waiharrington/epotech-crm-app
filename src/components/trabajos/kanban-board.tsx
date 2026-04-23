@@ -101,9 +101,9 @@ export function KanbanBoard({ trabajos, onRefresh }: KanbanBoardProps) {
       }
 
       // Update in DB
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('trabajos')
-        .update({ estado: newStatus as any })
+        .update({ estado: newStatus })
         .eq('id', activeId)
       
       if (!error) {

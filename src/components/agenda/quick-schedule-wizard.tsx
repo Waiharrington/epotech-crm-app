@@ -60,7 +60,7 @@ export function QuickScheduleWizard({ onClose, onSuccess }: QuickScheduleWizardP
 
     const serviceData = services.find(s => s.id === selectedService)
     
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('trabajos')
       .insert({
         cliente_id: selectedClient.id,
@@ -70,7 +70,7 @@ export function QuickScheduleWizard({ onClose, onSuccess }: QuickScheduleWizardP
         estado: 'proximo',
         prioridad: 'estandar',
         precio_acordado: serviceData?.precio_venta || 0
-      } as any)
+      })
 
     setLoading(false)
     if (!error) {

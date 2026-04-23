@@ -54,7 +54,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
     setLoading(true)
     
     // 1. Update Job status and details
-    const { error: jobError } = await supabase
+    const { error: jobError } = await (supabase as any)
       .from('trabajos')
       .update({
         estado: 'completado',
@@ -64,7 +64,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
         presion_agua: presionAgua,
         quimicos_aplicados: quimicos,
         completado_at: new Date().toISOString()
-      } as any)
+      })
       .eq('id', job.id)
 
     if (jobError) {
@@ -74,14 +74,14 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
     }
 
     // 2. Automatic Caja entry (Income)
-    await supabase.from('caja').insert({
+    await (supabase as any).from('caja').insert({
       tipo: 'ingreso',
       monto: precioCobrado,
       categoria: 'servicio_completado',
       trabajo_id: job.id,
       notas: `Servicio ${job.catalogo_servicios?.nombre || ''} - ${job.clientes.nombre}`,
       es_automatico: true
-    } as any)
+    })
 
     // 3. Stock discount (Simulated for now)
     // In a real app, we would loop through materials and update stock levels

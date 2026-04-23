@@ -29,9 +29,7 @@ const QuotePDFDownload = dynamic(() => import('@/components/presupuestos/quote-p
 })
 
 // Using "presupuestos" internally as per SQL schema
-type Presupuesto = Database['public']['Tables']['presupuestos']['Row'] & {
-  clientes: { nombre: string; apellido: string }
-}
+type Presupuesto = any
 
 export default function CotizacionesPage() {
   const supabase = createClient()

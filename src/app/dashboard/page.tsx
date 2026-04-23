@@ -45,7 +45,7 @@ export default function DashboardPage() {
     const { count: stockCount } = await supabase.from('stock').select('*', { count: 'exact', head: true })
 
     // Calculate monthly income (mock for now or sum up)
-    const totalIncome = incomeData?.reduce((acc, curr) => acc + curr.monto, 0) || 0
+    const totalIncome = incomeData?.reduce((acc, curr: any) => acc + curr.monto, 0) || 0
 
     setStats({
       totalClients: clientsCount || 0,

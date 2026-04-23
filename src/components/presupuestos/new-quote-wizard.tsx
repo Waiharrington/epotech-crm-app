@@ -74,7 +74,7 @@ export function NewQuoteWizard({ onClose, onSuccess }: NewQuoteWizardProps) {
     if (!selectedClient) return
     setLoading(true)
     
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('presupuestos')
       .insert({
         cliente_id: selectedClient.id,
@@ -83,7 +83,7 @@ export function NewQuoteWizard({ onClose, onSuccess }: NewQuoteWizardProps) {
         monto_descuento: descuento,
         monto_total: total,
         estado: 'pendiente'
-      } as any)
+      })
       .select()
 
     setLoading(false)

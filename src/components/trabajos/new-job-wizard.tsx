@@ -83,9 +83,9 @@ export function NewJobWizard({ onClose, onSuccess, initialClientId }: NewJobWiza
 
   const handleSave = async () => {
     setLoading(true)
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('trabajos')
-      .insert([formData as any])
+      .insert([formData])
     
     setLoading(false)
     if (!error) {
@@ -196,7 +196,7 @@ export function NewJobWizard({ onClose, onSuccess, initialClientId }: NewJobWiza
                     id="precio" 
                     type="number" 
                     className="text-2xl h-14 font-bold"
-                    value={formData.precio_acordado} 
+                    value={formData.precio_acordado || ''} 
                     onChange={e => setFormData(prev => ({ ...prev, precio_acordado: parseFloat(e.target.value) || 0 }))}
                   />
                </div>

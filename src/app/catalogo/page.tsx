@@ -60,9 +60,9 @@ export default function CatalogoPage() {
     setLoading(true)
     
     if (editingService) {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('catalogo_servicios')
-        .update(formData as any)
+        .update(formData)
         .eq('id', editingService.id)
       
       if (!error) {
@@ -70,9 +70,9 @@ export default function CatalogoPage() {
         fetchServicios()
       }
     } else {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('catalogo_servicios')
-        .insert([formData as any])
+        .insert([formData])
       
       if (!error) {
         setShowModal(false)

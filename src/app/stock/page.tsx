@@ -35,6 +35,13 @@ import {
   DialogTrigger 
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 type StockItem = Database['public']['Tables']['stock']['Row']
 
@@ -68,7 +75,7 @@ export default function StockPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    const { error } = await supabase.from('stock').insert([formData as any])
+    const { error } = await (supabase as any).from('stock').insert([formData])
     if (!error) {
       setShowAddModal(false)
       fetchStock()

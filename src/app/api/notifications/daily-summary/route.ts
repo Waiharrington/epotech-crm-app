@@ -41,7 +41,7 @@ export async function GET(request: Request) {
   }
 
   // 2. Prepare summary message
-  const jobsSummary = jobs.map(j => `- ${j.catalogo_servicios?.nombre} para ${j.clientes.nombre}`).join('\n')
+  const jobsSummary = jobs.map((j: any) => `- ${j.catalogo_servicios?.nombre} para ${j.clientes?.nombre}`).join('\n')
   const payload = JSON.stringify({
     title: 'Agenda del Día - Epotech',
     body: `Hoy tienes ${jobs.length} servicios programados:\n${jobsSummary}`,

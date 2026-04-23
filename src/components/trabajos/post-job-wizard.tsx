@@ -14,7 +14,14 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Check, Camera, Package, DollarSign, Loader2 } from 'lucide-react'
+import { Check, Camera, Package, DollarSign, Loader2, Trash2 } from 'lucide-react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { cn } from '@/lib/utils'
 
 type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
@@ -83,8 +90,17 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
       es_automatico: true
     })
 
-    // 3. Stock discount (Simulated for now)
-    // In a real app, we would loop through materials and update stock levels
+    // 3. Real Stock deduction
+    for (const mat of materials) {
+      const stockItem = availableStock.find(s => s.id === mat.id)
+      if (stockItem) {
+        const newQuantity = (stockItem.cantidad_actual || 0) - mat.cantidad
+        await (supabase as any)
+          .from('stock')
+          .update({ cantidad_actual: Math.max(0, newQuantity) })
+          .eq('id', mat.id)
+      }
+    }
 
     setLoading(false)
     onSuccess()
@@ -152,11 +168,47 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                 <Package className="mr-2 h-4 w-4 text-primary" />
                 Materiales Utilizados (Stock)
               </Label>
-              <div className="bg-muted/30 rounded-lg p-4 border border-dashed text-center">
-                <p className="text-xs text-muted-foreground">La gestión de stock se restará automáticamente del inventario.</p>
-                <Button variant="outline" size="sm" className="mt-2 h-8 text-xs">
-                  + Agregar Material
-                </Button>
+              
+              {materials.length > 0 && (
+                <div className="space-y-2 mb-3">
+                  {materials.map(m => (
+                    <div key={m.id} className="flex items-center justify-between bg-muted/50 p-2 rounded-lg border">
+                      <span className="text-sm font-medium">{m.nombre}</span>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center bg-background border rounded-md px-1">
+                           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
+                              setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: Math.max(1, x.cantidad - 1) } : x))
+                           }}>-</Button>
+                           <span className="text-xs font-bold px-2">{m.cantidad}</span>
+                           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
+                              setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: x.cantidad + 1 } : x))
+                           }}>+</Button>
+                        </div>
+                        <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 gap-2">
+                 <Select onValueChange={(val) => {
+                    const item = availableStock.find(s => s.id === val)
+                    if (item && !materials.find(m => m.id === val)) {
+                      setMaterials([...materials, { id: item.id, nombre: item.nombre, cantidad: 1 }])
+                    }
+                 }}>
+                    <SelectTrigger className="h-9 text-xs">
+                      <SelectValue placeholder="+ Agregar material del inventario" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableStock.filter(s => !materials.find(m => m.id === s.id)).map(s => (
+                        <SelectItem key={s.id} value={s.id}>{s.nombre} ({s.cantidad_actual} {s.unidad_medida})</SelectItem>
+                      ))}
+                    </SelectContent>
+                 </Select>
               </div>
             </div>
 

@@ -49,7 +49,7 @@ export async function GET(request: Request) {
   // Filter out clients who have had a more recent job
   const inactiveClients = []
   
-  for (const job of jobs) {
+  for (const job of jobs as any[]) {
       const { data: recentJobs } = await supabase
         .from('trabajos')
         .select('id')

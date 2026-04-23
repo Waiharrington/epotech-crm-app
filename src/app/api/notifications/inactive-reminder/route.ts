@@ -6,11 +6,13 @@ import webpush from 'web-push'
 const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || ''
 const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY || ''
 
-webpush.setVapidDetails(
-  'mailto:sebastian@epotech.com',
-  VAPID_PUBLIC_KEY,
-  VAPID_PRIVATE_KEY
-)
+if (VAPID_PUBLIC_KEY && VAPID_PRIVATE_KEY) {
+  webpush.setVapidDetails(
+    'mailto:sebastian@epotech.com',
+    VAPID_PUBLIC_KEY,
+    VAPID_PRIVATE_KEY
+  )
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)

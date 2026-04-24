@@ -42,6 +42,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { StockAdjustModal } from '@/components/stock/stock-adjust-modal'
 
 type StockItem = Database['public']['Tables']['stock']['Row']
 
@@ -51,6 +52,11 @@ export default function StockPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [showAddModal, setShowAddModal] = useState(false)
+  const [adjustModal, setAdjustModal] = useState<{ open: boolean, item: StockItem | null, type: 'in' | 'out' }>({
+    open: false,
+    item: null,
+    type: 'in'
+  })
   
   const [formData, setFormData] = useState<Partial<StockItem>>({
     nombre: '',
@@ -180,10 +186,20 @@ export default function StockPage() {
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex items-center justify-end gap-1">
-                                         <Button variant="ghost" size="icon" className="h-8 w-8">
+                                         <Button 
+                                           variant="ghost" 
+                                           size="icon" 
+                                           className="h-8 w-8 hover:bg-green-50"
+                                           onClick={() => setAdjustModal({ open: true, item: item, type: 'in' })}
+                                         >
                                             <ArrowUpRight className="h-4 w-4 text-green-600" />
                                          </Button>
-                                         <Button variant="ghost" size="icon" className="h-8 w-8">
+                                         <Button 
+                                           variant="ghost" 
+                                           size="icon" 
+                                           className="h-8 w-8 hover:bg-red-50"
+                                           onClick={() => setAdjustModal({ open: true, item: item, type: 'out' })}
+                                         >
                                             <ArrowDownRight className="h-4 w-4 text-red-600" />
                                          </Button>
                                          <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -198,6 +214,18 @@ export default function StockPage() {
             </div>
         </div>
       </div>
+
+      {adjustModal.open && adjustModal.item && (
+        <StockAdjustModal 
+           item={adjustModal.item} 
+           type={adjustModal.type} 
+           onClose={() => setAdjustModal({ ...adjustModal, open: false })} 
+           onSuccess={() => {
+               setAdjustModal({ ...adjustModal, open: false })
+               fetchStock()
+           }}
+        />
+      )}
 
       <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
         <DialogContent>

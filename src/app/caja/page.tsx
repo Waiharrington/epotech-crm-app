@@ -29,6 +29,8 @@ import {
   TableRow 
 } from '@/components/ui/table'
 
+import { FinanceModal } from '@/components/caja/finance-modal'
+
 type CajaEntry = Database['public']['Tables']['caja']['Row']
 
 export default function CajaPage() {
@@ -36,6 +38,7 @@ export default function CajaPage() {
   const [entries, setEntries] = useState<CajaEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [showModal, setShowModal] = useState<{ open: boolean, type: 'ingreso' | 'egreso' }>({ open: false, type: 'ingreso' })
 
   useEffect(() => {
     fetchCaja()
@@ -58,7 +61,7 @@ export default function CajaPage() {
   )
 
   return (
-    <div className="flex flex-col h-full bg-background overflow-hidden">
+    <div className="flex flex-col h-full bg-background overflow-hidden relative">
       <header className="p-4 md:p-6 border-b bg-card">
          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between max-w-7xl mx-auto w-full">
           <div>
@@ -66,10 +69,17 @@ export default function CajaPage() {
             <p className="text-muted-foreground text-sm">Control de flujo de caja, ingresos por servicios y gastos.</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="border-red-200 text-red-600 hover:bg-red-50">
+            <Button 
+                variant="outline" 
+                className="border-red-200 text-red-600 hover:bg-red-50"
+                onClick={() => setShowModal({ open: true, type: 'egreso' })}
+            >
               <Minus className="mr-2 h-4 w-4" /> Registrar Gasto
             </Button>
-            <Button className="bg-green-600 hover:bg-green-700">
+            <Button 
+                className="bg-green-600 hover:bg-green-700"
+                onClick={() => setShowModal({ open: true, type: 'ingreso' })}
+            >
               <Plus className="mr-2 h-4 w-4" /> Registrar Ingreso
             </Button>
           </div>
@@ -79,13 +89,16 @@ export default function CajaPage() {
       <div className="p-4 md:p-6 max-w-7xl mx-auto w-full flex-1 flex flex-col gap-6 overflow-hidden">
         {/* Financial Summary */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-primary text-primary-foreground">
+            <Card className="bg-primary text-primary-foreground border-none shadow-lg">
                 <CardContent className="p-6">
                     <div className="flex items-center justify-between font-bold text-sm uppercase tracking-wider opacity-80">
                         <span>Balance General</span>
                         <Wallet className="h-5 w-5" />
                     </div>
                     <p className="text-3xl font-bold mt-4">${balance.toLocaleString()}</p>
+                    <div className="mt-2 text-xs opacity-70 flex items-center">
+                        <TrendingUp className="mr-1 h-3 w-3" /> Neto acumulado
+                    </div>
                 </CardContent>
             </Card>
             <Card>
@@ -125,7 +138,7 @@ export default function CajaPage() {
         </div>
 
         {/* History Table */}
-        <div className="border rounded-xl bg-card overflow-hidden flex-1 flex flex-col">
+        <div className="border rounded-xl bg-card overflow-hidden flex-1 flex flex-col shadow-sm">
             <div className="overflow-auto flex-1">
                 <Table>
                     <TableHeader className="bg-muted/50">
@@ -141,7 +154,7 @@ export default function CajaPage() {
                            <TableRow><TableCell colSpan={4} className="text-center py-10"><Loader2 className="h-6 w-6 animate-spin mx-auto" /></TableCell></TableRow>
                         ) : filteredEntries.length > 0 ? (
                             filteredEntries.map(entry => (
-                                <TableRow key={entry.id}>
+                                <TableRow key={entry.id} className="hover:bg-muted/30 transition-colors">
                                     <TableCell className="w-40">
                                         <div className="flex flex-col">
                                             <span className="font-medium">{new Date(entry.fecha).toLocaleDateString()}</span>
@@ -151,11 +164,11 @@ export default function CajaPage() {
                                     <TableCell>
                                         <div className="flex items-center gap-2">
                                             {entry.tipo === 'ingreso' ? (
-                                                <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center">
+                                                <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center border border-green-200">
                                                     <ArrowUpRight className="h-3 w-3 text-green-600" />
                                                 </div>
                                             ) : (
-                                                <div className="h-6 w-6 rounded-full bg-red-100 flex items-center justify-center">
+                                                <div className="h-6 w-6 rounded-full bg-red-100 flex items-center justify-center border border-red-200">
                                                     <ArrowDownRight className="h-3 w-3 text-red-600" />
                                                 </div>
                                             )}
@@ -187,6 +200,17 @@ export default function CajaPage() {
             </div>
         </div>
       </div>
+
+      {showModal.open && (
+        <FinanceModal 
+            type={showModal.type} 
+            onClose={() => setShowModal({ ...showModal, open: false })} 
+            onSuccess={() => {
+                setShowModal({ ...showModal, open: false })
+                fetchCaja()
+            }}
+        />
+      )}
     </div>
   )
 }

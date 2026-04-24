@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
-import { Plus, Search, FileText, Download, Send, MoreVertical, Trash2, Loader2, User, ExternalLink } from 'lucide-react'
+import { Plus, Search, FileText, Download, Send, MoreVertical, Trash2, Loader2, User, ExternalLink, Check } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { 
@@ -61,9 +61,25 @@ export default function CotizacionesPage() {
     c.id.includes(search)
   )
 
-  const handleDownload = (id: string) => {
-    // PDF generation logic here
-    alert('Generando PDF...')
+  const handleUpdateStatus = async (id: string, newStatus: string) => {
+    const { error } = await (supabase as any)
+      .from('presupuestos')
+      .update({ estado: newStatus })
+      .eq('id', id)
+    
+    if (!error) fetchCotizaciones()
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('¿Seguro que deseas eliminar esta cotización?')) return
+    const { error } = await supabase.from('presupuestos').delete().eq('id', id)
+    if (!error) fetchCotizaciones()
+  }
+
+  const shareOnWhatsApp = (c: any) => {
+    const message = `Hola ${c.clientes.nombre}, adjunto la cotización de Epotech Solution. Total: $${c.monto_total.toLocaleString()}`
+    const url = `https://wa.me/${c.clientes.telefono.replace(/\s+/g, '')}?text=${encodeURIComponent(message)}`
+    window.open(url, '_blank')
   }
 
   return (
@@ -149,17 +165,17 @@ export default function CotizacionesPage() {
                                                         <MoreVertical className="h-4 w-4" />
                                                     </Button>
                                                 </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end">
-                                                    <DropdownMenuItem onClick={() => handleDownload(c.id)}>
-                                                        <Download className="mr-2 h-4 w-4" /> Descargar PDF
+                                                 <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem onClick={() => handleUpdateStatus(c.id, 'aprobado')}>
+                                                       <Check className="mr-2 h-4 w-4 text-green-600" /> Marcar Aprobado
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => shareOnWhatsApp(c)}>
                                                         <Send className="mr-2 h-4 w-4" /> Compartir WhatsApp
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem className="text-destructive">
+                                                    <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(c.id)}>
                                                         <Trash2 className="mr-2 h-4 w-4" /> Eliminar
                                                     </DropdownMenuItem>
-                                                </DropdownMenuContent>
+                                                 </DropdownMenuContent>
                                              </DropdownMenu>
                                         </div>
                                     </TableCell>

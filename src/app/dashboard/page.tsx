@@ -38,23 +38,24 @@ export default function DashboardPage() {
   const fetchDashboardData = async () => {
     setLoading(true)
     
-    // 1. Fetch counts
+    // 1. Fetch counts & Data
     const { count: clientsCount } = await supabase.from('clientes').select('*', { count: 'exact', head: true })
     const { count: jobsCount } = await supabase.from('trabajos').select('*', { count: 'exact', head: true }).neq('estado', 'completado')
     const { data: incomeData } = await supabase.from('caja').select('monto').eq('tipo', 'ingreso')
-    const { count: stockCount } = await supabase.from('stock').select('*', { count: 'exact', head: true })
+    const { data: stockItems } = await supabase.from('stock').select('cantidad_actual, cantidad_minima')
 
-    // Calculate monthly income (mock for now or sum up)
+    // Calculations
     const totalIncome = incomeData?.reduce((acc, curr: any) => acc + curr.monto, 0) || 0
+    const lowStockCount = stockItems?.filter(i => (i.cantidad_actual || 0) <= (i.cantidad_minima || 0)).length || 0
 
     setStats({
       totalClients: clientsCount || 0,
       activeJobs: jobsCount || 0,
       monthlyIncome: totalIncome,
-      lowStock: 0 // Logic to check current vs min would go here
+      lowStock: lowStockCount
     })
 
-    // 2. Fetch recent jobs
+    // 2. Fetch recent upcoming jobs
     const { data: jobs } = await supabase
         .from('trabajos')
         .select(`
@@ -62,6 +63,7 @@ export default function DashboardPage() {
             clientes (nombre, apellido),
             catalogo_servicios (nombre)
         `)
+        .neq('estado', 'completado')
         .order('fecha_servicio', { ascending: true })
         .limit(5)
     

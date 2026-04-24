@@ -6,7 +6,7 @@ import { Database } from '@/types/supabase'
 import { Calendar } from '@/components/ui/calendar'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Clock, User, MapPin, ChevronRight, LayoutList, Calendar as CalendarIcon, Loader2, Plus } from 'lucide-react'
+import { Clock, User, MapPin, ChevronRight, LayoutList, Calendar as CalendarIcon, Loader2, Plus, Send, TrendingUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation'
 import { QuickScheduleWizard } from '@/components/agenda/quick-schedule-wizard'
 
 type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
-  clientes: { nombre: string; apellido: string }
+  clientes: { nombre: string; apellido: string; direccion: string; telefono: string }
   catalogo_servicios: { nombre: string } | null
 }
 
@@ -27,8 +27,11 @@ export default function AgendaPage() {
   const [view, setView] = useState<'calendar' | 'list'>('calendar')
   const [showWizard, setShowWizard] = useState(false)
 
+  const [inactiveClients, setInactiveClients] = useState<any[]>([])
+
   useEffect(() => {
     fetchTrabajos()
+    fetchInactiveClients()
   }, [])
 
   const fetchTrabajos = async () => {
@@ -37,13 +40,51 @@ export default function AgendaPage() {
       .from('trabajos')
       .select(`
         *,
-        clientes (nombre, apellido),
+        clientes (nombre, apellido, direccion, telefono),
         catalogo_servicios (nombre)
       `)
       .order('fecha_servicio', { ascending: true })
     
     if (data) setTrabajos(data as Trabajo[])
     setLoading(false)
+  }
+
+  const fetchInactiveClients = async () => {
+    // Logic: Find clients who haven't had a job in the last 90 days
+    const ninetyDaysAgo = new Date()
+    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90)
+    
+    const { data } = await supabase
+      .from('clientes')
+      .select(`
+        id, nombre, apellido, telefono,
+        trabajos (fecha_servicio)
+      `)
+    
+    if (data) {
+       const inactive = data.filter((c: any) => {
+         if (c.trabajos.length === 0) return true
+         const lastJob = new Date(c.trabajos.sort((a: any, b: any) => new Date(b.fecha_servicio).getTime() - new Date(a.fecha_servicio).getTime())[0].fecha_servicio)
+         return lastJob < ninetyDaysAgo
+       })
+       setInactiveClients(inactive.slice(0, 5)) // Show top 5
+    }
+  }
+
+  const shareDailyRoute = () => {
+    if (jobsForDate.length === 0) return
+    let message = `*Ruta Epotech - ${date?.toLocaleDateString()}*\n\n`
+    jobsForDate.forEach((j, i) => {
+      message += `${i+1}. *${j.clientes.nombre} ${j.clientes.apellido}*\n`
+      message += `   ⏰ ${j.hora_servicio || 'Sin hora'}\n`
+      message += `   🛠️ ${j.catalogo_servicios?.nombre || 'Servicio'}\n`
+      message += `   📍 ${j.clientes.direccion || 'Sin dirección'}\n`
+      if (j.clientes.direccion) {
+        message += `   🗺️ https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(j.clientes.direccion)}\n`
+      }
+      message += `\n`
+    })
+    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank')
   }
 
   const selectedDateStr = date?.toISOString().split('T')[0]
@@ -106,6 +147,37 @@ export default function AgendaPage() {
                             <span className="text-sm font-medium">Trabajos hoy</span>
                             <Badge>{jobsForDate.length}</Badge>
                          </div>
+                    </div>
+                    <div className="mt-6 space-y-4">
+                        <Button className="w-full bg-green-600 hover:bg-green-700" onClick={shareDailyRoute} disabled={jobsForDate.length === 0}>
+                            <Send className="mr-2 h-4 w-4" /> Compartir Ruta WhatsApp
+                        </Button>
+                        
+                        <div className="pt-6 border-t">
+                            <h3 className="text-xs font-bold uppercase text-muted-foreground mb-3 flex items-center">
+                                <TrendingUp className="mr-2 h-3 w-3 text-primary" /> Reactivación (90 días+)
+                            </h3>
+                            <div className="space-y-2">
+                                {inactiveClients.length > 0 ? inactiveClients.map(c => (
+                                    <div key={c.id} className="p-3 bg-muted/30 rounded-lg border border-dashed flex flex-col gap-1">
+                                        <span className="text-xs font-bold">{c.nombre} {c.apellido}</span>
+                                        <Button 
+                                            variant="ghost" 
+                                            size="sm" 
+                                            className="h-6 text-[10px] justify-start p-0 text-primary hover:text-primary hover:bg-transparent"
+                                            onClick={() => {
+                                                const msg = `Hola ${c.nombre}, hace tiempo que no pasamos por tu propiedad...`
+                                                window.open(`https://wa.me/${c.telefono.replace(/\s+/g, '')}?text=${encodeURIComponent(msg)}`, '_blank')
+                                            }}
+                                        >
+                                            <Send className="mr-1 h-3 w-3" /> Recordar servicio
+                                        </Button>
+                                    </div>
+                                )) : (
+                                    <p className="text-[10px] text-muted-foreground italic">Todos tus clientes están al día.</p>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

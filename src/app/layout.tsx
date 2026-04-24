@@ -16,6 +16,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Epotech CRM",
   description: "Sistema de gestión para Epotech Solution",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Epotech CRM",
+  },
 };
 
 export const viewport: Viewport = {

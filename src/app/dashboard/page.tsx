@@ -45,8 +45,8 @@ export default function DashboardPage() {
     const { data: stockItems } = await supabase.from('stock').select('cantidad_actual, cantidad_minima')
 
     // Calculations
-    const totalIncome = incomeData?.reduce((acc, curr: any) => acc + curr.monto, 0) || 0
-    const lowStockCount = stockItems?.filter(i => (i.cantidad_actual || 0) <= (i.cantidad_minima || 0)).length || 0
+    const totalIncome = incomeData?.reduce((acc, curr: any) => acc + (curr.monto || 0), 0) || 0
+    const lowStockCount = (stockItems as any[])?.filter(i => (i.cantidad_actual || 0) <= (i.cantidad_minima || 0)).length || 0
 
     setStats({
       totalClients: clientsCount || 0,

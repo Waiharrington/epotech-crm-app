@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/daily-summary",
+      "schedule": "0 21 * * *"
+    },
+    {
+      "path": "/api/cron/inactive-reminder",
+      "schedule": "0 9 * * 1"
+    }
+  ]
+}

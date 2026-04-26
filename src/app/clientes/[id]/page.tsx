@@ -25,6 +25,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import Link from 'next/link'
 import { PhotoGallery } from '@/components/clientes/photo-gallery'
 import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
+import { EditClientModal } from '@/components/clientes/edit-client-modal'
 import { PostJobWizard } from '@/components/trabajos/post-job-wizard'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 
@@ -38,6 +39,7 @@ export default function ClienteProfilePage() {
   const [cliente, setCliente] = useState<Cliente | null>(null)
   const [loading, setLoading] = useState(true)
   const [showNewJobWizard, setShowNewJobWizard] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
   const [showJobTypeSelector, setShowJobTypeSelector] = useState(false)
   const [showPostJobWizard, setShowPostJobWizard] = useState(false)
   const [completedJobToLog, setCompletedJobToLog] = useState<any>(null)
@@ -116,7 +118,7 @@ export default function ClienteProfilePage() {
             </div>
             
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => alert("Función de edición de perfil en desarrollo")}>
+              <Button variant="outline" size="sm" onClick={() => setShowEditModal(true)}>
                 <Edit className="mr-2 h-4 w-4" /> Editar
               </Button>
               <Button size="sm" onClick={() => setShowJobTypeSelector(true)}>
@@ -366,6 +368,17 @@ export default function ClienteProfilePage() {
             setShowPostJobWizard(false)
             setCompletedJobToLog(null)
             alert('¡Registro completado guardado exitosamente!')
+          }}
+        />
+      )}
+
+      {showEditModal && cliente && (
+        <EditClientModal 
+          cliente={cliente}
+          onClose={() => setShowEditModal(false)}
+          onSuccess={() => {
+            setShowEditModal(false)
+            fetchCliente()
           }}
         />
       )}

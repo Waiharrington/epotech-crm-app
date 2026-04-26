@@ -26,6 +26,10 @@ import { cn } from '@/lib/utils'
 type Cliente = Database['public']['Tables']['clientes']['Row']
 type Servicio = Database['public']['Tables']['catalogo_servicios']['Row']
 type TrabajoInsert = Database['public']['Tables']['trabajos']['Insert']
+type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
+  clientes: { nombre: string; apellido: string }
+  catalogo_servicios: { nombre: string } | null
+}
 
 interface NewJobWizardProps {
   onClose: () => void

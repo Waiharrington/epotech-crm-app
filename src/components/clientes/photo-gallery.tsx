@@ -17,6 +17,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { BeforeAfterCollage } from './before-after-collage'
+import { CameraModal } from './camera-modal'
 
 interface Photo {
   id: string
@@ -36,6 +37,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
   const [uploading, setUploading] = useState(false)
   const [showCollageMode, setShowCollageMode] = useState(false)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [showCamera, setShowCamera] = useState(false)
 
   useEffect(() => {
     fetchPhotos()
@@ -53,8 +55,15 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
     setLoading(false)
   }
 
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+  const handleUpload = async (eventOrFile: React.ChangeEvent<HTMLInputElement> | File) => {
+    let file: File | undefined
+    
+    if (eventOrFile instanceof File) {
+      file = eventOrFile
+    } else {
+      file = eventOrFile.target.files?.[0]
+    }
+
     if (!file) return
 
     setUploading(true)
@@ -128,14 +137,14 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
       {/* Action Bar */}
       <div className="flex flex-wrap gap-3 justify-between items-center">
         <div className="flex gap-2">
-            <label className={cn(
-              "flex items-center justify-center p-3 rounded-xl bg-primary text-primary-foreground font-bold cursor-pointer hover:bg-primary/90 transition-all",
-              uploading && "opacity-50 pointer-events-none"
-            )}>
+            <Button 
+              onClick={() => setShowCamera(true)}
+              className="rounded-xl h-12 px-4 bg-primary text-primary-foreground font-bold hover:bg-primary/90"
+              disabled={uploading}
+            >
               {uploading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Camera className="mr-2 h-5 w-5" />}
               Tomar Foto
-              <input type="file" accept="image/*" capture="environment" className="hidden" onChange={handleUpload} />
-            </label>
+            </Button>
             
             <label className={cn(
               "flex items-center justify-center p-3 rounded-xl bg-secondary text-secondary-foreground font-bold cursor-pointer hover:bg-secondary/80 transition-all",
@@ -209,6 +218,16 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
            </Button>
            <img src={selectedImage} alt="Preview" className="max-w-full max-h-[90vh] rounded-lg shadow-2xl object-contain animate-in zoom-in-95 duration-300" />
         </div>
+      )}
+
+      {showCamera && (
+        <CameraModal 
+          onClose={() => setShowCamera(false)}
+          onCapture={(file) => {
+            setShowCamera(false)
+            handleUpload(file)
+          }}
+        />
       )}
     </div>
   )

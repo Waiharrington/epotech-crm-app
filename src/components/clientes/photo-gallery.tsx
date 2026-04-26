@@ -36,7 +36,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [showCollageMode, setShowCollageMode] = useState(false)
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null)
   const [showAddModal, setShowAddModal] = useState(false)
 
   useEffect(() => {
@@ -162,7 +162,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
                 src={photo.url_foto} 
                 alt="Trabajo" 
                 className="w-full h-full object-cover cursor-pointer"
-                onClick={() => setSelectedImage(photo.url_foto)}
+                onClick={() => setSelectedPhoto(photo)}
               />
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <Button 
@@ -194,13 +194,66 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
         </div>
       )}
 
-      {/* Image Modal Preview */}
-      {selectedImage && (
-        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4" onClick={() => setSelectedImage(null)}>
-           <Button variant="ghost" className="absolute top-4 right-4 text-white hover:bg-white/10" onClick={() => setSelectedImage(null)}>
+      {/* Image Modal Preview with Metadata */}
+      {selectedPhoto && (
+        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col md:flex-row items-stretch animate-in fade-in duration-300">
+           <Button 
+              variant="ghost" 
+              className="absolute top-4 right-4 text-white hover:bg-white/10 z-50" 
+              onClick={() => setSelectedPhoto(null)}
+           >
               <X className="h-6 w-6" />
            </Button>
-           <img src={selectedImage} alt="Preview" className="max-w-full max-h-[90vh] rounded-lg shadow-2xl object-contain animate-in zoom-in-95 duration-300" />
+
+           {/* Image Container */}
+           <div className="flex-1 flex items-center justify-center p-4 min-h-0" onClick={() => setSelectedPhoto(null)}>
+              <img 
+                src={selectedPhoto.url_foto} 
+                alt="Preview" 
+                className="max-w-full max-h-full rounded-lg shadow-2xl object-contain animate-in zoom-in-95 duration-300" 
+                onClick={(e) => e.stopPropagation()}
+              />
+           </div>
+
+           {/* Metadata Sidebar */}
+           <div className="w-full md:w-80 bg-zinc-900 border-t md:border-t-0 md:border-l border-white/10 p-6 flex flex-col gap-6 text-white overflow-y-auto shrink-0">
+              <div className="space-y-1">
+                 <p className="text-xs font-bold text-primary uppercase tracking-widest">Estado / Categoría</p>
+                 <Badge className="bg-primary hover:bg-primary text-white capitalize text-sm px-3">
+                    {selectedPhoto.etiqueta}
+                 </Badge>
+              </div>
+
+              <div className="space-y-1">
+                 <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Fecha del Registro</p>
+                 <p className="text-lg font-medium">
+                    {selectedPhoto.fecha_foto ? new Date(selectedPhoto.fecha_foto).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : new Date(selectedPhoto.created_at).toLocaleDateString()}
+                 </p>
+              </div>
+
+              <div className="space-y-2 pt-4 border-t border-white/5">
+                 <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                    <StickyNote className="h-3 w-3" /> Observaciones
+                 </p>
+                 <div className="bg-white/5 p-4 rounded-xl italic text-sm text-zinc-300 leading-relaxed min-h-[100px]">
+                    "{selectedPhoto.observaciones || 'Sin observaciones registradas para esta foto.'}"
+                 </div>
+              </div>
+
+              <div className="mt-auto pt-6">
+                 <Button 
+                    variant="destructive" 
+                    className="w-full" 
+                    onClick={(e) => {
+                       e.stopPropagation();
+                       handleDelete(selectedPhoto);
+                       setSelectedPhoto(null);
+                    }}
+                 >
+                    <Trash2 className="mr-2 h-4 w-4" /> Eliminar Foto
+                 </Button>
+              </div>
+           </div>
         </div>
       )}
 

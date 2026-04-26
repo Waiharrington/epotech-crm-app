@@ -35,7 +35,7 @@ interface NewJobWizardProps {
   onClose: () => void
   onSuccess: (job?: Trabajo) => void
   initialClientId?: string
-  initialState?: string
+  initialState?: 'completado' | 'proximo' | 'en_progreso'
 }
 
 export function NewJobWizard({ onClose, onSuccess, initialClientId, initialState = 'proximo' }: NewJobWizardProps) {

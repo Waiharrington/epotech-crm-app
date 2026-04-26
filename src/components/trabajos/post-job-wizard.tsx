@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Check, Camera, Package, DollarSign, Loader2, Trash2 } from 'lucide-react'
+import { Check, Camera, Package, DollarSign, Loader2, Trash2, Calendar, Repeat } from 'lucide-react'
 import {
   Select,
   SelectContent,
@@ -45,8 +45,31 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
   const [quimicos, setQuimicos] = useState(job.quimicos_aplicados || '')
   const [materials, setMaterials] = useState<{ id: string; nombre: string; cantidad: number }[]>([])
   
+  // Recurring state
+  const [esRecurrente, setEsRecurrente] = useState(false)
+  const [frecuencia, setFrecuencia] = useState('mensual')
+  const [frecuenciaPersonalizada, setFrecuenciaPersonalizada] = useState(30)
+  const [fechaProxima, setFechaProxima] = useState('')
+
   // Placeholder for stock items
   const [availableStock, setAvailableStock] = useState<any[]>([])
+
+  useEffect(() => {
+    // Set default next visit date (e.g. +30 days)
+    const nextDate = new Date()
+    nextDate.setDate(nextDate.getDate() + 30)
+    setFechaProxima(nextDate.toISOString().split('T')[0])
+  }, [])
+
+  const calculateNextDate = (freq: string, days?: number) => {
+    const next = new Date()
+    if (freq === 'semanal') next.setDate(next.getDate() + 7)
+    else if (freq === 'quincenal') next.setDate(next.getDate() + 15)
+    else if (freq === 'mensual') next.setDate(next.getDate() + 30)
+    else if (freq === 'personalizado' && days) next.setDate(next.getDate() + days)
+    
+    setFechaProxima(next.toISOString().split('T')[0])
+  }
 
   useEffect(() => {
     fetchStock()
@@ -70,9 +93,24 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
         maquina_usada: maquinaUsada,
         presion_agua: presionAgua,
         quimicos_aplicados: quimicos,
-        completado_at: new Date().toISOString()
+        completado_at: new Date().toISOString(),
+        es_recurrente: esRecurrente,
+        fecha_proximo_serv: fechaProxima || null
       })
       .eq('id', job.id)
+
+    // 1.5 If recurring, create or update the recurring plan
+    if (esRecurrente) {
+      await (supabase as any).from('planes_recurrentes').insert({
+        cliente_id: job.cliente_id,
+        servicio_id: job.servicio_id,
+        frecuencia: frecuencia,
+        frecuencia_dias: frecuencia === 'personalizado' ? frecuenciaPersonalizada : null,
+        monto_estimado: precioCobrado,
+        fecha_inicio: new Date().toISOString().split('T')[0],
+        proxima_visita: fechaProxima
+      })
+    }
 
     if (jobError) {
       alert('Error: ' + jobError.message)
@@ -233,6 +271,94 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                 value={notasPost}
                 onChange={e => setNotasPost(e.target.value)}
               />
+            </div>
+
+            <div className="pt-4 border-t space-y-4">
+               <div className="flex items-center justify-between p-4 bg-primary/5 rounded-xl border border-primary/10">
+                  <div className="flex items-center gap-3">
+                     <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Repeat className="h-5 w-5 text-primary" />
+                     </div>
+                     <div>
+                        <p className="text-sm font-bold">¿Es un servicio recurrente?</p>
+                        <p className="text-xs text-muted-foreground">Genera recordatorios automáticos</p>
+                     </div>
+                  </div>
+                  <div className="flex bg-muted rounded-lg p-1">
+                     <button 
+                       className={cn("px-4 py-1 text-xs font-bold rounded-md transition-all", esRecurrente ? "bg-primary text-white shadow-sm" : "text-muted-foreground")}
+                       onClick={() => setEsRecurrente(true)}
+                     >SÍ</button>
+                     <button 
+                       className={cn("px-4 py-1 text-xs font-bold rounded-md transition-all", !esRecurrente ? "bg-zinc-600 text-white shadow-sm" : "text-muted-foreground")}
+                       onClick={() => setEsRecurrente(false)}
+                     >NO</button>
+                  </div>
+               </div>
+
+               {esRecurrente && (
+                 <div className="grid grid-cols-2 gap-4 animate-in slide-in-from-top-2 duration-300">
+                    <div className="space-y-2">
+                       <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Frecuencia</Label>
+                       <Select 
+                         value={frecuencia} 
+                         onValueChange={(val) => {
+                            setFrecuencia(val)
+                            calculateNextDate(val, frecuenciaPersonalizada)
+                         }}
+                       >
+                          <SelectTrigger className="h-10">
+                             <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                             <SelectItem value="semanal">Semanal</SelectItem>
+                             <SelectItem value="quincenal">Quincenal</SelectItem>
+                             <SelectItem value="mensual">Mensual</SelectItem>
+                             <SelectItem value="personalizado">Personalizado</SelectItem>
+                          </SelectContent>
+                       </Select>
+                    </div>
+                    {frecuencia === 'personalizado' ? (
+                       <div className="space-y-2">
+                          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Cada cuántos días</Label>
+                          <Input 
+                            type="number" 
+                            value={frecuenciaPersonalizada} 
+                            onChange={(e) => {
+                               const val = parseInt(e.target.value) || 0
+                               setFrecuenciaPersonalizada(val)
+                               calculateNextDate('personalizado', val)
+                            }}
+                            className="h-10"
+                          />
+                       </div>
+                    ) : (
+                       <div className="space-y-2">
+                          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Próxima Visita</Label>
+                          <Input 
+                            type="date" 
+                            value={fechaProxima} 
+                            onChange={(e) => setFechaProxima(e.target.value)}
+                            className="h-10"
+                          />
+                       </div>
+                    )}
+                 </div>
+               )}
+
+               {!esRecurrente && (
+                  <div className="space-y-2 animate-in fade-in duration-300">
+                     <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                        <Calendar className="h-3 w-3" /> Fecha Tentativa Próximo Servicio (Seguimiento)
+                     </Label>
+                     <Input 
+                       type="date" 
+                       value={fechaProxima} 
+                       onChange={(e) => setFechaProxima(e.target.value)}
+                       className="h-10"
+                     />
+                  </div>
+               )}
             </div>
           </div>
           

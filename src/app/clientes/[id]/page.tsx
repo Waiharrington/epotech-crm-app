@@ -19,7 +19,8 @@ import {
   StickyNote,
   ArrowLeft,
   Loader2,
-  Check
+  Check,
+  Repeat
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import Link from 'next/link'
@@ -48,6 +49,7 @@ export default function ClienteProfilePage() {
   const [completedJobToLog, setCompletedJobToLog] = useState<any>(null)
   const [jobWizardState, setJobWizardState] = useState<'proximo' | 'completado'>('proximo')
   const [trabajos, setTrabajos] = useState<any[]>([])
+  const [planes, setPlanes] = useState<any[]>([])
   const [selectedJob, setSelectedJob] = useState<any | null>(null)
   const [showEditJobModal, setShowEditJobModal] = useState(false)
   const [jobToEdit, setJobToEdit] = useState<any | null>(null)
@@ -55,6 +57,7 @@ export default function ClienteProfilePage() {
   useEffect(() => {
     fetchCliente()
     fetchTrabajos()
+    fetchPlanes()
     
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search)
@@ -75,6 +78,15 @@ export default function ClienteProfilePage() {
     
     if (data) setCliente(data)
     setLoading(false)
+  }
+
+  const fetchPlanes = async () => {
+    const { data } = await supabase
+      .from('planes_recurrentes')
+      .select('*, catalogo_servicios(nombre)')
+      .eq('cliente_id', id)
+      .order('proxima_visita', { ascending: true })
+    if (data) setPlanes(data)
   }
 
   const fetchTrabajos = async () => {
@@ -329,13 +341,56 @@ export default function ClienteProfilePage() {
           </TabsContent>
 
           <TabsContent value="recurrentes" className="animate-in fade-in duration-500">
-             <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/10">
-              <RotateCcw className="h-10 w-10 text-muted-foreground mb-4" />
-              <h3 className="font-semibold text-lg">Planes Recurrentes</h3>
-              <p className="text-muted-foreground max-w-sm mt-1">
-                Visualiza los servicios que se repiten periódicamente.
-              </p>
-            </div>
+             {planes.length > 0 ? (
+                <div className="grid gap-4 sm:grid-cols-2">
+                   {planes.map(plan => (
+                      <Card key={plan.id} className="overflow-hidden border-primary/10 shadow-sm hover:shadow-md transition-all">
+                         <div className="bg-primary/5 p-4 border-b border-primary/10 flex justify-between items-start">
+                            <div className="flex items-center gap-3">
+                               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                  <Repeat className="h-5 w-5 text-primary" />
+                               </div>
+                               <div>
+                                  <h4 className="font-bold text-primary">{plan.catalogo_servicios?.nombre || 'Servicio'}</h4>
+                                  <Badge variant="outline" className="text-[10px] uppercase bg-white">{plan.frecuencia}</Badge>
+                               </div>
+                            </div>
+                            <Badge className={plan.activo ? "bg-green-100 text-green-700 hover:bg-green-100" : "bg-zinc-100 text-zinc-600 hover:bg-zinc-100"}>
+                               {plan.activo ? 'Activo' : 'Pausado'}
+                            </Badge>
+                         </div>
+                         <CardContent className="p-4 space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                               <div className="space-y-1">
+                                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Próxima Visita</p>
+                                  <p className="font-bold flex items-center gap-2">
+                                     <Calendar className="h-4 w-4 text-primary" />
+                                     {new Date(plan.proxima_visita).toLocaleDateString()}
+                                  </p>
+                               </div>
+                               <div className="space-y-1">
+                                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Monto Estimado</p>
+                                  <p className="font-bold text-green-600">${plan.monto_estimado}</p>
+                               </div>
+                            </div>
+                            
+                            <div className="pt-3 border-t flex gap-2">
+                               <Button variant="outline" size="sm" className="flex-1 h-8 text-xs">Editar Plan</Button>
+                               <Button variant="secondary" size="sm" className="flex-1 h-8 text-xs">Agendar Ahora</Button>
+                            </div>
+                         </CardContent>
+                      </Card>
+                   ))}
+                </div>
+             ) : (
+                <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/10">
+                  <RotateCcw className="h-10 w-10 text-muted-foreground mb-4" />
+                  <h3 className="font-semibold text-lg">Planes Recurrentes</h3>
+                  <p className="text-muted-foreground max-w-sm mt-1">
+                    Visualiza los servicios que se repiten periódicamente.
+                  </p>
+                </div>
+             )}
           </TabsContent>
 
           <TabsContent value="notas" className="animate-in fade-in duration-500">

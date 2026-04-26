@@ -28,7 +28,7 @@ export function EditNoteModal({ note, onClose, onSuccess }: EditNoteModalProps) 
     if (!contenido.trim()) return
     
     setLoading(true)
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('notas_clientes')
       .update({
         contenido: contenido.trim()
@@ -47,7 +47,7 @@ export function EditNoteModal({ note, onClose, onSuccess }: EditNoteModalProps) 
     if (!confirm('¿Estás seguro de que quieres eliminar esta nota?')) return
     
     setLoading(true)
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('notas_clientes')
       .delete()
       .eq('id', note.id)

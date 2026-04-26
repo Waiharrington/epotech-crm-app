@@ -17,7 +17,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { BeforeAfterCollage } from './before-after-collage'
-import { CameraModal } from './camera-modal'
+import { AddPhotoModal, PhotoMetadata } from './add-photo-modal'
 
 interface Photo {
   id: string
@@ -37,7 +37,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
   const [uploading, setUploading] = useState(false)
   const [showCollageMode, setShowCollageMode] = useState(false)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  const [showCamera, setShowCamera] = useState(false)
+  const [showAddModal, setShowAddModal] = useState(false)
 
   useEffect(() => {
     fetchPhotos()
@@ -55,17 +55,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
     setLoading(false)
   }
 
-  const handleUpload = async (eventOrFile: React.ChangeEvent<HTMLInputElement> | File) => {
-    let file: File | undefined
-    
-    if (eventOrFile instanceof File) {
-      file = eventOrFile
-    } else {
-      file = eventOrFile.target.files?.[0]
-    }
-
-    if (!file) return
-
+  const handleUpload = async (file: File, metadata: PhotoMetadata) => {
     setUploading(true)
     try {
       // 1. Upload to Supabase Storage
@@ -88,7 +78,9 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
         .insert([{
           cliente_id: clientId,
           url_foto: publicUrl,
-          etiqueta: 'general'
+          etiqueta: metadata.etiqueta,
+          observaciones: metadata.observaciones,
+          fecha_foto: metadata.fecha
         }])
 
       if (dbError) throw dbError
@@ -96,6 +88,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
       fetchPhotos()
     } catch (error: any) {
       alert('Error al subir: ' + error.message)
+      throw error
     } finally {
       setUploading(false)
     }
@@ -138,22 +131,13 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
       <div className="flex flex-wrap gap-3 justify-between items-center">
         <div className="flex gap-2">
             <Button 
-              onClick={() => setShowCamera(true)}
-              className="rounded-xl h-12 px-4 bg-primary text-primary-foreground font-bold hover:bg-primary/90"
+              onClick={() => setShowAddModal(true)}
+              className="rounded-xl h-12 px-6 bg-primary text-primary-foreground font-bold hover:bg-primary/90 shadow-md transition-all active:scale-95"
               disabled={uploading}
             >
-              {uploading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Camera className="mr-2 h-5 w-5" />}
-              Tomar Foto
+              {uploading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Plus className="mr-2 h-5 w-5" />}
+              Agregar Imagen
             </Button>
-            
-            <label className={cn(
-              "flex items-center justify-center p-3 rounded-xl bg-secondary text-secondary-foreground font-bold cursor-pointer hover:bg-secondary/80 transition-all",
-              uploading && "opacity-50 pointer-events-none"
-            )}>
-              <Upload className="mr-2 h-5 w-5" />
-              Subir
-              <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
-            </label>
         </div>
 
         <Button 
@@ -220,13 +204,10 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
         </div>
       )}
 
-      {showCamera && (
-        <CameraModal 
-          onClose={() => setShowCamera(false)}
-          onCapture={(file) => {
-            setShowCamera(false)
-            handleUpload(file)
-          }}
+      {showAddModal && (
+        <AddPhotoModal 
+          onClose={() => setShowAddModal(false)}
+          onUpload={handleUpload}
         />
       )}
     </div>

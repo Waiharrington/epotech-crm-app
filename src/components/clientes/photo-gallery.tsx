@@ -12,7 +12,8 @@ import {
   Image as ImageIcon,
   Loader2,
   X,
-  Maximize2
+  Maximize2,
+  StickyNote
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'

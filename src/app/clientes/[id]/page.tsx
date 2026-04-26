@@ -18,7 +18,8 @@ import {
   RotateCcw, 
   StickyNote,
   ArrowLeft,
-  Loader2
+  Loader2,
+  Check
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import Link from 'next/link'

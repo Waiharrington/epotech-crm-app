@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Download, RotateCcw, ImageIcon, Plus, Check, Loader2, X, ArrowsLeftRight, ArrowUpDown } from 'lucide-react'
+import { Download, RotateCcw, ImageIcon, Plus, Check, Loader2, X, ArrowLeftRight, ArrowUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Label } from '@/components/ui/label'
 
@@ -181,7 +181,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                    size="sm" 
                    onClick={() => setOrientation(orientation === 'horizontal' ? 'vertical' : 'horizontal')}
                  >
-                    {orientation === 'horizontal' ? <ArrowUpDown className="mr-2 h-4 w-4" /> : <ArrowsLeftRight className="mr-2 h-4 w-4" />}
+                    {orientation === 'horizontal' ? <ArrowUpDown className="mr-2 h-4 w-4" /> : <ArrowLeftRight className="mr-2 h-4 w-4" />}
                     {orientation === 'horizontal' ? 'Vertical' : 'Horizontal'}
                  </Button>
                  <Button size="sm" onClick={downloadCollage} disabled={generating}>
@@ -237,7 +237,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                 
                 {/* Circle */}
                 <div className="h-10 w-10 rounded-full bg-white shadow-2xl flex items-center justify-center text-primary border-4 border-primary/20">
-                  {orientation === 'horizontal' ? <ArrowsLeftRight className="h-5 w-5" /> : <ArrowUpDown className="h-5 w-5" />}
+                  {orientation === 'horizontal' ? <ArrowLeftRight className="h-5 w-5" /> : <ArrowUpDown className="h-5 w-5" />}
                 </div>
               </div>
 

@@ -28,6 +28,7 @@ import { PhotoGallery } from '@/components/clientes/photo-gallery'
 import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 import { EditClientModal } from '@/components/clientes/edit-client-modal'
 import { PostJobWizard } from '@/components/trabajos/post-job-wizard'
+import { EditRecurringPlanModal } from '@/components/clientes/edit-recurring-plan-modal'
 import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
 import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -53,6 +54,9 @@ export default function ClienteProfilePage() {
   const [selectedJob, setSelectedJob] = useState<any | null>(null)
   const [showEditJobModal, setShowEditJobModal] = useState(false)
   const [jobToEdit, setJobToEdit] = useState<any | null>(null)
+  
+  const [selectedPlan, setSelectedPlan] = useState<any | null>(null)
+  const [showEditPlanModal, setShowEditPlanModal] = useState(false)
 
   useEffect(() => {
     fetchCliente()
@@ -375,7 +379,17 @@ export default function ClienteProfilePage() {
                             </div>
                             
                             <div className="pt-3 border-t flex gap-2">
-                               <Button variant="outline" size="sm" className="flex-1 h-8 text-xs">Editar Plan</Button>
+                               <Button 
+                                 variant="outline" 
+                                 size="sm" 
+                                 className="flex-1 h-8 text-xs"
+                                 onClick={() => {
+                                    setSelectedPlan(plan)
+                                    setShowEditPlanModal(true)
+                                 }}
+                               >
+                                 Editar Plan
+                               </Button>
                                <Button variant="secondary" size="sm" className="flex-1 h-8 text-xs">Agendar Ahora</Button>
                             </div>
                          </CardContent>
@@ -489,6 +503,17 @@ export default function ClienteProfilePage() {
           onSuccess={() => {
             setShowEditModal(false)
             fetchCliente()
+          }}
+        />
+      )}
+
+      {showEditPlanModal && (
+        <EditRecurringPlanModal 
+          plan={selectedPlan}
+          onClose={() => setShowEditPlanModal(false)}
+          onSuccess={() => {
+            setShowEditPlanModal(false)
+            fetchPlanes()
           }}
         />
       )}

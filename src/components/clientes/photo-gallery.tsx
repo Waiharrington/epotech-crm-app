@@ -24,6 +24,8 @@ interface Photo {
   url_foto: string
   etiqueta: string
   created_at: string
+  observaciones?: string
+  fecha_foto?: string
 }
 
 interface PhotoGalleryProps {

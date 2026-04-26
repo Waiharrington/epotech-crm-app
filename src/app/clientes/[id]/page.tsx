@@ -57,6 +57,7 @@ export default function ClienteProfilePage() {
   
   const [selectedPlan, setSelectedPlan] = useState<any | null>(null)
   const [showEditPlanModal, setShowEditPlanModal] = useState(false)
+  const [recurringJobData, setRecurringJobData] = useState<any | null>(null)
 
   useEffect(() => {
     fetchCliente()
@@ -390,7 +391,23 @@ export default function ClienteProfilePage() {
                                >
                                  Editar Plan
                                </Button>
-                               <Button variant="secondary" size="sm" className="flex-1 h-8 text-xs">Agendar Ahora</Button>
+                               <Button 
+                                 variant="secondary" 
+                                 size="sm" 
+                                 className="flex-1 h-8 text-xs"
+                                 onClick={() => {
+                                    setRecurringJobData({
+                                       cliente_id: id,
+                                       servicio_id: plan.servicio_id,
+                                       precio_acordado: plan.monto_estimado,
+                                       fecha_servicio: plan.proxima_visita,
+                                       es_recurrente: true
+                                    })
+                                    setShowNewJobWizard(true)
+                                 }}
+                               >
+                                 Agendar Ahora
+                               </Button>
                             </div>
                          </CardContent>
                       </Card>
@@ -468,9 +485,14 @@ export default function ClienteProfilePage() {
         <NewJobWizard 
           initialClientId={id}
           initialState={jobWizardState}
-          onClose={() => setShowNewJobWizard(false)}
+          initialData={recurringJobData}
+          onClose={() => {
+            setShowNewJobWizard(false)
+            setRecurringJobData(null)
+          }}
           onSuccess={(job) => {
             setShowNewJobWizard(false)
+            setRecurringJobData(null)
             if (jobWizardState === 'completado' && job) {
               setCompletedJobToLog(job)
               setShowPostJobWizard(true)

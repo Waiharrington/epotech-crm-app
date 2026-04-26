@@ -36,24 +36,25 @@ interface NewJobWizardProps {
   onSuccess: (job?: Trabajo) => void
   initialClientId?: string
   initialState?: 'completado' | 'proximo' | 'en_progreso'
+  initialData?: Partial<TrabajoInsert>
 }
 
-export function NewJobWizard({ onClose, onSuccess, initialClientId, initialState = 'proximo' }: NewJobWizardProps) {
+export function NewJobWizard({ onClose, onSuccess, initialClientId, initialState = 'proximo', initialData }: NewJobWizardProps) {
   const supabase = createClient()
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(initialData?.servicio_id ? 3 : initialClientId ? 2 : 1)
   const [loading, setLoading] = useState(false)
   const [clients, setClients] = useState<Cliente[]>([])
   const [services, setServices] = useState<Servicio[]>([])
   const [searchClient, setSearchClient] = useState('')
   
   const [formData, setFormData] = useState<Partial<TrabajoInsert>>({
-    cliente_id: initialClientId || '',
-    servicio_id: '',
-    estado: initialState,
-    prioridad: 'estandar',
-    fecha_servicio: new Date().toISOString().split('T')[0],
-    precio_acordado: 0,
-    es_recurrente: false
+    cliente_id: initialClientId || initialData?.cliente_id || '',
+    servicio_id: initialData?.servicio_id || '',
+    estado: initialState || initialData?.estado || 'proximo',
+    prioridad: initialData?.prioridad || 'estandar',
+    fecha_servicio: initialData?.fecha_servicio || new Date().toISOString().split('T')[0],
+    precio_acordado: initialData?.precio_acordado || 0,
+    es_recurrente: initialData?.es_recurrente || false
   })
 
   useEffect(() => {

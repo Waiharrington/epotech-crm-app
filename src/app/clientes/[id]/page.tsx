@@ -29,6 +29,7 @@ import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 import { EditClientModal } from '@/components/clientes/edit-client-modal'
 import { PostJobWizard } from '@/components/trabajos/post-job-wizard'
 import { EditRecurringPlanModal } from '@/components/clientes/edit-recurring-plan-modal'
+import { AddNoteModal } from '@/components/clientes/add-note-modal'
 import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
 import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -58,11 +59,15 @@ export default function ClienteProfilePage() {
   const [selectedPlan, setSelectedPlan] = useState<any | null>(null)
   const [showEditPlanModal, setShowEditPlanModal] = useState(false)
   const [recurringJobData, setRecurringJobData] = useState<any | null>(null)
+  
+  const [notas, setNotas] = useState<any[]>([])
+  const [showAddNoteModal, setShowAddNoteModal] = useState(false)
 
   useEffect(() => {
     fetchCliente()
     fetchTrabajos()
     fetchPlanes()
+    fetchNotas()
     
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search)
@@ -92,6 +97,15 @@ export default function ClienteProfilePage() {
       .eq('cliente_id', id)
       .order('proxima_visita', { ascending: true })
     if (data) setPlanes(data)
+  }
+
+  const fetchNotas = async () => {
+    const { data } = await supabase
+      .from('notas_clientes')
+      .select('*')
+      .eq('cliente_id', id)
+      .order('created_at', { ascending: false })
+    if (data) setNotas(data)
   }
 
   const fetchTrabajos = async () => {
@@ -425,13 +439,46 @@ export default function ClienteProfilePage() {
           </TabsContent>
 
           <TabsContent value="notas" className="animate-in fade-in duration-500">
-             <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/10">
-              <StickyNote className="h-10 w-10 text-muted-foreground mb-4" />
-              <h3 className="font-semibold text-lg">Notas Adicionales</h3>
-              <p className="text-muted-foreground max-w-sm mt-1">
-                Agrega comentarios o recordatorios específicos para este cliente.
-              </p>
-            </div>
+             <div className="flex items-center justify-between mb-6">
+                <div>
+                   <h3 className="text-lg font-bold">Bitácora de Notas</h3>
+                   <p className="text-sm text-muted-foreground">Registros y observaciones internas del cliente.</p>
+                </div>
+                <Button onClick={() => setShowAddNoteModal(true)}>
+                   <Plus className="mr-2 h-4 w-4" /> Nueva Nota
+                </Button>
+             </div>
+
+             {notas.length > 0 ? (
+                <div className="space-y-4">
+                   {notas.map(nota => (
+                      <Card key={nota.id} className="bg-amber-50/30 border-amber-200/50">
+                         <CardContent className="p-5">
+                            <div className="flex justify-between items-start mb-2">
+                               <div className="flex items-center gap-2 text-amber-800/60">
+                                  <StickyNote className="h-4 w-4" />
+                                  <span className="text-[10px] font-bold uppercase tracking-wider">
+                                     {new Date(nota.created_at).toLocaleString()}
+                                  </span>
+                                </div>
+                            </div>
+                            <p className="text-sm whitespace-pre-wrap text-zinc-800">{nota.contenido}</p>
+                         </CardContent>
+                      </Card>
+                   ))}
+                </div>
+             ) : (
+                <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/10">
+                  <StickyNote className="h-10 w-10 text-muted-foreground mb-4" />
+                  <h3 className="font-semibold text-lg">Notas Adicionales</h3>
+                  <p className="text-muted-foreground max-w-sm mt-1">
+                    Agrega comentarios o recordatorios específicos para este cliente.
+                  </p>
+                  <Button variant="outline" className="mt-4" onClick={() => setShowAddNoteModal(true)}>
+                     Comenzar a anotar
+                  </Button>
+                </div>
+             )}
           </TabsContent>
         </Tabs>
       </main>
@@ -536,6 +583,17 @@ export default function ClienteProfilePage() {
           onSuccess={() => {
             setShowEditPlanModal(false)
             fetchPlanes()
+          }}
+        />
+      )}
+
+      {showAddNoteModal && (
+        <AddNoteModal 
+          clientId={id}
+          onClose={() => setShowAddNoteModal(false)}
+          onSuccess={() => {
+            setShowAddNoteModal(false)
+            fetchNotas()
           }}
         />
       )}

@@ -29,11 +29,12 @@ type TrabajoInsert = Database['public']['Tables']['trabajos']['Insert']
 
 interface NewJobWizardProps {
   onClose: () => void
-  onSuccess: () => void
+  onSuccess: (job?: Trabajo) => void
   initialClientId?: string
+  initialState?: string
 }
 
-export function NewJobWizard({ onClose, onSuccess, initialClientId }: NewJobWizardProps) {
+export function NewJobWizard({ onClose, onSuccess, initialClientId, initialState = 'proximo' }: NewJobWizardProps) {
   const supabase = createClient()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -44,7 +45,7 @@ export function NewJobWizard({ onClose, onSuccess, initialClientId }: NewJobWiza
   const [formData, setFormData] = useState<Partial<TrabajoInsert>>({
     cliente_id: initialClientId || '',
     servicio_id: '',
-    estado: 'proximo',
+    estado: initialState,
     prioridad: 'estandar',
     fecha_servicio: new Date().toISOString().split('T')[0],
     precio_acordado: 0,
@@ -83,15 +84,16 @@ export function NewJobWizard({ onClose, onSuccess, initialClientId }: NewJobWiza
 
   const handleSave = async () => {
     setLoading(true)
-    const { error } = await (supabase as any)
+    const { data, error } = await (supabase as any)
       .from('trabajos')
       .insert([formData])
+      .select(`*, clientes (nombre, apellido), catalogo_servicios (nombre)`)
     
     setLoading(false)
-    if (!error) {
-      onSuccess()
+    if (!error && data) {
+      onSuccess(data[0])
     } else {
-      alert('Error: ' + error.message)
+      alert('Error: ' + error?.message)
     }
   }
 

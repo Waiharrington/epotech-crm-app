@@ -24,6 +24,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import Link from 'next/link'
 import { PhotoGallery } from '@/components/clientes/photo-gallery'
 import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
+import { PostJobWizard } from '@/components/trabajos/post-job-wizard'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 
 type Cliente = Database['public']['Tables']['clientes']['Row']
 
@@ -35,6 +37,10 @@ export default function ClienteProfilePage() {
   const [cliente, setCliente] = useState<Cliente | null>(null)
   const [loading, setLoading] = useState(true)
   const [showNewJobWizard, setShowNewJobWizard] = useState(false)
+  const [showJobTypeSelector, setShowJobTypeSelector] = useState(false)
+  const [showPostJobWizard, setShowPostJobWizard] = useState(false)
+  const [completedJobToLog, setCompletedJobToLog] = useState<any>(null)
+  const [jobWizardState, setJobWizardState] = useState<'proximo' | 'completado'>('proximo')
 
   useEffect(() => {
     fetchCliente()
@@ -42,7 +48,7 @@ export default function ClienteProfilePage() {
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search)
       if (urlParams.get('action') === 'agendar') {
-        setShowNewJobWizard(true)
+        setShowJobTypeSelector(true)
         window.history.replaceState({}, '', `/clientes/${id}`)
       }
     }
@@ -112,7 +118,7 @@ export default function ClienteProfilePage() {
               <Button variant="outline" size="sm" onClick={() => alert("Función de edición de perfil en desarrollo")}>
                 <Edit className="mr-2 h-4 w-4" /> Editar
               </Button>
-              <Button size="sm" onClick={() => setShowNewJobWizard(true)}>
+              <Button size="sm" onClick={() => setShowJobTypeSelector(true)}>
                 <Plus className="mr-2 h-4 w-4" /> Nuevo Servicio
               </Button>
             </div>
@@ -286,14 +292,80 @@ export default function ClienteProfilePage() {
         </Tabs>
       </main>
 
+      {showJobTypeSelector && (
+        <Dialog open onOpenChange={() => setShowJobTypeSelector(false)}>
+          <DialogContent className="sm:max-w-[400px]">
+            <DialogHeader>
+              <DialogTitle>Tipo de Registro</DialogTitle>
+              <DialogDescription>
+                ¿El servicio ya fue realizado o se va a programar a futuro?
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex flex-col gap-3 py-4">
+              <Button 
+                className="h-14 justify-start px-4 text-base" 
+                variant="outline"
+                onClick={() => {
+                  setJobWizardState('proximo')
+                  setShowJobTypeSelector(false)
+                  setShowNewJobWizard(true)
+                }}
+              >
+                <Calendar className="mr-3 h-5 w-5 text-blue-500" /> 
+                <div className="flex flex-col items-start">
+                  <span>Por Realizar</span>
+                  <span className="text-xs font-normal text-muted-foreground">Agendar para el futuro</span>
+                </div>
+              </Button>
+              <Button 
+                className="h-14 justify-start px-4 text-base" 
+                variant="outline"
+                onClick={() => {
+                  setJobWizardState('completado')
+                  setShowJobTypeSelector(false)
+                  setShowNewJobWizard(true)
+                }}
+              >
+                <Check className="mr-3 h-5 w-5 text-green-500" /> 
+                <div className="flex flex-col items-start">
+                  <span>Ya Realizado</span>
+                  <span className="text-xs font-normal text-muted-foreground">Registrar servicio completado</span>
+                </div>
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
       {showNewJobWizard && (
         <NewJobWizard 
           initialClientId={id}
+          initialState={jobWizardState}
           onClose={() => setShowNewJobWizard(false)}
-          onSuccess={() => {
+          onSuccess={(job) => {
             setShowNewJobWizard(false)
-            alert('¡Servicio agendado exitosamente!')
+            if (jobWizardState === 'completado' && job) {
+              setCompletedJobToLog(job)
+              setShowPostJobWizard(true)
+            } else {
+              alert('¡Servicio agendado exitosamente!')
+            }
           }} 
+        />
+      )}
+
+      {showPostJobWizard && completedJobToLog && (
+        <PostJobWizard 
+          job={completedJobToLog}
+          onClose={() => {
+            setShowPostJobWizard(false)
+            setCompletedJobToLog(null)
+          }}
+          onSuccess={() => {
+            setShowPostJobWizard(false)
+            setCompletedJobToLog(null)
+            alert('¡Registro completado guardado exitosamente!')
+          }}
         />
       )}
     </div>

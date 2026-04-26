@@ -30,6 +30,7 @@ import { EditClientModal } from '@/components/clientes/edit-client-modal'
 import { PostJobWizard } from '@/components/trabajos/post-job-wizard'
 import { EditRecurringPlanModal } from '@/components/clientes/edit-recurring-plan-modal'
 import { AddNoteModal } from '@/components/clientes/add-note-modal'
+import { EditNoteModal } from '@/components/clientes/edit-note-modal'
 import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
 import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -62,6 +63,8 @@ export default function ClienteProfilePage() {
   
   const [notas, setNotas] = useState<any[]>([])
   const [showAddNoteModal, setShowAddNoteModal] = useState(false)
+  const [selectedNote, setSelectedNote] = useState<any | null>(null)
+  const [showEditNoteModal, setShowEditNoteModal] = useState(false)
 
   useEffect(() => {
     fetchCliente()
@@ -452,7 +455,7 @@ export default function ClienteProfilePage() {
              {notas.length > 0 ? (
                 <div className="space-y-4">
                    {notas.map(nota => (
-                      <Card key={nota.id} className="bg-amber-50/30 border-amber-200/50">
+                      <Card key={nota.id} className="bg-amber-50/30 border-amber-200/50 group">
                          <CardContent className="p-5">
                             <div className="flex justify-between items-start mb-2">
                                <div className="flex items-center gap-2 text-amber-800/60">
@@ -461,6 +464,17 @@ export default function ClienteProfilePage() {
                                      {new Date(nota.created_at).toLocaleString()}
                                   </span>
                                 </div>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-8 w-8 text-amber-800/40 hover:text-amber-800 hover:bg-amber-100 opacity-0 group-hover:opacity-100 transition-opacity"
+                                  onClick={() => {
+                                     setSelectedNote(nota)
+                                     setShowEditNoteModal(true)
+                                  }}
+                                >
+                                   <Edit className="h-4 w-4" />
+                                </Button>
                             </div>
                             <p className="text-sm whitespace-pre-wrap text-zinc-800">{nota.contenido}</p>
                          </CardContent>
@@ -593,6 +607,17 @@ export default function ClienteProfilePage() {
           onClose={() => setShowAddNoteModal(false)}
           onSuccess={() => {
             setShowAddNoteModal(false)
+            fetchNotas()
+          }}
+        />
+      )}
+
+      {showEditNoteModal && (
+        <EditNoteModal 
+          note={selectedNote}
+          onClose={() => setShowEditNoteModal(false)}
+          onSuccess={() => {
+            setShowEditNoteModal(false)
             fetchNotas()
           }}
         />

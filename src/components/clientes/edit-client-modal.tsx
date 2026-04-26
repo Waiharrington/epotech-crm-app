@@ -55,7 +55,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
 
   const handleSave = async () => {
     setLoading(true)
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('clientes')
       .update(formData)
       .eq('id', cliente.id)

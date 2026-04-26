@@ -27,6 +27,7 @@ import { PhotoGallery } from '@/components/clientes/photo-gallery'
 import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 import { EditClientModal } from '@/components/clientes/edit-client-modal'
 import { PostJobWizard } from '@/components/trabajos/post-job-wizard'
+import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
 
@@ -46,6 +47,7 @@ export default function ClienteProfilePage() {
   const [completedJobToLog, setCompletedJobToLog] = useState<any>(null)
   const [jobWizardState, setJobWizardState] = useState<'proximo' | 'completado'>('proximo')
   const [trabajos, setTrabajos] = useState<any[]>([])
+  const [selectedJob, setSelectedJob] = useState<any | null>(null)
 
   useEffect(() => {
     fetchCliente()
@@ -259,7 +261,11 @@ export default function ClienteProfilePage() {
             {trabajos.length > 0 ? (
               <div className="grid gap-4">
                 {trabajos.map((trabajo) => (
-                  <Card key={trabajo.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                  <Card 
+                    key={trabajo.id} 
+                    className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]"
+                    onClick={() => setSelectedJob(trabajo)}
+                  >
                     <div className="flex items-center p-4">
                       <div className={cn(
                         "h-10 w-10 rounded-full flex items-center justify-center mr-4 shrink-0",
@@ -437,6 +443,13 @@ export default function ClienteProfilePage() {
             setShowEditModal(false)
             fetchCliente()
           }}
+        />
+      )}
+
+      {selectedJob && (
+        <JobDetailModal 
+          job={selectedJob}
+          onClose={() => setSelectedJob(null)}
         />
       )}
     </div>

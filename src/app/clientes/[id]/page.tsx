@@ -325,17 +325,6 @@ export default function ClienteProfilePage() {
                 </div>
                 
                 <PhotoGallery clientId={id} />
-                
-                <div className="mt-8 pt-8 border-t">
-                    <h4 className="text-sm font-bold uppercase text-muted-foreground mb-4">Fotos Individuales</h4>
-                    <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/10">
-                        <Camera className="h-10 w-10 text-muted-foreground mb-4" />
-                        <h3 className="font-semibold text-lg">Próximamente</h3>
-                        <p className="text-muted-foreground max-w-sm mt-1">
-                            Integración con Supabase Storage para almacenamiento permanente de fotos.
-                        </p>
-                    </div>
-                </div>
              </div>
           </TabsContent>
 

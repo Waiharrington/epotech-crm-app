@@ -28,6 +28,7 @@ import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 import { EditClientModal } from '@/components/clientes/edit-client-modal'
 import { PostJobWizard } from '@/components/trabajos/post-job-wizard'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { cn } from '@/lib/utils'
 
 type Cliente = Database['public']['Tables']['clientes']['Row']
 
@@ -44,9 +45,11 @@ export default function ClienteProfilePage() {
   const [showPostJobWizard, setShowPostJobWizard] = useState(false)
   const [completedJobToLog, setCompletedJobToLog] = useState<any>(null)
   const [jobWizardState, setJobWizardState] = useState<'proximo' | 'completado'>('proximo')
+  const [trabajos, setTrabajos] = useState<any[]>([])
 
   useEffect(() => {
     fetchCliente()
+    fetchTrabajos()
     
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search)
@@ -67,6 +70,19 @@ export default function ClienteProfilePage() {
     
     if (data) setCliente(data)
     setLoading(false)
+  }
+
+  const fetchTrabajos = async () => {
+    const { data } = await supabase
+      .from('trabajos')
+      .select(`
+        *,
+        catalogo_servicios (nombre)
+      `)
+      .eq('cliente_id', id)
+      .order('fecha_servicio', { ascending: false })
+    
+    if (data) setTrabajos(data)
   }
 
   if (loading) {
@@ -240,13 +256,54 @@ export default function ClienteProfilePage() {
           </TabsContent>
 
           <TabsContent value="servicios" className="animate-in fade-in duration-500">
-            <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/10">
-              <ArrowLeft className="h-10 w-10 text-muted-foreground mb-4 rotate-180" />
-              <h3 className="font-semibold text-lg">Historial de Servicios</h3>
-              <p className="text-muted-foreground max-w-sm mt-1">
-                Aquí aparecerán los servicios realizados organizados por categorías.
-              </p>
-            </div>
+            {trabajos.length > 0 ? (
+              <div className="grid gap-4">
+                {trabajos.map((trabajo) => (
+                  <Card key={trabajo.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                    <div className="flex items-center p-4">
+                      <div className={cn(
+                        "h-10 w-10 rounded-full flex items-center justify-center mr-4 shrink-0",
+                        trabajo.estado === 'completado' ? "bg-green-100 text-green-600" : "bg-blue-100 text-blue-600"
+                      )}>
+                        {trabajo.estado === 'completado' ? <Check className="h-5 w-5" /> : <Calendar className="h-5 w-5" />}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <h4 className="font-semibold text-base truncate">
+                            {trabajo.catalogo_servicios?.nombre || 'Servicio Personalizado'}
+                          </h4>
+                          <Badge variant={trabajo.estado === 'completado' ? 'default' : 'outline'} className={cn(
+                            trabajo.estado === 'completado' ? "bg-green-500 hover:bg-green-600" : ""
+                          )}>
+                            {trabajo.estado === 'completado' ? 'Completado' : 'Pendiente'}
+                          </Badge>
+                        </div>
+                        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-muted-foreground">
+                          <div className="flex items-center">
+                            <Calendar className="mr-1 h-3 w-3" />
+                            {new Date(trabajo.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+                          </div>
+                          <div className="font-medium text-foreground">
+                            ${trabajo.precio_acordado?.toLocaleString()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/10">
+                <ArrowLeft className="h-10 w-10 text-muted-foreground mb-4 rotate-180" />
+                <h3 className="font-semibold text-lg">Historial de Servicios</h3>
+                <p className="text-muted-foreground max-w-sm mt-1">
+                  Aún no hay servicios registrados para este cliente. Comienza agendando uno nuevo.
+                </p>
+                <Button variant="outline" className="mt-4" onClick={() => setShowJobTypeSelector(true)}>
+                  <Plus className="mr-2 h-4 w-4" /> Nuevo Servicio
+                </Button>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="fotos" className="animate-in fade-in duration-500">

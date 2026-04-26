@@ -28,6 +28,7 @@ import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 import { EditClientModal } from '@/components/clientes/edit-client-modal'
 import { PostJobWizard } from '@/components/trabajos/post-job-wizard'
 import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
+import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
 
@@ -48,6 +49,8 @@ export default function ClienteProfilePage() {
   const [jobWizardState, setJobWizardState] = useState<'proximo' | 'completado'>('proximo')
   const [trabajos, setTrabajos] = useState<any[]>([])
   const [selectedJob, setSelectedJob] = useState<any | null>(null)
+  const [showEditJobModal, setShowEditJobModal] = useState(false)
+  const [jobToEdit, setJobToEdit] = useState<any | null>(null)
 
   useEffect(() => {
     fetchCliente()
@@ -450,6 +453,26 @@ export default function ClienteProfilePage() {
         <JobDetailModal 
           job={selectedJob}
           onClose={() => setSelectedJob(null)}
+          onEdit={(job) => {
+            setSelectedJob(null)
+            setJobToEdit(job)
+            setShowEditJobModal(true)
+          }}
+        />
+      )}
+
+      {showEditJobModal && jobToEdit && (
+        <EditJobModal 
+          job={jobToEdit}
+          onClose={() => {
+            setShowEditJobModal(false)
+            setJobToEdit(null)
+          }}
+          onSuccess={() => {
+            setShowEditJobModal(false)
+            setJobToEdit(null)
+            fetchTrabajos()
+          }}
         />
       )}
     </div>

@@ -9,7 +9,8 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import { Badge } from '@/components/ui/badge'
-import { Calendar, DollarSign, PenTool, Droplets, FlaskConical, StickyNote, CheckCircle2, Clock } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Calendar, DollarSign, PenTool, Droplets, FlaskConical, StickyNote, CheckCircle2, Clock, Edit } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
@@ -19,9 +20,10 @@ type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
 interface JobDetailModalProps {
   job: Trabajo
   onClose: () => void
+  onEdit?: (job: Trabajo) => void
 }
 
-export function JobDetailModal({ job, onClose }: JobDetailModalProps) {
+export function JobDetailModal({ job, onClose, onEdit }: JobDetailModalProps) {
   const isCompleted = job.estado === 'completado'
 
   return (
@@ -30,11 +32,24 @@ export function JobDetailModal({ job, onClose }: JobDetailModalProps) {
         <DialogHeader>
           <div className="flex items-center justify-between gap-4 mr-6">
             <DialogTitle className="text-xl">Detalle del Servicio</DialogTitle>
-            <Badge variant={isCompleted ? 'default' : 'outline'} className={cn(
-              isCompleted ? "bg-green-500 hover:bg-green-600" : ""
-            )}>
-              {isCompleted ? 'Completado' : 'Pendiente'}
-            </Badge>
+            <div className="flex items-center gap-2">
+              {onEdit && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8" 
+                  onClick={() => onEdit(job)}
+                  title="Editar Servicio"
+                >
+                  <Edit className="h-4 w-4" />
+                </Button>
+              )}
+              <Badge variant={isCompleted ? 'default' : 'outline'} className={cn(
+                isCompleted ? "bg-green-500 hover:bg-green-600" : ""
+              )}>
+                {isCompleted ? 'Completado' : 'Pendiente'}
+              </Badge>
+            </div>
           </div>
           <DialogDescription>
             {job.catalogo_servicios?.nombre || 'Servicio Personalizado'}

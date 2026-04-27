@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
 import { EditJobModal } from '@/components/trabajos/edit-job-modal'
+import Link from 'next/link'
 
 type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
   clientes: { nombre: string; apellido: string; telefono: string }

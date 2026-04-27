@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog"
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Calendar, DollarSign, PenTool, Droplets, FlaskConical, StickyNote, CheckCircle2, Clock, Edit, Package } from 'lucide-react'
+import { Calendar, DollarSign, PenTool, Droplets, FlaskConical, StickyNote, CheckCircle2, Clock, Edit, Package, Archive } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {

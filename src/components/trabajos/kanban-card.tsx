@@ -17,6 +17,7 @@ type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
 interface KanbanCardProps {
   job: Trabajo
   isOverlay?: boolean
+  onClick?: (job: Trabajo) => void
 }
 
 export function KanbanCard({ job, isOverlay }: KanbanCardProps) {
@@ -52,11 +53,16 @@ export function KanbanCard({ job, isOverlay }: KanbanCardProps) {
     >
       <Card 
         className={cn(
-          "cursor-grab active:cursor-grabbing border shadow-sm hover:shadow-md transition-shadow",
+          "cursor-grab active:cursor-grabbing border shadow-sm hover:shadow-md transition-all active:scale-[0.98]",
           job.estado === 'completado' && "bg-muted/30"
         )}
         {...attributes}
         {...listeners}
+        onClick={(e) => {
+          // If we are dragging, don't trigger click
+          if (isDragging) return
+          onClick?.(job)
+        }}
       >
         <CardContent className="p-4 space-y-3">
           <div className="flex items-start justify-between gap-2">

@@ -8,8 +8,9 @@ import { Plus, LayoutGrid, List as ListIcon, Archive, Search, Filter } from 'luc
 import { KanbanBoard } from '@/components/trabajos/kanban-board'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import Link from 'next/link'
 import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
+import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
+import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 
 type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
   clientes: { nombre: string; apellido: string; telefono: string }
@@ -23,6 +24,9 @@ export default function TrabajosPage() {
   const [view, setView] = useState<'kanban' | 'list'>('kanban')
   const [search, setSearch] = useState('')
   const [showWizard, setShowWizard] = useState(false)
+  const [selectedJob, setSelectedJob] = useState<TrabajoWithDetails | null>(null)
+  const [jobToEdit, setJobToEdit] = useState<TrabajoWithDetails | null>(null)
+  const [showEditModal, setShowEditModal] = useState(false)
 
   useEffect(() => {
     fetchTrabajos()
@@ -113,7 +117,11 @@ export default function TrabajosPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           </div>
         ) : view === 'kanban' ? (
-          <KanbanBoard trabajos={filteredTrabajos} onRefresh={fetchTrabajos} />
+          <KanbanBoard 
+            trabajos={filteredTrabajos} 
+            onRefresh={fetchTrabajos} 
+            onCardClick={(job) => setSelectedJob(job as TrabajoWithDetails)}
+          />
         ) : (
           <div className="p-6 max-w-7xl mx-auto w-full">
              {/* List View Placeholder */}
@@ -122,13 +130,34 @@ export default function TrabajosPage() {
         )}
       </div>
 
-      {showWizard && (
-        <NewJobWizard 
-            onClose={() => setShowWizard(false)} 
-            onSuccess={() => {
-                setShowWizard(false)
-                fetchTrabajos()
-            }} 
+          }} 
+        />
+      )}
+
+      {selectedJob && (
+        <JobDetailModal 
+          job={selectedJob}
+          onClose={() => setSelectedJob(null)}
+          onEdit={(job) => {
+            setSelectedJob(null)
+            setJobToEdit(job as TrabajoWithDetails)
+            setShowEditModal(true)
+          }}
+        />
+      )}
+
+      {showEditModal && jobToEdit && (
+        <EditJobModal 
+          job={jobToEdit}
+          onClose={() => {
+            setShowEditModal(false)
+            setJobToEdit(null)
+          }}
+          onSuccess={() => {
+            setShowEditModal(false)
+            setJobToEdit(null)
+            fetchTrabajos()
+          }}
         />
       )}
     </div>

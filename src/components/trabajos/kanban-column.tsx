@@ -20,9 +20,10 @@ interface KanbanColumnProps {
   title: string
   jobs: Trabajo[]
   onCardClick?: (job: Trabajo) => void
+  onArchive?: (job: Trabajo) => void
 }
 
-export function KanbanColumn({ id, title, jobs, onCardClick }: KanbanColumnProps) {
+export function KanbanColumn({ id, title, jobs, onCardClick, onArchive }: KanbanColumnProps) {
   const { setNodeRef } = useDroppable({
     id: id,
   })
@@ -40,7 +41,7 @@ export function KanbanColumn({ id, title, jobs, onCardClick }: KanbanColumnProps
       >
         <SortableContext id={id} items={jobs.map(j => j.id)} strategy={verticalListSortingStrategy}>
           {jobs.map((job) => (
-            <KanbanCard key={job.id} job={job} onClick={onCardClick} />
+            <KanbanCard key={job.id} job={job} onClick={onCardClick} onArchive={onArchive} />
           ))}
         </SortableContext>
         

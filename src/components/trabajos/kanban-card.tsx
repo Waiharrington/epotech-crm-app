@@ -5,7 +5,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Clock, MapPin, User, ChevronRight } from 'lucide-react'
+import { Calendar, Clock, MapPin, User, ChevronRight, Archive } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Database } from '@/types/supabase'
 
@@ -18,9 +18,10 @@ interface KanbanCardProps {
   job: Trabajo
   isOverlay?: boolean
   onClick?: (job: Trabajo) => void
+  onArchive?: (job: Trabajo) => void
 }
 
-export function KanbanCard({ job, isOverlay, onClick }: KanbanCardProps) {
+export function KanbanCard({ job, isOverlay, onClick, onArchive }: KanbanCardProps) {
   const {
     attributes,
     listeners,
@@ -99,8 +100,22 @@ export function KanbanCard({ job, isOverlay, onClick }: KanbanCardProps) {
             <span className="font-bold text-sm text-primary">
               ${job.precio_acordado || 0}
             </span>
-            <div className="h-6 w-6 rounded-full bg-accent flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-              <ChevronRight className="h-4 w-4" />
+            <div className="flex items-center gap-1">
+              {job.estado === 'completado' && onArchive && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onArchive(job)
+                  }}
+                  className="h-6 w-6 rounded-full flex items-center justify-center text-zinc-400 hover:text-amber-600 hover:bg-amber-50 transition-colors"
+                  title="Archivar"
+                >
+                  <Archive className="h-3.5 w-3.5" />
+                </button>
+              )}
+              <div className="h-6 w-6 rounded-full bg-accent flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                <ChevronRight className="h-4 w-4" />
+              </div>
             </div>
           </div>
         </CardContent>

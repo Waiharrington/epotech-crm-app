@@ -301,6 +301,15 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
         <JobDetailModal 
           job={jobToView}
           onClose={() => setJobToView(null)}
+          onArchive={async (job) => {
+            if (!confirm('¿Seguro que deseas archivar este trabajo?')) return
+            const { error } = await supabase.from('trabajos').update({ archivado: true }).eq('id', job.id)
+            if (error) alert('Error: ' + error.message)
+            else {
+               setJobToView(null)
+               fetchPhotos()
+            }
+          }}
         />
       )}
     </div>

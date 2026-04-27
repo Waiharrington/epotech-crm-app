@@ -41,9 +41,10 @@ interface KanbanBoardProps {
   trabajos: Trabajo[]
   onRefresh: () => void
   onCardClick?: (job: Trabajo) => void
+  onArchive?: (job: Trabajo) => void
 }
 
-export function KanbanBoard({ trabajos, onRefresh, onCardClick }: KanbanBoardProps) {
+export function KanbanBoard({ trabajos, onRefresh, onCardClick, onArchive }: KanbanBoardProps) {
   const supabase = createClient()
   const [activeId, setActiveId] = useState<string | null>(null)
   const [jobToComplete, setJobToComplete] = useState<Trabajo | null>(null)
@@ -131,6 +132,7 @@ export function KanbanBoard({ trabajos, onRefresh, onCardClick }: KanbanBoardPro
               title={col.title}
               jobs={jobsByColumn[col.id as keyof typeof jobsByColumn]}
               onCardClick={onCardClick}
+              onArchive={onArchive}
             />
           ))}
 

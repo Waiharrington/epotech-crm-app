@@ -21,9 +21,10 @@ interface JobDetailModalProps {
   job: Trabajo
   onClose: () => void
   onEdit?: (job: Trabajo) => void
+  onArchive?: (job: Trabajo) => void
 }
 
-export function JobDetailModal({ job, onClose, onEdit }: JobDetailModalProps) {
+export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailModalProps) {
   const isCompleted = job.estado === 'completado'
 
   return (
@@ -33,6 +34,17 @@ export function JobDetailModal({ job, onClose, onEdit }: JobDetailModalProps) {
           <div className="flex items-center justify-between gap-4 mr-6">
             <DialogTitle className="text-xl">Detalle del Servicio</DialogTitle>
             <div className="flex items-center gap-2">
+              {isCompleted && onArchive && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 text-zinc-400 hover:text-amber-600 hover:bg-amber-50"
+                  onClick={() => onArchive(job)}
+                  title="Archivar Servicio"
+                >
+                  <Archive className="h-4 w-4" />
+                </Button>
+              )}
               {onEdit && (
                 <Button 
                   variant="ghost" 

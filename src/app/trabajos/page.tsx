@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
 import { EditJobModal } from '@/components/trabajos/edit-job-modal'
+import { JobList } from '@/components/trabajos/job-list'
 import Link from 'next/link'
 
 type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
@@ -44,8 +45,24 @@ export default function TrabajosPage() {
       `)
       .order('fecha_servicio', { ascending: true })
     
-    if (data) setTrabajos(data as TrabajoWithDetails[])
+    // By default, only show non-archived jobs in the main operations center
+    if (data) setTrabajos((data as any[]).filter(t => !t.archivado))
     setLoading(false)
+  }
+
+  const handleArchive = async (job: TrabajoWithDetails) => {
+    if (!confirm('¿Seguro que deseas archivar este trabajo? Dejará de aparecer en el Centro de Operaciones principal.')) return
+
+    const { error } = await supabase
+      .from('trabajos')
+      .update({ archivado: true })
+      .eq('id', job.id)
+
+    if (error) {
+      alert('Error al archivar: ' + error.message)
+    } else {
+      fetchTrabajos()
+    }
   }
 
   const filteredTrabajos = trabajos.filter(t => {
@@ -122,11 +139,15 @@ export default function TrabajosPage() {
             trabajos={filteredTrabajos} 
             onRefresh={fetchTrabajos} 
             onCardClick={(job) => setSelectedJob(job as TrabajoWithDetails)}
+            onArchive={(job) => handleArchive(job as TrabajoWithDetails)}
           />
         ) : (
-          <div className="p-6 max-w-7xl mx-auto w-full">
-             {/* List View Placeholder */}
-             <p className="text-center text-muted-foreground">Vista de lista en desarrollo...</p>
+          <div className="p-4 md:p-6 max-w-7xl mx-auto w-full overflow-y-auto h-full pb-20">
+             <JobList 
+                trabajos={filteredTrabajos} 
+                onCardClick={(job) => setSelectedJob(job as TrabajoWithDetails)}
+                onArchive={(job) => handleArchive(job as TrabajoWithDetails)}
+             />
           </div>
         )}
       </div>
@@ -149,6 +170,10 @@ export default function TrabajosPage() {
             setSelectedJob(null)
             setJobToEdit(job as TrabajoWithDetails)
             setShowEditModal(true)
+          }}
+          onArchive={(job) => {
+            setSelectedJob(null)
+            handleArchive(job as TrabajoWithDetails)
           }}
         />
       )}

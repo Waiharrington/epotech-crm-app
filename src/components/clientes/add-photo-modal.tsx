@@ -25,23 +25,26 @@ import { CameraModal } from './camera-modal'
 interface AddPhotoModalProps {
   onUpload: (file: File, metadata: PhotoMetadata) => Promise<void>
   onClose: () => void
+  initialData?: Partial<PhotoMetadata>
 }
 
 export interface PhotoMetadata {
   etiqueta: string
   fecha: string
   observaciones: string
+  trabajo_id?: string
 }
 
-export function AddPhotoModal({ onUpload, onClose }: AddPhotoModalProps) {
+export function AddPhotoModal({ onUpload, onClose, initialData }: AddPhotoModalProps) {
   const [step, setStep] = useState<'source' | 'camera' | 'form'>('source')
   const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [metadata, setMetadata] = useState<PhotoMetadata>({
-    etiqueta: 'antes',
-    fecha: new Date().toISOString().split('T')[0],
-    observaciones: ''
+    etiqueta: initialData?.etiqueta || 'antes',
+    fecha: initialData?.fecha || new Date().toISOString().split('T')[0],
+    observaciones: initialData?.observaciones || '',
+    trabajo_id: initialData?.trabajo_id
   })
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

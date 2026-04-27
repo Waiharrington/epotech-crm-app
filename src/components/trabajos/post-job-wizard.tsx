@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from '@/lib/utils'
+import { AddPhotoModal, PhotoMetadata } from '@/components/clientes/add-photo-modal'
 
 type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
   clientes: { nombre: string; apellido: string }
@@ -50,6 +51,10 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
   const [frecuencia, setFrecuencia] = useState('mensual')
   const [frecuenciaPersonalizada, setFrecuenciaPersonalizada] = useState(30)
   const [fechaProxima, setFechaProxima] = useState('')
+
+  // Photo state
+  const [showPhotoModal, setShowPhotoModal] = useState(false)
+  const [uploadedPhotos, setUploadedPhotos] = useState<any[]>([])
 
   // Placeholder for stock items
   const [availableStock, setAvailableStock] = useState<any[]>([])
@@ -142,6 +147,45 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
 
     setLoading(false)
     onSuccess()
+  }
+
+  const handlePhotoUpload = async (file: File, metadata: PhotoMetadata) => {
+    // 1. Upload to Supabase Storage
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${Math.random()}.${fileExt}`
+    const filePath = `${job.cliente_id}/${fileName}`
+
+    const { error: uploadError } = await supabase.storage
+      .from('galeria')
+      .upload(filePath, file)
+
+    if (uploadError) {
+      alert('Error al subir imagen: ' + uploadError.message)
+      return
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('galeria')
+      .getPublicUrl(filePath)
+
+    // 2. Save metadata to fotos_trabajos
+    const { data: photoData, error: dbError } = await (supabase as any)
+      .from('fotos_trabajos')
+      .insert({
+        cliente_id: job.cliente_id,
+        trabajo_id: job.id,
+        url_foto: publicUrl,
+        etiqueta: metadata.etiqueta,
+        fecha_foto: metadata.fecha,
+        observaciones: metadata.observaciones
+      })
+      .select()
+
+    if (dbError) {
+      alert('Error al guardar datos: ' + dbError.message)
+    } else {
+      setUploadedPhotos([...uploadedPhotos, photoData[0]])
+    }
   }
 
   return (
@@ -256,9 +300,17 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                 Fotos del Resultado
               </Label>
               <div className="grid grid-cols-3 gap-2">
-                 <div className="aspect-square rounded-lg border-2 border-dashed border-muted flex flex-col items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors">
+                 {uploadedPhotos.map(p => (
+                   <div key={p.id} className="aspect-square rounded-lg overflow-hidden border">
+                     <img src={p.url_foto} className="w-full h-full object-cover" />
+                   </div>
+                 ))}
+                 <div 
+                   className="aspect-square rounded-lg border-2 border-dashed border-muted flex flex-col items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
+                   onClick={() => setShowPhotoModal(true)}
+                 >
                     <Plus className="h-6 w-6 text-muted-foreground" />
-                    <span className="text-[10px] text-muted-foreground mt-1">Subir</span>
+                    <span className="text-[10px] text-muted-foreground mt-1">Añadir</span>
                  </div>
               </div>
             </div>
@@ -375,6 +427,17 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
           </Button>
         </div>
       </DialogContent>
+
+      {showPhotoModal && (
+        <AddPhotoModal 
+          onClose={() => setShowPhotoModal(false)}
+          onUpload={handlePhotoUpload}
+          initialData={{
+             etiqueta: 'despues',
+             trabajo_id: job.id
+          }}
+        />
+      )}
     </Dialog>
   )
 }

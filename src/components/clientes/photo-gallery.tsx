@@ -13,7 +13,9 @@ import {
   Loader2,
   X,
   Maximize2,
-  StickyNote
+  StickyNote,
+  Briefcase,
+  ExternalLink
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
@@ -27,6 +29,11 @@ interface Photo {
   created_at: string
   observaciones?: string
   fecha_foto?: string
+  trabajo_id?: string
+  trabajos?: {
+    id: string
+    catalogo_servicios: { nombre: string } | null
+  } | null
 }
 
 interface PhotoGalleryProps {
@@ -50,7 +57,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
     setLoading(true)
     const { data } = await supabase
       .from('fotos_trabajos')
-      .select('*')
+      .select('*, trabajos(id, catalogo_servicios(nombre))')
       .eq('cliente_id', clientId)
       .order('created_at', { ascending: false })
     
@@ -83,7 +90,8 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
           url_foto: publicUrl,
           etiqueta: metadata.etiqueta,
           observaciones: metadata.observaciones,
-          fecha_foto: metadata.fecha
+          fecha_foto: metadata.fecha,
+          trabajo_id: metadata.trabajo_id
         }])
 
       if (dbError) throw dbError
@@ -242,6 +250,23 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
                     "{selectedPhoto.observaciones || 'Sin observaciones registradas para esta foto.'}"
                  </div>
               </div>
+
+              {selectedPhoto.trabajos && (
+                 <div className="space-y-2 pt-4 border-t border-white/5">
+                    <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                       <Briefcase className="h-3 w-3" /> Servicio Asociado
+                    </p>
+                    <div className="bg-primary/10 border border-primary/20 p-4 rounded-xl flex items-center justify-between group/srv">
+                       <div className="flex-1">
+                          <p className="text-sm font-bold text-primary truncate">
+                             {selectedPhoto.trabajos.catalogo_servicios?.nombre || 'Servicio General'}
+                          </p>
+                          <p className="text-[10px] text-primary/60 font-medium">Ver detalles del trabajo</p>
+                       </div>
+                       <ExternalLink className="h-4 w-4 text-primary opacity-40 group-hover/srv:opacity-100 transition-opacity" />
+                    </div>
+                 </div>
+               )}
 
               <div className="mt-auto pt-6">
                  <Button 

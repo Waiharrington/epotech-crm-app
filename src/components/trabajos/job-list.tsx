@@ -4,7 +4,7 @@ import React from 'react'
 import { Database } from '@/types/supabase'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, Clock, User, ChevronRight, Archive, CheckCircle2 } from 'lucide-react'
+import { Calendar, Clock, User, ChevronRight, Archive, CheckCircle2, RotateCcw } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 
@@ -16,10 +16,11 @@ type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
 interface JobListProps {
   trabajos: Trabajo[]
   onCardClick: (job: Trabajo) => void
-  onArchive: (job: Trabajo) => void
+  onArchive?: (job: Trabajo) => void
+  onUnarchive?: (job: Trabajo) => void
 }
 
-export function JobList({ trabajos, onCardClick, onArchive }: JobListProps) {
+export function JobList({ trabajos, onCardClick, onArchive, onUnarchive }: JobListProps) {
   const priorityColor = {
     urgente: 'bg-red-500 text-white',
     estandar: 'bg-blue-500 text-white',
@@ -100,7 +101,7 @@ export function JobList({ trabajos, onCardClick, onArchive }: JobListProps) {
                     {job.estado === 'completado' ? 'Completado' : job.estado === 'en_progreso' ? 'En Progreso' : 'Pendiente'}
                   </Badge>
 
-                  {job.estado === 'completado' && (
+                  {job.estado === 'completado' && onArchive && !(job as any).archivado && (
                     <Button 
                       variant="ghost" 
                       size="icon" 
@@ -112,6 +113,21 @@ export function JobList({ trabajos, onCardClick, onArchive }: JobListProps) {
                       title="Archivar Trabajo"
                     >
                       <Archive className="h-4 w-4" />
+                    </Button>
+                  )}
+
+                  {(job as any).archivado && onUnarchive && (
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-8 w-8 text-zinc-400 hover:text-primary hover:bg-primary/5"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onUnarchive(job)
+                      }}
+                      title="Restaurar a Operaciones"
+                    >
+                      <RotateCcw className="h-4 w-4" />
                     </Button>
                   )}
                   

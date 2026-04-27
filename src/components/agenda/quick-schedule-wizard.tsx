@@ -29,7 +29,7 @@ export function QuickScheduleWizard({ onClose, onSuccess }: QuickScheduleWizardP
   const [loading, setLoading] = useState(false)
   const [clients, setClients] = useState<Cliente[]>([])
   const [services, setServices] = useState<Servicio[]>([])
-  const [searchPhone, setSearchPhone] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
   
   const [selectedClient, setSelectedClient] = useState<Cliente | null>(null)
   const [selectedService, setSelectedService] = useState<string>('')
@@ -51,8 +51,15 @@ export function QuickScheduleWizard({ onClose, onSuccess }: QuickScheduleWizardP
     if (data) setServices(data)
   }
 
-  // Filter clients by phone
-  const filteredClients = searchPhone ? clients.filter(c => c.telefono.includes(searchPhone)) : []
+  // Filter clients by name or phone
+  const filteredClients = searchQuery ? clients.filter(c => {
+    const q = searchQuery.toLowerCase()
+    return (
+      c.nombre.toLowerCase().includes(q) ||
+      c.apellido.toLowerCase().includes(q) ||
+      c.telefono.includes(searchQuery)
+    )
+  }) : []
 
   const handleSave = async () => {
     if (!selectedClient || !selectedService) return
@@ -85,26 +92,26 @@ export function QuickScheduleWizard({ onClose, onSuccess }: QuickScheduleWizardP
       <DialogContent className="sm:max-w-[425px] p-0 overflow-hidden bg-background">
         <DialogHeader className="p-6 pb-0">
           <DialogTitle>Agendado Rápido</DialogTitle>
-          <DialogDescription>Asigna rápidamente un servicio buscando el teléfono del cliente.</DialogDescription>
+          <DialogDescription>Encuentra rápidamente al cliente por nombre o teléfono para agendar su servicio.</DialogDescription>
         </DialogHeader>
 
         <div className="p-6 space-y-6">
           {!selectedClient ? (
               <div className="space-y-4">
-                 <Label>1. Buscar por Teléfono</Label>
+                 <Label>1. Buscar por Nombre o Teléfono</Label>
                  <div className="relative">
                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                      <Input 
-                         type="tel"
-                         placeholder="Ej: 555-1234" 
+                         type="text"
+                         placeholder="Ej: Andrea o 555-1234" 
                          className="pl-10 text-lg py-6"
-                         value={searchPhone}
-                         onChange={e => setSearchPhone(e.target.value)}
+                         value={searchQuery}
+                         onChange={e => setSearchQuery(e.target.value)}
                          autoFocus
                      />
                  </div>
                  
-                 {searchPhone && filteredClients.length > 0 && (
+                 {searchQuery && filteredClients.length > 0 && (
                      <div className="mt-4 border rounded-xl overflow-hidden divide-y">
                          {filteredClients.map(c => (
                              <div 
@@ -121,7 +128,7 @@ export function QuickScheduleWizard({ onClose, onSuccess }: QuickScheduleWizardP
                          ))}
                      </div>
                  )}
-                 {searchPhone && filteredClients.length === 0 && (
+                 {searchQuery && filteredClients.length === 0 && (
                      <div className="text-center p-4 bg-muted/20 rounded-xl border border-dashed">
                          <p className="text-sm font-medium">Cliente no encontrado</p>
                          <p className="text-xs text-muted-foreground mt-1">Primero debes registrarlo en la pestaña de Clientes.</p>

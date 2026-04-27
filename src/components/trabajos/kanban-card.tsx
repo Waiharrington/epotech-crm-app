@@ -20,7 +20,7 @@ interface KanbanCardProps {
   onClick?: (job: Trabajo) => void
 }
 
-export function KanbanCard({ job, isOverlay }: KanbanCardProps) {
+export function KanbanCard({ job, isOverlay, onClick }: KanbanCardProps) {
   const {
     attributes,
     listeners,

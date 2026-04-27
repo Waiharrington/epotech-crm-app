@@ -53,7 +53,7 @@ export default function TrabajosPage() {
   const handleArchive = async (job: TrabajoWithDetails) => {
     if (!confirm('¿Seguro que deseas archivar este trabajo? Dejará de aparecer en el Centro de Operaciones principal.')) return
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('trabajos')
       .update({ archivado: true })
       .eq('id', job.id)

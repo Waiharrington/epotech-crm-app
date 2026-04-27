@@ -98,6 +98,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
         maquina_usada: maquinaUsada,
         presion_agua: presionAgua,
         quimicos_aplicados: quimicos,
+        materiales_utilizados: materials,
         completado_at: new Date().toISOString(),
         es_recurrente: esRecurrente,
         fecha_proximo_serv: fechaProxima || null

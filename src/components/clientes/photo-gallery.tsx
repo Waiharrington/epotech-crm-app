@@ -21,6 +21,7 @@ import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { BeforeAfterCollage } from './before-after-collage'
 import { AddPhotoModal, PhotoMetadata } from './add-photo-modal'
+import { JobDetailModal } from '../trabajos/job-detail-modal'
 
 interface Photo {
   id: string
@@ -48,6 +49,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
   const [showCollageMode, setShowCollageMode] = useState(false)
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null)
   const [showAddModal, setShowAddModal] = useState(false)
+  const [jobToView, setJobToView] = useState<any | null>(null)
 
   useEffect(() => {
     fetchPhotos()
@@ -57,7 +59,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
     setLoading(true)
     const { data } = await supabase
       .from('fotos_trabajos')
-      .select('*, trabajos(id, catalogo_servicios(nombre))')
+      .select('*, trabajos(*, catalogo_servicios(nombre))')
       .eq('cliente_id', clientId)
       .order('created_at', { ascending: false })
     
@@ -256,12 +258,15 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
                     <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
                        <Briefcase className="h-3 w-3" /> Servicio Asociado
                     </p>
-                    <div className="bg-primary/10 border border-primary/20 p-4 rounded-xl flex items-center justify-between group/srv">
+                    <div 
+                      className="bg-primary/10 border border-primary/20 p-4 rounded-xl flex items-center justify-between group/srv cursor-pointer hover:bg-primary/20 transition-all active:scale-95"
+                      onClick={() => setJobToView(selectedPhoto.trabajos)}
+                    >
                        <div className="flex-1">
                           <p className="text-sm font-bold text-primary truncate">
                              {selectedPhoto.trabajos.catalogo_servicios?.nombre || 'Servicio General'}
                           </p>
-                          <p className="text-[10px] text-primary/60 font-medium">Ver detalles del trabajo</p>
+                          <p className="text-[10px] text-primary/60 font-medium">Ver ficha técnica completa</p>
                        </div>
                        <ExternalLink className="h-4 w-4 text-primary opacity-40 group-hover/srv:opacity-100 transition-opacity" />
                     </div>
@@ -289,6 +294,13 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
         <AddPhotoModal 
           onClose={() => setShowAddModal(false)}
           onUpload={handleUpload}
+        />
+      )}
+
+      {jobToView && (
+        <JobDetailModal 
+          job={jobToView}
+          onClose={() => setJobToView(null)}
         />
       )}
     </div>

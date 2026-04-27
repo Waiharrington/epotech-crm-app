@@ -130,7 +130,13 @@ export default function TrabajosPage() {
         )}
       </div>
 
-          }} 
+      {showWizard && (
+        <NewJobWizard 
+            onClose={() => setShowWizard(false)} 
+            onSuccess={() => {
+                setShowWizard(false)
+                fetchTrabajos()
+            }} 
         />
       )}
 

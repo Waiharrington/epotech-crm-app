@@ -6,12 +6,16 @@ import { Database } from '@/types/supabase'
 import { Calendar } from '@/components/ui/calendar'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Clock, User, MapPin, ChevronRight, LayoutList, Calendar as CalendarIcon, Loader2, Plus, Send, TrendingUp } from 'lucide-react'
+import { Clock, User, MapPin, ChevronRight, LayoutList, Calendar as CalendarIcon, Loader2, Plus, Send, TrendingUp, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { QuickScheduleWizard } from '@/components/agenda/quick-schedule-wizard'
+import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, isWithinInterval, parseISO, addDays } from 'date-fns'
+import { es } from 'date-fns/locale'
 
 type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
   clientes: { nombre: string; apellido: string; direccion: string; telefono: string }
@@ -26,6 +30,11 @@ export default function AgendaPage() {
   const [loading, setLoading] = useState(true)
   const [view, setView] = useState<'calendar' | 'list'>('calendar')
   const [showWizard, setShowWizard] = useState(false)
+  const [period, setPeriod] = useState<'day' | 'week' | 'fortnight' | 'month' | 'custom'>('day')
+  const [customRange, setCustomRange] = useState<{ start: string; end: string }>({
+    start: new Date().toISOString().split('T')[0],
+    end: addDays(new Date(), 7).toISOString().split('T')[0]
+  })
 
   const [inactiveClients, setInactiveClients] = useState<any[]>([])
 
@@ -88,7 +97,59 @@ export default function AgendaPage() {
   }
 
   const selectedDateStr = date?.toISOString().split('T')[0]
-  const jobsForDate = trabajos.filter(t => t.fecha_servicio === selectedDateStr)
+  
+  const getFilteredJobs = () => {
+    if (!date) return []
+    
+    const selectedDate = new Date(date)
+    
+    switch (period) {
+      case 'day':
+        return trabajos.filter(t => t.fecha_servicio === selectedDateStr)
+      
+      case 'week': {
+        const start = startOfWeek(selectedDate, { weekStartsOn: 1 })
+        const end = endOfWeek(selectedDate, { weekStartsOn: 1 })
+        return trabajos.filter(t => {
+          const jobDate = parseISO(t.fecha_servicio)
+          return isWithinInterval(jobDate, { start, end })
+        })
+      }
+      
+      case 'fortnight': {
+        const start = selectedDate
+        const end = addDays(selectedDate, 14)
+        return trabajos.filter(t => {
+          const jobDate = parseISO(t.fecha_servicio)
+          return isWithinInterval(jobDate, { start, end })
+        })
+      }
+      
+      case 'month': {
+        const start = startOfMonth(selectedDate)
+        const end = endOfMonth(selectedDate)
+        return trabajos.filter(t => {
+          const jobDate = parseISO(t.fecha_servicio)
+          return isWithinInterval(jobDate, { start, end })
+        })
+      }
+      
+      case 'custom': {
+        const start = parseISO(customRange.start)
+        const end = parseISO(customRange.end)
+        return trabajos.filter(t => {
+          const jobDate = parseISO(t.fecha_servicio)
+          return isWithinInterval(jobDate, { start, end })
+        })
+      }
+      
+      default:
+        return []
+    }
+  }
+
+  const jobsToDisplay = getFilteredJobs()
+  const jobsForToday = trabajos.filter(t => t.fecha_servicio === new Date().toISOString().split('T')[0])
 
   return (
     <div className="flex flex-col h-full bg-background overflow-hidden">
@@ -126,6 +187,39 @@ export default function AgendaPage() {
         </div>
       </header>
 
+      {/* Period Selector Toolbar */}
+      <div className="bg-card border-b px-4 py-2 overflow-x-auto no-scrollbar">
+          <div className="max-w-7xl mx-auto flex items-center gap-2">
+              <Tabs value={period} onValueChange={(v: any) => setPeriod(v)} className="w-full md:w-auto">
+                  <TabsList className="bg-muted/50 h-9">
+                      <TabsTrigger value="day" className="text-xs">Día</TabsTrigger>
+                      <TabsTrigger value="week" className="text-xs">Semanal</TabsTrigger>
+                      <TabsTrigger value="fortnight" className="text-xs">Quincenal</TabsTrigger>
+                      <TabsTrigger value="month" className="text-xs">Mensual</TabsTrigger>
+                      <TabsTrigger value="custom" className="text-xs">Personalizado</TabsTrigger>
+                  </TabsList>
+              </Tabs>
+              
+              {period === 'custom' && (
+                  <div className="flex items-center gap-2 animate-in slide-in-from-left-2 duration-300">
+                      <Input 
+                        type="date" 
+                        value={customRange.start} 
+                        onChange={(e) => setCustomRange(prev => ({ ...prev, start: e.target.value }))}
+                        className="h-8 text-xs w-32"
+                      />
+                      <span className="text-xs text-muted-foreground">al</span>
+                      <Input 
+                        type="date" 
+                        value={customRange.end} 
+                        onChange={(e) => setCustomRange(prev => ({ ...prev, end: e.target.value }))}
+                        className="h-8 text-xs w-32"
+                      />
+                  </div>
+              )}
+          </div>
+      </div>
+
       <div className="flex-1 overflow-hidden">
         <div className="h-full flex flex-col md:flex-row max-w-7xl mx-auto w-full">
             {/* Calendar Picker Section */}
@@ -141,15 +235,15 @@ export default function AgendaPage() {
                 />
                 
                 <div className="mt-8 hidden md:block">
-                    <h3 className="text-sm font-bold uppercase text-muted-foreground tracking-wider mb-4">Resumen Semanal</h3>
+                    <h3 className="text-sm font-bold uppercase text-muted-foreground tracking-wider mb-4">Resumen de Hoy</h3>
                     <div className="space-y-3">
                          <div className="flex items-center justify-between p-3 rounded-lg bg-primary/5 border border-primary/10">
                             <span className="text-sm font-medium">Trabajos hoy</span>
-                            <Badge>{jobsForDate.length}</Badge>
+                            <Badge>{jobsForToday.length}</Badge>
                          </div>
                     </div>
                     <div className="mt-6 space-y-4">
-                        <Button className="w-full bg-green-600 hover:bg-green-700" onClick={shareDailyRoute} disabled={jobsForDate.length === 0}>
+                        <Button className="w-full bg-green-600 hover:bg-green-700" onClick={shareDailyRoute} disabled={jobsForToday.length === 0}>
                             <Send className="mr-2 h-4 w-4" /> Compartir Ruta WhatsApp
                         </Button>
                         
@@ -185,17 +279,27 @@ export default function AgendaPage() {
             {/* List Section */}
             <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-muted/20">
                 <div className="mb-6 flex items-center justify-between">
-                    <h2 className="text-xl font-bold">
-                        {date ? date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Selecciona una fecha'}
+                    <h2 className="text-xl font-bold capitalize">
+                        {period === 'day' ? (
+                            date ? date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Selecciona una fecha'
+                        ) : period === 'week' ? (
+                            'Esta Semana'
+                        ) : period === 'fortnight' ? (
+                            'Próxima Quincena'
+                        ) : period === 'month' ? (
+                            date ? date.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }) : 'Este Mes'
+                        ) : (
+                            'Rango Personalizado'
+                        )}
                     </h2>
                     <Badge variant="outline" className="h-6">
-                        {jobsForDate.length} {jobsForDate.length === 1 ? 'Servicio' : 'Servicios'}
+                        {jobsToDisplay.length} {jobsToDisplay.length === 1 ? 'Servicio' : 'Servicios'}
                     </Badge>
                 </div>
 
                 <div className="space-y-4">
-                    {jobsForDate.length > 0 ? (
-                        jobsForDate.map(job => (
+                    {jobsToDisplay.length > 0 ? (
+                        jobsToDisplay.map(job => (
                             <Link key={job.id} href={`/trabajos`}>
                                 <Card className="hover:shadow-md transition-shadow group cursor-pointer mb-4">
                                     <CardContent className="p-4 flex items-center gap-4">

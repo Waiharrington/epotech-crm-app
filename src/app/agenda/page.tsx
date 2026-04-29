@@ -81,9 +81,9 @@ export default function AgendaPage() {
   }
 
   const shareDailyRoute = () => {
-    if (jobsForDate.length === 0) return
+    if (jobsForToday.length === 0) return
     let message = `*Ruta Epotech - ${date?.toLocaleDateString()}*\n\n`
-    jobsForDate.forEach((j, i) => {
+    jobsForToday.forEach((j, i) => {
       message += `${i+1}. *${j.clientes.nombre} ${j.clientes.apellido}*\n`
       message += `   ⏰ ${j.hora_servicio || 'Sin hora'}\n`
       message += `   🛠️ ${j.catalogo_servicios?.nombre || 'Servicio'}\n`

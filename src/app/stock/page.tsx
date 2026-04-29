@@ -13,9 +13,10 @@ import {
   ArrowUpRight, 
   ArrowDownRight, 
   History, 
-  MoreVertical,
   Search,
-  Loader2
+  Loader2,
+  Pencil,
+  Trash2
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { 
@@ -58,6 +59,9 @@ export default function StockPage() {
     type: 'in'
   })
   
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [editingItem, setEditingItem] = useState<StockItem | null>(null)
+  
   const [formData, setFormData] = useState<Partial<StockItem>>({
     nombre: '',
     tipo: 'consumible',
@@ -84,8 +88,46 @@ export default function StockPage() {
     const { error } = await (supabase as any).from('stock').insert([formData])
     if (!error) {
       setShowAddModal(false)
+      setFormData({
+        nombre: '',
+        tipo: 'consumible',
+        unidad_medida: 'unidades',
+        cantidad_actual: 0,
+        cantidad_minima: 1,
+        precio_costo: 0
+      })
       fetchStock()
     }
+    setLoading(false)
+  }
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!editingItem) return
+    setLoading(true)
+    const { error } = await (supabase as any)
+      .from('stock')
+      .update({
+        nombre: editingItem.nombre,
+        tipo: editingItem.tipo,
+        unidad_medida: editingItem.unidad_medida,
+        cantidad_minima: editingItem.cantidad_minima,
+        precio_costo: editingItem.precio_costo
+      })
+      .eq('id', editingItem.id)
+    
+    if (!error) {
+      setShowEditModal(false)
+      fetchStock()
+    }
+    setLoading(false)
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('¿Estás seguro de que deseas eliminar este item del inventario?')) return
+    setLoading(true)
+    const { error } = await supabase.from('stock').delete().eq('id', id)
+    if (!error) fetchStock()
     setLoading(false)
   }
 
@@ -202,8 +244,24 @@ export default function StockPage() {
                                          >
                                             <ArrowDownRight className="h-4 w-4 text-red-600" />
                                          </Button>
-                                         <Button variant="ghost" size="icon" className="h-8 w-8">
-                                            <History className="h-4 w-4 text-muted-foreground" />
+                                         <Button 
+                                           variant="ghost" 
+                                           size="icon" 
+                                           className="h-8 w-8 hover:bg-blue-50"
+                                           onClick={() => {
+                                               setEditingItem(item)
+                                               setShowEditModal(true)
+                                           }}
+                                         >
+                                            <Pencil className="h-4 w-4 text-blue-600" />
+                                         </Button>
+                                         <Button 
+                                           variant="ghost" 
+                                           size="icon" 
+                                           className="h-8 w-8 hover:bg-red-50"
+                                           onClick={() => handleDelete(item.id)}
+                                         >
+                                            <Trash2 className="h-4 w-4 text-red-600" />
                                          </Button>
                                     </div>
                                 </TableCell>
@@ -281,6 +339,65 @@ export default function StockPage() {
                 {loading ? <Loader2 className="animate-spin" /> : 'Registrar Item'}
              </Button>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Item</DialogTitle>
+            <DialogDescription>Modifica la información del material o herramienta.</DialogDescription>
+          </DialogHeader>
+          {editingItem && (
+            <form onSubmit={handleUpdate} className="space-y-4 pt-4">
+               <div className="space-y-2">
+                  <Label htmlFor="edit-nombre">Nombre</Label>
+                  <Input 
+                      id="edit-nombre" 
+                      value={editingItem.nombre} 
+                      onChange={e => setEditingItem({ ...editingItem, nombre: e.target.value })} 
+                      required 
+                  />
+               </div>
+               <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                     <Label>Tipo</Label>
+                     <Select value={editingItem.tipo as string} onValueChange={v => setEditingItem({ ...editingItem, tipo: v as any })}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="consumible">Consumible</SelectItem>
+                          <SelectItem value="herramienta">Herramienta</SelectItem>
+                          <SelectItem value="maquinaria">Maquinaria</SelectItem>
+                        </SelectContent>
+                     </Select>
+                  </div>
+                  <div className="space-y-2">
+                      <Label htmlFor="edit-unidad">Unidad de Medida</Label>
+                      <Input 
+                          id="edit-unidad" 
+                          value={editingItem.unidad_medida || ''} 
+                          onChange={e => setEditingItem({ ...editingItem, unidad_medida: e.target.value })} 
+                          placeholder="Ej: galones, litros, unidades, etc."
+                      />
+                  </div>
+               </div>
+               <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                      <Label htmlFor="edit-min">Aviso Stock Mín.</Label>
+                      <Input id="edit-min" type="number" value={editingItem.cantidad_minima || 0} onChange={e => setEditingItem({ ...editingItem, cantidad_minima: parseFloat(e.target.value) || 0 })} />
+                  </div>
+                  <div className="space-y-2">
+                      <Label htmlFor="edit-precio">Precio Costo</Label>
+                      <Input id="edit-precio" type="number" step="0.01" value={editingItem.precio_costo || 0} onChange={e => setEditingItem({ ...editingItem, precio_costo: parseFloat(e.target.value) || 0 })} />
+                  </div>
+               </div>
+               <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? <Loader2 className="animate-spin" /> : 'Guardar Cambios'}
+               </Button>
+            </form>
+          )}
         </DialogContent>
       </Dialog>
     </div>

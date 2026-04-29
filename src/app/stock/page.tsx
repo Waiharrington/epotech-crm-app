@@ -43,6 +43,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 import { StockAdjustModal } from '@/components/stock/stock-adjust-modal'
 import { StockHistoryModal } from '@/components/stock/stock-history-modal'
 
@@ -79,6 +85,10 @@ export default function StockPage() {
   const [showEditModal, setShowEditModal] = useState(false)
   const [editingItem, setEditingItem] = useState<StockItem | null>(null)
   
+  const [globalMovements, setGlobalMovements] = useState<any[]>([])
+  const [loadingHistory, setLoadingHistory] = useState(false)
+  const [historySearch, setHistorySearch] = useState('')
+  
   const [formData, setFormData] = useState<Partial<StockItem>>({
     nombre: '',
     tipo: 'consumible',
@@ -90,7 +100,19 @@ export default function StockPage() {
 
   useEffect(() => {
     fetchStock()
+    fetchGlobalHistory()
   }, [])
+
+  const fetchGlobalHistory = async () => {
+    setLoadingHistory(true)
+    const { data } = await supabase
+      .from('stock_movimientos')
+      .select('*, stock(nombre, unidad_medida)')
+      .order('created_at', { ascending: false })
+    
+    if (data) setGlobalMovements(data)
+    setLoadingHistory(false)
+  }
 
   const fetchStock = async () => {
     setLoading(true)
@@ -114,6 +136,7 @@ export default function StockPage() {
         precio_costo: 0
       })
       fetchStock()
+      fetchGlobalHistory()
     }
     setLoading(false)
   }
@@ -136,6 +159,7 @@ export default function StockPage() {
     if (!error) {
       setShowEditModal(false)
       fetchStock()
+      fetchGlobalHistory()
     }
     setLoading(false)
   }
@@ -144,9 +168,17 @@ export default function StockPage() {
     if (!confirm('¿Estás seguro de que deseas eliminar este item del inventario?')) return
     setLoading(true)
     const { error } = await supabase.from('stock').delete().eq('id', id)
-    if (!error) fetchStock()
+    if (!error) {
+      fetchStock()
+      fetchGlobalHistory()
+    }
     setLoading(false)
   }
+
+  const filteredHistory = globalMovements.filter(m => 
+    m.stock?.nombre?.toLowerCase().includes(historySearch.toLowerCase()) ||
+    m.motivo?.toLowerCase().includes(historySearch.toLowerCase())
+  )
 
   const filteredItems = items.filter(i => 
     i.nombre.toLowerCase().includes(search.toLowerCase())
@@ -187,115 +219,196 @@ export default function StockPage() {
             </Card>
         </div>
 
-        {/* Toolbar */}
-        <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Buscar por nombre de producto..."
-              className="pl-10 h-10 bg-card"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
         </div>
+        
+        <Tabs defaultValue="inventario" className="flex-1 flex flex-col gap-4 overflow-hidden">
+          <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
+            <TabsTrigger value="inventario">Inventario Actual</TabsTrigger>
+            <TabsTrigger value="historial">Historial General</TabsTrigger>
+          </TabsList>
 
-        {/* Table Section */}
-        <div className="border rounded-xl bg-card overflow-hidden flex-1 flex flex-col">
-            <div className="overflow-auto flex-1">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Producto</TableHead>
-                            <TableHead>Estado</TableHead>
-                            <TableHead>Cantidad</TableHead>
-                            <TableHead className="hidden md:table-cell">Precio Costo</TableHead>
-                            <TableHead className="text-right">Acciones</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {loading ? (
-                           <TableRow><TableCell colSpan={5} className="text-center py-10"><Loader2 className="h-6 w-6 animate-spin mx-auto" /></TableCell></TableRow>
-                        ) : filteredItems.map(item => (
-                            <TableRow key={item.id}>
-                                <TableCell>
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-8 w-8 rounded bg-muted flex items-center justify-center">
-                                            <Package className="h-4 w-4 text-muted-foreground" />
-                                        </div>
-                                        <div>
-                                            <div className="font-medium">{item.nombre}</div>
-                                            <div className="text-[10px] text-muted-foreground uppercase">{item.tipo}</div>
-                                        </div>
-                                    </div>
-                                </TableCell>
-                                <TableCell>
-                                    {(item.cantidad_actual || 0) <= (item.cantidad_minima || 0) ? (
-                                        <Badge variant="destructive" className="bg-orange-500 hover:bg-orange-600">Reordenar</Badge>
-                                    ) : (
-                                        <Badge variant="secondary" className="bg-green-100 text-green-700 hover:bg-green-200 border-green-200">OK</Badge>
-                                    )}
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex flex-col">
-                                        <span className="font-bold text-base">{item.cantidad_actual}</span>
-                                        <span className="text-[10px] text-muted-foreground uppercase font-medium">{item.unidad_medida || 'unidades'}</span>
-                                    </div>
-                                </TableCell>
-                                <TableCell className="hidden md:table-cell">
-                                    <span className="text-sm font-medium">${item.precio_costo}</span>
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <div className="flex items-center justify-end gap-1">
-                                         <Button 
-                                           variant="ghost" 
-                                           size="icon" 
-                                           className="h-8 w-8 hover:bg-green-50"
-                                           onClick={() => setAdjustModal({ open: true, item: item, type: 'in' })}
-                                         >
-                                            <ArrowUpRight className="h-4 w-4 text-green-600" />
-                                         </Button>
-                                         <Button 
-                                           variant="ghost" 
-                                           size="icon" 
-                                           className="h-8 w-8 hover:bg-red-50"
-                                           onClick={() => setAdjustModal({ open: true, item: item, type: 'out' })}
-                                         >
-                                            <ArrowDownRight className="h-4 w-4 text-red-600" />
-                                         </Button>
-                                         <Button 
-                                           variant="ghost" 
-                                           size="icon" 
-                                           className="h-8 w-8 hover:bg-muted"
-                                           onClick={() => setHistoryModal({ open: true, item: item })}
-                                         >
-                                            <History className="h-4 w-4 text-muted-foreground" />
-                                         </Button>
-                                         <Button 
-                                           variant="ghost" 
-                                           size="icon" 
-                                           className="h-8 w-8 hover:bg-blue-50"
-                                           onClick={() => {
-                                               setEditingItem(item)
-                                               setShowEditModal(true)
-                                           }}
-                                         >
-                                            <Pencil className="h-4 w-4 text-blue-600" />
-                                         </Button>
-                                         <Button 
-                                           variant="ghost" 
-                                           size="icon" 
-                                           className="h-8 w-8 hover:bg-red-50"
-                                           onClick={() => handleDelete(item.id)}
-                                         >
-                                            <Trash2 className="h-4 w-4 text-red-600" />
-                                         </Button>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+          <TabsContent value="inventario" className="flex-1 flex flex-col gap-4 overflow-hidden mt-0">
+            {/* Toolbar */}
+            <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Buscar por nombre de producto..."
+                  className="pl-10 h-10 bg-card"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
             </div>
-        </div>
+
+            {/* Table Section */}
+            <div className="border rounded-xl bg-card overflow-hidden flex-1 flex flex-col">
+                <div className="overflow-auto flex-1">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Producto</TableHead>
+                                <TableHead>Estado</TableHead>
+                                <TableHead>Cantidad</TableHead>
+                                <TableHead className="hidden md:table-cell">Precio Costo</TableHead>
+                                <TableHead className="text-right">Acciones</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {loading ? (
+                               <TableRow><TableCell colSpan={5} className="text-center py-10"><Loader2 className="h-6 w-6 animate-spin mx-auto" /></TableCell></TableRow>
+                            ) : filteredItems.map(item => (
+                                <TableRow key={item.id}>
+                                    <TableCell>
+                                        <div className="flex items-center gap-3">
+                                            <div className="h-8 w-8 rounded bg-muted flex items-center justify-center">
+                                                <Package className="h-4 w-4 text-muted-foreground" />
+                                            </div>
+                                            <div>
+                                                <div className="font-medium">{item.nombre}</div>
+                                                <div className="text-[10px] text-muted-foreground uppercase">{item.tipo}</div>
+                                            </div>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        {(item.cantidad_actual || 0) <= (item.cantidad_minima || 0) ? (
+                                            <Badge variant="destructive" className="bg-orange-500 hover:bg-orange-600">Reordenar</Badge>
+                                        ) : (
+                                            <Badge variant="secondary" className="bg-green-100 text-green-700 hover:bg-green-200 border-green-200">OK</Badge>
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex flex-col">
+                                            <span className="font-bold text-base">{item.cantidad_actual}</span>
+                                            <span className="text-[10px] text-muted-foreground uppercase font-medium">{item.unidad_medida || 'unidades'}</span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="hidden md:table-cell">
+                                        <span className="text-sm font-medium">${item.precio_costo}</span>
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        <div className="flex items-center justify-end gap-1">
+                                             <Button 
+                                               variant="ghost" 
+                                               size="icon" 
+                                               className="h-8 w-8 hover:bg-green-50"
+                                               onClick={() => setAdjustModal({ open: true, item: item, type: 'in' })}
+                                             >
+                                                <ArrowUpRight className="h-4 w-4 text-green-600" />
+                                             </Button>
+                                             <Button 
+                                               variant="ghost" 
+                                               size="icon" 
+                                               className="h-8 w-8 hover:bg-red-50"
+                                               onClick={() => setAdjustModal({ open: true, item: item, type: 'out' })}
+                                             >
+                                                <ArrowDownRight className="h-4 w-4 text-red-600" />
+                                             </Button>
+                                             <Button 
+                                               variant="ghost" 
+                                               size="icon" 
+                                               className="h-8 w-8 hover:bg-muted"
+                                               onClick={() => setHistoryModal({ open: true, item: item })}
+                                             >
+                                                <History className="h-4 w-4 text-muted-foreground" />
+                                             </Button>
+                                             <Button 
+                                               variant="ghost" 
+                                               size="icon" 
+                                               className="h-8 w-8 hover:bg-blue-50"
+                                               onClick={() => {
+                                                   setEditingItem(item)
+                                                   setShowEditModal(true)
+                                               }}
+                                             >
+                                                <Pencil className="h-4 w-4 text-blue-600" />
+                                             </Button>
+                                             <Button 
+                                               variant="ghost" 
+                                               size="icon" 
+                                               className="h-8 w-8 hover:bg-red-50"
+                                               onClick={() => handleDelete(item.id)}
+                                             >
+                                                <Trash2 className="h-4 w-4 text-red-600" />
+                                             </Button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="historial" className="flex-1 flex flex-col gap-4 overflow-hidden mt-0">
+            <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Buscar por producto o motivo..."
+                  className="pl-10 h-10 bg-card"
+                  value={historySearch}
+                  onChange={(e) => setHistorySearch(e.target.value)}
+                />
+            </div>
+
+            <div className="border rounded-xl bg-card overflow-hidden flex-1 flex flex-col">
+                <div className="overflow-auto flex-1">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Fecha</TableHead>
+                                <TableHead>Producto</TableHead>
+                                <TableHead>Movimiento</TableHead>
+                                <TableHead>Motivo</TableHead>
+                                <TableHead className="text-right">Balance</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {loadingHistory ? (
+                               <TableRow><TableCell colSpan={5} className="text-center py-10"><Loader2 className="h-6 w-6 animate-spin mx-auto" /></TableCell></TableRow>
+                            ) : filteredHistory.length > 0 ? filteredHistory.map(move => (
+                                <TableRow key={move.id}>
+                                    <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
+                                        {new Date(move.created_at).toLocaleString('es-ES', { 
+                                          day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' 
+                                        })}
+                                    </TableCell>
+                                    <TableCell className="font-medium">
+                                        {move.stock?.nombre || 'Item eliminado'}
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-2">
+                                            <div className={`h-6 w-6 rounded-full flex items-center justify-center ${
+                                                move.tipo === 'entrada' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                            }`}>
+                                                {move.tipo === 'entrada' ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+                                            </div>
+                                            <span className={`text-sm font-bold ${
+                                                move.tipo === 'entrada' ? 'text-green-700' : 'text-red-700'
+                                            }`}>
+                                                {move.tipo === 'entrada' ? '+' : '-'}{move.cantidad} {move.stock?.unidad_medida}
+                                            </span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="text-sm max-w-[200px] truncate">
+                                        {move.motivo}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        <Badge variant="outline">{move.cantidad_resultante}</Badge>
+                                    </TableCell>
+                                </TableRow>
+                            )) : (
+                                <TableRow>
+                                    <TableCell colSpan={5} className="text-center py-20 text-muted-foreground italic">
+                                        No hay movimientos registrados.
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
 
       {adjustModal.open && adjustModal.item && (
@@ -306,6 +419,7 @@ export default function StockPage() {
            onSuccess={() => {
                setAdjustModal({ ...adjustModal, open: false })
                fetchStock()
+               fetchGlobalHistory()
            }}
         />
       )}

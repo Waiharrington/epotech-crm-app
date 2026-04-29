@@ -218,8 +218,6 @@ export default function StockPage() {
                 </CardContent>
             </Card>
         </div>
-
-        </div>
         
         <Tabs defaultValue="inventario" className="flex-1 flex flex-col gap-4 overflow-hidden">
           <TabsList className="grid w-full grid-cols-2 max-w-[400px]">

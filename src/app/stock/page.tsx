@@ -44,6 +44,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { StockAdjustModal } from '@/components/stock/stock-adjust-modal'
+import { StockHistoryModal } from '@/components/stock/stock-history-modal'
 
 type StockItem = Database['public']['Tables']['stock']['Row']
 
@@ -68,6 +69,11 @@ export default function StockPage() {
     open: false,
     item: null,
     type: 'in'
+  })
+  
+  const [historyModal, setHistoryModal] = useState<{ open: boolean, item: StockItem | null }>({
+    open: false,
+    item: null
   })
   
   const [showEditModal, setShowEditModal] = useState(false)
@@ -258,6 +264,14 @@ export default function StockPage() {
                                          <Button 
                                            variant="ghost" 
                                            size="icon" 
+                                           className="h-8 w-8 hover:bg-muted"
+                                           onClick={() => setHistoryModal({ open: true, item: item })}
+                                         >
+                                            <History className="h-4 w-4 text-muted-foreground" />
+                                         </Button>
+                                         <Button 
+                                           variant="ghost" 
+                                           size="icon" 
                                            className="h-8 w-8 hover:bg-blue-50"
                                            onClick={() => {
                                                setEditingItem(item)
@@ -293,6 +307,13 @@ export default function StockPage() {
                setAdjustModal({ ...adjustModal, open: false })
                fetchStock()
            }}
+        />
+      )}
+
+      {historyModal.open && historyModal.item && (
+        <StockHistoryModal 
+          item={historyModal.item}
+          onClose={() => setHistoryModal({ ...historyModal, open: false })}
         />
       )}
 

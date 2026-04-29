@@ -35,16 +35,26 @@ export function StockAdjustModal({ item, type, onClose, onSuccess }: StockAdjust
         ? (item.cantidad_actual || 0) + adjustment 
         : Math.max(0, (item.cantidad_actual || 0) - adjustment)
 
-    const { error } = await (supabase as any)
+    const { error: updateError } = await (supabase as any)
       .from('stock')
       .update({ cantidad_actual: newQuantity })
       .eq('id', item.id)
 
-    if (!error) {
-       // Optional: Add to a stock_movements table if we had one
+    if (!updateError) {
+       // Registrar el movimiento en el historial
+       await (supabase as any)
+         .from('stock_movimientos')
+         .insert([{
+           stock_id: item.id,
+           tipo: type === 'in' ? 'entrada' : 'salida',
+           cantidad: adjustment,
+           cantidad_resultante: newQuantity,
+           motivo: reason || (type === 'in' ? 'Ajuste de entrada' : 'Ajuste de salida')
+         }])
+         
        onSuccess()
     } else {
-       alert('Error: ' + error.message)
+       alert('Error: ' + updateError.message)
     }
     setLoading(false)
   }

@@ -47,6 +47,17 @@ import { StockAdjustModal } from '@/components/stock/stock-adjust-modal'
 
 type StockItem = Database['public']['Tables']['stock']['Row']
 
+const UNIDADES_MEDIDA = [
+  'unidades',
+  'galones',
+  'litros',
+  'kilos',
+  'metros',
+  'paquetes',
+  'rollos',
+  'otro'
+]
+
 export default function StockPage() {
   const supabase = createClient()
   const [items, setItems] = useState<StockItem[]>([])
@@ -315,15 +326,19 @@ export default function StockPage() {
                       </SelectContent>
                    </Select>
                 </div>
-                <div className="space-y-2">
-                    <Label htmlFor="unidad">Unidad de Medida</Label>
-                    <Input 
-                        id="unidad" 
-                        value={formData.unidad_medida || ''} 
-                        onChange={e => setFormData({ ...formData, unidad_medida: e.target.value })} 
-                        placeholder="Ej: galones, litros, unidades, etc."
-                    />
-                </div>
+                 <div className="space-y-2">
+                    <Label>Unidad de Medida</Label>
+                    <Select value={formData.unidad_medida || 'unidades'} onValueChange={v => setFormData({ ...formData, unidad_medida: v })}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona unidad" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {UNIDADES_MEDIDA.map(u => (
+                            <SelectItem key={u} value={u} className="capitalize">{u}</SelectItem>
+                          ))}
+                        </SelectContent>
+                    </Select>
+                 </div>
              </div>
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -374,13 +389,17 @@ export default function StockPage() {
                      </Select>
                   </div>
                   <div className="space-y-2">
-                      <Label htmlFor="edit-unidad">Unidad de Medida</Label>
-                      <Input 
-                          id="edit-unidad" 
-                          value={editingItem.unidad_medida || ''} 
-                          onChange={e => setEditingItem({ ...editingItem, unidad_medida: e.target.value })} 
-                          placeholder="Ej: galones, litros, unidades, etc."
-                      />
+                      <Label>Unidad de Medida</Label>
+                      <Select value={editingItem.unidad_medida || 'unidades'} onValueChange={v => setEditingItem({ ...editingItem, unidad_medida: v })}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona unidad" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {UNIDADES_MEDIDA.map(u => (
+                              <SelectItem key={u} value={u} className="capitalize">{u}</SelectItem>
+                            ))}
+                          </SelectContent>
+                      </Select>
                   </div>
                </div>
                <div className="grid grid-cols-2 gap-4">

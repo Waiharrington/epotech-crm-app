@@ -176,9 +176,9 @@ export default function StockPage() {
                                     )}
                                 </TableCell>
                                 <TableCell>
-                                    <div className="flex items-center gap-2">
-                                        <span className="font-bold">{item.cantidad_actual}</span>
-                                        <span className="text-xs text-muted-foreground">{item.unidad_medida}</span>
+                                    <div className="flex flex-col">
+                                        <span className="font-bold text-base">{item.cantidad_actual}</span>
+                                        <span className="text-[10px] text-muted-foreground uppercase font-medium">{item.unidad_medida || 'unidades'}</span>
                                     </div>
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
@@ -258,12 +258,12 @@ export default function StockPage() {
                    </Select>
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="unidad">Unidad</Label>
+                    <Label htmlFor="unidad">Unidad de Medida</Label>
                     <Input 
                         id="unidad" 
                         value={formData.unidad_medida || ''} 
                         onChange={e => setFormData({ ...formData, unidad_medida: e.target.value })} 
-                        placeholder="galones, unidades..."
+                        placeholder="Ej: galones, litros, unidades, etc."
                     />
                 </div>
              </div>

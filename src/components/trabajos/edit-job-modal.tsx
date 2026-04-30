@@ -23,10 +23,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-type Trabajo = Database['public']['Tables']['trabajos']['Row']
+type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
+  clientes: { nombre: string; apellido: string }
+  catalogo_servicios: { nombre: string } | null
+}
 
 interface EditJobModalProps {
-  job: Trabajo
+  job: TrabajoWithDetails
   onClose: () => void
   onSuccess: () => void
 }
@@ -95,17 +98,17 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
             // Record a purchase first to balance it out
             await (supabase as any).from('stock_movimientos').insert({
               stock_id: mat.id,
+              trabajo_id: job.id,
               tipo: 'entrada',
               cantidad: difference,
               cantidad_resultante: mat.cantidad,
-              motivo: `Compra rápida (Auto-ajuste por Servicio #${job.id.substring(0, 5)})`
+              motivo: `Compra rápida (Auto-ajuste por: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre})`
             })
         }
 
         const newQuantity = (stockItem.cantidad_actual || 0) - mat.cantidad
         
-        // Update current stock (if it goes negative, we'll allow it but record it, or cap at 0)
-        // Actually, with the purchase logic above, it should land at 0 if usage == stock
+        // Update current stock
         await (supabase as any)
           .from('stock')
           .update({ cantidad_actual: Math.max(0, newQuantity) })
@@ -114,10 +117,11 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
         // Record movement in history
         await (supabase as any).from('stock_movimientos').insert({
           stock_id: mat.id,
+          trabajo_id: job.id,
           tipo: 'salida',
           cantidad: mat.cantidad,
           cantidad_resultante: Math.max(0, newQuantity),
-          motivo: `Uso en Servicio #${job.id.substring(0, 5)} (Editado)`
+          motivo: `Uso en: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre}`
         })
       }
     }

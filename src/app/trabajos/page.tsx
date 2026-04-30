@@ -14,6 +14,8 @@ import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 import { JobList } from '@/components/trabajos/job-list'
 import Link from 'next/link'
 
+import { useSearchParams } from 'next/navigation'
+
 type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
   clientes: { nombre: string; apellido: string; telefono: string }
   catalogo_servicios: { nombre: string } | null
@@ -21,6 +23,7 @@ type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
 
 export default function TrabajosPage() {
   const supabase = createClient()
+  const searchParams = useSearchParams()
   const [trabajos, setTrabajos] = useState<TrabajoWithDetails[]>([])
   const [loading, setLoading] = useState(true)
   const [view, setView] = useState<'kanban' | 'list'>('kanban')
@@ -46,7 +49,17 @@ export default function TrabajosPage() {
       .order('fecha_servicio', { ascending: true })
     
     // By default, only show non-archived jobs in the main operations center
-    if (data) setTrabajos((data as any[]).filter(t => !t.archivado))
+    if (data) {
+      const allJobs = data as any[]
+      setTrabajos(allJobs.filter(t => !t.archivado))
+      
+      // Auto-open job from URL if present
+      const jobId = searchParams.get('id')
+      if (jobId) {
+        const job = allJobs.find(t => t.id === jobId)
+        if (job) setSelectedJob(job)
+      }
+    }
     setLoading(false)
   }
 

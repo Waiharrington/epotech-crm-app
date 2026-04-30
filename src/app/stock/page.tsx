@@ -16,8 +16,10 @@ import {
   Search,
   Loader2,
   Pencil,
-  Trash2
+  Trash2,
+  ExternalLink
 } from 'lucide-react'
+import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { 
   Table, 
@@ -388,7 +390,17 @@ export default function StockPage() {
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-sm max-w-[200px] truncate">
-                                        {move.motivo}
+                                        {move.trabajo_id ? (
+                                          <Link 
+                                            href={`/trabajos?id=${move.trabajo_id}`}
+                                            className="text-blue-600 hover:underline flex items-center gap-1 font-medium"
+                                          >
+                                            {move.motivo}
+                                            <ExternalLink className="h-3 w-3" />
+                                          </Link>
+                                        ) : (
+                                          move.motivo
+                                        )}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <Badge variant="outline">{move.cantidad_resultante}</Badge>

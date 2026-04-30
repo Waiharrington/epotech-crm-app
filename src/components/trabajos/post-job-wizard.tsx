@@ -25,13 +25,13 @@ import {
 import { cn } from '@/lib/utils'
 import { AddPhotoModal, PhotoMetadata } from '@/components/clientes/add-photo-modal'
 
-type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
+type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
   clientes: { nombre: string; apellido: string }
   catalogo_servicios: { nombre: string } | null
 }
 
 interface PostJobWizardProps {
-  job: Trabajo
+  job: TrabajoWithDetails
   onClose: () => void
   onSuccess: () => void
 }
@@ -146,10 +146,11 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
             // Record a purchase first to balance it out
             await (supabase as any).from('stock_movimientos').insert({
               stock_id: mat.id,
+              trabajo_id: job.id,
               tipo: 'entrada',
               cantidad: difference,
               cantidad_resultante: mat.cantidad,
-              motivo: `Compra rápida (Auto-ajuste por Servicio #${job.id.substring(0, 5)})`
+              motivo: `Compra rápida (Auto-ajuste por: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre})`
             })
         }
 
@@ -164,10 +165,11 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
         // Record movement in history
         await (supabase as any).from('stock_movimientos').insert({
           stock_id: mat.id,
+          trabajo_id: job.id,
           tipo: 'salida',
           cantidad: mat.cantidad,
           cantidad_resultante: Math.max(0, newQuantity),
-          motivo: `Uso en Servicio #${job.id.substring(0, 5)} - ${job.clientes.nombre} ${job.clientes.apellido}`
+          motivo: `Uso en: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre}`
         })
       }
     }

@@ -37,7 +37,7 @@ interface EditJobModalProps {
 export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
   const supabase = createClient()
   const [loading, setLoading] = useState(false)
-  const [formData, setFormData] = useState<Partial<Trabajo>>({
+  const [formData, setFormData] = useState<Partial<Database['public']['Tables']['trabajos']['Row']>>({
     fecha_servicio: job.fecha_servicio,
     precio_acordado: job.precio_acordado,
     precio_cobrado: job.precio_cobrado,
@@ -65,7 +65,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
     if (data) setAvailableStock(data)
   }
 
-  const updateFields = (fields: Partial<Trabajo>) => {
+  const updateFields = (fields: Partial<Database['public']['Tables']['trabajos']['Row']>) => {
     setFormData(prev => ({ ...prev, ...fields }))
   }
 

@@ -58,6 +58,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
 
   // Placeholder for stock items
   const [availableStock, setAvailableStock] = useState<any[]>([])
+  const [searchMaterial, setSearchMaterial] = useState('')
 
   useEffect(() => {
     // Set default next visit date (e.g. +30 days)
@@ -134,15 +135,26 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
       es_automatico: true
     })
 
-    // 3. Real Stock deduction
+    // 3. Real Stock deduction & History record
     for (const mat of materials) {
       const stockItem = availableStock.find(s => s.id === mat.id)
       if (stockItem) {
         const newQuantity = (stockItem.cantidad_actual || 0) - mat.cantidad
+        
+        // Update current stock
         await (supabase as any)
           .from('stock')
           .update({ cantidad_actual: Math.max(0, newQuantity) })
           .eq('id', mat.id)
+
+        // Record movement in history
+        await (supabase as any).from('stock_movimientos').insert({
+          stock_id: mat.id,
+          tipo: 'salida',
+          cantidad: mat.cantidad,
+          cantidad_resultante: Math.max(0, newQuantity),
+          motivo: `Uso en Servicio #${job.id.substring(0, 5)} - ${job.clientes.nombre} ${job.clientes.apellido}`
+        })
       }
     }
 
@@ -276,22 +288,45 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 gap-2">
-                 <Select onValueChange={(val) => {
-                    const item = availableStock.find(s => s.id === val)
-                    if (item && !materials.find(m => m.id === val)) {
-                      setMaterials([...materials, { id: item.id, nombre: item.nombre, cantidad: 1 }])
-                    }
-                 }}>
-                    <SelectTrigger className="h-9 text-xs">
-                      <SelectValue placeholder="+ Agregar material del inventario" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {availableStock.filter(s => !materials.find(m => m.id === s.id)).map(s => (
-                        <SelectItem key={s.id} value={s.id}>{s.nombre} ({s.cantidad_actual} {s.unidad_medida})</SelectItem>
+              <div className="space-y-2">
+                <div className="relative">
+                  <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                  <Input 
+                    placeholder="Buscar material..." 
+                    value={searchMaterial}
+                    onChange={(e) => setSearchMaterial(e.target.value)}
+                    className="pl-8 h-8 text-xs"
+                  />
+                </div>
+                
+                {searchMaterial && (
+                  <div className="border rounded-md bg-card shadow-sm max-h-[150px] overflow-y-auto p-1 animate-in fade-in zoom-in-95 duration-200 z-50">
+                    {availableStock
+                      .filter(s => 
+                        !materials.find(m => m.id === s.id) && 
+                        s.nombre.toLowerCase().includes(searchMaterial.toLowerCase())
+                      )
+                      .map(s => (
+                        <button
+                          key={s.id}
+                          className="w-full text-left px-2 py-1.5 text-xs hover:bg-muted rounded flex items-center justify-between transition-colors"
+                          onClick={() => {
+                            setMaterials([...materials, { id: s.id, nombre: s.nombre, cantidad: 1 }])
+                            setSearchMaterial('')
+                          }}
+                        >
+                          <span className="font-medium">{s.nombre}</span>
+                          <span className="text-[10px] opacity-60 bg-muted px-1.5 rounded">{s.cantidad_actual} {s.unidad_medida}</span>
+                        </button>
                       ))}
-                    </SelectContent>
-                 </Select>
+                    {availableStock.filter(s => 
+                        !materials.find(m => m.id === s.id) && 
+                        s.nombre.toLowerCase().includes(searchMaterial.toLowerCase())
+                      ).length === 0 && (
+                        <p className="text-[10px] text-center py-2 text-muted-foreground italic">No se encontraron materiales</p>
+                      )}
+                  </div>
+                )}
               </div>
             </div>
 

@@ -84,21 +84,34 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
       return
     }
 
-    // 2. Process NEW stock deductions
-    // Note: To keep it simple, we only deduct what's newly added compared to original
-    const originalMaterials = (job.materiales_utilizados as any[]) || []
-    const newMaterials = materials.filter(m => !originalMaterials.find(om => om.id === m.id))
-
-    for (const mat of newMaterials) {
+    // 3. Real Stock deduction & History record
+    for (const mat of materials) {
       const stockItem = availableStock.find(s => s.id === mat.id)
       if (stockItem) {
+        // Check if we need to "Buy" items (if usage > current stock)
+        if (mat.cantidad > (stockItem.cantidad_actual || 0)) {
+            const difference = mat.cantidad - (stockItem.cantidad_actual || 0)
+            
+            // Record a purchase first to balance it out
+            await (supabase as any).from('stock_movimientos').insert({
+              stock_id: mat.id,
+              tipo: 'entrada',
+              cantidad: difference,
+              cantidad_resultante: mat.cantidad,
+              motivo: `Compra rápida (Auto-ajuste por Servicio #${job.id.substring(0, 5)})`
+            })
+        }
+
         const newQuantity = (stockItem.cantidad_actual || 0) - mat.cantidad
         
+        // Update current stock (if it goes negative, we'll allow it but record it, or cap at 0)
+        // Actually, with the purchase logic above, it should land at 0 if usage == stock
         await (supabase as any)
           .from('stock')
           .update({ cantidad_actual: Math.max(0, newQuantity) })
           .eq('id', mat.id)
 
+        // Record movement in history
         await (supabase as any).from('stock_movimientos').insert({
           stock_id: mat.id,
           tipo: 'salida',
@@ -227,23 +240,33 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                 {materials.length > 0 && (
                   <div className="space-y-2">
                     {materials.map(m => (
-                      <div key={m.id} className="flex items-center justify-between bg-muted/50 p-2 rounded-lg border text-sm">
-                        <span className="font-medium">{m.nombre}</span>
-                        <div className="flex items-center gap-2">
-                           <div className="flex items-center bg-background border rounded-md h-7">
-                              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
-                                 setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: Math.max(1, x.cantidad - 1) } : x))
-                              }}>-</Button>
-                              <span className="text-xs font-bold px-2">{m.cantidad}</span>
-                              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
-                                 setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: x.cantidad + 1 } : x))
-                              }}>+</Button>
-                           </div>
-                           <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
-                             <Trash2 className="h-4 w-4" />
-                           </Button>
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium">{m.nombre}</span>
+                            <div className="flex items-center gap-2">
+                               <div className="flex items-center bg-background border rounded-md h-7">
+                                  <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
+                                     setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: Math.max(1, x.cantidad - 1) } : x))
+                                  }}>-</Button>
+                                  <span className="text-xs font-bold px-2">{m.cantidad}</span>
+                                  <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
+                                     setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: x.cantidad + 1 } : x))
+                                  }}>+</Button>
+                               </div>
+                               <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
+                                 <Trash2 className="h-4 w-4" />
+                               </Button>
+                            </div>
+                          </div>
+                          {m.cantidad > (availableStock.find(s => s.id === m.id)?.cantidad_actual || 0) && (
+                            <div className="flex items-center justify-between bg-orange-50 border border-orange-100 rounded p-1 px-2 mt-1">
+                               <p className="text-[10px] text-orange-700 font-medium">
+                                 ⚠️ Superas el stock ({availableStock.find(s => s.id === m.id)?.cantidad_actual || 0} disponibles)
+                               </p>
+                               <span className="text-[9px] bg-orange-200 text-orange-800 px-1 rounded font-bold uppercase">Se registrará como compra</span>
+                            </div>
+                          )}
                         </div>
-                      </div>
                     ))}
                   </div>
                 )}

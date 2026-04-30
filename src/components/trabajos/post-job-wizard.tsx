@@ -139,6 +139,20 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
     for (const mat of materials) {
       const stockItem = availableStock.find(s => s.id === mat.id)
       if (stockItem) {
+        // Check if we need to "Buy" items (if usage > current stock)
+        if (mat.cantidad > (stockItem.cantidad_actual || 0)) {
+            const difference = mat.cantidad - (stockItem.cantidad_actual || 0)
+            
+            // Record a purchase first to balance it out
+            await (supabase as any).from('stock_movimientos').insert({
+              stock_id: mat.id,
+              tipo: 'entrada',
+              cantidad: difference,
+              cantidad_resultante: mat.cantidad,
+              motivo: `Compra rápida (Auto-ajuste por Servicio #${job.id.substring(0, 5)})`
+            })
+        }
+
         const newQuantity = (stockItem.cantidad_actual || 0) - mat.cantidad
         
         // Update current stock
@@ -267,22 +281,32 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
               {materials.length > 0 && (
                 <div className="space-y-2 mb-3">
                   {materials.map(m => (
-                    <div key={m.id} className="flex items-center justify-between bg-muted/50 p-2 rounded-lg border">
-                      <span className="text-sm font-medium">{m.nombre}</span>
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center bg-background border rounded-md px-1">
-                           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
-                              setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: Math.max(1, x.cantidad - 1) } : x))
-                           }}>-</Button>
-                           <span className="text-xs font-bold px-2">{m.cantidad}</span>
-                           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
-                              setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: x.cantidad + 1 } : x))
-                           }}>+</Button>
+                    <div key={m.id} className="flex flex-col gap-1 bg-muted/50 p-2 rounded-lg border">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">{m.nombre}</span>
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center bg-background border rounded-md px-1">
+                             <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
+                                setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: Math.max(1, x.cantidad - 1) } : x))
+                             }}>-</Button>
+                             <span className="text-xs font-bold px-2">{m.cantidad}</span>
+                             <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
+                                setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: x.cantidad + 1 } : x))
+                             }}>+</Button>
+                          </div>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </div>
-                        <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
                       </div>
+                      {m.cantidad > (availableStock.find(s => s.id === m.id)?.cantidad_actual || 0) && (
+                        <div className="flex items-center justify-between bg-orange-50 border border-orange-100 rounded p-1 px-2 mt-1">
+                           <p className="text-[10px] text-orange-700 font-medium">
+                             ⚠️ Superas el stock ({availableStock.find(s => s.id === m.id)?.cantidad_actual || 0} disponibles)
+                           </p>
+                           <span className="text-[9px] bg-orange-200 text-orange-800 px-1 rounded font-bold uppercase">Se registrará como compra</span>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

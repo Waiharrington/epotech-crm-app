@@ -172,6 +172,8 @@ export interface Database {
           quimicos_aplicados: string | null
           fecha_proximo_serv: string | null
           completado_at: string | null
+          materiales_utilizados: Json | null
+          archivado: boolean | null
           created_at: string
           updated_at: string
         }
@@ -196,6 +198,8 @@ export interface Database {
           quimicos_aplicados?: string | null
           fecha_proximo_serv?: string | null
           completado_at?: string | null
+          materiales_utilizados?: Json | null
+          archivado?: boolean | null
           created_at?: string
           updated_at?: string
         }
@@ -220,6 +224,8 @@ export interface Database {
           quimicos_aplicados?: string | null
           fecha_proximo_serv?: string | null
           completado_at?: string | null
+          materiales_utilizados?: Json | null
+          archivado?: boolean | null
           created_at?: string
           updated_at?: string
         }
@@ -262,7 +268,35 @@ export interface Database {
           created_at?: string
         }
       }
-      // Add other tables as needed based on the SQL schema
+      stock_movimientos: {
+        Row: {
+          id: string
+          stock_id: string
+          tipo: 'entrada' | 'salida'
+          cantidad: number
+          cantidad_resultante: number
+          motivo: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          stock_id: string
+          tipo: 'entrada' | 'salida'
+          cantidad: number
+          cantidad_resultante: number
+          motivo?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          stock_id?: string
+          tipo?: 'entrada' | 'salida'
+          cantidad?: number
+          cantidad_resultante?: number
+          motivo?: string | null
+          created_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never

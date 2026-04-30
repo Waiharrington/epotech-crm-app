@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Loader2, Save } from 'lucide-react'
+import { Loader2, Save, Search, Trash2, Package, Plus } from 'lucide-react'
 import {
   Select,
   SelectContent,
@@ -45,8 +45,22 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
     presion_agua: job.presion_agua,
     quimicos_aplicados: job.quimicos_aplicados,
     es_recurrente: job.es_recurrente,
-    frecuencia_dias: job.frecuencia_dias
+    frecuencia_dias: job.frecuencia_dias,
+    materiales_utilizados: job.materiales_utilizados
   })
+
+  const [availableStock, setAvailableStock] = useState<any[]>([])
+  const [materials, setMaterials] = useState<{ id: string; nombre: string; cantidad: number }[]>((job.materiales_utilizados as any[]) || [])
+  const [searchMaterial, setSearchMaterial] = useState('')
+
+  useEffect(() => {
+    fetchStock()
+  }, [])
+
+  const fetchStock = async () => {
+    const { data } = await supabase.from('stock').select('*').eq('tipo', 'consumible')
+    if (data) setAvailableStock(data)
+  }
 
   const updateFields = (fields: Partial<Trabajo>) => {
     setFormData(prev => ({ ...prev, ...fields }))
@@ -54,17 +68,49 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
 
   const handleSave = async () => {
     setLoading(true)
+    
+    // 1. Update job data
     const { error } = await (supabase as any)
       .from('trabajos')
-      .update(formData)
+      .update({
+        ...formData,
+        materiales_utilizados: materials
+      })
       .eq('id', job.id)
 
-    setLoading(false)
     if (error) {
       alert('Error al actualizar: ' + error.message)
-    } else {
-      onSuccess()
+      setLoading(false)
+      return
     }
+
+    // 2. Process NEW stock deductions
+    // Note: To keep it simple, we only deduct what's newly added compared to original
+    const originalMaterials = (job.materiales_utilizados as any[]) || []
+    const newMaterials = materials.filter(m => !originalMaterials.find(om => om.id === m.id))
+
+    for (const mat of newMaterials) {
+      const stockItem = availableStock.find(s => s.id === mat.id)
+      if (stockItem) {
+        const newQuantity = (stockItem.cantidad_actual || 0) - mat.cantidad
+        
+        await (supabase as any)
+          .from('stock')
+          .update({ cantidad_actual: Math.max(0, newQuantity) })
+          .eq('id', mat.id)
+
+        await (supabase as any).from('stock_movimientos').insert({
+          stock_id: mat.id,
+          tipo: 'salida',
+          cantidad: mat.cantidad,
+          cantidad_resultante: Math.max(0, newQuantity),
+          motivo: `Uso en Servicio #${job.id.substring(0, 5)} (Editado)`
+        })
+      }
+    }
+
+    setLoading(false)
+    onSuccess()
   }
 
   return (
@@ -170,6 +216,72 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                   value={formData.notas_post || ''} 
                   onChange={e => updateFields({ notas_post: e.target.value })} 
                 />
+              </div>
+
+              <div className="space-y-4 border-t pt-4">
+                <Label className="flex items-center text-primary font-bold">
+                  <Package className="mr-2 h-4 w-4" />
+                  Materiales Utilizados
+                </Label>
+                
+                {materials.length > 0 && (
+                  <div className="space-y-2">
+                    {materials.map(m => (
+                      <div key={m.id} className="flex items-center justify-between bg-muted/50 p-2 rounded-lg border text-sm">
+                        <span className="font-medium">{m.nombre}</span>
+                        <div className="flex items-center gap-2">
+                           <div className="flex items-center bg-background border rounded-md h-7">
+                              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
+                                 setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: Math.max(1, x.cantidad - 1) } : x))
+                              }}>-</Button>
+                              <span className="text-xs font-bold px-2">{m.cantidad}</span>
+                              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
+                                 setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: x.cantidad + 1 } : x))
+                              }}>+</Button>
+                           </div>
+                           <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
+                             <Trash2 className="h-4 w-4" />
+                           </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <div className="relative">
+                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                    <Input 
+                      placeholder="Buscar e integrar material..." 
+                      value={searchMaterial}
+                      onChange={(e) => setSearchMaterial(e.target.value)}
+                      className="pl-8 h-8 text-xs bg-muted/30"
+                    />
+                  </div>
+                  
+                  {searchMaterial && (
+                    <div className="border rounded-md bg-card shadow-lg max-h-[150px] overflow-y-auto p-1 animate-in fade-in zoom-in-95 duration-200 z-[100]">
+                      {availableStock
+                        .filter(s => 
+                          !materials.find(m => m.id === s.id) && 
+                          s.nombre.toLowerCase().includes(searchMaterial.toLowerCase())
+                        )
+                        .map(s => (
+                          <button
+                            key={s.id}
+                            className="w-full text-left px-2 py-1.5 text-xs hover:bg-primary hover:text-white rounded flex items-center justify-between transition-colors"
+                            onClick={() => {
+                              setMaterials([...materials, { id: s.id, nombre: s.nombre, cantidad: 1 }])
+                              setSearchMaterial('')
+                            }}
+                          >
+                            <span className="font-medium">{s.nombre}</span>
+                            <span className="text-[10px] opacity-70">{s.cantidad_actual} {s.unidad_medida}</span>
+                          </button>
+                        ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </>
           )}

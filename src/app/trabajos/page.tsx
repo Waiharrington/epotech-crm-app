@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
-import { Plus, LayoutGrid, List as ListIcon, Archive, Search, Filter } from 'lucide-react'
+import { Plus, LayoutGrid, List as ListIcon, Archive, Search, Filter, Loader2 } from 'lucide-react'
 import { KanbanBoard } from '@/components/trabajos/kanban-board'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -21,7 +21,7 @@ type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
   catalogo_servicios: { nombre: string } | null
 }
 
-export default function TrabajosPage() {
+function TrabajosContent() {
   const supabase = createClient()
   const searchParams = useSearchParams()
   const [trabajos, setTrabajos] = useState<TrabajoWithDetails[]>([])
@@ -206,5 +206,13 @@ export default function TrabajosPage() {
         />
       )}
     </div>
+  )
+}
+
+export default function TrabajosPage() {
+  return (
+    <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
+      <TrabajosContent />
+    </Suspense>
   )
 }

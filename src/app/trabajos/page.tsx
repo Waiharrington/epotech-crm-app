@@ -17,7 +17,7 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
 type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
-  clientes: { nombre: string; apellido: string; telefono: string }
+  clientes: { id: string; nombre: string; apellido: string; telefono: string; direccion: string | null }
   catalogo_servicios: { nombre: string } | null
 }
 
@@ -43,7 +43,7 @@ function TrabajosContent() {
       .from('trabajos')
       .select(`
         *,
-        clientes (nombre, apellido, telefono),
+        clientes (id, nombre, apellido, telefono, direccion),
         catalogo_servicios (nombre)
       `)
       .order('fecha_servicio', { ascending: true })

@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Database } from '@/types/supabase'
 import {
   Dialog,
@@ -10,11 +11,12 @@ import {
 } from "@/components/ui/dialog"
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Calendar, DollarSign, PenTool, Droplets, FlaskConical, StickyNote, CheckCircle2, Clock, Edit, Package, Archive } from 'lucide-react'
+import { Calendar, DollarSign, PenTool, Droplets, FlaskConical, StickyNote, CheckCircle2, Clock, Edit, Package, Archive, User, MapPin, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
   catalogo_servicios: { nombre: string } | null
+  clientes: { id: string; nombre: string; apellido: string; direccion: string | null }
 }
 
 interface JobDetailModalProps {
@@ -89,6 +91,31 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
             </div>
           </div>
 
+          {/* Customer Info */}
+          <div className="p-4 rounded-xl border bg-primary/5 border-primary/10">
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-primary mb-3 flex items-center gap-2">
+              <User className="h-3.3 w-3.3" /> Información del Cliente
+            </h4>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Link 
+                  href={`/clientes/${job.clientes.id}`}
+                  className="group flex items-center gap-2 hover:text-primary transition-colors"
+                >
+                  <span className="text-sm font-bold">{job.clientes.nombre} {job.clientes.apellido}</span>
+                  <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
+                <Badge variant="outline" className="text-[10px] bg-white">ID: {job.clientes.id.substring(0, 5)}</Badge>
+              </div>
+              
+              <div className="flex items-start gap-2 text-muted-foreground">
+                <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
+                <p className="text-xs leading-relaxed">
+                  {job.clientes.direccion || 'Sin dirección registrada'}
+                </p>
+              </div>
+            </div>
+          </div>
           {/* Technical Details (if completed) */}
           {isCompleted && (
             <div className="space-y-4">

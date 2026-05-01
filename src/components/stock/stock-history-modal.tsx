@@ -10,7 +10,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Badge } from '@/components/ui/badge'
-import { ArrowUpRight, ArrowDownRight, Clock, Loader2 } from 'lucide-react'
+import Link from 'next/link'
+import { ArrowUpRight, ArrowDownRight, Clock, Loader2, ExternalLink } from 'lucide-react'
 
 interface StockHistoryModalProps {
   item: any
@@ -82,9 +83,21 @@ export function StockHistoryModal({ item, onClose }: StockHistoryModalProps) {
                         })}
                       </span>
                     </div>
-                    <p className="text-sm text-card-foreground font-medium">
-                      {move.motivo}
-                    </p>
+                    
+                    {move.trabajo_id ? (
+                      <Link 
+                        href={`/trabajos?id=${move.trabajo_id}`}
+                        className="text-sm text-primary font-bold hover:underline flex items-center gap-1 group"
+                        onClick={onClose}
+                      >
+                        {move.motivo}
+                        <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </Link>
+                    ) : (
+                      <p className="text-sm text-card-foreground font-medium">
+                        {move.motivo}
+                      </p>
+                    )}
                     <div className="flex items-center gap-2 mt-1">
                        <span className="text-[10px] text-muted-foreground">Balance resultante:</span>
                        <Badge variant="outline" className="text-[10px] h-4 py-0">{move.cantidad_resultante}</Badge>

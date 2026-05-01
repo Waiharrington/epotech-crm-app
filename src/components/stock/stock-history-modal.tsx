@@ -51,7 +51,7 @@ export function StockHistoryModal({ item, onClose }: StockHistoryModalProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto pr-2 py-4">
+        <div className="flex-1 overflow-y-auto px-4 py-4">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-10">
               <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -60,7 +60,7 @@ export function StockHistoryModal({ item, onClose }: StockHistoryModalProps) {
           ) : movements.length > 0 ? (
             <div className="space-y-6">
               {movements.map((move) => (
-                <div key={move.id} className="relative pl-8 pb-2 border-l-2 border-muted last:border-0 last:pb-0">
+                <div key={move.id} className="relative pl-10 pb-2 border-l-2 border-muted last:border-0 last:pb-0">
                   <div className={`absolute -left-[11px] top-0 h-5 w-5 rounded-full flex items-center justify-center border-2 border-background ${
                     move.tipo === 'entrada' ? 'bg-green-500' : 'bg-red-500'
                   }`}>

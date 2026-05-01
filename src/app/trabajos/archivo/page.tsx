@@ -12,7 +12,7 @@ import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 import Link from 'next/link'
 
 type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
-  clientes: { nombre: string; apellido: string; telefono: string }
+  clientes: { id: string; nombre: string; apellido: string; telefono: string; direccion: string | null }
   catalogo_servicios: { nombre: string } | null
 }
 
@@ -35,7 +35,7 @@ export default function ArchivoPage() {
       .from('trabajos')
       .select(`
         *,
-        clientes (nombre, apellido, telefono),
+        clientes (id, nombre, apellido, telefono, direccion),
         catalogo_servicios (nombre)
       `)
       .eq('archivado', true)

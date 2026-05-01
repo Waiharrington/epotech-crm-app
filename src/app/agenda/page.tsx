@@ -24,7 +24,6 @@ type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
 
 export default function AgendaPage() {
   const supabase = createClient()
-  const router = useRouter()
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [trabajos, setTrabajos] = useState<Trabajo[]>([])
   const [loading, setLoading] = useState(true)

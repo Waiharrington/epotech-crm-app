@@ -144,7 +144,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
             const difference = mat.cantidad - (stockItem.cantidad_actual || 0)
             
             // Record a purchase first to balance it out
-            await (supabase as any).from('stock_movimientos').insert({
+            const { error: buyError } = await (supabase as any).from('stock_movimientos').insert({
               stock_id: mat.id,
               trabajo_id: job.id,
               tipo: 'entrada',
@@ -152,6 +152,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
               cantidad_resultante: mat.cantidad,
               motivo: `Compra rápida (Auto-ajuste por: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre})`
             })
+            if (buyError) console.error('Error recording purchase:', buyError)
         }
 
         const newQuantity = (stockItem.cantidad_actual || 0) - mat.cantidad
@@ -163,7 +164,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
           .eq('id', mat.id)
 
         // Record movement in history
-        await (supabase as any).from('stock_movimientos').insert({
+        const { error: moveError } = await (supabase as any).from('stock_movimientos').insert({
           stock_id: mat.id,
           trabajo_id: job.id,
           tipo: 'salida',
@@ -171,6 +172,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
           cantidad_resultante: Math.max(0, newQuantity),
           motivo: `Uso en: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre}`
         })
+        if (moveError) console.error('Error recording movement:', moveError)
       }
     }
 

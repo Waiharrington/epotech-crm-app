@@ -272,6 +272,7 @@ export interface Database {
         Row: {
           id: string
           stock_id: string
+          trabajo_id: string | null
           tipo: 'entrada' | 'salida'
           cantidad: number
           cantidad_resultante: number
@@ -281,6 +282,7 @@ export interface Database {
         Insert: {
           id?: string
           stock_id: string
+          trabajo_id?: string | null
           tipo: 'entrada' | 'salida'
           cantidad: number
           cantidad_resultante: number
@@ -290,6 +292,7 @@ export interface Database {
         Update: {
           id?: string
           stock_id?: string
+          trabajo_id?: string | null
           tipo?: 'entrada' | 'salida'
           cantidad?: number
           cantidad_resultante?: number

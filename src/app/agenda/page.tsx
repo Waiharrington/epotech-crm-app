@@ -11,14 +11,14 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { QuickScheduleWizard } from '@/components/agenda/quick-schedule-wizard'
+import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
+import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, isWithinInterval, parseISO, addDays } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
-  clientes: { nombre: string; apellido: string; direccion: string; telefono: string }
+  clientes: { id: string; nombre: string; apellido: string; direccion: string; telefono: string }
   catalogo_servicios: { nombre: string } | null
 }
 
@@ -35,6 +35,9 @@ export default function AgendaPage() {
     start: new Date().toISOString().split('T')[0],
     end: addDays(new Date(), 7).toISOString().split('T')[0]
   })
+  const [selectedJob, setSelectedJob] = useState<Trabajo | null>(null)
+  const [jobToEdit, setJobToEdit] = useState<Trabajo | null>(null)
+  const [showEditModal, setShowEditModal] = useState(false)
 
   const [inactiveClients, setInactiveClients] = useState<any[]>([])
 
@@ -49,7 +52,7 @@ export default function AgendaPage() {
       .from('trabajos')
       .select(`
         *,
-        clientes (nombre, apellido, direccion, telefono),
+        clientes (id, nombre, apellido, direccion, telefono),
         catalogo_servicios (nombre)
       `)
       .order('fecha_servicio', { ascending: true })
@@ -300,29 +303,31 @@ export default function AgendaPage() {
                 <div className="space-y-4">
                     {jobsToDisplay.length > 0 ? (
                         jobsToDisplay.map(job => (
-                            <Link key={job.id} href={`/trabajos`}>
-                                <Card className="hover:shadow-md transition-shadow group cursor-pointer mb-4">
-                                    <CardContent className="p-4 flex items-center gap-4">
-                                        <div className="h-14 w-14 rounded-xl bg-primary/10 flex flex-col items-center justify-center text-primary">
-                                            <Clock className="h-5 w-5" />
-                                            <span className="text-[10px] font-bold mt-1">{job.hora_servicio || '--:--'}</span>
+                            <Card 
+                              key={job.id} 
+                              className="hover:shadow-md transition-shadow group cursor-pointer mb-4"
+                              onClick={() => setSelectedJob(job)}
+                            >
+                                <CardContent className="p-4 flex items-center gap-4">
+                                    <div className="h-14 w-14 rounded-xl bg-primary/10 flex flex-col items-center justify-center text-primary">
+                                        <Clock className="h-5 w-5" />
+                                        <span className="text-[10px] font-bold mt-1">{job.hora_servicio || '--:--'}</span>
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <Badge variant={job.estado === 'completado' ? 'secondary' : 'default'} className="h-5 px-1.5 text-[9px] uppercase">
+                                                {job.estado?.replace('_', ' ')}
+                                            </Badge>
+                                            {job.prioridad === 'urgente' && <Badge variant="destructive" className="h-5 px-1.5 text-[9px] uppercase">Urgente</Badge>}
                                         </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <Badge variant={job.estado === 'completado' ? 'secondary' : 'default'} className="h-5 px-1.5 text-[9px] uppercase">
-                                                    {job.estado?.replace('_', ' ')}
-                                                </Badge>
-                                                {job.prioridad === 'urgente' && <Badge variant="destructive" className="h-5 px-1.5 text-[9px] uppercase">Urgente</Badge>}
-                                            </div>
-                                            <h4 className="font-bold text-base truncate">{job.catalogo_servicios?.nombre}</h4>
-                                            <p className="text-sm text-muted-foreground flex items-center">
-                                                <User className="mr-1.5 h-3 w-3" /> {job.clientes.nombre} {job.clientes.apellido}
-                                            </p>
-                                        </div>
-                                        <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                                    </CardContent>
-                                </Card>
-                            </Link>
+                                        <h4 className="font-bold text-base truncate">{job.catalogo_servicios?.nombre}</h4>
+                                        <p className="text-sm text-muted-foreground flex items-center">
+                                            <User className="mr-1.5 h-3 w-3" /> {job.clientes.nombre} {job.clientes.apellido}
+                                        </p>
+                                    </div>
+                                    <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                                </CardContent>
+                            </Card>
                         ))
                     ) : (
                         <div className="text-center py-20 border-2 border-dashed rounded-2xl bg-card">
@@ -349,6 +354,33 @@ export default function AgendaPage() {
                   fetchTrabajos()
               }}
           />
+      )}
+
+      {selectedJob && (
+        <JobDetailModal 
+          job={selectedJob}
+          onClose={() => setSelectedJob(null)}
+          onEdit={(job) => {
+            setSelectedJob(null)
+            setJobToEdit(job as Trabajo)
+            setShowEditModal(true)
+          }}
+        />
+      )}
+
+      {showEditModal && jobToEdit && (
+        <EditJobModal 
+          job={jobToEdit}
+          onClose={() => {
+            setShowEditModal(false)
+            setJobToEdit(null)
+          }}
+          onSuccess={() => {
+            setShowEditModal(false)
+            setJobToEdit(null)
+            fetchTrabajos()
+          }}
+        />
       )}
     </div>
   )

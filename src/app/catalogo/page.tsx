@@ -31,6 +31,7 @@ type Servicio = Database['public']['Tables']['catalogo_servicios']['Row']
 export default function CatalogoPage() {
   const supabase = createClient()
   const [servicios, setServicios] = useState<Servicio[]>([])
+  const [stockItems, setStockItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editingService, setEditingService] = useState<Servicio | null>(null)
@@ -40,13 +41,21 @@ export default function CatalogoPage() {
     categoria: 'lavado',
     precio_venta: 0,
     costo_materiales_est: 0,
+    costo_variable_est: 0,
+    materiales_receta: [],
     descripcion_interna: '',
     activo: true
   })
 
   useEffect(() => {
     fetchServicios()
+    fetchStock()
   }, [])
+
+  const fetchStock = async () => {
+    const { data } = await supabase.from('stock').select('*').order('nombre')
+    if (data) setStockItems(data)
+  }
 
   const fetchServicios = async () => {
     setLoading(true)
@@ -98,7 +107,16 @@ export default function CatalogoPage() {
           </div>
           <Button onClick={() => {
             setEditingService(null)
-            setFormData({ nombre: '', categoria: 'lavado', precio_venta: 0, costo_materiales_est: 0, descripcion_interna: '', activo: true })
+            setFormData({ 
+              nombre: '', 
+              categoria: 'lavado', 
+              precio_venta: 0, 
+              costo_materiales_est: 0, 
+              costo_variable_est: 0,
+              materiales_receta: [],
+              descripcion_interna: '', 
+              activo: true 
+            })
             setShowModal(true)
           }}>
             <Plus className="mr-2 h-4 w-4" /> Nuevo Servicio
@@ -133,10 +151,16 @@ export default function CatalogoPage() {
                             <span className="font-bold text-primary">${servicio.precio_venta}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                            <span className="text-muted-foreground">Costo Materiales</span>
-                            <span className="font-bold">${servicio.costo_materiales_est}</span>
+                            <span className="text-muted-foreground">Gastos Variables Est.</span>
+                            <span className="font-bold">${servicio.costo_variable_est || 0}</span>
                         </div>
-                        <div className="pt-2 border-t text-xs text-muted-foreground">
+                        <div className="flex justify-between text-sm pt-1 border-t">
+                            <span className="text-muted-foreground font-medium">Costo Total Est.</span>
+                            <span className="font-bold text-destructive">
+                              ${(servicio.costo_materiales_est || 0) + (servicio.costo_variable_est || 0)}
+                            </span>
+                        </div>
+                        <div className="pt-2 text-xs text-muted-foreground italic">
                             {servicio.descripcion_interna || 'Sin descripción.'}
                         </div>
                     </div>
@@ -164,8 +188,22 @@ export default function CatalogoPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{editingService ? 'Editar Servicio' : 'Nuevo Servicio'}</DialogTitle>
-            <DialogDescription>Define los parámetros comerciales de este servicio.</DialogDescription>
+            <DialogDescription>Define los parámetros comerciales y técnicos de este servicio.</DialogDescription>
           </DialogHeader>
+
+          {/* Helper function for calculations */}
+          {(() => {
+            const materiales = (formData.materiales_receta as any[]) || []
+            const costoMateriales = materiales.reduce((acc, item) => {
+              const stockItem = stockItems.find(s => s.id === item.stock_id)
+              return acc + (stockItem?.precio_costo || 0) * item.cantidad
+            }, 0)
+            
+            if (formData.costo_materiales_est !== costoMateriales) {
+              setFormData(prev => ({ ...prev, costo_materiales_est: costoMateriales }))
+            }
+            return null
+          })()}
           <form onSubmit={handleSave} className="space-y-4 pt-4">
              <div className="space-y-2">
                 <Label htmlFor="nombre">Nombre del Servicio</Label>
@@ -203,14 +241,95 @@ export default function CatalogoPage() {
                     />
                 </div>
              </div>
-             <div className="space-y-2">
-                <Label htmlFor="costo">Costo Materiales Est. ($)</Label>
-                <Input 
-                    id="costo" 
-                    type="number" 
-                    value={formData.costo_materiales_est || 0} 
-                    onChange={e => setFormData({ ...formData, costo_materiales_est: parseFloat(e.target.value) || 0 })} 
-                />
+             <div className="p-4 bg-muted/30 rounded-xl space-y-4 border border-dashed">
+                <div className="flex items-center justify-between">
+                   <Label className="text-xs font-bold uppercase tracking-wider">Receta de Materiales</Label>
+                   <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-7 text-[10px]"
+                    onClick={() => {
+                      const current = (formData.materiales_receta as any[]) || []
+                      setFormData({ ...formData, materiales_receta: [...current, { stock_id: '', cantidad: 1 }] })
+                    }}
+                   >
+                     <Plus className="h-3 w-3 mr-1" /> Añadir Material
+                   </Button>
+                </div>
+
+                <div className="space-y-3">
+                   {((formData.materiales_receta as any[]) || []).map((item, idx) => (
+                      <div key={idx} className="flex items-end gap-2 animate-in fade-in slide-in-from-top-1 duration-200">
+                         <div className="flex-1 space-y-1">
+                            <Select 
+                              value={item.stock_id} 
+                              onValueChange={(v) => {
+                                const current = [...((formData.materiales_receta as any[]) || [])]
+                                current[idx].stock_id = v
+                                setFormData({ ...formData, materiales_receta: current })
+                              }}
+                            >
+                               <SelectTrigger className="h-9 text-xs">
+                                  <SelectValue placeholder="Producto..." />
+                               </SelectTrigger>
+                               <SelectContent>
+                                  {stockItems.map(s => (
+                                    <SelectItem key={s.id} value={s.id}>{s.nombre} (${s.precio_costo}/{s.unidad_medida})</SelectItem>
+                                  ))}
+                               </SelectContent>
+                            </Select>
+                         </div>
+                         <div className="w-20 space-y-1">
+                            <Input 
+                              type="number" 
+                              className="h-9 text-xs" 
+                              value={item.cantidad} 
+                              onChange={(e) => {
+                                const current = [...((formData.materiales_receta as any[]) || [])]
+                                current[idx].cantidad = parseFloat(e.target.value) || 0
+                                setFormData({ ...formData, materiales_receta: current })
+                              }}
+                            />
+                         </div>
+                         <Button 
+                          type="button" 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-9 w-9 text-destructive"
+                          onClick={() => {
+                            const current = [...((formData.materiales_receta as any[]) || [])]
+                            current.splice(idx, 1)
+                            setFormData({ ...formData, materiales_receta: current })
+                          }}
+                         >
+                            <Trash2 className="h-4 w-4" />
+                         </Button>
+                      </div>
+                   ))}
+                   {(!formData.materiales_receta || (formData.materiales_receta as any[]).length === 0) && (
+                     <p className="text-[10px] text-muted-foreground italic text-center py-2">Sin materiales asignados.</p>
+                   )}
+                </div>
+             </div>
+
+             <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="costo_var">Costo Variable Est. ($)</Label>
+                    <Input 
+                        id="costo_var" 
+                        type="number" 
+                        value={formData.costo_variable_est || 0} 
+                        onChange={e => setFormData({ ...formData, costo_variable_est: parseFloat(e.target.value) || 0 })} 
+                        placeholder="Gasolina, peajes..."
+                    />
+                </div>
+                <div className="space-y-2">
+                    <Label className="text-primary font-bold">Costo Total Calculado</Label>
+                    <div className="h-10 px-3 flex items-center bg-primary/5 border border-primary/20 rounded-md font-bold text-primary">
+                        ${(formData.costo_materiales_est || 0) + (formData.costo_variable_est || 0)}
+                    </div>
+                </div>
              </div>
              <div className="space-y-2">
                 <Label htmlFor="desc">Descripción Interna</Label>

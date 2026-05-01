@@ -79,7 +79,9 @@ export interface Database {
           icono: string | null
           precio_venta: number
           costo_materiales_est: number | null
+          costo_variable_est: number | null
           gastos_adicionales: number | null
+          materiales_receta: Json | null
           descripcion_interna: string | null
           activo: boolean | null
           created_at: string
@@ -91,7 +93,9 @@ export interface Database {
           icono?: string | null
           precio_venta?: number
           costo_materiales_est?: number | null
+          costo_variable_est?: number | null
           gastos_adicionales?: number | null
+          materiales_receta?: Json | null
           descripcion_interna?: string | null
           activo?: boolean | null
           created_at?: string
@@ -103,7 +107,9 @@ export interface Database {
           icono?: string | null
           precio_venta?: number
           costo_materiales_est?: number | null
+          costo_variable_est?: number | null
           gastos_adicionales?: number | null
+          materiales_receta?: Json | null
           descripcion_interna?: string | null
           activo?: boolean | null
           created_at?: string

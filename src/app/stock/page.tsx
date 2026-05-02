@@ -17,7 +17,8 @@ import {
   Loader2,
   Pencil,
   Trash2,
-  ExternalLink
+  ExternalLink,
+  DollarSign
 } from 'lucide-react'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
@@ -495,6 +496,22 @@ export default function StockPage() {
                     <Input id="min" type="number" value={formData.cantidad_minima ?? ''} onChange={e => setFormData({ ...formData, cantidad_minima: e.target.value === '' ? null : parseFloat(e.target.value) })} />
                 </div>
              </div>
+             <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="precio-costo">Precio Costo ($)</Label>
+                    <div className="relative">
+                       <DollarSign className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                       <Input id="precio-costo" type="number" step="0.01" className="pl-7" placeholder="Tu costo" value={formData.precio_costo ?? ''} onChange={e => setFormData({ ...formData, precio_costo: e.target.value === '' ? null : parseFloat(e.target.value) })} />
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="precio-cliente">Precio Cliente ($)</Label>
+                    <div className="relative">
+                       <DollarSign className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                       <Input id="precio-cliente" type="number" step="0.01" className="pl-7" placeholder="Al cliente" value={(formData as any).precio_cliente ?? ''} onChange={e => setFormData({ ...formData, precio_cliente: e.target.value === '' ? null : parseFloat(e.target.value) } as any)} />
+                    </div>
+                </div>
+             </div>
              <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? <Loader2 className="animate-spin" /> : 'Registrar Item'}
              </Button>
@@ -547,14 +564,24 @@ export default function StockPage() {
                       </Select>
                   </div>
                </div>
+               <div className="space-y-2">
+                   <Label htmlFor="edit-min">Aviso Stock Mín.</Label>
+                   <Input id="edit-min" type="number" value={editingItem.cantidad_minima ?? ''} onChange={e => setEditingItem({ ...editingItem, cantidad_minima: e.target.value === '' ? null : parseFloat(e.target.value) })} />
+               </div>
                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                      <Label htmlFor="edit-min">Aviso Stock Mín.</Label>
-                      <Input id="edit-min" type="number" value={editingItem.cantidad_minima ?? ''} onChange={e => setEditingItem({ ...editingItem, cantidad_minima: e.target.value === '' ? null : parseFloat(e.target.value) })} />
+                      <Label htmlFor="edit-precio">Precio Costo ($)</Label>
+                      <div className="relative">
+                         <DollarSign className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                         <Input id="edit-precio" type="number" step="0.01" className="pl-7" placeholder="Tu costo" value={editingItem.precio_costo ?? ''} onChange={e => setEditingItem({ ...editingItem, precio_costo: e.target.value === '' ? null : parseFloat(e.target.value) })} />
+                      </div>
                   </div>
                   <div className="space-y-2">
-                      <Label htmlFor="edit-precio">Precio Costo</Label>
-                      <Input id="edit-precio" type="number" step="0.01" value={editingItem.precio_costo ?? ''} onChange={e => setEditingItem({ ...editingItem, precio_costo: e.target.value === '' ? null : parseFloat(e.target.value) })} />
+                      <Label htmlFor="edit-precio-cliente">Precio Cliente ($)</Label>
+                      <div className="relative">
+                         <DollarSign className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                         <Input id="edit-precio-cliente" type="number" step="0.01" className="pl-7" placeholder="Al cliente" value={(editingItem as any).precio_cliente ?? ''} onChange={e => setEditingItem({ ...editingItem, precio_cliente: e.target.value === '' ? null : parseFloat(e.target.value) } as any)} />
+                      </div>
                   </div>
                </div>
                <Button type="submit" className="w-full" disabled={loading}>

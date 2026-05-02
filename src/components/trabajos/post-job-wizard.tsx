@@ -89,7 +89,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
     
     // Fetch recipe from catalog if job has service_id
     if (job.servicio_id) {
-      const { data: serviceData } = await supabase
+      const { data: serviceData } = await (supabase as any)
         .from('catalogo_servicios')
         .select('materiales_receta, costo_variable_est')
         .eq('id', job.servicio_id)
@@ -97,7 +97,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
       
       if (serviceData?.materiales_receta) {
         const recipe = serviceData.materiales_receta as any[]
-        const initialMaterials = recipe.map(r => {
+        const initialMaterials = recipe.map((r: any) => {
           const item = (data || []).find(s => s.id === r.stock_id)
           return { id: r.stock_id, nombre: item?.nombre || 'Material', cantidad: r.cantidad }
         })

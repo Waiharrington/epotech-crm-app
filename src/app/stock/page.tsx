@@ -488,11 +488,11 @@ export default function StockPage() {
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="actual">Cant. Actual</Label>
-                    <Input id="actual" type="number" value={formData.cantidad_actual || 0} onChange={e => setFormData({ ...formData, cantidad_actual: parseFloat(e.target.value) || 0 })} />
+                    <Input id="actual" type="number" value={formData.cantidad_actual ?? ''} onChange={e => setFormData({ ...formData, cantidad_actual: e.target.value === '' ? null : parseFloat(e.target.value) })} />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="min">Aviso Stock Mín.</Label>
-                    <Input id="min" type="number" value={formData.cantidad_minima || 0} onChange={e => setFormData({ ...formData, cantidad_minima: parseFloat(e.target.value) || 0 })} />
+                    <Input id="min" type="number" value={formData.cantidad_minima ?? ''} onChange={e => setFormData({ ...formData, cantidad_minima: e.target.value === '' ? null : parseFloat(e.target.value) })} />
                 </div>
              </div>
              <Button type="submit" className="w-full" disabled={loading}>
@@ -550,11 +550,11 @@ export default function StockPage() {
                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                       <Label htmlFor="edit-min">Aviso Stock Mín.</Label>
-                      <Input id="edit-min" type="number" value={editingItem.cantidad_minima || 0} onChange={e => setEditingItem({ ...editingItem, cantidad_minima: parseFloat(e.target.value) || 0 })} />
+                      <Input id="edit-min" type="number" value={editingItem.cantidad_minima ?? ''} onChange={e => setEditingItem({ ...editingItem, cantidad_minima: e.target.value === '' ? null : parseFloat(e.target.value) })} />
                   </div>
                   <div className="space-y-2">
                       <Label htmlFor="edit-precio">Precio Costo</Label>
-                      <Input id="edit-precio" type="number" step="0.01" value={editingItem.precio_costo || 0} onChange={e => setEditingItem({ ...editingItem, precio_costo: parseFloat(e.target.value) || 0 })} />
+                      <Input id="edit-precio" type="number" step="0.01" value={editingItem.precio_costo ?? ''} onChange={e => setEditingItem({ ...editingItem, precio_costo: e.target.value === '' ? null : parseFloat(e.target.value) })} />
                   </div>
                </div>
                <Button type="submit" className="w-full" disabled={loading}>

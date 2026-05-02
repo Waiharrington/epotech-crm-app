@@ -97,8 +97,9 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
       
       if (serviceData?.materiales_receta) {
         const recipe = serviceData.materiales_receta as any[]
+        const stockData = (data as any[]) || []
         const initialMaterials = recipe.map((r: any) => {
-          const item = (data || []).find(s => s.id === r.stock_id)
+          const item = stockData.find(s => s.id === r.stock_id)
           return { id: r.stock_id, nombre: item?.nombre || 'Material', cantidad: r.cantidad }
         })
         setMaterials(initialMaterials)

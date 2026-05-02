@@ -175,7 +175,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
     // 3. Real Stock deduction & History record
     for (const mat of materials) {
       // Fetch fresh stock level to avoid stale data
-      const { data: freshItem } = await supabase
+      const { data: freshItem } = await (supabase as any)
         .from('stock')
         .select('cantidad_actual, nombre, unidad_medida')
         .eq('id', mat.id)

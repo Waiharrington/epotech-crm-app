@@ -126,7 +126,8 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
         materiales_utilizados: materials,
         completado_at: new Date().toISOString(),
         es_recurrente: esRecurrente,
-        fecha_proximo_serv: fechaProxima || null
+        fecha_proximo_serv: fechaProxima || null,
+        costo_variable: costoVariable
       })
       .eq('id', job.id)
 

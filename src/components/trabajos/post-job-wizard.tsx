@@ -150,6 +150,12 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
     }
 
     // 2. Automatic Caja entry (Income)
+    await (supabase as any).from('caja').insert({
+      tipo: 'ingreso',
+      monto: precioCobrado,
+      categoria: 'servicio_completado',
+      trabajo_id: job.id,
+      notas: `Servicio ${job.catalogo_servicios?.nombre || ''} - ${job.clientes.nombre}`,
       es_automatico: true
     })
 

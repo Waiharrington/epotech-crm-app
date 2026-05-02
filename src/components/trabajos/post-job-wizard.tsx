@@ -46,7 +46,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
   const [quimicos, setQuimicos] = useState(job.quimicos_aplicados || '')
   const [materials, setMaterials] = useState<{ id: string; nombre: string; cantidad: number }[]>([])
   const [costoVariable, setCostoVariable] = useState(0)
-  const [motivoVariable, setMotivoVariable] = useState('Gasolina / Peajes')
+  const [motivoVariable, setMotivoVariable] = useState('')
   
   // Recurring state
   const [esRecurrente, setEsRecurrente] = useState(false)
@@ -174,42 +174,55 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
 
     // 3. Real Stock deduction & History record
     for (const mat of materials) {
-      const stockItem = availableStock.find(s => s.id === mat.id)
-      if (stockItem) {
+      // Fetch fresh stock level to avoid stale data
+      const { data: freshItem } = await supabase
+        .from('stock')
+        .select('cantidad_actual, nombre, unidad_medida')
+        .eq('id', mat.id)
+        .single()
+
+      if (freshItem) {
+        const currentQty = freshItem.cantidad_actual || 0
+        
         // Check if we need to "Buy" items (if usage > current stock)
-        if (mat.cantidad > (stockItem.cantidad_actual || 0)) {
-            const difference = mat.cantidad - (stockItem.cantidad_actual || 0)
+        if (mat.cantidad > currentQty) {
+            const difference = mat.cantidad - currentQty
             
             // Record a purchase first to balance it out
-            const { error: buyError } = await (supabase as any).from('stock_movimientos').insert({
+            await (supabase as any).from('stock_movimientos').insert({
               stock_id: mat.id,
               trabajo_id: job.id,
               tipo: 'entrada',
               cantidad: difference,
               cantidad_resultante: mat.cantidad,
-              motivo: `Compra rápida (Auto-ajuste por: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre})`
+              motivo: `Auto-ajuste (Stock insuficiente para: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre})`
             })
-            if (buyError) console.error('Error recording purchase:', buyError)
+
+            // Update current stock to the required amount before deducting
+            await (supabase as any)
+              .from('stock')
+              .update({ cantidad_actual: mat.cantidad })
+              .eq('id', mat.id)
         }
 
-        const newQuantity = (stockItem.cantidad_actual || 0) - mat.cantidad
+        // Deduct materials
+        const finalQuantity = Math.max(0, (mat.cantidad > currentQty ? mat.cantidad : currentQty) - mat.cantidad)
         
         // Update current stock
         await (supabase as any)
           .from('stock')
-          .update({ cantidad_actual: Math.max(0, newQuantity) })
+          .update({ cantidad_actual: finalQuantity })
           .eq('id', mat.id)
 
         // Record movement in history
-        const { error: moveError } = await (supabase as any).from('stock_movimientos').insert({
+        await (supabase as any).from('stock_movimientos').insert({
           stock_id: mat.id,
           trabajo_id: job.id,
           tipo: 'salida',
           cantidad: mat.cantidad,
-          cantidad_resultante: Math.max(0, newQuantity),
+          cantidad_resultante: finalQuantity,
           motivo: `Uso en: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre}`
         })
-        if (moveError) console.error('Error recording movement:', moveError)
       }
     }
 
@@ -441,20 +454,25 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
               <div className="space-y-3 pt-2 border-t border-primary/10">
                  <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1">
-                       <Label className="text-[10px] uppercase text-muted-foreground">Gastos Variables (Gasolina)</Label>
-                       <Input 
-                        type="number" 
-                        className="h-8 text-xs font-bold"
-                        value={costoVariable}
-                        onChange={e => setCostoVariable(parseFloat(e.target.value) || 0)}
-                       />
+                       <Label className="text-[10px] uppercase text-muted-foreground">Gastos Adicionales ($)</Label>
+                       <div className="relative">
+                          <DollarSign className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                          <Input 
+                            type="number" 
+                            className="h-9 text-xs font-bold pl-7"
+                            value={costoVariable || ''}
+                            onChange={e => setCostoVariable(parseFloat(e.target.value) || 0)}
+                            placeholder="0.00"
+                          />
+                       </div>
                     </div>
                     <div className="space-y-1">
-                       <Label className="text-[10px] uppercase text-muted-foreground">Motivo Gasto</Label>
+                       <Label className="text-[10px] uppercase text-muted-foreground">¿En qué se gastó?</Label>
                        <Input 
-                        className="h-8 text-xs"
+                        className="h-9 text-xs"
                         value={motivoVariable}
                         onChange={e => setMotivoVariable(e.target.value)}
+                        placeholder="Ej: Peajes, Almuerzo..."
                        />
                     </div>
                  </div>

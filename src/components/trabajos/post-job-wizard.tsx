@@ -44,7 +44,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
   const [maquinaUsada, setMaquinaUsada] = useState(job.maquina_usada || '')
   const [presionAgua, setPresionAgua] = useState(job.presion_agua || '')
   const [quimicos, setQuimicos] = useState(job.quimicos_aplicados || '')
-  const [materials, setMaterials] = useState<{ id: string; nombre: string; cantidad: number }[]>([])
+  const [materials, setMaterials] = useState<{ id: string; nombre: string; cantidad: number; unidad: string }[]>([])
   const [costoVariable, setCostoVariable] = useState(0)
   const [motivoVariable, setMotivoVariable] = useState('')
   
@@ -100,7 +100,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
         const stockData = (data as any[]) || []
         const initialMaterials = recipe.map((r: any) => {
           const item = stockData.find(s => s.id === r.stock_id)
-          return { id: r.stock_id, nombre: item?.nombre || 'Material', cantidad: r.cantidad }
+          return { id: r.stock_id, nombre: item?.nombre || 'Material', cantidad: r.cantidad, unidad: item?.unidad_medida || 'ud' }
         })
         setMaterials(initialMaterials)
       }
@@ -334,35 +334,50 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
               
               {materials.length > 0 && (
                 <div className="space-y-2 mb-3">
-                  {materials.map(m => (
-                    <div key={m.id} className="flex flex-col gap-1 bg-muted/50 p-2 rounded-lg border">
+                  {materials.map(m => {
+                    const stockItem = availableStock.find(s => s.id === m.id)
+                    const unit = stockItem?.unidad_medida || 'ud'
+                    const precioCosto = stockItem?.precio_costo || 0
+                    const costoUso = precioCosto * m.cantidad
+                    return (
+                    <div key={m.id} className="flex flex-col gap-1 bg-muted/50 p-3 rounded-lg border">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">{m.nombre}</span>
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center bg-background border rounded-md px-1">
-                             <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
-                                setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: Math.max(1, x.cantidad - 1) } : x))
-                             }}>-</Button>
-                             <span className="text-xs font-bold px-2">{m.cantidad}</span>
-                             <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
-                                setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: x.cantidad + 1 } : x))
-                             }}>+</Button>
-                          </div>
-                          <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                        <div>
+                          <span className="text-sm font-medium">{m.nombre}</span>
+                          <p className="text-[10px] text-muted-foreground">
+                            Costo: ${precioCosto}/{unit} &middot; Subtotal: <span className="font-bold text-foreground">${costoUso.toFixed(2)}</span>
+                          </p>
+                        </div>
+                        <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive shrink-0" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Label className="text-[10px] text-muted-foreground shrink-0">¿Cuánto usaste?</Label>
+                        <div className="relative flex-1">
+                          <Input 
+                            type="number" 
+                            step="0.01"
+                            min="0"
+                            className="h-8 text-xs font-bold pr-12"
+                            value={m.cantidad}
+                            onChange={(e) => {
+                              setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: parseFloat(e.target.value) || 0 } : x))
+                            }}
+                          />
+                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-bold text-muted-foreground uppercase">{unit}</span>
                         </div>
                       </div>
-                      {m.cantidad > (availableStock.find(s => s.id === m.id)?.cantidad_actual || 0) && (
+                      {m.cantidad > (stockItem?.cantidad_actual || 0) && (
                         <div className="flex items-center justify-between bg-orange-50 border border-orange-100 rounded p-1 px-2 mt-1">
                            <p className="text-[10px] text-orange-700 font-medium">
-                             ⚠️ Superas el stock ({availableStock.find(s => s.id === m.id)?.cantidad_actual || 0} disponibles)
+                             ⚠️ Superas el stock ({stockItem?.cantidad_actual || 0} {unit} disponibles)
                            </p>
-                           <span className="text-[9px] bg-orange-200 text-orange-800 px-1 rounded font-bold uppercase">Se registrará como compra</span>
+                           <span className="text-[9px] bg-orange-200 text-orange-800 px-1 rounded font-bold uppercase">Auto-compra</span>
                         </div>
                       )}
                     </div>
-                  ))}
+                  )})}
                 </div>
               )}
 
@@ -389,7 +404,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                           key={s.id}
                           className="w-full text-left px-2 py-1.5 text-xs hover:bg-muted rounded flex items-center justify-between transition-colors"
                           onClick={() => {
-                            setMaterials([...materials, { id: s.id, nombre: s.nombre, cantidad: 1 }])
+                            setMaterials([...materials, { id: s.id, nombre: s.nombre, cantidad: 1, unidad: s.unidad_medida || 'ud' }])
                             setSearchMaterial('')
                           }}
                         >

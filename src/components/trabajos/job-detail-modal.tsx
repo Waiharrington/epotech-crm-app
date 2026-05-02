@@ -164,17 +164,40 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
                         {(job as any).materiales_utilizados.map((m: any, idx: number) => (
                            <div key={idx} className="flex justify-between items-center text-xs border-b border-white/10 pb-1 last:border-0 last:pb-0">
                               <span className="text-zinc-300">{m.nombre}</span>
-                              <span className="bg-white/10 px-2 py-0.5 rounded font-bold">x{m.cantidad}</span>
+                              <span className="bg-white/10 px-2 py-0.5 rounded font-bold">{m.cantidad} {m.unidad || 'ud'}</span>
                            </div>
                         ))}
                      </div>
                   </div>
                 )}
 
+                {/* Financial Summary */}
                 {job.precio_cobrado !== null && (
-                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-xl border border-green-100 mt-2">
-                    <span className="text-sm font-bold text-green-700 uppercase tracking-tight">Monto Final Cobrado</span>
-                    <span className="text-lg font-black text-green-600">${job.precio_cobrado?.toLocaleString()}</span>
+                  <div className="space-y-2 mt-2">
+                    <div className="flex justify-between items-center p-3 bg-green-50 rounded-xl border border-green-100">
+                      <span className="text-sm font-bold text-green-700 uppercase tracking-tight">Monto Cobrado</span>
+                      <span className="text-lg font-black text-green-600">${job.precio_cobrado?.toLocaleString()}</span>
+                    </div>
+
+                    {(job as any).costo_variable > 0 && (
+                      <div className="flex justify-between items-center p-3 bg-orange-50 rounded-xl border border-orange-100">
+                        <span className="text-xs font-bold text-orange-700 uppercase">Gastos Adicionales</span>
+                        <span className="text-sm font-black text-orange-600">-${(job as any).costo_variable}</span>
+                      </div>
+                    )}
+
+                    <div className="flex justify-between items-center p-4 bg-primary/5 rounded-xl border-2 border-primary/20">
+                      <div>
+                        <span className="text-sm font-black text-primary uppercase tracking-tight">Ganancia Neta</span>
+                        <p className="text-[10px] text-muted-foreground">Cobrado - Gastos</p>
+                      </div>
+                      <span className={cn(
+                        "text-xl font-black",
+                        ((job.precio_cobrado || 0) - ((job as any).costo_variable || 0)) >= 0 ? "text-green-600" : "text-destructive"
+                      )}>
+                        ${((job.precio_cobrado || 0) - ((job as any).costo_variable || 0)).toFixed(2)}
+                      </span>
+                    </div>
                   </div>
                 )}
               </div>

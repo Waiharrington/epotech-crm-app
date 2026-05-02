@@ -45,6 +45,8 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
   const [presionAgua, setPresionAgua] = useState(job.presion_agua || '')
   const [quimicos, setQuimicos] = useState(job.quimicos_aplicados || '')
   const [materials, setMaterials] = useState<{ id: string; nombre: string; cantidad: number }[]>([])
+  const [costoVariable, setCostoVariable] = useState(0)
+  const [motivoVariable, setMotivoVariable] = useState('Gasolina / Peajes')
   
   // Recurring state
   const [esRecurrente, setEsRecurrente] = useState(false)
@@ -84,6 +86,27 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
   const fetchStock = async () => {
     const { data } = await supabase.from('stock').select('*').eq('tipo', 'consumible')
     if (data) setAvailableStock(data)
+    
+    // Fetch recipe from catalog if job has service_id
+    if (job.servicio_id) {
+      const { data: serviceData } = await supabase
+        .from('catalogo_servicios')
+        .select('materiales_receta, costo_variable_est')
+        .eq('id', job.servicio_id)
+        .single()
+      
+      if (serviceData?.materiales_receta) {
+        const recipe = serviceData.materiales_receta as any[]
+        const initialMaterials = recipe.map(r => {
+          const item = (data || []).find(s => s.id === r.stock_id)
+          return { id: r.stock_id, nombre: item?.nombre || 'Material', cantidad: r.cantidad }
+        })
+        setMaterials(initialMaterials)
+      }
+      if (serviceData?.costo_variable_est) {
+        setCostoVariable(serviceData.costo_variable_est)
+      }
+    }
   }
 
   const handleComplete = async () => {
@@ -102,7 +125,8 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
         materiales_utilizados: materials,
         completado_at: new Date().toISOString(),
         es_recurrente: esRecurrente,
-        fecha_proximo_serv: fechaProxima || null
+        fecha_proximo_serv: fechaProxima || null,
+        costo_variable: costoVariable
       })
       .eq('id', job.id)
 
@@ -126,14 +150,20 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
     }
 
     // 2. Automatic Caja entry (Income)
-    await (supabase as any).from('caja').insert({
-      tipo: 'ingreso',
-      monto: precioCobrado,
-      categoria: 'servicio_completado',
-      trabajo_id: job.id,
-      notas: `Servicio ${job.catalogo_servicios?.nombre || ''} - ${job.clientes.nombre}`,
       es_automatico: true
     })
+
+    // 2.5 Variable cost entry (Expense)
+    if (costoVariable > 0) {
+      await (supabase as any).from('caja').insert({
+        tipo: 'egreso',
+        monto: costoVariable,
+        categoria: 'gastos_operativos',
+        trabajo_id: job.id,
+        notas: `${motivoVariable} - ${job.catalogo_servicios?.nombre || ''} - ${job.clientes.nombre}`,
+        es_automatico: true
+      })
+    }
 
     // 3. Real Stock deduction & History record
     for (const mat of materials) {
@@ -375,6 +405,51 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                  >
                     <Plus className="h-6 w-6 text-muted-foreground" />
                     <span className="text-[10px] text-muted-foreground mt-1">Añadir</span>
+                 </div>
+              </div>
+            </div>
+
+            <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-sm font-bold flex items-center gap-2">
+                   <DollarSign className="h-4 w-4 text-primary" /> Rentabilidad Estimada
+                </Label>
+                {(() => {
+                   const matCost = materials.reduce((acc, m) => {
+                     const item = availableStock.find(s => s.id === m.id)
+                     return acc + (item?.precio_costo || 0) * m.cantidad
+                   }, 0)
+                   const net = precioCobrado - (matCost + costoVariable)
+                   return (
+                     <div className="text-right">
+                        <p className={cn("text-xl font-black", net >= 0 ? "text-green-600" : "text-destructive")}>
+                          ${net.toFixed(2)}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Ganancia Neta</p>
+                     </div>
+                   )
+                })()}
+              </div>
+
+              <div className="space-y-3 pt-2 border-t border-primary/10">
+                 <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                       <Label className="text-[10px] uppercase text-muted-foreground">Gastos Variables (Gasolina)</Label>
+                       <Input 
+                        type="number" 
+                        className="h-8 text-xs font-bold"
+                        value={costoVariable}
+                        onChange={e => setCostoVariable(parseFloat(e.target.value) || 0)}
+                       />
+                    </div>
+                    <div className="space-y-1">
+                       <Label className="text-[10px] uppercase text-muted-foreground">Motivo Gasto</Label>
+                       <Input 
+                        className="h-8 text-xs"
+                        value={motivoVariable}
+                        onChange={e => setMotivoVariable(e.target.value)}
+                       />
+                    </div>
                  </div>
               </div>
             </div>

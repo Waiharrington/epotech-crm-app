@@ -29,19 +29,20 @@ interface LineItem {
 interface NewQuoteWizardProps {
   onClose: () => void
   onSuccess: () => void
+  quoteToEdit?: any
 }
 
-export function NewQuoteWizard({ onClose, onSuccess }: NewQuoteWizardProps) {
+export function NewQuoteWizard({ onClose, onSuccess, quoteToEdit }: NewQuoteWizardProps) {
   const supabase = createClient()
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(quoteToEdit ? 2 : 1)
   const [loading, setLoading] = useState(false)
   const [clients, setClients] = useState<Cliente[]>([])
   const [services, setServices] = useState<Servicio[]>([])
   const [searchClient, setSearchClient] = useState('')
   
-  const [selectedClient, setSelectedClient] = useState<Cliente | null>(null)
-  const [lineItems, setLineItems] = useState<LineItem[]>([])
-  const [descuento, setDescuento] = useState(0)
+  const [selectedClient, setSelectedClient] = useState<Cliente | null>(quoteToEdit ? quoteToEdit.clientes : null)
+  const [lineItems, setLineItems] = useState<LineItem[]>(quoteToEdit ? quoteToEdit.items_detalle : [])
+  const [descuento, setDescuento] = useState(quoteToEdit ? quoteToEdit.monto_descuento : 0)
 
   useEffect(() => {
     fetchClients()
@@ -74,23 +75,37 @@ export function NewQuoteWizard({ onClose, onSuccess }: NewQuoteWizardProps) {
     if (!selectedClient) return
     setLoading(true)
     
-    const { data, error } = await (supabase as any)
-      .from('presupuestos')
-      .insert({
-        cliente_id: selectedClient.id,
-        items_detalle: lineItems,
-        monto_subtotal: subtotal,
-        monto_descuento: descuento,
-        monto_total: total,
-        estado: 'pendiente'
-      })
-      .select()
+    let res
+    if (quoteToEdit) {
+      res = await (supabase as any)
+        .from('presupuestos')
+        .update({
+          cliente_id: selectedClient.id,
+          items_detalle: lineItems,
+          monto_subtotal: subtotal,
+          monto_descuento: descuento,
+          monto_total: total
+        })
+        .eq('id', quoteToEdit.id)
+    } else {
+      res = await (supabase as any)
+        .from('presupuestos')
+        .insert({
+          cliente_id: selectedClient.id,
+          items_detalle: lineItems,
+          monto_subtotal: subtotal,
+          monto_descuento: descuento,
+          monto_total: total,
+          estado: 'pendiente'
+        })
+        .select()
+    }
 
     setLoading(false)
-    if (!error) {
+    if (!res.error) {
       onSuccess()
     } else {
-      alert('Error: ' + error.message)
+      alert('Error: ' + res.error.message)
     }
   }
 
@@ -98,8 +113,10 @@ export function NewQuoteWizard({ onClose, onSuccess }: NewQuoteWizardProps) {
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden bg-background">
         <DialogHeader className="p-6 pb-0">
-          <DialogTitle>Nueva Cotización</DialogTitle>
-          <DialogDescription>Construye una propuesta personalizada para tu cliente.</DialogDescription>
+          <DialogTitle>{quoteToEdit ? 'Editar Cotización' : 'Nueva Cotización'}</DialogTitle>
+          <DialogDescription>
+            {quoteToEdit ? 'Modifica los servicios y montos de esta propuesta.' : 'Construye una propuesta personalizada para tu cliente.'}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="p-6 h-[70vh] flex flex-col gap-6">

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
-import { Plus, Search, FileText, Download, Send, MoreVertical, Trash2, Loader2, User, ExternalLink, Check } from 'lucide-react'
+import { Plus, Search, FileText, Download, Send, MoreVertical, Trash2, Loader2, User, ExternalLink, Check, Eye, Pencil } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { 
@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { NewQuoteWizard } from '@/components/presupuestos/new-quote-wizard'
+import { QuoteDetailModal } from '@/components/presupuestos/quote-detail-modal'
 import dynamic from 'next/dynamic'
 
 const QuotePDFDownload = dynamic(() => import('@/components/presupuestos/quote-pdf-download'), {
@@ -37,6 +38,8 @@ export default function CotizacionesPage() {
   const [loading, setLoading] = useState(true)
   const [showWizard, setShowWizard] = useState(false)
   const [search, setSearch] = useState('')
+  const [selectedQuote, setSelectedQuote] = useState<Presupuesto | null>(null)
+  const [quoteToEdit, setQuoteToEdit] = useState<Presupuesto | null>(null)
 
   useEffect(() => {
     fetchCotizaciones()
@@ -48,7 +51,7 @@ export default function CotizacionesPage() {
       .from('presupuestos')
       .select(`
         *,
-        clientes (nombre, apellido)
+        clientes (*)
       `)
       .order('created_at', { ascending: false })
     
@@ -90,7 +93,10 @@ export default function CotizacionesPage() {
             <h1 className="text-2xl font-bold tracking-tight">Presupuestos y Cotizaciones</h1>
             <p className="text-muted-foreground text-sm">Genera propuestas profesionales para tus clientes.</p>
           </div>
-          <Button onClick={() => setShowWizard(true)}>
+          <Button onClick={() => {
+            setQuoteToEdit(null)
+            setShowWizard(true)
+          }}>
             <Plus className="mr-2 h-4 w-4" /> Nueva Cotización
           </Button>
         </div>
@@ -124,24 +130,24 @@ export default function CotizacionesPage() {
                            <TableRow><TableCell colSpan={5} className="text-center py-10"><Loader2 className="h-6 w-6 animate-spin mx-auto" /></TableCell></TableRow>
                         ) : filteredCotizaciones.length > 0 ? (
                             filteredCotizaciones.map(c => (
-                                <TableRow key={c.id}>
-                                    <TableCell>
+                                <TableRow key={c.id} className="hover:bg-muted/30 transition-colors">
+                                    <TableCell className="cursor-pointer font-medium" onClick={() => setSelectedQuote(c)}>
                                         <div className="flex flex-col">
                                             <span className="font-bold text-sm">#{c.id.substring(0, 8).toUpperCase()}</span>
                                             <span className="text-[10px] text-muted-foreground uppercase">{new Date(c.created_at).toLocaleDateString()}</span>
                                         </div>
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="cursor-pointer" onClick={() => setSelectedQuote(c)}>
                                         <div className="flex items-center gap-2">
                                             <User className="h-4 w-4 text-muted-foreground" />
                                             <span className="text-sm font-medium">{c.clientes.nombre} {c.clientes.apellido}</span>
                                         </div>
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className="cursor-pointer" onClick={() => setSelectedQuote(c)}>
                                         <span className="font-bold text-primary">${c.monto_total.toLocaleString()}</span>
                                     </TableCell>
-                                    <TableCell>
-                                        <Badge variant={c.estado === 'aprobado' ? 'default' : 'secondary'} className="capitalize">
+                                    <TableCell className="cursor-pointer" onClick={() => setSelectedQuote(c)}>
+                                        <Badge variant={c.estado === 'aprobado' ? 'default' : c.estado === 'rechazado' ? 'destructive' : 'secondary'} className="capitalize">
                                             {c.estado}
                                         </Badge>
                                     </TableCell>
@@ -166,6 +172,15 @@ export default function CotizacionesPage() {
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                  <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem onClick={() => setSelectedQuote(c)}>
+                                                       <Eye className="mr-2 h-4 w-4" /> Ver Detalles
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => {
+                                                       setQuoteToEdit(c)
+                                                       setShowWizard(true)
+                                                    }}>
+                                                       <Pencil className="mr-2 h-4 w-4" /> Editar
+                                                    </DropdownMenuItem>
                                                     <DropdownMenuItem onClick={() => handleUpdateStatus(c.id, 'aprobado')}>
                                                        <Check className="mr-2 h-4 w-4 text-green-600" /> Marcar Aprobado
                                                     </DropdownMenuItem>
@@ -187,7 +202,10 @@ export default function CotizacionesPage() {
                                     <div className="flex flex-col items-center">
                                         <FileText className="h-10 w-10 text-muted-foreground mb-4 opacity-20" />
                                         <p className="text-muted-foreground italic">No hay cotizaciones registradas.</p>
-                                        <Button variant="outline" className="mt-4" onClick={() => setShowWizard(true)}>Crear la primera</Button>
+                                        <Button variant="outline" className="mt-4" onClick={() => {
+                                            setQuoteToEdit(null)
+                                            setShowWizard(true)
+                                        }}>Crear la primera</Button>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -198,17 +216,42 @@ export default function CotizacionesPage() {
         </div>
       </div>
 
-      {showWizard && (
-        <NewQuoteWizard 
-            onClose={() => setShowWizard(false)} 
-            onSuccess={() => {
-                setShowWizard(false)
-                fetchCotizaciones()
-            }} 
-        />
-      )}
-    </div>
-  )
-}
+       {selectedQuote && (
+         <QuoteDetailModal 
+            quote={selectedQuote}
+            onClose={() => setSelectedQuote(null)}
+            onEdit={(q) => {
+                setSelectedQuote(null)
+                setQuoteToEdit(q)
+                setShowWizard(true)
+            }}
+            onDelete={async (id) => {
+                setSelectedQuote(null)
+                await handleDelete(id)
+            }}
+            onUpdateStatus={async (id, status) => {
+                await handleUpdateStatus(id, status)
+                setSelectedQuote(prev => prev && prev.id === id ? { ...prev, estado: status } : prev)
+            }}
+         />
+       )}
+
+       {showWizard && (
+         <NewQuoteWizard 
+             quoteToEdit={quoteToEdit}
+             onClose={() => {
+                 setShowWizard(false)
+                 setQuoteToEdit(null)
+             }} 
+             onSuccess={() => {
+                 setShowWizard(false)
+                 setQuoteToEdit(null)
+                 fetchCotizaciones()
+             }} 
+         />
+       )}
+     </div>
+   )
+ }
 
 import { Input } from '@/components/ui/input'

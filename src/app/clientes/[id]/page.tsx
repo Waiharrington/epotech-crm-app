@@ -20,7 +20,10 @@ import {
   ArrowLeft,
   Loader2,
   Check,
-  Repeat
+  Repeat,
+  FileText,
+  DollarSign,
+  ExternalLink as ExternalLinkIcon
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import Link from 'next/link'
@@ -65,12 +68,14 @@ export default function ClienteProfilePage() {
   const [showAddNoteModal, setShowAddNoteModal] = useState(false)
   const [selectedNote, setSelectedNote] = useState<any | null>(null)
   const [showEditNoteModal, setShowEditNoteModal] = useState(false)
+  const [cotizaciones, setCotizaciones] = useState<any[]>([])
 
   useEffect(() => {
     fetchCliente()
     fetchTrabajos()
     fetchPlanes()
     fetchNotas()
+    fetchCotizaciones()
     
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search)
@@ -103,12 +108,21 @@ export default function ClienteProfilePage() {
   }
 
   const fetchNotas = async () => {
-    const { data } = await supabase
-      .from('notas_clientes')
+    const { data } = await (supabase as any)
+      .from('notas_cliente')
       .select('*')
       .eq('cliente_id', id)
       .order('created_at', { ascending: false })
     if (data) setNotas(data)
+  }
+
+  const fetchCotizaciones = async () => {
+    const { data } = await (supabase as any)
+      .from('presupuestos')
+      .select('*')
+      .eq('cliente_id', id)
+      .order('created_at', { ascending: false })
+    if (data) setCotizaciones(data)
   }
 
   const fetchTrabajos = async () => {
@@ -218,6 +232,12 @@ export default function ClienteProfilePage() {
                 className="inline-flex items-center justify-center whitespace-nowrap px-6 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary rounded-none h-12"
               >
                 <StickyNote className="mr-2 h-4 w-4" /> Notas
+              </TabsTrigger>
+              <TabsTrigger 
+                value="cotizaciones" 
+                className="inline-flex items-center justify-center whitespace-nowrap px-6 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary rounded-none h-12"
+              >
+                <FileText className="mr-2 h-4 w-4" /> Cotizaciones
               </TabsTrigger>
             </TabsList>
           </div>
@@ -491,6 +511,76 @@ export default function ClienteProfilePage() {
                   <Button variant="outline" className="mt-4" onClick={() => setShowAddNoteModal(true)}>
                      Comenzar a anotar
                   </Button>
+                </div>
+             )}
+          </TabsContent>
+
+          <TabsContent value="cotizaciones" className="animate-in fade-in duration-500">
+             <div className="flex items-center justify-between mb-6">
+                <div>
+                   <h3 className="text-lg font-bold">Cotizaciones del Cliente</h3>
+                   <p className="text-sm text-muted-foreground">Historial de presupuestos y propuestas enviadas.</p>
+                </div>
+                <Link href="/cotizaciones">
+                   <Button variant="outline" size="sm">
+                      <ExternalLinkIcon className="mr-2 h-3 w-3" /> Ir a Cotizaciones
+                   </Button>
+                </Link>
+             </div>
+
+             {cotizaciones.length > 0 ? (
+                <div className="space-y-3">
+                   {cotizaciones.map(c => (
+                      <Card key={c.id} className="group hover:shadow-md transition-shadow">
+                         <CardContent className="p-4">
+                            <div className="flex items-center justify-between">
+                               <div className="flex items-center gap-4">
+                                  <div className="bg-primary/10 rounded-lg p-2.5">
+                                     <FileText className="h-5 w-5 text-primary" />
+                                  </div>
+                                  <div>
+                                     <p className="font-bold text-sm">#{c.id.substring(0, 8).toUpperCase()}</p>
+                                     <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                                        {new Date(c.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                     </p>
+                                     {c.items_detalle && (
+                                        <p className="text-[10px] text-muted-foreground mt-0.5">
+                                           {(c.items_detalle as any[]).length} servicio{(c.items_detalle as any[]).length !== 1 ? 's' : ''}
+                                        </p>
+                                     )}
+                                  </div>
+                               </div>
+                               <div className="flex items-center gap-3">
+                                  <div className="text-right">
+                                     <p className="font-black text-lg text-primary">${c.monto_total?.toLocaleString()}</p>
+                                     {c.monto_descuento > 0 && (
+                                        <p className="text-[10px] text-muted-foreground">Desc: -${c.monto_descuento}</p>
+                                     )}
+                                  </div>
+                                  <Badge variant={c.estado === 'aprobado' ? 'default' : 'secondary'} className={cn(
+                                     'capitalize text-[10px]',
+                                     c.estado === 'aprobado' && 'bg-green-500 hover:bg-green-600'
+                                  )}>
+                                     {c.estado}
+                                  </Badge>
+                               </div>
+                            </div>
+                         </CardContent>
+                      </Card>
+                   ))}
+                </div>
+             ) : (
+                <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/10">
+                  <FileText className="h-10 w-10 text-muted-foreground mb-4" />
+                  <h3 className="font-semibold text-lg">Sin Cotizaciones</h3>
+                  <p className="text-muted-foreground max-w-sm mt-1">
+                    Este cliente aún no tiene cotizaciones registradas.
+                  </p>
+                  <Link href="/cotizaciones">
+                     <Button variant="outline" className="mt-4">
+                        Crear Cotización
+                     </Button>
+                  </Link>
                 </div>
              )}
           </TabsContent>

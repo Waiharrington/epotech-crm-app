@@ -14,14 +14,18 @@ import {
   Plus,
   ChevronRight,
   Loader2,
-  Clock
+  Clock,
+  Bell,
+  Check
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { toast } from 'sonner'
 import Link from 'next/link'
 
 export default function DashboardPage() {
-  const supabase = createClient()
+  const supabase = createClient() as any
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState({
     totalClients: 0,
@@ -30,10 +34,122 @@ export default function DashboardPage() {
     lowStock: 0
   })
   const [recentJobs, setRecentJobs] = useState<any[]>([])
+  
+  // Reminders state
+  const [reminders, setReminders] = useState<any[]>([])
+  const [quickTitle, setQuickTitle] = useState('')
+  const [isDbOffline, setIsDbOffline] = useState(false)
 
   useEffect(() => {
     fetchDashboardData()
+    fetchReminders()
+
+    const handleChanges = () => {
+      fetchReminders()
+    }
+    window.addEventListener('recordatoriosChanged', handleChanges)
+    return () => {
+      window.removeEventListener('recordatoriosChanged', handleChanges)
+    }
   }, [])
+
+  const fetchReminders = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('recordatorios')
+        .select('*')
+        .eq('completado', false)
+        .order('fecha', { ascending: true })
+        .order('hora', { ascending: true })
+        .limit(4)
+
+      if (error) throw error
+      setReminders(data || [])
+      setIsDbOffline(false)
+    } catch (e) {
+      setIsDbOffline(true)
+      const localData = localStorage.getItem('epotech_recordatorios')
+      if (localData) {
+        const parsed = JSON.parse(localData)
+        const uncompleted = parsed.filter((r: any) => !r.completado)
+        const sorted = uncompleted.sort((a: any, b: any) => {
+          if (a.fecha !== b.fecha) return a.fecha.localeCompare(b.fecha)
+          return (a.hora || '').localeCompare(b.hora || '')
+        })
+        setReminders(sorted.slice(0, 4))
+      }
+    }
+  }
+
+  const handleToggleReminder = async (id: string) => {
+    try {
+      if (isDbOffline) throw new Error('Offline fallback')
+      
+      const { error } = await supabase
+        .from('recordatorios')
+        .update({ completado: true })
+        .eq('id', id)
+
+      if (error) throw error
+      toast.success('¡Recordatorio completado!')
+      fetchReminders()
+      window.dispatchEvent(new Event('recordatoriosChanged'))
+    } catch (e) {
+      const localData = localStorage.getItem('epotech_recordatorios')
+      if (localData) {
+        const parsed = JSON.parse(localData)
+        const updated = parsed.map((r: any) => r.id === id ? { ...r, completado: true } : r)
+        localStorage.setItem('epotech_recordatorios', JSON.stringify(updated))
+        toast.success('¡Recordatorio completado!')
+        fetchReminders()
+        window.dispatchEvent(new Event('recordatoriosChanged'))
+      }
+    }
+  }
+
+  const handleQuickAddReminder = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!quickTitle.trim()) return
+
+    const payload = {
+      titulo: quickTitle.trim(),
+      descripcion: 'Creado desde el panel principal.',
+      fecha: new Date().toISOString().substring(0, 10),
+      hora: '09:00:00',
+      prioridad: 'normal',
+      completado: false,
+      notificado: false
+    }
+
+    try {
+      if (isDbOffline) throw new Error('Offline fallback')
+
+      const { error } = await supabase
+        .from('recordatorios')
+        .insert([payload])
+
+      if (error) throw error
+      toast.success('Recordatorio agregado')
+      setQuickTitle('')
+      fetchReminders()
+      window.dispatchEvent(new Event('recordatoriosChanged'))
+    } catch (err) {
+      const localData = localStorage.getItem('epotech_recordatorios') || '[]'
+      const parsed = JSON.parse(localData)
+      const newItem = {
+        id: `local-${Date.now()}`,
+        ...payload,
+        created_at: new Date().toISOString()
+      }
+      parsed.push(newItem)
+      localStorage.setItem('epotech_recordatorios', JSON.stringify(parsed))
+      
+      toast.success('Recordatorio agregado localmente')
+      setQuickTitle('')
+      fetchReminders()
+      window.dispatchEvent(new Event('recordatoriosChanged'))
+    }
+  }
 
   const fetchDashboardData = async () => {
     setLoading(true)
@@ -45,7 +161,7 @@ export default function DashboardPage() {
     const { data: stockItems } = await supabase.from('stock').select('cantidad_actual, cantidad_minima')
 
     // Calculations
-    const totalIncome = incomeData?.reduce((acc, curr: any) => acc + (curr.monto || 0), 0) || 0
+    const totalIncome = incomeData?.reduce((acc: number, curr: any) => acc + (curr.monto || 0), 0) || 0
     const lowStockCount = (stockItems as any[])?.filter(i => (i.cantidad_actual || 0) <= (i.cantidad_minima || 0)).length || 0
 
     setStats({
@@ -211,11 +327,157 @@ export default function DashboardPage() {
                             <p className="text-sm font-bold">Revisa tu Stock</p>
                             <p className="text-xs opacity-80 mt-1">Tienes algunos consumibles por debajo del mínimo.</p>
                             <Button variant="link" className="p-0 h-auto text-primary text-xs mt-2" asChild>
-                                <Link href="/stock flex items-center">Ir al inventario <ChevronRight className="ml-1 h-3 w-3" /></Link>
+                                <Link href="/stock" className="flex items-center">Ir al inventario <ChevronRight className="ml-1 h-3 w-3" /></Link>
                             </Button>
                          </div>
                     </div>
                 </CardContent>
+            </Card>
+        </div>
+
+        {/* Reminders & Alerts Row */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+            {/* Reminders Widget */}
+            <Card className="lg:col-span-4 border-primary/10">
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <div className="space-y-1">
+                  <CardTitle className="text-base font-bold flex items-center gap-2">
+                    <Bell className="h-5 w-5 text-primary" />
+                    Recordatorios y Pendientes
+                  </CardTitle>
+                  <CardDescription className="text-xs text-muted-foreground">Alertas programadas y avisos rápidos de la agenda.</CardDescription>
+                </div>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/recordatorios" className="text-xs flex items-center gap-1">
+                    Gestionar <ChevronRight className="h-3.5 w-3.5" />
+                  </Link>
+                </Button>
+              </CardHeader>
+              <CardContent>
+                {/* Formulario Rápido */}
+                <form onSubmit={handleQuickAddReminder} className="flex gap-2 mb-4">
+                  <Input
+                    placeholder="Escribe un pendiente rápido para hoy (presiona Enter)..."
+                    value={quickTitle}
+                    onChange={e => setQuickTitle(e.target.value)}
+                    className="text-xs h-9"
+                  />
+                  <Button type="submit" size="sm" className="h-9 font-bold gap-1 px-3">
+                    <Plus className="h-4 w-4" /> Agregar
+                  </Button>
+                </form>
+
+                {/* Listado */}
+                <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                  {reminders.length > 0 ? (
+                    reminders.map((reminder) => {
+                      const getPriorityStyle = (p: string) => {
+                        switch (p) {
+                          case 'urgente': return 'bg-red-50 text-red-700 border-red-100 hover:bg-red-100/50'
+                          case 'alta': return 'bg-orange-50 text-orange-700 border-orange-100 hover:bg-orange-100/50'
+                          case 'baja': return 'bg-green-50 text-green-700 border-green-100 hover:bg-green-100/50'
+                          default: return 'bg-zinc-50 text-zinc-700 border-zinc-100 hover:bg-zinc-100/50'
+                        }
+                      }
+                      const getPriorityLabel = (p: string) => {
+                        switch (p) {
+                          case 'urgente': return '🚨 Urgente'
+                          case 'alta': return '🔥 Alta'
+                          case 'baja': return '🟢 Baja'
+                          default: return 'Normal'
+                        }
+                      }
+                      return (
+                        <div 
+                          key={reminder.id} 
+                          className="flex items-center justify-between p-2.5 rounded-lg border bg-card hover:bg-muted/10 transition-all group"
+                        >
+                          <div className="flex items-start gap-2.5 min-w-0 flex-1">
+                            <button
+                              type="button"
+                              onClick={() => handleToggleReminder(reminder.id)}
+                              className="h-5 w-5 rounded-full border border-zinc-300 hover:border-primary hover:bg-primary/5 flex items-center justify-center shrink-0 mt-0.5 transition-colors"
+                            >
+                              <Check className="h-3 w-3 stroke-[3] text-transparent group-hover:text-primary transition-colors" />
+                            </button>
+                            <div className="min-w-0">
+                              <p className="font-bold text-xs truncate text-foreground">{reminder.titulo}</p>
+                              <div className="flex items-center gap-2 mt-1 text-[10px] text-muted-foreground">
+                                <span className="flex items-center gap-0.5">
+                                  <Calendar className="h-3 w-3" />
+                                  {new Date(reminder.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                                </span>
+                                {reminder.hora && (
+                                  <span className="flex items-center gap-0.5">
+                                    <Clock className="h-3 w-3" />
+                                    {reminder.hora.substring(0, 5)}
+                                  </span>
+                                )}
+                                <Badge variant="outline" className={`text-[8px] px-1 py-0 uppercase font-extrabold tracking-wider ${getPriorityStyle(reminder.prioridad)}`}>
+                                  {getPriorityLabel(reminder.prioridad)}
+                                </Badge>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })
+                  ) : (
+                    <div className="text-center py-10 text-xs text-muted-foreground italic border border-dashed rounded-lg bg-muted/5">
+                      No hay recordatorios pendientes.
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Stock & Cash Critical Alerts Widget */}
+            <Card className="lg:col-span-3 flex flex-col justify-between">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base font-bold flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-red-500" />
+                  Alertas y Operaciones
+                </CardTitle>
+                <CardDescription className="text-xs text-muted-foreground">Alertas críticas del inventario y flujo de caja diario.</CardDescription>
+              </CardHeader>
+              <CardContent className="flex-1 flex flex-col justify-between pt-2">
+                <div className="space-y-3">
+                  {stats.lowStock > 0 ? (
+                    <div className="p-3 rounded-lg bg-red-50/50 border border-red-100 flex items-start gap-2.5">
+                      <AlertTriangle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-bold text-xs text-red-800">{stats.lowStock} productos en bajo stock</p>
+                        <p className="text-[10px] text-red-700 mt-0.5">Hay insumos que están por debajo de su cantidad mínima establecida.</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-3 rounded-lg bg-green-50/50 border border-green-100 flex items-start gap-2.5">
+                      <Check className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-bold text-xs text-green-800">Inventario al día</p>
+                        <p className="text-[10px] text-green-700/90 mt-0.5">Todos los insumos de lavado y resina epóxica tienen niveles adecuados.</p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="p-3 rounded-lg bg-primary/5 border border-primary/10 flex items-start gap-2.5">
+                    <Wallet className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-bold text-xs text-foreground">Caja Mensual</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">El total registrado en caja este mes es de <strong className="text-foreground">${stats.monthlyIncome.toLocaleString()}</strong>.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t mt-4 flex gap-2">
+                  <Button variant="outline" size="sm" className="w-full text-xs font-bold" asChild>
+                    <Link href="/stock">Ver Inventario</Link>
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full text-xs font-bold" asChild>
+                    <Link href="/caja">Ver Caja</Link>
+                  </Button>
+                </div>
+              </CardContent>
             </Card>
         </div>
       </main>

@@ -119,7 +119,7 @@ export function NewQuoteWizard({ onClose, onSuccess, quoteToEdit }: NewQuoteWiza
           </DialogDescription>
         </DialogHeader>
 
-        <div className="p-6 h-[70vh] flex flex-col gap-6">
+        <div className="p-6 max-h-[80vh] overflow-y-auto space-y-6">
           {step === 1 ? (
              <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
                 <Label>1. Selecciona el Cliente</Label>
@@ -149,37 +149,70 @@ export function NewQuoteWizard({ onClose, onSuccess, quoteToEdit }: NewQuoteWiza
                 </Button>
              </div>
           ) : (
-            <div className="flex flex-col h-full gap-6 animate-in fade-in slide-in-from-right-4 duration-300 overflow-hidden">
-                <div className="flex-1 flex flex-col gap-4 overflow-hidden">
-                    <div className="flex items-center justify-between">
-                        <Label>2. Servicios a Cotizar</Label>
-                        <span className="text-xs font-bold text-primary">{selectedClient?.nombre} {selectedClient?.apellido}</span>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-2 h-40 overflow-y-auto border rounded-lg p-2 bg-muted/20">
+            <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
+                <div className="flex items-center justify-between">
+                    <Label className="text-sm font-bold">2. Servicios a Cotizar</Label>
+                    <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">{selectedClient?.nombre} {selectedClient?.apellido}</span>
+                </div>
+                
+                {/* Available Services Grid */}
+                <div className="space-y-2">
+                    <span className="text-[10px] uppercase font-bold text-muted-foreground">Servicios Disponibles (Click para agregar)</span>
+                    <div className="grid grid-cols-2 gap-2 max-h-36 overflow-y-auto border rounded-lg p-2 bg-muted/20">
                         {services.map(s => (
-                            <Button key={s.id} variant="secondary" size="sm" className="justify-start text-xs h-8" onClick={() => addLineItem(s)}>
-                                <Plus className="mr-2 h-3 w-3" /> {s.nombre}
+                            <Button key={s.id} variant="secondary" size="sm" className="justify-start text-xs h-8 hover:bg-primary/10 hover:text-primary transition-colors truncate" onClick={() => addLineItem(s)}>
+                                <Plus className="mr-1.5 h-3.5 w-3.5 shrink-0" /> {s.nombre}
                             </Button>
                         ))}
                     </div>
+                </div>
 
-                    <div className="flex-1 border rounded-xl overflow-hidden flex flex-col">
-                        <div className="bg-muted p-2 text-[10px] font-bold uppercase grid grid-cols-12 gap-2">
+                {/* Added Services list */}
+                <div className="space-y-2">
+                    <span className="text-[10px] uppercase font-bold text-muted-foreground">Servicios en esta Cotización</span>
+                    <div className="border rounded-xl overflow-hidden flex flex-col min-h-[160px] max-h-[220px]">
+                        <div className="bg-muted p-2 text-[10px] font-black uppercase grid grid-cols-12 gap-2 text-muted-foreground border-b">
                             <span className="col-span-6">Servicio</span>
-                            <span className="col-span-2 text-center">Cant</span>
+                            <span className="col-span-3 text-center">Cant</span>
                             <span className="col-span-3 text-right">Precio</span>
-                            <span className="col-span-1"></span>
                         </div>
-                        <div className="flex-1 overflow-y-auto p-2 space-y-2">
+                        <div className="flex-1 overflow-y-auto p-2 space-y-2 divide-y bg-card">
                             {lineItems.map(item => (
-                                <div key={item.id} className="grid grid-cols-12 gap-2 items-center text-sm border-b pb-2 last:border-0">
-                                    <span className="col-span-6 font-medium truncate">{item.nombre}</span>
-                                    <span className="col-span-2 text-center">{item.cantidad}</span>
-                                    <span className="col-span-3 text-right font-bold">${item.precio * item.cantidad}</span>
-                                    <button className="col-span-1 text-red-500 hover:bg-red-50 rounded" onClick={() => setLineItems(lineItems.filter(i => i.id !== item.id))}>
-                                        <Trash2 className="h-3.5 w-3.5 mx-auto" />
-                                    </button>
+                                <div key={item.id} className="grid grid-cols-12 gap-2 items-center text-xs py-2 first:pt-0 last:pb-0">
+                                    <span className="col-span-6 font-semibold text-foreground truncate">{item.nombre}</span>
+                                    <div className="col-span-3 flex items-center justify-center gap-1.5">
+                                        <button 
+                                            type="button"
+                                            className="w-5 h-5 rounded-full border bg-muted flex items-center justify-center hover:bg-primary/10 hover:text-primary font-bold text-xs"
+                                            onClick={() => {
+                                                if (item.cantidad > 1) {
+                                                    setLineItems(lineItems.map(i => i.id === item.id ? { ...i, cantidad: i.cantidad - 1 } : i))
+                                                } else {
+                                                    setLineItems(lineItems.filter(i => i.id !== item.id))
+                                                }
+                                            }}
+                                        >
+                                            -
+                                        </button>
+                                        <span className="font-bold text-xs min-w-[12px] text-center">{item.cantidad}</span>
+                                        <button 
+                                            type="button"
+                                            className="w-5 h-5 rounded-full border bg-muted flex items-center justify-center hover:bg-primary/10 hover:text-primary font-bold text-xs"
+                                            onClick={() => setLineItems(lineItems.map(i => i.id === item.id ? { ...i, cantidad: i.cantidad + 1 } : i))}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                    <div className="col-span-3 flex items-center justify-end gap-1.5">
+                                        <span className="font-bold text-foreground">${(item.precio * item.cantidad)?.toLocaleString()}</span>
+                                        <button 
+                                            type="button"
+                                            className="text-destructive hover:bg-red-50 p-1 rounded transition-colors" 
+                                            onClick={() => setLineItems(lineItems.filter(i => i.id !== item.id))}
+                                        >
+                                            <Trash2 className="h-3.5 w-3.5" />
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                             {lineItems.length === 0 && <p className="text-center py-10 text-muted-foreground italic text-xs">Agrega servicios arriba</p>}
@@ -187,28 +220,29 @@ export function NewQuoteWizard({ onClose, onSuccess, quoteToEdit }: NewQuoteWiza
                     </div>
                 </div>
 
-                <div className="space-y-3 bg-muted/50 p-4 rounded-xl">
-                    <div className="flex justify-between text-sm">
+                {/* Subtotals and save */}
+                <div className="space-y-3 bg-muted/30 p-4 rounded-xl border border-dashed">
+                    <div className="flex justify-between text-xs text-muted-foreground">
                         <span>Subtotal</span>
-                        <span className="font-bold">${subtotal}</span>
+                        <span className="font-bold">${subtotal?.toLocaleString()}</span>
                     </div>
-                    <div className="flex justify-between items-center text-sm">
+                    <div className="flex justify-between items-center text-xs text-muted-foreground">
                         <span>Descuento ($)</span>
                         <Input 
                             type="number" 
-                            className="w-24 h-8 text-right font-bold" 
-                            value={descuento} 
+                            className="w-24 h-8 text-right font-bold text-xs" 
+                            value={descuento || ''} 
                             onChange={e => setDescuento(parseFloat(e.target.value) || 0)} 
                         />
                     </div>
-                    <div className="flex justify-between text-lg font-bold border-t pt-2 text-primary">
+                    <div className="flex justify-between text-base font-black border-t pt-2 text-primary">
                         <span>Total de la Propuesta</span>
-                        <span>${total}</span>
+                        <span>${total?.toLocaleString()}</span>
                     </div>
                     <div className="flex gap-2 pt-2">
-                        <Button variant="outline" className="flex-1" onClick={() => setStep(1)}>Atrás</Button>
-                        <Button className="flex-1" onClick={handleSave} disabled={loading || lineItems.length === 0}>
-                            {loading ? <Loader2 className="animate-spin" /> : <><Check className="mr-2 h-4 w-4" /> Guardar</>}
+                        <Button variant="outline" className="flex-1 text-xs h-9 font-semibold" onClick={() => setStep(1)}>Atrás</Button>
+                        <Button className="flex-1 text-xs h-9 font-semibold" onClick={handleSave} disabled={loading || lineItems.length === 0}>
+                            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Check className="mr-1.5 h-4 w-4" /> Guardar</>}
                         </Button>
                     </div>
                 </div>

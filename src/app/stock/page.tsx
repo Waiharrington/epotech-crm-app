@@ -127,8 +127,32 @@ export default function StockPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    const { error } = await (supabase as any).from('stock').insert([formData])
+    const finalData = { ...formData };
+    if (finalData.tipo !== 'consumible') {
+      finalData.unidad_medida = 'unidades';
+      finalData.cantidad_minima = 0;
+      finalData.precio_costo = 0;
+      if ('precio_cliente' in finalData) {
+        (finalData as any).precio_cliente = 0;
+      }
+    }
+    const { data: newItems, error } = await (supabase as any).from('stock').insert([finalData]).select()
     if (!error) {
+      // Registrar egreso en caja si el consumible inicial tiene stock y costo
+      if (newItems && newItems.length > 0) {
+        const newItem = newItems[0]
+        if (newItem.tipo === 'consumible' && newItem.cantidad_actual > 0 && newItem.precio_costo > 0) {
+          const totalCosto = newItem.cantidad_actual * newItem.precio_costo
+          await (supabase as any).from('caja').insert({
+            tipo: 'egreso',
+            monto: totalCosto,
+            categoria: 'materiales',
+            stock_id: newItem.id,
+            notas: `Compra de stock inicial (Nuevo producto): ${newItem.nombre} (${newItem.cantidad_actual} ${newItem.unidad_medida || 'unidades'})`,
+            es_automatico: true
+          })
+        }
+      }
       setShowAddModal(false)
       setFormData({
         nombre: '',
@@ -148,15 +172,19 @@ export default function StockPage() {
     e.preventDefault()
     if (!editingItem) return
     setLoading(true)
+    const updateData: any = {
+      nombre: editingItem.nombre,
+      tipo: editingItem.tipo,
+      unidad_medida: editingItem.tipo === 'consumible' ? editingItem.unidad_medida : 'unidades',
+      cantidad_minima: editingItem.tipo === 'consumible' ? editingItem.cantidad_minima : 0,
+      precio_costo: editingItem.tipo === 'consumible' ? editingItem.precio_costo : 0
+    };
+    if ('precio_cliente' in editingItem) {
+      updateData.precio_cliente = editingItem.tipo === 'consumible' ? (editingItem as any).precio_cliente : 0;
+    }
     const { error } = await (supabase as any)
       .from('stock')
-      .update({
-        nombre: editingItem.nombre,
-        tipo: editingItem.tipo,
-        unidad_medida: editingItem.unidad_medida,
-        cantidad_minima: editingItem.cantidad_minima,
-        precio_costo: editingItem.precio_costo
-      })
+      .update(updateData)
       .eq('id', editingItem.id)
     
     if (!error) {
@@ -250,12 +278,13 @@ export default function StockPage() {
                                 <TableHead>Estado</TableHead>
                                 <TableHead>Cantidad</TableHead>
                                 <TableHead className="hidden md:table-cell">Precio Costo</TableHead>
+                                <TableHead className="hidden md:table-cell">Precio Cliente</TableHead>
                                 <TableHead className="text-right">Acciones</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {loading ? (
-                               <TableRow><TableCell colSpan={5} className="text-center py-10"><Loader2 className="h-6 w-6 animate-spin mx-auto" /></TableCell></TableRow>
+                               <TableRow><TableCell colSpan={6} className="text-center py-10"><Loader2 className="h-6 w-6 animate-spin mx-auto" /></TableCell></TableRow>
                             ) : filteredItems.map(item => (
                                 <TableRow key={item.id}>
                                     <TableCell>
@@ -284,6 +313,9 @@ export default function StockPage() {
                                     </TableCell>
                                     <TableCell className="hidden md:table-cell">
                                         <span className="text-sm font-medium">${item.precio_costo}</span>
+                                    </TableCell>
+                                    <TableCell className="hidden md:table-cell">
+                                        <span className="text-sm font-semibold text-blue-600">${(item as any).precio_cliente ?? 0}</span>
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex items-center justify-end gap-1">
@@ -458,10 +490,10 @@ export default function StockPage() {
                     required 
                 />
              </div>
-             <div className="grid grid-cols-2 gap-4">
+             <div className={formData.tipo === 'consumible' ? "grid grid-cols-2 gap-4" : "grid grid-cols-1"}>
                 <div className="space-y-2">
                    <Label>Tipo</Label>
-                   <Select value={formData.tipo as string} onValueChange={v => setFormData({ ...formData, tipo: v as any })}>
+                   <Select value={formData.tipo as string} onValueChange={v => setFormData({ ...formData, tipo: v as any, unidad_medida: v !== 'consumible' ? 'unidades' : formData.unidad_medida })}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -472,6 +504,7 @@ export default function StockPage() {
                       </SelectContent>
                    </Select>
                 </div>
+                {formData.tipo === 'consumible' && (
                  <div className="space-y-2">
                     <Label>Unidad de Medida</Label>
                     <Select value={formData.unidad_medida || 'unidades'} onValueChange={v => setFormData({ ...formData, unidad_medida: v })}>
@@ -485,6 +518,7 @@ export default function StockPage() {
                         </SelectContent>
                     </Select>
                  </div>
+                )}
              </div>
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -496,6 +530,7 @@ export default function StockPage() {
                     <Input id="min" type="number" value={formData.cantidad_minima ?? ''} onChange={e => setFormData({ ...formData, cantidad_minima: e.target.value === '' ? null : parseFloat(e.target.value) })} />
                 </div>
              </div>
+             {formData.tipo === 'consumible' && (
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="precio-costo">Precio Costo ($)</Label>
@@ -512,6 +547,7 @@ export default function StockPage() {
                     </div>
                 </div>
              </div>
+             )}
              <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? <Loader2 className="animate-spin" /> : 'Registrar Item'}
              </Button>
@@ -536,10 +572,10 @@ export default function StockPage() {
                       required 
                   />
                </div>
-               <div className="grid grid-cols-2 gap-4">
+               <div className={editingItem.tipo === 'consumible' ? "grid grid-cols-2 gap-4" : "grid grid-cols-1"}>
                   <div className="space-y-2">
                      <Label>Tipo</Label>
-                     <Select value={editingItem.tipo as string} onValueChange={v => setEditingItem({ ...editingItem, tipo: v as any })}>
+                     <Select value={editingItem.tipo as string} onValueChange={v => setEditingItem({ ...editingItem, tipo: v as any, unidad_medida: v !== 'consumible' ? 'unidades' : editingItem.unidad_medida })}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -550,6 +586,7 @@ export default function StockPage() {
                         </SelectContent>
                      </Select>
                   </div>
+                  {editingItem.tipo === 'consumible' && (
                   <div className="space-y-2">
                       <Label>Unidad de Medida</Label>
                       <Select value={editingItem.unidad_medida || 'unidades'} onValueChange={v => setEditingItem({ ...editingItem, unidad_medida: v })}>
@@ -563,11 +600,13 @@ export default function StockPage() {
                           </SelectContent>
                       </Select>
                   </div>
+                  )}
                </div>
                <div className="space-y-2">
                    <Label htmlFor="edit-min">Aviso Stock Mín.</Label>
                    <Input id="edit-min" type="number" value={editingItem.cantidad_minima ?? ''} onChange={e => setEditingItem({ ...editingItem, cantidad_minima: e.target.value === '' ? null : parseFloat(e.target.value) })} />
                </div>
+               {editingItem.tipo === 'consumible' && (
                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                       <Label htmlFor="edit-precio">Precio Costo ($)</Label>
@@ -584,6 +623,7 @@ export default function StockPage() {
                       </div>
                   </div>
                </div>
+               )}
                <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? <Loader2 className="animate-spin" /> : 'Guardar Cambios'}
                </Button>

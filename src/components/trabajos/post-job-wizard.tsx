@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Check, Camera, Package, DollarSign, Loader2, Trash2, Calendar, Repeat, Search } from 'lucide-react'
+import { Plus, Check, Camera, Package, DollarSign, Loader2, Trash2, Calendar, Repeat, Search } from 'lucide-react'
 import {
   Select,
   SelectContent,
@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
 import { AddPhotoModal, PhotoMetadata } from '@/components/clientes/add-photo-modal'
 
 type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
@@ -41,12 +42,14 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
   const [loading, setLoading] = useState(false)
   const [precioCobrado, setPrecioCobrado] = useState(job.precio_acordado || 0)
   const [notasPost, setNotasPost] = useState('')
-  const [maquinaUsada, setMaquinaUsada] = useState(job.maquina_usada || '')
+  const [equiposUsados, setEquiposUsados] = useState<string[]>(job.maquina_usada ? job.maquina_usada.split(',').map(s => s.trim()).filter(Boolean) : [])
+  const [currentEquipo, setCurrentEquipo] = useState('')
   const [presionAgua, setPresionAgua] = useState(job.presion_agua || '')
   const [quimicos, setQuimicos] = useState(job.quimicos_aplicados || '')
-  const [materials, setMaterials] = useState<{ id: string; nombre: string; cantidad: number; unidad: string }[]>([])
+  const [materials, setMaterials] = useState<{ id: string; nombre: string; cantidad: number; unidad: string; precio_costo?: number; precio_cliente?: number }[]>([])
   const [costoVariable, setCostoVariable] = useState(0)
   const [motivoVariable, setMotivoVariable] = useState('')
+  const [gastosAdicionales, setGastosAdicionales] = useState<{monto: number; motivo: string}[]>([])
   
   // Recurring state
   const [esRecurrente, setEsRecurrente] = useState(false)
@@ -60,6 +63,8 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
 
   // Placeholder for stock items
   const [availableStock, setAvailableStock] = useState<any[]>([])
+  const [maquinasStock, setMaquinasStock] = useState<any[]>([])
+  const [isCustomMaquina, setIsCustomMaquina] = useState(false)
   const [searchMaterial, setSearchMaterial] = useState('')
 
   useEffect(() => {
@@ -68,6 +73,20 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
     nextDate.setDate(nextDate.getDate() + 30)
     setFechaProxima(nextDate.toISOString().split('T')[0])
   }, [])
+
+  const addEquipo = () => {
+    const val = currentEquipo.trim()
+    if (!val) return
+    if (!equiposUsados.includes(val)) {
+      setEquiposUsados([...equiposUsados, val])
+    }
+    setCurrentEquipo('')
+    setIsCustomMaquina(false)
+  }
+
+  const removeEquipo = (name: string) => {
+    setEquiposUsados(equiposUsados.filter(e => e !== name))
+  }
 
   const calculateNextDate = (freq: string, days?: number) => {
     const next = new Date()
@@ -79,6 +98,15 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
     setFechaProxima(next.toISOString().split('T')[0])
   }
 
+  // Initial custom maquina setup is no longer needed as we support list addition
+  useEffect(() => {
+    // If there is an initial value not in stock, we can pre-add it to the list
+    if (job.maquina_usada && maquinasStock.length > 0 && equiposUsados.length === 0) {
+      const items = job.maquina_usada.split(',').map(s => s.trim()).filter(Boolean)
+      setEquiposUsados(items)
+    }
+  }, [maquinasStock, job.maquina_usada])
+
   useEffect(() => {
     fetchStock()
   }, [])
@@ -86,6 +114,9 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
   const fetchStock = async () => {
     const { data } = await supabase.from('stock').select('*').eq('tipo', 'consumible')
     if (data) setAvailableStock(data)
+
+    const { data: maquinas } = await supabase.from('stock').select('*').in('tipo', ['herramienta', 'maquinaria']).order('nombre')
+    if (maquinas) setMaquinasStock(maquinas)
     
     // Fetch recipe from catalog if job has service_id
     if (job.servicio_id) {
@@ -100,12 +131,19 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
         const stockData = (data as any[]) || []
         const initialMaterials = recipe.map((r: any) => {
           const item = stockData.find(s => s.id === r.stock_id)
-          return { id: r.stock_id, nombre: item?.nombre || 'Material', cantidad: r.cantidad, unidad: item?.unidad_medida || 'ud' }
+          return { 
+            id: r.stock_id, 
+            nombre: item?.nombre || 'Material', 
+            cantidad: r.cantidad, 
+            unidad: item?.unidad_medida || 'ud',
+            precio_costo: item?.precio_costo || 0,
+            precio_cliente: item?.precio_cliente || 0
+          }
         })
         setMaterials(initialMaterials)
       }
       if (serviceData?.costo_variable_est) {
-        setCostoVariable(serviceData.costo_variable_est)
+        setGastosAdicionales([{ monto: serviceData.costo_variable_est, motivo: 'Gastos operativos estimados' }])
       }
     }
   }
@@ -120,14 +158,14 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
         estado: 'completado',
         precio_cobrado: precioCobrado,
         notas_post: notasPost,
-        maquina_usada: maquinaUsada,
+        maquina_usada: equiposUsados.join(', '),
         presion_agua: presionAgua,
         quimicos_aplicados: quimicos,
         materiales_utilizados: materials,
         completado_at: new Date().toISOString(),
         es_recurrente: esRecurrente,
         fecha_proximo_serv: fechaProxima || null,
-        costo_variable: costoVariable
+        costo_variable: gastosAdicionales.reduce((sum, g) => sum + g.monto, 0)
       })
       .eq('id', job.id)
 
@@ -160,16 +198,18 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
       es_automatico: true
     })
 
-    // 2.5 Variable cost entry (Expense)
-    if (costoVariable > 0) {
-      await (supabase as any).from('caja').insert({
-        tipo: 'egreso',
-        monto: costoVariable,
-        categoria: 'gastos_operativos',
-        trabajo_id: job.id,
-        notas: `${motivoVariable} - ${job.catalogo_servicios?.nombre || ''} - ${job.clientes.nombre}`,
-        es_automatico: true
-      })
+    // 2.5 Variable cost entries (Expenses)
+    for (const gasto of gastosAdicionales) {
+      if (gasto.monto > 0) {
+        await (supabase as any).from('caja').insert({
+          tipo: 'egreso',
+          monto: gasto.monto,
+          categoria: 'gastos_operativos',
+          trabajo_id: job.id,
+          notas: `${gasto.motivo} - ${job.catalogo_servicios?.nombre || ''} - ${job.clientes.nombre}`,
+          es_automatico: true
+        })
+      }
     }
 
     // 3. Real Stock deduction & History record
@@ -177,7 +217,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
       // Fetch fresh stock level to avoid stale data
       const { data: freshItem } = await (supabase as any)
         .from('stock')
-        .select('cantidad_actual, nombre, unidad_medida')
+        .select('cantidad_actual, nombre, unidad_medida, precio_costo, precio_cliente')
         .eq('id', mat.id)
         .single()
 
@@ -187,6 +227,8 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
         // Check if we need to "Buy" items (if usage > current stock)
         if (mat.cantidad > currentQty) {
             const difference = mat.cantidad - currentQty
+            const finalCosto = mat.precio_costo !== undefined ? mat.precio_costo : (freshItem.precio_costo || 0)
+            const finalCliente = mat.precio_cliente !== undefined ? mat.precio_cliente : (freshItem.precio_cliente || 0)
             
             // Record a purchase first to balance it out
             await (supabase as any).from('stock_movimientos').insert({
@@ -198,11 +240,29 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
               motivo: `Auto-ajuste (Stock insuficiente para: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre})`
             })
 
-            // Update current stock to the required amount before deducting
+            // Update current stock to the required amount before deducting, and save prices to stock
             await (supabase as any)
               .from('stock')
-              .update({ cantidad_actual: mat.cantidad })
+              .update({ 
+                cantidad_actual: mat.cantidad,
+                precio_costo: finalCosto,
+                precio_cliente: finalCliente
+              })
               .eq('id', mat.id)
+
+            // Record transaction in Caja (egreso)
+            const purchaseTotal = difference * finalCosto
+            if (purchaseTotal > 0) {
+              await (supabase as any).from('caja').insert({
+                tipo: 'egreso',
+                monto: purchaseTotal,
+                categoria: 'materiales',
+                trabajo_id: job.id,
+                stock_id: mat.id,
+                notas: `Compra automática de stock (${difference} ${freshItem.unidad_medida || 'unidades'} de ${freshItem.nombre}) por falta de stock en servicio para ${job.clientes.nombre}`,
+                es_automatico: true
+              })
+            }
         }
 
         // Deduct materials
@@ -223,6 +283,23 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
           cantidad_resultante: finalQuantity,
           motivo: `Uso en: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre}`
         })
+      }
+    }
+
+    // 4. Log machine usage for each selected tool
+    for (const eqName of equiposUsados) {
+      const maquinaSeleccionada = maquinasStock.find(m => m.nombre === eqName)
+      if (maquinaSeleccionada) {
+         await (supabase as any).from('stock_movimientos').insert({
+            stock_id: maquinaSeleccionada.id,
+            trabajo_id: job.id,
+            tipo: 'salida',
+            cantidad: 0,
+            cantidad_resultante: maquinaSeleccionada.cantidad_actual || 1,
+            motivo: `Uso de equipo en servicio: ${job.catalogo_servicios?.nombre || ''} - ${job.clientes.nombre}`
+         })
+         // Update updated_at of the machine so we know when it was last used
+         await (supabase as any).from('stock').update({ updated_at: new Date().toISOString() }).eq('id', maquinaSeleccionada.id)
       }
     }
 
@@ -297,13 +374,63 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
 
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="maquina">Máquina Usada</Label>
-                    <Input 
-                        id="maquina" 
-                        placeholder="Ej: Hidro 3000"
-                        value={maquinaUsada} 
-                        onChange={e => setMaquinaUsada(e.target.value)}
-                    />
+                    <Label>Equipos / Herramientas Usados</Label>
+                    <div className="flex gap-2">
+                      {isCustomMaquina ? (
+                        <>
+                          <Input 
+                              id="maquina" 
+                              placeholder="Ej: Cepillo industrial"
+                              value={currentEquipo} 
+                              onChange={e => setCurrentEquipo(e.target.value)}
+                              className="flex-1"
+                              onKeyDown={e => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault()
+                                  addEquipo()
+                                }
+                              }}
+                          />
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            size="icon"
+                            onClick={() => {
+                              setIsCustomMaquina(false)
+                              setCurrentEquipo('')
+                            }}
+                          >
+                            Lista
+                          </Button>
+                        </>
+                      ) : (
+                        <Select 
+                          value={currentEquipo === '' ? 'placeholder' : currentEquipo} 
+                          onValueChange={v => {
+                            if (v === 'otro') {
+                              setIsCustomMaquina(true)
+                              setCurrentEquipo('')
+                            } else if (v !== 'placeholder') {
+                              setCurrentEquipo(v)
+                            }
+                          }}
+                        >
+                          <SelectTrigger className="flex-1">
+                             <SelectValue placeholder="Selecciona equipo..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                             <SelectItem value="placeholder" disabled>Selecciona equipo...</SelectItem>
+                             {maquinasStock.map(m => (
+                                <SelectItem key={m.id} value={m.nombre}>{m.nombre}</SelectItem>
+                             ))}
+                             <SelectItem value="otro">Otro (Escribir manual)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
+                      <Button type="button" onClick={addEquipo} className="bg-primary hover:bg-primary/95 text-primary-foreground">
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="presion">Presión Agua</Label>
@@ -315,6 +442,24 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                     />
                 </div>
             </div>
+
+            {/* List of added tools */}
+            {equiposUsados.length > 0 && (
+              <div className="flex flex-wrap gap-2 pt-1">
+                {equiposUsados.map(eq => (
+                  <Badge key={eq} variant="secondary" className="flex items-center gap-1.5 py-1.5 px-3 bg-muted hover:bg-muted text-foreground border border-border">
+                    <span>{eq}</span>
+                    <button 
+                      type="button" 
+                      onClick={() => removeEquipo(eq)}
+                      className="text-muted-foreground hover:text-destructive rounded-full p-0.5 transition-colors"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+            )}
 
             <div className="space-y-2">
               <Label htmlFor="quimicos">Químicos Aplicados</Label>
@@ -369,11 +514,41 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                         </div>
                       </div>
                       {m.cantidad > (stockItem?.cantidad_actual || 0) && (
-                        <div className="flex items-center justify-between bg-orange-50 border border-orange-100 rounded p-1 px-2 mt-1">
-                           <p className="text-[10px] text-orange-700 font-medium">
-                             ⚠️ Superas el stock ({stockItem?.cantidad_actual || 0} {unit} disponibles)
-                           </p>
-                           <span className="text-[9px] bg-orange-200 text-orange-800 px-1 rounded font-bold uppercase">Auto-compra</span>
+                        <div className="flex flex-col gap-2 mt-1.5 p-2 bg-orange-50 border border-orange-100 rounded">
+                           <div className="flex items-center justify-between">
+                             <p className="text-[10px] text-orange-700 font-medium">
+                               ⚠️ Superas el stock ({stockItem?.cantidad_actual || 0} {unit} disponibles)
+                             </p>
+                             <span className="text-[9px] bg-orange-200 text-orange-800 px-1 rounded font-bold uppercase">Auto-compra</span>
+                           </div>
+                           <div className="grid grid-cols-2 gap-2 pt-1.5 border-t border-orange-100/60">
+                             <div className="space-y-1">
+                               <Label className="text-[9px] text-orange-800 font-bold">Costo Unitario Compra ($)</Label>
+                               <Input 
+                                 type="number"
+                                 step="0.01"
+                                 min="0"
+                                 className="h-7 text-[10px] bg-white border-orange-200 text-orange-950 font-bold"
+                                 value={m.precio_costo !== undefined ? m.precio_costo : precioCosto}
+                                 onChange={(e) => {
+                                   setMaterials(materials.map(x => x.id === m.id ? { ...x, precio_costo: parseFloat(e.target.value) || 0 } : x))
+                                 }}
+                               />
+                             </div>
+                             <div className="space-y-1">
+                               <Label className="text-[9px] text-orange-800 font-bold">Precio Venta Cliente ($)</Label>
+                               <Input 
+                                 type="number"
+                                 step="0.01"
+                                 min="0"
+                                 className="h-7 text-[10px] bg-white border-orange-200 text-orange-950 font-bold"
+                                 value={m.precio_cliente !== undefined ? m.precio_cliente : (stockItem?.precio_cliente || 0)}
+                                 onChange={(e) => {
+                                   setMaterials(materials.map(x => x.id === m.id ? { ...x, precio_cliente: parseFloat(e.target.value) || 0 } : x))
+                                 }}
+                               />
+                             </div>
+                           </div>
                         </div>
                       )}
                     </div>
@@ -404,7 +579,14 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                           key={s.id}
                           className="w-full text-left px-2 py-1.5 text-xs hover:bg-muted rounded flex items-center justify-between transition-colors"
                           onClick={() => {
-                            setMaterials([...materials, { id: s.id, nombre: s.nombre, cantidad: 1, unidad: s.unidad_medida || 'ud' }])
+                            setMaterials([...materials, { 
+                              id: s.id, 
+                              nombre: s.nombre, 
+                              cantidad: 1, 
+                              unidad: s.unidad_medida || 'ud',
+                              precio_costo: s.precio_costo || 0,
+                              precio_cliente: s.precio_cliente || 0
+                            }])
                             setSearchMaterial('')
                           }}
                         >
@@ -454,7 +636,8 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                      const item = availableStock.find(s => s.id === m.id)
                      return acc + (item?.precio_costo || 0) * m.cantidad
                    }, 0)
-                   const net = precioCobrado - (matCost + costoVariable)
+                   const totalGastos = gastosAdicionales.reduce((sum, g) => sum + g.monto, 0)
+                   const net = precioCobrado - (matCost + totalGastos)
                    return (
                      <div className="text-right">
                         <p className={cn("text-xl font-black", net >= 0 ? "text-green-600" : "text-destructive")}>
@@ -467,8 +650,23 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
               </div>
 
               <div className="space-y-3 pt-2 border-t border-primary/10">
-                 <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1">
+                 {gastosAdicionales.length > 0 && (
+                   <div className="space-y-2 mb-2">
+                     {gastosAdicionales.map((g, idx) => (
+                       <div key={idx} className="flex items-center justify-between bg-destructive/5 p-2 rounded-lg border border-destructive/10">
+                         <div className="flex flex-col">
+                           <span className="text-xs font-bold text-destructive">${g.monto.toFixed(2)}</span>
+                           <span className="text-[10px] text-muted-foreground">{g.motivo}</span>
+                         </div>
+                         <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => setGastosAdicionales(gastosAdicionales.filter((_, i) => i !== idx))}>
+                           <Trash2 className="h-3 w-3" />
+                         </Button>
+                       </div>
+                     ))}
+                   </div>
+                 )}
+                 <div className="flex items-end gap-2">
+                    <div className="flex-1 space-y-1">
                        <Label className="text-[10px] uppercase text-muted-foreground">Gastos Adicionales ($)</Label>
                        <div className="relative">
                           <DollarSign className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
@@ -481,15 +679,36 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                           />
                        </div>
                     </div>
-                    <div className="space-y-1">
+                    <div className="flex-[2] space-y-1">
                        <Label className="text-[10px] uppercase text-muted-foreground">¿En qué se gastó?</Label>
                        <Input 
                         className="h-9 text-xs"
                         value={motivoVariable}
                         onChange={e => setMotivoVariable(e.target.value)}
-                        placeholder="Ej: Peajes, Almuerzo..."
+                        placeholder="Ej: Peajes..."
+                        onKeyDown={e => {
+                          if (e.key === 'Enter' && costoVariable > 0 && motivoVariable.trim()) {
+                            e.preventDefault()
+                            setGastosAdicionales([...gastosAdicionales, { monto: costoVariable, motivo: motivoVariable.trim() }])
+                            setCostoVariable(0)
+                            setMotivoVariable('')
+                          }
+                        }}
                        />
                     </div>
+                    <Button 
+                      type="button"
+                      size="icon" 
+                      className="h-9 w-9 shrink-0" 
+                      disabled={!costoVariable || !motivoVariable.trim()}
+                      onClick={() => {
+                        setGastosAdicionales([...gastosAdicionales, { monto: costoVariable, motivo: motivoVariable.trim() }])
+                        setCostoVariable(0)
+                        setMotivoVariable('')
+                      }}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
                  </div>
               </div>
             </div>
@@ -621,4 +840,3 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
   )
 }
 
-import { Plus } from 'lucide-react'

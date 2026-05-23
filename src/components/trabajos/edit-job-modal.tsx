@@ -53,7 +53,13 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
   })
 
   const [availableStock, setAvailableStock] = useState<any[]>([])
-  const [materials, setMaterials] = useState<{ id: string; nombre: string; cantidad: number }[]>((job.materiales_utilizados as any[]) || [])
+  const [materials, setMaterials] = useState<{ 
+    id: string; 
+    nombre: string; 
+    cantidad: number;
+    precio_costo?: number;
+    precio_cliente?: number;
+  }[]>((job.materiales_utilizados as any[]) || [])
   const [searchMaterial, setSearchMaterial] = useState('')
 
   useEffect(() => {
@@ -88,43 +94,184 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
     }
 
     // 3. Real Stock deduction & History record
+    const originalMaterials = (job.materiales_utilizados as any[]) || []
+    const originalMap = new Map<string, number>()
+    originalMaterials.forEach((m: any) => {
+      originalMap.set(m.id, m.cantidad || 0)
+    })
+
+    const processedIds = new Set<string>()
+
     for (const mat of materials) {
-      const stockItem = availableStock.find(s => s.id === mat.id)
-      if (stockItem) {
-        // Check if we need to "Buy" items (if usage > current stock)
-        if (mat.cantidad > (stockItem.cantidad_actual || 0)) {
-            const difference = mat.cantidad - (stockItem.cantidad_actual || 0)
+      processedIds.add(mat.id)
+      const originalQty = originalMap.get(mat.id) || 0
+      const diff = mat.cantidad - originalQty
+
+      // Fetch fresh stock level to avoid stale data
+      const { data: freshItem } = await (supabase as any)
+        .from('stock')
+        .select('cantidad_actual, nombre, unidad_medida, precio_costo, precio_cliente')
+        .eq('id', mat.id)
+        .single()
+
+      if (freshItem) {
+        const currentQty = freshItem.cantidad_actual || 0
+        const finalCosto = mat.precio_costo !== undefined ? mat.precio_costo : (freshItem.precio_costo || 0)
+        const finalCliente = mat.precio_cliente !== undefined ? mat.precio_cliente : (freshItem.precio_cliente || 0)
+
+        if (diff > 0) {
+          // We need more material. Check if we need to "Auto-buy" (if diff > current stock)
+          if (diff > currentQty) {
+            const autoBuyQty = diff - currentQty
             
             // Record a purchase first to balance it out
             const { error: buyError } = await (supabase as any).from('stock_movimientos').insert({
               stock_id: mat.id,
               trabajo_id: job.id,
               tipo: 'entrada',
-              cantidad: difference,
-              cantidad_resultante: mat.cantidad,
-              motivo: `Compra rápida (Auto-ajuste por: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre})`
+              cantidad: autoBuyQty,
+              cantidad_resultante: currentQty + autoBuyQty,
+              motivo: `Compra rápida (Auto-ajuste por edición: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre})`
             })
             if (buyError) console.error('Error recording purchase:', buyError)
+
+            // Record transaction in Caja (egreso)
+            const purchaseTotal = autoBuyQty * finalCosto
+            if (purchaseTotal > 0) {
+              const { error: cajaError } = await (supabase as any).from('caja').insert({
+                tipo: 'egreso',
+                monto: purchaseTotal,
+                categoria: 'materiales',
+                trabajo_id: job.id,
+                stock_id: mat.id,
+                notas: `Compra automática por edición de servicio (${autoBuyQty} ${freshItem.unidad_medida || 'unidades'} de ${freshItem.nombre}) para ${job.clientes.nombre}`,
+                es_automatico: true
+              })
+              if (cajaError) console.error('Error recording caja egreso:', cajaError)
+            }
+
+            // Update current stock to include the auto-bought quantity AND update prices
+            const { error: updateError } = await (supabase as any)
+              .from('stock')
+              .update({
+                cantidad_actual: currentQty + autoBuyQty,
+                precio_costo: finalCosto,
+                precio_cliente: finalCliente
+              })
+              .eq('id', mat.id)
+            if (updateError) console.error('Error updating stock:', updateError)
+          } else {
+            // No auto-buy needed, but we should still update the prices if they were modified!
+            const { error: updateError } = await (supabase as any)
+              .from('stock')
+              .update({
+                precio_costo: finalCosto,
+                precio_cliente: finalCliente
+              })
+              .eq('id', mat.id)
+            if (updateError) console.error('Error updating stock prices:', updateError)
+          }
+
+          // Deduct the diff from stock
+          // Fetch fresh quantity again just in case it was updated by auto-buy
+          const { data: updatedItem } = await (supabase as any)
+            .from('stock')
+            .select('cantidad_actual')
+            .eq('id', mat.id)
+            .single()
+          
+          const stockBeforeDeduction = updatedItem?.cantidad_actual || 0
+          const finalQuantity = Math.max(0, stockBeforeDeduction - diff)
+
+          const { error: deductError } = await (supabase as any)
+            .from('stock')
+            .update({ cantidad_actual: finalQuantity })
+            .eq('id', mat.id)
+          if (deductError) console.error('Error deducting stock:', deductError)
+
+          // Record movement in history
+          const { error: moveError } = await (supabase as any).from('stock_movimientos').insert({
+            stock_id: mat.id,
+            trabajo_id: job.id,
+            tipo: 'salida',
+            cantidad: diff,
+            cantidad_resultante: finalQuantity,
+            motivo: `Uso adicional por edición de: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre}`
+          })
+          if (moveError) console.error('Error recording movement:', moveError)
+
+        } else if (diff < 0) {
+          // We used less material than before, return the difference to stock
+          const returnQty = -diff
+          const finalQuantity = currentQty + returnQty
+
+          // Update stock and prices
+          const { error: returnError } = await (supabase as any)
+            .from('stock')
+            .update({ 
+              cantidad_actual: finalQuantity,
+              precio_costo: finalCosto,
+              precio_cliente: finalCliente
+            })
+            .eq('id', mat.id)
+          if (returnError) console.error('Error returning stock:', returnError)
+
+          // Record movement in history
+          const { error: moveError } = await (supabase as any).from('stock_movimientos').insert({
+            stock_id: mat.id,
+            trabajo_id: job.id,
+            tipo: 'entrada',
+            cantidad: returnQty,
+            cantidad_resultante: finalQuantity,
+            motivo: `Devolución por edición de: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre}`
+          })
+          if (moveError) console.error('Error recording movement:', moveError)
+        } else {
+          // diff === 0, no stock change, but we might still want to update the prices if they changed
+          const { error: priceError } = await (supabase as any)
+            .from('stock')
+            .update({
+              precio_costo: finalCosto,
+              precio_cliente: finalCliente
+            })
+            .eq('id', mat.id)
+          if (priceError) console.error('Error updating stock prices:', priceError)
         }
+      }
+    }
 
-        const newQuantity = (stockItem.cantidad_actual || 0) - mat.cantidad
-        
-        // Update current stock
-        await (supabase as any)
+    // Process materials that were completely removed from the job
+    for (const oldMat of originalMaterials) {
+      if (!processedIds.has(oldMat.id)) {
+        // This material was completely removed from the job. We must return its entire original qty to stock.
+        const { data: freshItem } = await (supabase as any)
           .from('stock')
-          .update({ cantidad_actual: Math.max(0, newQuantity) })
-          .eq('id', mat.id)
+          .select('cantidad_actual, nombre, unidad_medida')
+          .eq('id', oldMat.id)
+          .single()
 
-        // Record movement in history
-        const { error: moveError } = await (supabase as any).from('stock_movimientos').insert({
-          stock_id: mat.id,
-          trabajo_id: job.id,
-          tipo: 'salida',
-          cantidad: mat.cantidad,
-          cantidad_resultante: Math.max(0, newQuantity),
-          motivo: `Uso en: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre}`
-        })
-        if (moveError) console.error('Error recording movement:', moveError)
+        if (freshItem) {
+          const currentQty = freshItem.cantidad_actual || 0
+          const originalQty = oldMat.cantidad || 0
+          const finalQuantity = currentQty + originalQty
+
+          const { error: returnError } = await (supabase as any)
+            .from('stock')
+            .update({ cantidad_actual: finalQuantity })
+            .eq('id', oldMat.id)
+          if (returnError) console.error('Error returning stock for removed material:', returnError)
+
+          // Record movement in history
+          const { error: moveError } = await (supabase as any).from('stock_movimientos').insert({
+            stock_id: oldMat.id,
+            trabajo_id: job.id,
+            tipo: 'entrada',
+            cantidad: originalQty,
+            cantidad_resultante: finalQuantity,
+            motivo: `Devolución por eliminación de material al editar: ${job.catalogo_servicios?.nombre || 'Servicio'} - ${job.clientes.nombre}`
+          })
+          if (moveError) console.error('Error recording movement:', moveError)
+        }
       }
     }
 
@@ -245,10 +392,20 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                 
                 {materials.length > 0 && (
                   <div className="space-y-2">
-                    {materials.map(m => (
-                        <div className="flex flex-col gap-1">
+                    {materials.map(m => {
+                      const stockItem = availableStock.find(s => s.id === m.id)
+                      const unit = stockItem?.unidad_medida || 'ud'
+                      const precioCosto = stockItem?.precio_costo || 0
+                      const precioCliente = stockItem?.precio_cliente || 0
+                      return (
+                        <div key={m.id} className="flex flex-col gap-1 bg-muted/30 p-2.5 rounded-lg border">
                           <div className="flex items-center justify-between">
-                            <span className="font-medium">{m.nombre}</span>
+                            <div>
+                              <span className="font-medium text-xs">{m.nombre}</span>
+                              <p className="text-[9px] text-muted-foreground">
+                                Costo: ${precioCosto}/{unit}
+                              </p>
+                            </div>
                             <div className="flex items-center gap-2">
                                <div className="flex items-center bg-background border rounded-md h-7">
                                   <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => {
@@ -264,16 +421,47 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                                </Button>
                             </div>
                           </div>
-                          {m.cantidad > (availableStock.find(s => s.id === m.id)?.cantidad_actual || 0) && (
-                            <div className="flex items-center justify-between bg-orange-50 border border-orange-100 rounded p-1 px-2 mt-1">
-                               <p className="text-[10px] text-orange-700 font-medium">
-                                 ⚠️ Superas el stock ({availableStock.find(s => s.id === m.id)?.cantidad_actual || 0} disponibles)
-                               </p>
-                               <span className="text-[9px] bg-orange-200 text-orange-800 px-1 rounded font-bold uppercase">Se registrará como compra</span>
+                          {m.cantidad > (stockItem?.cantidad_actual || 0) && (
+                            <div className="flex flex-col gap-2 mt-1.5 p-2 bg-orange-50 border border-orange-100 rounded">
+                               <div className="flex items-center justify-between">
+                                 <p className="text-[10px] text-orange-700 font-medium">
+                                   ⚠️ Superas el stock ({stockItem?.cantidad_actual || 0} {unit} disponibles)
+                                 </p>
+                                 <span className="text-[9px] bg-orange-200 text-orange-800 px-1 rounded font-bold uppercase">Auto-compra</span>
+                               </div>
+                               <div className="grid grid-cols-2 gap-2 pt-1.5 border-t border-orange-100/60">
+                                 <div className="space-y-1">
+                                   <Label className="text-[9px] text-orange-800 font-bold">Costo Unitario Compra ($)</Label>
+                                   <Input 
+                                     type="number"
+                                     step="0.01"
+                                     min="0"
+                                     className="h-7 text-[10px] bg-white border-orange-200 text-orange-950 font-bold"
+                                     value={m.precio_costo !== undefined ? m.precio_costo : precioCosto}
+                                     onChange={(e) => {
+                                       setMaterials(materials.map(x => x.id === m.id ? { ...x, precio_costo: parseFloat(e.target.value) || 0 } : x))
+                                     }}
+                                   />
+                                 </div>
+                                 <div className="space-y-1">
+                                   <Label className="text-[9px] text-orange-800 font-bold">Precio Venta Cliente ($)</Label>
+                                   <Input 
+                                     type="number"
+                                     step="0.01"
+                                     min="0"
+                                     className="h-7 text-[10px] bg-white border-orange-200 text-orange-950 font-bold"
+                                     value={m.precio_cliente !== undefined ? m.precio_cliente : precioCliente}
+                                     onChange={(e) => {
+                                       setMaterials(materials.map(x => x.id === m.id ? { ...x, precio_cliente: parseFloat(e.target.value) || 0 } : x))
+                                     }}
+                                   />
+                                 </div>
+                               </div>
                             </div>
                           )}
                         </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 )}
 
@@ -300,7 +488,13 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                             key={s.id}
                             className="w-full text-left px-2 py-1.5 text-xs hover:bg-primary hover:text-white rounded flex items-center justify-between transition-colors"
                             onClick={() => {
-                              setMaterials([...materials, { id: s.id, nombre: s.nombre, cantidad: 1 }])
+                              setMaterials([...materials, { 
+                                id: s.id, 
+                                nombre: s.nombre, 
+                                cantidad: 1,
+                                precio_costo: s.precio_costo || 0,
+                                precio_cliente: s.precio_cliente || 0
+                              }])
                               setSearchMaterial('')
                             }}
                           >

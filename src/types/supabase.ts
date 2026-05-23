@@ -306,6 +306,44 @@ export interface Database {
           created_at?: string
         }
       }
+      recordatorios: {
+        Row: {
+          id: string
+          titulo: string
+          descripcion: string | null
+          fecha: string
+          hora: string | null
+          prioridad: string
+          completado: boolean
+          notificado: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          titulo: string
+          descripcion?: string | null
+          fecha: string
+          hora?: string | null
+          prioridad?: string
+          completado?: boolean
+          notificado?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          titulo?: string
+          descripcion?: string | null
+          fecha?: string
+          hora?: string | null
+          prioridad?: string
+          completado?: boolean
+          notificado?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never

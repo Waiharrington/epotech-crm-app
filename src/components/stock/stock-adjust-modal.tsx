@@ -52,6 +52,21 @@ export function StockAdjustModal({ item, type, onClose, onSuccess }: StockAdjust
            motivo: reason || (type === 'in' ? 'Ajuste de entrada' : 'Ajuste de salida')
          }])
          
+       // Registrar egreso en caja si cargamos inventario (tipo 'in') y tiene precio de costo
+       if (type === 'in' && item.tipo === 'consumible' && item.precio_costo > 0) {
+         const totalCosto = adjustment * item.precio_costo
+         await (supabase as any).from('caja').insert({
+           tipo: 'egreso',
+           monto: totalCosto,
+           categoria: 'materiales',
+           stock_id: item.id,
+           notas: reason 
+             ? `Compra de stock (Carga manual): ${item.nombre} (${adjustment} ${item.unidad_medida || 'unidades'}) - ${reason}`
+             : `Compra de stock (Carga manual): ${item.nombre} (${adjustment} ${item.unidad_medida || 'unidades'})`,
+           es_automatico: true
+         })
+       }
+         
        onSuccess()
     } else {
        alert('Error: ' + updateError.message)

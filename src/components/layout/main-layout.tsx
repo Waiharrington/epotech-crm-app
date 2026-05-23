@@ -14,7 +14,8 @@ import {
   Wallet,
   Settings,
   BarChart3,
-  BookOpen
+  BookOpen,
+  Bell
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
@@ -25,6 +26,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import { ReminderPoller } from '@/components/recordatorios/reminder-poller'
 
 const mainNavItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -35,10 +37,11 @@ const mainNavItems = [
 ]
 
 const moreNavItems = [
-  { name: 'Catálogo', href: '/catalogo', icon: BookOpen },
+  { name: 'Servicios', href: '/catalogo', icon: BookOpen },
   { name: 'Stock', href: '/stock', icon: Package },
   { name: 'Caja', href: '/caja', icon: Wallet },
   { name: 'Reportes', href: '/reportes', icon: BarChart3 },
+  { name: 'Recordatorios', href: '/recordatorios', icon: Bell },
   { name: 'Ajustes', href: '/ajustes', icon: Settings },
 ]
 
@@ -49,6 +52,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background">
+      <ReminderPoller />
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex w-64 flex-col fixed inset-y-0 z-50 border-r bg-card">
         <div className="p-6 flex items-center gap-3">

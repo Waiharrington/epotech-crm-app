@@ -12,6 +12,7 @@ import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
 import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 import { JobList } from '@/components/trabajos/job-list'
+import { PostJobWizard } from '@/components/trabajos/post-job-wizard'
 import Link from 'next/link'
 
 import { useSearchParams } from 'next/navigation'
@@ -32,6 +33,25 @@ function TrabajosContent() {
   const [selectedJob, setSelectedJob] = useState<TrabajoWithDetails | null>(null)
   const [jobToEdit, setJobToEdit] = useState<TrabajoWithDetails | null>(null)
   const [showEditModal, setShowEditModal] = useState(false)
+  const [jobToComplete, setJobToComplete] = useState<TrabajoWithDetails | null>(null)
+
+  const handleStatusChange = async (job: TrabajoWithDetails, newStatus: 'proximo' | 'en_progreso' | 'completado') => {
+    if (newStatus === 'completado') {
+      setJobToComplete(job)
+      return
+    }
+
+    const { error } = await (supabase as any)
+      .from('trabajos')
+      .update({ estado: newStatus })
+      .eq('id', job.id)
+
+    if (error) {
+      alert('Error al actualizar el estado: ' + error.message)
+    } else {
+      fetchTrabajos()
+    }
+  }
 
   useEffect(() => {
     fetchTrabajos()
@@ -160,6 +180,7 @@ function TrabajosContent() {
                 trabajos={filteredTrabajos} 
                 onCardClick={(job) => setSelectedJob(job as TrabajoWithDetails)}
                 onArchive={(job) => handleArchive(job as TrabajoWithDetails)}
+                onStatusChange={handleStatusChange}
              />
           </div>
         )}
@@ -201,6 +222,17 @@ function TrabajosContent() {
           onSuccess={() => {
             setShowEditModal(false)
             setJobToEdit(null)
+            fetchTrabajos()
+          }}
+        />
+      )}
+
+      {jobToComplete && (
+        <PostJobWizard 
+          job={jobToComplete}
+          onClose={() => setJobToComplete(null)}
+          onSuccess={() => {
+            setJobToComplete(null)
             fetchTrabajos()
           }}
         />

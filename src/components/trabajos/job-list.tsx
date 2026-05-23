@@ -8,8 +8,15 @@ import { Calendar, Clock, User, ChevronRight, Archive, CheckCircle2, RotateCcw }
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
-  clientes: { nombre: string; apellido: string; telefono: string }
+  clientes: any
   catalogo_servicios: { nombre: string } | null
 }
 
@@ -18,9 +25,10 @@ interface JobListProps {
   onCardClick: (job: Trabajo) => void
   onArchive?: (job: Trabajo) => void
   onUnarchive?: (job: Trabajo) => void
+  onStatusChange?: (job: Trabajo, newStatus: 'proximo' | 'en_progreso' | 'completado') => void
 }
 
-export function JobList({ trabajos, onCardClick, onArchive, onUnarchive }: JobListProps) {
+export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatusChange }: JobListProps) {
   const priorityColor = {
     urgente: 'bg-red-500 text-white',
     estandar: 'bg-blue-500 text-white',
@@ -95,11 +103,57 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive }: JobLi
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Badge variant={job.estado === 'completado' ? 'default' : 'outline'} className={cn(
-                    job.estado === 'completado' ? "bg-green-500 hover:bg-green-600" : ""
-                  )}>
-                    {job.estado === 'completado' ? 'Completado' : job.estado === 'en_progreso' ? 'En Progreso' : 'Pendiente'}
-                  </Badge>
+                  {onStatusChange ? (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                        <Badge 
+                          variant={job.estado === 'completado' ? 'default' : 'outline'} 
+                          className={cn(
+                            "cursor-pointer select-none transition-colors pr-1.5 flex items-center gap-1",
+                            job.estado === 'completado' ? "bg-green-500 hover:bg-green-600 text-white" : "hover:bg-muted"
+                          )}
+                        >
+                          {job.estado === 'completado' ? 'Completado' : job.estado === 'en_progreso' ? 'En Progreso' : 'Pendiente'}
+                          <span className="text-[8px] opacity-60">▼</span>
+                        </Badge>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-32 bg-popover text-popover-foreground border shadow-md p-1 rounded-md" onClick={(e) => e.stopPropagation()}>
+                        <DropdownMenuItem 
+                          className={cn("text-xs py-1.5 px-2 cursor-pointer rounded hover:bg-accent", job.estado === 'proximo' && "bg-accent font-bold")}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onStatusChange(job, 'proximo');
+                          }}
+                        >
+                          Pendiente
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          className={cn("text-xs py-1.5 px-2 cursor-pointer rounded hover:bg-accent", job.estado === 'en_progreso' && "bg-accent font-bold")}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onStatusChange(job, 'en_progreso');
+                          }}
+                        >
+                          En Progreso
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          className={cn("text-xs py-1.5 px-2 cursor-pointer rounded hover:bg-accent", job.estado === 'completado' && "bg-accent font-bold")}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onStatusChange(job, 'completado');
+                          }}
+                        >
+                          Completado
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  ) : (
+                    <Badge variant={job.estado === 'completado' ? 'default' : 'outline'} className={cn(
+                      job.estado === 'completado' ? "bg-green-500 hover:bg-green-600" : ""
+                    )}>
+                      {job.estado === 'completado' ? 'Completado' : job.estado === 'en_progreso' ? 'En Progreso' : 'Pendiente'}
+                    </Badge>
+                  )}
 
                   {job.estado === 'completado' && onArchive && !(job as any).archivado && (
                     <Button 

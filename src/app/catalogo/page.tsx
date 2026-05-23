@@ -6,7 +6,7 @@ import { Database } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Plus, Briefcase, DollarSign, Settings, Trash2, Edit, Loader2 } from 'lucide-react'
+import { Plus, Briefcase, DollarSign, Settings, Trash2, Edit, Loader2, FolderOpen } from 'lucide-react'
 import { 
   Dialog, 
   DialogContent, 
@@ -15,6 +15,7 @@ import {
   DialogDescription,
   DialogTrigger 
 } from '@/components/ui/dialog'
+import { CategoriasManagerModal } from '@/components/catalogo/categorias-manager-modal'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -35,6 +36,9 @@ export default function CatalogoPage() {
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editingService, setEditingService] = useState<Servicio | null>(null)
+  const [showCategoriesModal, setShowCategoriesModal] = useState(false)
+  const [categorias, setCategorias] = useState<{ id: string; nombre: string }[]>([])
+  const [dbEnabled, setDbEnabled] = useState(true)
   
   const [formData, setFormData] = useState<Partial<Servicio>>({
     nombre: '',
@@ -47,9 +51,23 @@ export default function CatalogoPage() {
     activo: true
   })
 
+  const fetchCategorias = async () => {
+    const { data, error } = await supabase.from('categorias_servicios').select('*').order('nombre')
+    if (error) {
+      console.error('Error loading categories:', error)
+      if (error.code === 'PGRST116' || error.message.includes('does not exist')) {
+        setDbEnabled(false)
+      }
+    } else if (data) {
+      setCategorias(data)
+      setDbEnabled(true)
+    }
+  }
+
   useEffect(() => {
     fetchServicios()
     fetchStock()
+    fetchCategorias()
   }, [])
 
   const fetchStock = async () => {
@@ -97,6 +115,10 @@ export default function CatalogoPage() {
     fetchServicios()
   }
 
+  const categoryOptions = dbEnabled && categorias.length > 0 
+    ? categorias.map(c => c.nombre)
+    : ['lavado', 'limpieza', 'epoxico', 'pintura', 'otro']
+
   return (
     <div className="flex flex-col h-full bg-background overflow-hidden">
       <header className="p-4 md:p-6 border-b bg-card">
@@ -105,22 +127,27 @@ export default function CatalogoPage() {
             <h1 className="text-2xl font-bold tracking-tight">Catálogo de Servicios</h1>
             <p className="text-muted-foreground text-sm">Define tus servicios, precios y costos estimados.</p>
           </div>
-          <Button onClick={() => {
-            setEditingService(null)
-            setFormData({ 
-              nombre: '', 
-              categoria: 'lavado', 
-              precio_venta: 0, 
-              costo_materiales_est: 0, 
-              costo_variable_est: 0,
-              materiales_receta: [],
-              descripcion_interna: '', 
-              activo: true 
-            })
-            setShowModal(true)
-          }}>
-            <Plus className="mr-2 h-4 w-4" /> Nuevo Servicio
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => setShowCategoriesModal(true)} className="border-primary/20 text-primary hover:bg-primary/5">
+              <FolderOpen className="mr-2 h-4 w-4" /> Categorías
+            </Button>
+            <Button onClick={() => {
+              setEditingService(null)
+              setFormData({ 
+                nombre: '', 
+                categoria: 'lavado', 
+                precio_venta: 0, 
+                costo_materiales_est: 0, 
+                costo_variable_est: 0,
+                materiales_receta: [],
+                descripcion_interna: '', 
+                activo: true 
+              })
+              setShowModal(true)
+            }}>
+              <Plus className="mr-2 h-4 w-4" /> Nuevo Servicio
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -217,18 +244,18 @@ export default function CatalogoPage() {
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                    <Label>Categoría</Label>
-                   <Select value={formData.categoria as string} onValueChange={v => setFormData({ ...formData, categoria: v as any })}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="lavado">Lavado</SelectItem>
-                        <SelectItem value="limpieza">Limpieza</SelectItem>
-                        <SelectItem value="epoxico">Epóxico</SelectItem>
-                        <SelectItem value="pintura">Pintura</SelectItem>
-                        <SelectItem value="otro">Otro</SelectItem>
-                      </SelectContent>
-                   </Select>
+                    <Select value={formData.categoria as string} onValueChange={v => setFormData({ ...formData, categoria: v as any })}>
+                       <SelectTrigger className="capitalize">
+                         <SelectValue />
+                       </SelectTrigger>
+                       <SelectContent>
+                         {categoryOptions.map((catName) => (
+                           <SelectItem key={catName} value={catName} className="capitalize">
+                             {catName === 'epoxico' ? 'Epóxico' : catName}
+                           </SelectItem>
+                         ))}
+                       </SelectContent>
+                    </Select>
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="precio">Precio Venta ($)</Label>
@@ -345,6 +372,15 @@ export default function CatalogoPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      <CategoriasManagerModal
+        isOpen={showCategoriesModal}
+        onClose={() => setShowCategoriesModal(false)}
+        onCategoriesChange={() => {
+          fetchCategorias()
+          fetchServicios()
+        }}
+      />
     </div>
   )
 }

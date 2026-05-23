@@ -231,7 +231,7 @@ export default function CotizacionesPage() {
             }}
             onUpdateStatus={async (id, status) => {
                 await handleUpdateStatus(id, status)
-                setSelectedQuote(prev => prev && prev.id === id ? { ...prev, estado: status } : prev)
+                setSelectedQuote((prev: any) => prev && prev.id === id ? { ...prev, estado: status } : prev)
             }}
          />
        )}

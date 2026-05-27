@@ -79,15 +79,15 @@
   --chart-5: oklch(0.269 0 0);
   --radius: 0.75rem;
   
-  /* Sidebar uses deep navy style in light mode too */
-  --sidebar: oklch(0.24 0.08 248.0);
-  --sidebar-foreground: oklch(0.90 0.02 245.0);
-  --sidebar-primary: oklch(0.78 0.16 205.0);
-  --sidebar-primary-foreground: oklch(0.20 0.07 248.0);
-  --sidebar-accent: oklch(0.32 0.07 248.0);
-  --sidebar-accent-foreground: oklch(0.99 0.002 245.0);
-  --sidebar-border: oklch(0.32 0.07 248.0 / 40%);
-  --sidebar-ring: oklch(0.78 0.16 205.0);
+  /* Sidebar: clean white/light theme with Epotech turquoise accents */
+  --sidebar: oklch(1 0 0);                           /* Pure white */
+  --sidebar-foreground: oklch(0.24 0.08 248.0);      /* Deep navy text */
+  --sidebar-primary: oklch(0.78 0.16 205.0);         /* Turquoise active */
+  --sidebar-primary-foreground: oklch(1 0 0);        /* White on turquoise */
+  --sidebar-accent: oklch(0.95 0.02 205.0);          /* Very light turquoise hover */
+  --sidebar-accent-foreground: oklch(0.24 0.08 248.0); /* Navy text on hover */
+  --sidebar-border: oklch(0.90 0.02 245.0);          /* Soft gray border */
+  --sidebar-ring: oklch(0.78 0.16 205.0);            /* Turquoise ring */
 }
 
 .dark {
@@ -140,4 +140,89 @@
 .card-premium {
   @apply rounded-xl border bg-card text-card-foreground shadow-[0_4px_20px_-4px_rgba(0,201,224,0.06)] hover:shadow-[0_8px_30px_-6px_rgba(0,201,224,0.12)] transition-all duration-300 ease-out;
 }
+
+/* Sidebar Menu Animations */
+@keyframes sidebarItemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-sidebar-item {
+  animation: sidebarItemFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Micro-animations for Icons */
+.group:hover .icon-spin {
+  transform: rotate(90deg);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.group:hover .icon-bounce {
+  transform: translateY(-2px);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.group:hover .icon-tilt {
+  transform: rotate(-10deg) scale(1.05);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes bell-ring {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(15deg); }
+  30% { transform: rotate(-15deg); }
+  45% { transform: rotate(10deg); }
+  60% { transform: rotate(-10deg); }
+  75% { transform: rotate(4deg); }
+  85% { transform: rotate(-4deg); }
+}
+
+.group:hover .icon-ring {
+  animation: bell-ring 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform-origin: top center;
+}
+
+.group:hover .icon-wrench {
+  transform: rotate(20deg) scale(1.05);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.group:hover .icon-pulse-glow {
+  filter: drop-shadow(0 0 4px rgba(0, 201, 224, 0.6));
+  transform: scale(1.05);
+  transition: all 0.25s ease;
+}
+
+/* Glassmorphism Hover/Active States */
+.sidebar-link-active {
+  background: linear-gradient(135deg, var(--primary) 0%, oklch(0.82 0.15 200.0) 100%);
+  box-shadow: 0 4px 15px -3px rgba(0, 201, 224, 0.3), 0 2px 6px -2px rgba(0, 201, 224, 0.2);
+}
+
+/* Water drop pulse on active indicator */
+@keyframes water-drop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+}
+
+.active-indicator-pulse {
+  animation: water-drop 2s infinite ease-in-out;
+}
+
 

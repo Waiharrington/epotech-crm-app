@@ -706,23 +706,35 @@ export default function DashboardPage() {
 
 function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void }) {
   const [animationStage, setAnimationStage] = useState<'idle' | 'spraying' | 'flooding' | 'clearing'>('idle')
+  const [isMobile, setIsMobile] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768)
+  }, [])
+
   // Use a ref so the timer useEffect never re-runs due to onComplete changing identity each render.
   // This was the root cause of the 3-4 second water delay on mobile: timers were being reset constantly.
   const onCompleteRef = useRef(onComplete)
   useEffect(() => { onCompleteRef.current = onComplete }, [onComplete])
 
   useEffect(() => {
-    // 1. Start spraying at 600ms (after gun has mostly entered)
-    const t1 = setTimeout(() => setAnimationStage('spraying'), 600)
-    // 2. Full water flooding effect on glass at 1200ms
-    const t2 = setTimeout(() => setAnimationStage('flooding'), 1200)
-    // 3. Clear/wipe screen with high-pressure sheet sweep at 2000ms
-    const t3 = setTimeout(() => setAnimationStage('clearing'), 2000)
-    // 4. Complete transition at 2650ms
+    const isMobileDevice = window.innerWidth < 768
+    const t1Delay = isMobileDevice ? 300 : 600
+    const t2Delay = isMobileDevice ? 700 : 1200
+    const t3Delay = isMobileDevice ? 1200 : 2000
+    const t4Delay = isMobileDevice ? 1650 : 2650
+
+    // 1. Start spraying
+    const t1 = setTimeout(() => setAnimationStage('spraying'), t1Delay)
+    // 2. Full water flooding effect on glass
+    const t2 = setTimeout(() => setAnimationStage('flooding'), t2Delay)
+    // 3. Clear/wipe screen with high-pressure sheet sweep
+    const t3 = setTimeout(() => setAnimationStage('clearing'), t3Delay)
+    // 4. Complete transition
     const t4 = setTimeout(() => {
       onCompleteRef.current()
-    }, 2650)
+    }, t4Delay)
 
     return () => {
       clearTimeout(t1)
@@ -1090,7 +1102,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             ? 'none'
             : (animationStage === 'spraying' || animationStage === 'flooding')
               ? 'nozzle-recoil 0.08s infinite alternate'
-              : 'gun-enter 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards'
+              : `gun-enter ${isMobile ? '0.45s' : '0.8s'} cubic-bezier(0.19, 1, 0.22, 1) forwards`
         }}
       >
         <img

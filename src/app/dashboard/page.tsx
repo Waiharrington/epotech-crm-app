@@ -476,12 +476,14 @@ export default function DashboardPage() {
           </div>
 
           {/* Acciones Rápidas */}
-          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0 animate-dashboard-item" style={{ animationDelay: '400ms' }}>
-            <div className="flex flex-col min-h-0">
-              <h3 className="text-xs font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
-              <p className="text-[8.5px] text-slate-400 font-medium">Accesos directos operacionales.</p>
+          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col gap-2.5 min-h-0 animate-dashboard-item" style={{ animationDelay: '400ms' }}>
+            <div className="flex flex-col min-h-0 flex-1 overflow-y-auto no-scrollbar gap-2">
+              <div>
+                <h3 className="text-xs font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
+                <p className="text-[8.5px] text-slate-400 font-medium">Accesos directos operacionales.</p>
+              </div>
               
-              <div className="grid gap-1 mt-2.5">
+              <div className="grid gap-1.5">
                 <Link href="/clientes" className="flex items-center justify-between py-1.5 px-3 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E5F2FF]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group">
                   <div className="flex items-center gap-2.5">
                     <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)]">
@@ -515,7 +517,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Recommended Block */}
-            <div className="mt-2 pt-2 border-t border-slate-100 shrink-0">
+            <div className="pt-2 border-t border-slate-100 shrink-0">
               <div className="p-1.5 rounded-lg bg-gradient-to-tr from-[#E5F2FF]/40 to-[#E5F2FF]/10 border border-[#E5F2FF]/70 flex items-start gap-2 shadow-sm">
                 <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-white border border-[#E5F2FF] shadow-sm shrink-0">
                   <Package className="h-3.5 w-3.5 text-[#046bd2]" />

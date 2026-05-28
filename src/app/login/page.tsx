@@ -232,27 +232,27 @@ export default function LoginPage() {
         {/* Satisfying water droplet micro-particles */}
         <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-0 opacity-40" />
         
-        {/* Mobile-Only Hero Header (Taller h-[275px] to shift photo up and keep text clean) */}
-        <div className="lg:hidden w-full h-[275px] relative flex-shrink-0 bg-[#102A43] z-10">
+        {/* Mobile-Only Hero Header (Taller h-[320px] to cover Dynamic Island and shift photo and title down gracefully) */}
+        <div className="lg:hidden w-full h-[320px] relative flex-shrink-0 bg-[#102A43] z-10">
           <div 
             className="w-full h-full bg-cover"
             style={{ 
               backgroundImage: `url('/assets/worker.jpg')`,
-              backgroundPosition: '38% 0%',
+              backgroundPosition: '38% 12%',
               backgroundRepeat: 'no-repeat'
             }}
           />
           {/* Elegant gradient overlay: clear at the top, rich solid navy blue (#102A43) at the bottom to back the text */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#102A43]/0 via-[#102A43]/40 to-[#102A43]/98 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#102A43]/0 via-[#102A43]/35 to-[#102A43]/98 z-10" />
 
-          {/* Welcome greeting absolute-positioned at the absolute bottom (Perfect contrast against solid navy) */}
+          {/* Welcome greeting absolute-positioned at the absolute bottom (Lowered to pb-4 for perfect contrast and positioning) */}
           <div className="absolute inset-x-0 bottom-0 pb-4 pt-20 px-4 z-20 text-center flex flex-col items-center">
-            {/* Accent Line */}
-            <div className="w-10 h-[2.5px] bg-[#00C9E0] rounded-full mb-2.5" />
-            <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase block leading-tight">
+            {/* Accent Line - Resized for premium proportions */}
+            <div className="w-16 h-[4px] bg-[#00C9E0] rounded-full mb-3.5" />
+            <span className="text-[34px] sm:text-[44px] font-black tracking-tight text-white uppercase block leading-tight">
               Gestión Inteligente
             </span>
-            <p className="text-[9px] sm:text-[10px] font-black text-[#00C9E0] tracking-[0.25em] uppercase mt-1">
+            <p className="text-[12px] sm:text-[14px] font-black text-[#00C9E0] tracking-[0.28em] uppercase mt-2">
               Portal CRM • Epotech Solutions
             </p>
           </div>

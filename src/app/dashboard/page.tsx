@@ -780,13 +780,14 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
     // The PNG image is 320x320px inside the container.
     // The nozzle tip points to the upper-left corner of the image bounding box, roughly at (32px, 32px) relative to container top-left.
     const getWandTip = () => {
+      const isMobile = window.innerWidth < 768;
       // Base coordinates from the bottom right viewport corner
       const containerLeft = window.innerWidth - 320 + 40; // 320px width, -40px right offset
       const containerTop = window.innerHeight - 320 + 40;  // 320px height, -40px bottom offset
 
       // Orifice tip coordinates relative to top-left of container for PNG image
-      const tipOffsetX = 32.0;
-      const tipOffsetY = 32.0;
+      const tipOffsetX = isMobile ? 68.0 : 32.0;
+      const tipOffsetY = isMobile ? 74.0 : 32.0;
 
       const tipX = containerLeft + tipOffsetX;
       const tipY = containerTop + tipOffsetY;

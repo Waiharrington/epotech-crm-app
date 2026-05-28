@@ -77,6 +77,33 @@ export default function DashboardPage() {
     iconColor: 'text-[#00C9E0]'
   })
 
+  // Dynamic Utah (Salt Lake City) 12-hour format time state
+  const [utahTime, setUtahTime] = useState('')
+
+  useEffect(() => {
+    const updateTime = () => {
+      try {
+        const timeStr = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/Denver',
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        }).format(new Date()).toLowerCase();
+        setUtahTime(timeStr);
+      } catch (e) {
+        const timeStr = new Date().toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        }).toLowerCase();
+        setUtahTime(timeStr);
+      }
+    }
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, [])
+
   useEffect(() => {
     const updateGreeting = () => {
       try {
@@ -395,8 +422,11 @@ export default function DashboardPage() {
             
             <span className="text-white/20 text-[10px] font-light">|</span>
 
-            <div className="px-2.5 py-0.5 rounded-full text-[8.5px] font-black uppercase tracking-wider text-[#00C9E0] border border-[#00C9E0]/20 bg-[#00C9E0]/5">
-              Vercel Pro Deployment
+            <div className="flex items-center gap-1.5 text-white/95">
+              <Clock className="h-3.5 w-3.5 text-[#00C9E0]" />
+              <span className="text-[10px] md:text-[11px] font-bold text-slate-200">
+                {utahTime}
+              </span>
             </div>
           </div>
         </div>

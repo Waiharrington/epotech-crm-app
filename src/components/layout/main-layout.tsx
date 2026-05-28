@@ -185,8 +185,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-5 left-2.5 right-2.5 z-50 h-16 rounded-2xl border border-sidebar-border/10 bg-sidebar/85 backdrop-blur-xl px-2 shadow-[0_12px_40px_rgba(0,0,0,0.3)] flex items-center justify-around">
-        <div className="flex items-center justify-between w-full h-full gap-0.5">
+      <nav className="md:hidden fixed bottom-5 left-4 right-4 z-50 h-16 rounded-2xl border border-sidebar-border/10 bg-sidebar/85 backdrop-blur-xl px-3 shadow-[0_12px_40px_rgba(0,0,0,0.3)] flex items-center justify-around">
+        <div className="flex items-center justify-between w-full h-full">
           {mainNavItems.map((item) => {
             const isActive = pathname.startsWith(item.href)
             return (
@@ -194,10 +194,10 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-1 px-1 py-1.5 rounded-xl transition-all duration-300 ease-out relative group min-w-0 flex-1",
+                  "flex items-center justify-center transition-all duration-300 ease-out relative group rounded-xl",
                   isActive
-                    ? "sidebar-link-active text-white font-semibold scale-105 shadow-md"
-                    : "text-sidebar-foreground/50 hover:bg-white/[0.03] hover:text-sidebar-foreground hover:scale-102"
+                    ? "sidebar-link-active text-white px-3 py-2 gap-1.5 scale-105 shadow-md"
+                    : "text-sidebar-foreground/50 hover:bg-white/[0.03] hover:text-sidebar-foreground px-2.5 py-2.5"
                 )}
               >
                 <item.icon className={cn(
@@ -206,9 +206,10 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_6px_rgba(0,201,224,0.4)]" 
                     : "group-hover:scale-105 group-hover:text-sidebar-foreground"
                 )} />
-                <span className="text-[9px] font-medium tracking-tighter relative z-10 transition-colors duration-300 truncate w-full text-center">{item.name}</span>
                 {isActive && (
-                  <div className="absolute bottom-1 w-3 h-[2px] rounded-full bg-[#00C9E0] shadow-[0_0_6px_rgba(0,201,224,0.7)] transition-all duration-300" />
+                  <span className="text-[11px] font-bold tracking-tight relative z-10 transition-all duration-300 ease-out animate-in fade-in slide-in-from-left-2 duration-300 whitespace-nowrap">
+                    {item.name}
+                  </span>
                 )}
               </Link>
             )
@@ -216,9 +217,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           
           <Sheet>
             <SheetTrigger asChild>
-              <button className="flex flex-col items-center justify-center gap-1 px-1 py-1.5 rounded-xl text-sidebar-foreground/50 hover:bg-white/[0.03] hover:text-sidebar-foreground active:scale-95 transition-all duration-300 group relative min-w-0 flex-1">
+              <button className="flex items-center justify-center px-2.5 py-2.5 rounded-xl text-sidebar-foreground/50 hover:bg-white/[0.03] hover:text-sidebar-foreground active:scale-95 transition-all duration-300 group relative">
                 <MoreHorizontal className="h-5 w-5 transition-transform duration-300 group-hover:scale-105" />
-                <span className="text-[9px] font-medium tracking-tighter truncate w-full text-center">Más</span>
               </button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[85%] p-0 rounded-l-3xl border-l border-sidebar-border bg-sidebar backdrop-blur-xl">

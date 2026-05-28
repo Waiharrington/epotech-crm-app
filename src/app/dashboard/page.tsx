@@ -786,8 +786,8 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
       const containerTop = window.innerHeight - 320 + 40;  // 320px height, -40px bottom offset
 
       // Orifice tip coordinates relative to top-left of container for PNG image
-      const tipOffsetX = isMobile ? 68.0 : 32.0;
-      const tipOffsetY = isMobile ? 74.0 : 32.0;
+      const tipOffsetX = isMobile ? 48.0 : 32.0;
+      const tipOffsetY = isMobile ? 52.0 : 32.0;
 
       const tipX = containerLeft + tipOffsetX;
       const tipY = containerTop + tipOffsetY;

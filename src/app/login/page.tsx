@@ -232,8 +232,8 @@ export default function LoginPage() {
         {/* Satisfying water droplet micro-particles */}
         <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-0 opacity-40" />
         
-        {/* Mobile-Only Hero Header (Taller h-[320px] to cover Dynamic Island and shift photo and title down gracefully) */}
-        <div className="lg:hidden w-full h-[320px] relative flex-shrink-0 bg-[#102A43] z-10">
+        {/* Mobile-Only Hero Header (Covers Dynamic Island beautifully at a reduced h-[220px] height) */}
+        <div className="lg:hidden w-full h-[220px] relative flex-shrink-0 bg-[#102A43] z-10">
           <div 
             className="w-full h-full bg-cover"
             style={{ 
@@ -242,13 +242,17 @@ export default function LoginPage() {
               backgroundRepeat: 'no-repeat'
             }}
           />
-          {/* Elegant gradient overlay: clear at the top, rich solid navy blue (#102A43) at the bottom to back the text */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#102A43]/0 via-[#102A43]/35 to-[#102A43]/98 z-10" />
+          {/* Elegant gradient overlay: clear at the top, rich solid navy blue (#102A43) at the bottom */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#102A43]/0 via-[#102A43]/30 to-[#102A43] z-10" />
+        </div>
 
-          {/* Welcome greeting absolute-positioned at the absolute bottom (Lowered to pb-4 for perfect contrast and positioning) */}
-          <div className="absolute inset-x-0 bottom-0 pb-4 pt-20 px-4 z-20 text-center flex flex-col items-center">
+        {/* Card Container (Floats on solid dark navy on mobile, centered light grey on desktop) */}
+        <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 relative z-20 bg-[#102A43] lg:bg-transparent overflow-y-auto lg:overflow-hidden no-scrollbar">
+          
+          {/* Mobile-Only Greeting (Lowered completely below the photo to sit beautifully on solid navy, perfectly centered above the login card) */}
+          <div className="lg:hidden w-full max-w-[485px] text-center flex flex-col items-center mb-6 mt-2 px-4 z-20 flex-shrink-0">
             {/* Accent Line - Resized for premium proportions */}
-            <div className="w-16 h-[4px] bg-[#00C9E0] rounded-full mb-3.5" />
+            <div className="w-16 h-[4px] bg-[#00C9E0] rounded-full mb-3" />
             <span className="text-[34px] sm:text-[44px] font-black tracking-tight text-white uppercase block leading-tight">
               Gestión Inteligente
             </span>
@@ -256,10 +260,7 @@ export default function LoginPage() {
               Portal CRM • Epotech Solutions
             </p>
           </div>
-        </div>
 
-        {/* Card Container (Floats on solid dark navy on mobile, centered light grey on desktop) */}
-        <div className="flex-1 flex items-center justify-center p-4 sm:p-6 relative z-20 bg-[#102A43] lg:bg-transparent overflow-y-auto lg:overflow-hidden no-scrollbar">
           <div className="w-full max-w-[485px] my-auto flex-shrink-0">
             {/* Card compressed to h-auto and padding set to p-6 sm:p-8 */}
             <Card className="w-full shadow-[0_25px_60px_-15px_rgba(15,23,42,0.25)] border-0 bg-white rounded-[24px] overflow-hidden p-6 sm:p-8 flex flex-col gap-0 relative">

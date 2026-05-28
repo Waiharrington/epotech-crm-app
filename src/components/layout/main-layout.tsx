@@ -97,14 +97,17 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     href={item.href}
                     style={{ animationDelay: `${index * 50}ms` }}
                     className={cn(
-                      "flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-300 ease-out group relative overflow-hidden animate-sidebar-item",
+                      "flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-[transform,color] duration-300 ease-out group relative overflow-hidden animate-sidebar-item",
                       isActive
-                        ? "sidebar-link-active text-white font-semibold"
+                        ? "text-white font-semibold"
                         : "text-sidebar-foreground/70 hover:bg-white/[0.03] hover:text-sidebar-foreground hover:translate-x-1"
                     )}
                   >
+                    {isActive && (
+                      <div className="absolute inset-0 rounded-xl sidebar-link-active z-0 animate-in fade-in zoom-in-95 duration-200" />
+                    )}
                     <div className={cn(
-                      "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out",
+                      "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out z-10",
                       isActive 
                         ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
                         : "scale-y-0 opacity-0 group-hover:scale-y-[1.1] group-hover:opacity-40"
@@ -137,14 +140,17 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     href={item.href}
                     style={{ animationDelay: `${globalIndex * 50}ms` }}
                     className={cn(
-                      "flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-300 ease-out group relative overflow-hidden animate-sidebar-item",
+                      "flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-[transform,color] duration-300 ease-out group relative overflow-hidden animate-sidebar-item",
                       isActive
-                        ? "sidebar-link-active text-white font-semibold"
+                        ? "text-white font-semibold"
                         : "text-sidebar-foreground/70 hover:bg-white/[0.03] hover:text-sidebar-foreground hover:translate-x-1"
                     )}
                   >
+                    {isActive && (
+                      <div className="absolute inset-0 rounded-xl sidebar-link-active z-0 animate-in fade-in zoom-in-95 duration-200" />
+                    )}
                     <div className={cn(
-                      "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out",
+                      "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out z-10",
                       isActive 
                         ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
                         : "scale-y-0 opacity-0 group-hover:scale-y-[1.1] group-hover:opacity-40"
@@ -194,12 +200,15 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-0.5 rounded-xl transition-all duration-300 ease-out relative group min-w-0 flex-1 py-1.5 h-[85%]",
+                  "flex flex-col items-center justify-center gap-0.5 rounded-xl transition-[transform,color] duration-300 ease-out relative group min-w-0 flex-1 py-1.5 h-[85%]",
                   isActive
-                    ? "sidebar-link-active text-white font-semibold scale-105 shadow-md px-1"
+                    ? "text-white font-semibold scale-105 px-1"
                     : "text-sidebar-foreground/50 active:scale-95 px-1"
                 )}
               >
+                {isActive && (
+                  <div className="absolute inset-0 rounded-xl sidebar-link-active z-0 shadow-md animate-in fade-in zoom-in-95 duration-200" />
+                )}
                 <item.icon className={cn(
                   "h-5 w-5 transition-all duration-300 relative z-10",
                   isActive 
@@ -213,7 +222,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                   {item.mobileName || item.name}
                 </span>
                 {isActive && (
-                  <div className="absolute bottom-0.5 w-3.5 h-[1.5px] rounded-full bg-[#00C9E0] shadow-[0_0_6px_rgba(0,201,224,0.7)] transition-all duration-300" />
+                  <div className="absolute bottom-0.5 w-3.5 h-[1.5px] rounded-full bg-[#00C9E0] shadow-[0_0_6px_rgba(0,201,224,0.7)] transition-all duration-300 z-10" />
                 )}
               </Link>
             )
@@ -243,15 +252,18 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center justify-between gap-4 px-4 py-4.5 text-base font-medium transition-all duration-300 ease-out group relative overflow-hidden rounded-2xl border border-white/[0.01]",
+                        "flex items-center justify-between gap-4 px-4 py-4.5 text-base font-medium transition-[transform,color] duration-300 ease-out group relative overflow-hidden rounded-2xl border border-white/[0.01]",
                         isActive
-                          ? "sidebar-link-active text-white font-bold shadow-md active:scale-95"
+                          ? "text-white font-bold active:scale-95"
                           : "text-sidebar-foreground/75 hover:bg-white/[0.02] hover:text-sidebar-foreground hover:translate-x-1 active:scale-[0.98]"
                       )}
                     >
+                      {isActive && (
+                        <div className="absolute inset-0 rounded-2xl sidebar-link-active z-0 animate-in fade-in zoom-in-95 duration-200" />
+                      )}
                       <div className="flex items-center gap-4 relative z-10 w-full">
                         <div className={cn(
-                          "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out",
+                          "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out z-10",
                           isActive 
                             ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
                             : "scale-y-0 opacity-0 group-hover:scale-y-[1.1] group-hover:opacity-40"

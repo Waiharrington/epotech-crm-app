@@ -323,7 +323,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen md:h-screen md:max-h-screen bg-[#F0F5FA] overflow-y-auto md:overflow-hidden p-4.5 pb-24 md:pb-4.5 gap-4 relative no-scrollbar">
+    <div className="flex flex-col min-h-screen md:h-screen md:max-h-screen bg-[#F0F5FA] overflow-y-auto md:overflow-hidden p-4.5 pb-24 md:pb-4.5 gap-4 relative no-scrollbar">
       {/* Premium Ambient Background Lighting - Dynamic color shifts based on Utah Time */}
       <div className={`absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full ${greetingState.glowClass} blur-[130px] pointer-events-none z-0 transition-all duration-1000`} />
       <div className="absolute bottom-[-10%] left-[20%] w-[45%] h-[45%] rounded-full bg-[#0097A7]/6 blur-[130px] pointer-events-none z-0" />
@@ -374,7 +374,7 @@ export default function DashboardPage() {
       </header>
 
       {/* Main Content scroll-free grid layout */}
-      <main className="flex-grow min-h-0 flex flex-col gap-4 overflow-visible md:overflow-hidden no-scrollbar relative z-10">
+      <main className="flex-grow md:min-h-0 flex flex-col gap-4 overflow-visible md:overflow-hidden no-scrollbar relative z-10">
         {/* Statistics Grid */}
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 shrink-0">
           {/* Card: Clientes Totales */}
@@ -443,9 +443,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Middle Row Section */}
-        <div className="grid gap-4 lg:grid-cols-7 flex-1 min-h-0 overflow-visible md:overflow-hidden shrink-0">
+        <div className="grid gap-4 lg:grid-cols-7 md:flex-1 md:min-h-0 h-auto overflow-visible md:overflow-hidden md:shrink-0">
           {/* Próximos Servicios */}
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col min-h-0 animate-dashboard-item" style={{ animationDelay: '350ms' }}>
+          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col md:min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '350ms' }}>
             {/* Header */}
             <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-3 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
               <div>
@@ -457,7 +457,7 @@ export default function DashboardPage() {
               </Link>
             </div>
             
-            <div className="p-3 flex-1 overflow-y-auto no-scrollbar space-y-2 min-h-0 bg-gradient-to-b from-white to-slate-50/30">
+            <div className="p-3 md:flex-1 md:overflow-y-auto no-scrollbar space-y-2 md:min-h-0 h-auto bg-gradient-to-b from-white to-slate-50/30">
               {loading ? (
                 <div className="flex justify-center py-6"><Loader2 className="h-5 w-5 text-[#0097A7] animate-spin" /></div>
               ) : recentJobs.length > 0 ? (
@@ -506,8 +506,8 @@ export default function DashboardPage() {
           </div>
 
           {/* Acciones Rápidas */}
-          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-2.5 flex flex-col justify-between min-h-0 animate-dashboard-item" style={{ animationDelay: '400ms' }}>
-            <div className="flex flex-col gap-1.5 min-h-0">
+          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-2.5 flex flex-col justify-between md:min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '400ms' }}>
+            <div className="flex flex-col gap-1.5 md:min-h-0 h-auto">
               <div>
                 <h3 className="text-[10px] font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
                 <p className="text-[8px] text-slate-400 font-medium">Accesos directos operacionales.</p>
@@ -565,10 +565,10 @@ export default function DashboardPage() {
         </div>
 
         {/* Lower Row: Reminders & Alerts */}
-        <div className="grid gap-4 lg:grid-cols-7 flex-1 min-h-0 overflow-visible md:overflow-hidden shrink-0">
+        <div className="grid gap-4 lg:grid-cols-7 md:flex-1 md:min-h-0 h-auto overflow-visible md:overflow-hidden md:shrink-0">
           {/* Reminders Widget */}
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between min-h-0 animate-dashboard-item" style={{ animationDelay: '450ms' }}>
-            <div className="min-h-0 flex flex-col flex-1">
+          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between md:min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '450ms' }}>
+            <div className="md:min-h-0 flex flex-col md:flex-1 h-auto">
               <div className="flex items-center justify-between pb-2 border-b border-slate-50 shrink-0">
                 <div>
                   <h3 className="text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
@@ -596,7 +596,7 @@ export default function DashboardPage() {
               </form>
 
               {/* Listado */}
-              <div className="space-y-1.5 mt-2 overflow-y-auto pr-1 no-scrollbar flex-1 min-h-0">
+              <div className="space-y-1.5 mt-2 md:overflow-y-auto pr-1 no-scrollbar md:flex-1 md:min-h-0 h-auto">
                 {reminders.length > 0 ? (
                   reminders.map((reminder) => {
                     const getPriorityStyle = (p: string) => {
@@ -663,8 +663,8 @@ export default function DashboardPage() {
           </div>
 
           {/* Alertas y Operaciones */}
-          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0 overflow-hidden animate-dashboard-item" style={{ animationDelay: '500ms' }}>
-            <div className="min-h-0 flex flex-col flex-1">
+          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between md:min-h-0 h-auto overflow-visible md:overflow-hidden animate-dashboard-item" style={{ animationDelay: '500ms' }}>
+            <div className="md:min-h-0 flex flex-col md:flex-1 h-auto">
               <div className="pb-2 border-b border-slate-50 shrink-0">
                 <h3 className="text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
                   <AlertTriangle className="h-3.5 w-3.5 text-[#0097A7]" />
@@ -673,7 +673,7 @@ export default function DashboardPage() {
                 <p className="text-[8.5px] text-slate-400 font-medium">Alertas críticas del inventario y flujo de caja diario.</p>
               </div>
               
-              <div className="space-y-2 pt-2.5 overflow-y-auto no-scrollbar flex-1 min-h-0">
+              <div className="space-y-2 pt-2.5 md:overflow-y-auto no-scrollbar md:flex-1 md:min-h-0 h-auto">
                 {stats.lowStock > 0 ? (
                   <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 flex items-start gap-2 shadow-sm">
                     <AlertTriangle className="h-4 text-[#0097A7] shrink-0 mt-0.5 animate-pulse" />

@@ -328,47 +328,76 @@ export default function DashboardPage() {
       <div className={`absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full ${greetingState.glowClass} blur-[130px] pointer-events-none z-0 transition-all duration-1000`} />
       <div className="absolute bottom-[-10%] left-[20%] w-[45%] h-[45%] rounded-full bg-[#0097A7]/6 blur-[130px] pointer-events-none z-0" />
 
-      {/* Premium Compact Header */}
-      <header className="bg-transparent shrink-0 relative z-10 animate-dashboard-item" style={{ animationDelay: '100ms' }}>
-        <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-          <div>
+      {/* Premium Dark Navy Header Banner */}
+      <header className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-5 md:p-6 shrink-0 relative overflow-hidden z-10 animate-dashboard-item shadow-xl" style={{ animationDelay: '100ms' }}>
+        <div className="relative z-10 flex flex-col gap-4.5">
+          {/* Top Row: Logo & Icons */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <img 
+                src="/assets/logo.png" 
+                alt="Epotech Solutions" 
+                className="h-6 md:h-7 w-auto object-contain relative z-10 logo-premium" 
+              />
+            </div>
             <div className="flex items-center gap-2.5">
-              <h1 className="text-xl font-black tracking-tight text-[#0B1E3F]">
+              {/* Notification Bell */}
+              <button className="h-7.5 w-7.5 rounded-xl flex items-center justify-center bg-white/5 border border-white/10 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-200 relative group">
+                <Bell className="h-4 w-4" />
+                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#00C9E0] animate-pulse" />
+              </button>
+
+              {/* Profile Avatar trigger */}
+              <Link 
+                href="/ajustes" 
+                className="h-7.5 w-7.5 rounded-xl overflow-hidden border border-white/20 hover:border-[#00C9E0] shadow-md hover:shadow-[#00C9E0]/20 transition-all hover:scale-105 active:scale-95 duration-200"
+              >
+                <img 
+                  src={profilePic} 
+                  alt="Sebastián" 
+                  className="h-full w-full object-cover" 
+                />
+              </Link>
+            </div>
+          </div>
+
+          {/* Middle Row: Greeting */}
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
                 {greetingState.text}
               </h1>
               
               {/* Dynamic Celestial Time-of-day Icon */}
               <div className="flex items-center justify-center">
                 {greetingState.icon === 'sunrise' && (
-                  <Sunrise className={`h-4.5 w-4.5 ${greetingState.iconColor} filter drop-shadow-[0_0_4px_rgba(245,158,11,0.4)]`} />
+                  <Sunrise className={`h-5 w-5 ${greetingState.iconColor} filter drop-shadow-[0_0_4px_rgba(0,201,224,0.4)]`} />
                 )}
                 {greetingState.icon === 'sun' && (
-                  <Sun className={`h-4.5 w-4.5 ${greetingState.iconColor} filter drop-shadow-[0_0_6px_rgba(234,179,8,0.5)]`} style={{ animation: 'spin 12s linear infinite' }} />
+                  <Sun className={`h-5 w-5 ${greetingState.iconColor} filter drop-shadow-[0_0_6px_rgba(234,179,8,0.5)]`} style={{ animation: 'spin 12s linear infinite' }} />
                 )}
                 {greetingState.icon === 'moon' && (
-                  <Moon className={`h-4.5 w-4.5 ${greetingState.iconColor} filter drop-shadow-[0_0_4px_rgba(129,140,248,0.4)] animate-pulse`} />
+                  <Moon className={`h-5 w-5 ${greetingState.iconColor} filter drop-shadow-[0_0_4px_rgba(129,140,248,0.4)] animate-pulse`} />
                 )}
               </div>
             </div>
-            <p className="text-slate-400 text-[10px] mt-0.5 font-medium">{greetingState.sub}</p>
+            <p className="text-slate-300/80 text-[10px] md:text-xs mt-1 font-medium">{greetingState.sub}</p>
           </div>
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-xl shadow-[0_4px_15px_-4px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,0.8)] border border-slate-100/90">
+
+          {/* Bottom Row: Date & Vercel Pill */}
+          <div className="flex items-center gap-2 flex-wrap pt-0.5 border-t border-white/[0.04]">
+            <div className="flex items-center gap-1.5 text-white/95">
               <Calendar className="h-3.5 w-3.5 text-[#00C9E0]" />
-              <span className="text-[9px] font-extrabold text-slate-700 uppercase tracking-widest">
-                {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+              <span className="text-[10px] md:text-[11px] font-bold text-slate-200">
+                {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).toLowerCase()}
               </span>
             </div>
-            <Link 
-              href="/ajustes" 
-              className="h-7.5 w-7.5 rounded-full overflow-hidden shadow-lg shadow-cyan-500/10 hover:shadow-cyan-500/25 shrink-0 border border-slate-200 hover:border-[#00C9E0] transition-all hover:scale-105 active:scale-95 duration-200 relative group block"
-            >
-              <img 
-                src={profilePic} 
-                alt="Sebastián" 
-                className="h-full w-full object-cover" 
-              />
-            </Link>
+            
+            <span className="text-white/20 text-[10px] font-light">|</span>
+
+            <div className="px-2.5 py-0.5 rounded-full text-[8.5px] font-black uppercase tracking-wider text-[#00C9E0] border border-[#00C9E0]/20 bg-[#00C9E0]/5">
+              Vercel Pro Deployment
+            </div>
           </div>
         </div>
       </header>

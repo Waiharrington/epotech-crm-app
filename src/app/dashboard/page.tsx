@@ -764,10 +764,10 @@ export default function DashboardPage() {
             </div>
 
             <div className="pt-2.5 border-t border-slate-100 mt-2.5 flex gap-2 shrink-0">
-              <Button variant="outline" size="sm" className="w-full h-8 text-[9px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#0097A7] hover:border-[#0097A7]/30 shadow-sm transition-all duration-300" asChild>
+              <Button variant="outline" size="sm" className="flex-1 h-8 text-[9px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#0097A7] hover:border-[#0097A7]/30 shadow-sm transition-all duration-300" asChild>
                 <Link href="/stock">Ver Inventario</Link>
               </Button>
-              <Button variant="outline" size="sm" className="w-full h-8 text-[9px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#00C9E0] hover:border-[#00C9E0]/30 shadow-sm transition-all duration-300" asChild>
+              <Button variant="outline" size="sm" className="flex-1 h-8 text-[9px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#00C9E0] hover:border-[#00C9E0]/30 shadow-sm transition-all duration-300" asChild>
                 <Link href="/caja">Ver Caja</Link>
               </Button>
             </div>

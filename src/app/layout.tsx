@@ -1,4 +1,4 @@
-﻿import type { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Caveat } from "next/font/google";
 import "./globals.css";
 import { MainLayout } from "@/components/layout/main-layout";
@@ -41,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${caveat.variable} antialiased`}
       >

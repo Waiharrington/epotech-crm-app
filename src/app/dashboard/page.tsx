@@ -299,7 +299,7 @@ export default function DashboardPage() {
       <div className="absolute bottom-[-10%] left-[20%] w-[45%] h-[45%] rounded-full bg-[#046bd2]/6 blur-[130px] pointer-events-none z-0" />
 
       {/* Premium Compact Header */}
-      <header className="bg-transparent shrink-0 relative z-10">
+      <header className="bg-transparent shrink-0 relative z-10 animate-dashboard-item" style={{ animationDelay: '100ms' }}>
         <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
           <div>
             <div className="flex items-center gap-2.5">
@@ -348,7 +348,7 @@ export default function DashboardPage() {
         {/* Statistics Grid */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 shrink-0">
           {/* Card: Clientes Totales */}
-          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group">
+          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item" style={{ animationDelay: '150ms' }}>
             <div className="p-3.5 flex items-center justify-between">
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Clientes Totales</p>
@@ -364,7 +364,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Card: Trabajos Activos */}
-          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group">
+          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item" style={{ animationDelay: '200ms' }}>
             <div className="p-3.5 flex items-center justify-between">
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Trabajos Activos</p>
@@ -380,7 +380,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Card: Ingresos Totales */}
-          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group">
+          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item" style={{ animationDelay: '250ms' }}>
             <div className="p-3.5 flex items-center justify-between">
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Ingresos Totales</p>
@@ -396,7 +396,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Card: Alertas Stock */}
-          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group">
+          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item" style={{ animationDelay: '300ms' }}>
             <div className="p-3.5 flex items-center justify-between">
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Alertas Stock</p>
@@ -415,7 +415,7 @@ export default function DashboardPage() {
         {/* Middle Row Section */}
         <div className="grid gap-4 lg:grid-cols-7 flex-1 min-h-0 overflow-hidden">
           {/* Próximos Servicios */}
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col min-h-0">
+          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col min-h-0 animate-dashboard-item" style={{ animationDelay: '350ms' }}>
             {/* Header */}
             <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-3 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
               <div>
@@ -476,7 +476,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Acciones Rápidas */}
-          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0">
+          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0 animate-dashboard-item" style={{ animationDelay: '400ms' }}>
             <div className="flex flex-col min-h-0">
               <h3 className="text-xs font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
               <p className="text-[8.5px] text-slate-400 font-medium">Accesos directos operacionales.</p>
@@ -535,7 +535,7 @@ export default function DashboardPage() {
         {/* Lower Row: Reminders & Alerts */}
         <div className="grid gap-4 lg:grid-cols-7 flex-1 min-h-0 overflow-hidden">
           {/* Reminders Widget */}
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between min-h-0">
+          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between min-h-0 animate-dashboard-item" style={{ animationDelay: '450ms' }}>
             <div className="min-h-0 flex flex-col flex-1">
               <div className="flex items-center justify-between pb-2 border-b border-slate-50 shrink-0">
                 <div>
@@ -631,7 +631,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Alertas y Operaciones */}
-          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0 overflow-hidden">
+          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0 overflow-hidden animate-dashboard-item" style={{ animationDelay: '500ms' }}>
             <div className="min-h-0 flex flex-col flex-1">
               <div className="pb-2 border-b border-slate-50 shrink-0">
                 <h3 className="text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
@@ -683,6 +683,23 @@ export default function DashboardPage() {
           </div>
         </div>
       </main>
+
+      <style>{`
+        @keyframes dashboard-fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(12px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-dashboard-item {
+          opacity: 0;
+          animation: dashboard-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+      `}</style>
     </div>
   )
 }
@@ -696,16 +713,16 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
   useEffect(() => { onCompleteRef.current = onComplete }, [onComplete])
 
   useEffect(() => {
-    // 1. Start spraying immediately
-    const t1 = setTimeout(() => setAnimationStage('spraying'), 50)
-    // 2. Full water flooding effect on glass at 550ms
-    const t2 = setTimeout(() => setAnimationStage('flooding'), 550)
-    // 3. Clear/wipe screen with high-pressure sheet sweep at 1100ms
-    const t3 = setTimeout(() => setAnimationStage('clearing'), 1100)
-    // 4. Complete transition at 1750ms
+    // 1. Start spraying at 1000ms (after gun has fully entered)
+    const t1 = setTimeout(() => setAnimationStage('spraying'), 1000)
+    // 2. Full water flooding effect on glass at 2200ms
+    const t2 = setTimeout(() => setAnimationStage('flooding'), 2200)
+    // 3. Clear/wipe screen with high-pressure sheet sweep at 3600ms
+    const t3 = setTimeout(() => setAnimationStage('clearing'), 3600)
+    // 4. Complete transition at 4400ms
     const t4 = setTimeout(() => {
       onCompleteRef.current()
-    }, 1750)
+    }, 4400)
 
     return () => {
       clearTimeout(t1)
@@ -794,80 +811,138 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
 
       // 1. Generate spray particles when spraying/flooding
       if (animationStage === 'spraying' || animationStage === 'flooding') {
-        const count = animationStage === 'flooding' ? 25 : 12
+        const baseAngle = Math.atan2(sprayTarget.y - tip.y, sprayTarget.x - tip.x)
+        const count = animationStage === 'flooding' ? 55 : 35
+
         for (let i = 0; i < count; i++) {
-          // Calculate angle from nozzle tip to center screen with random fan spread
-          const angle = Math.atan2(sprayTarget.y - tip.y, sprayTarget.x - tip.x)
-          const spread = 0.28 // 25 degree fan angle
-          const finalAngle = angle + (Math.random() - 0.5) * spread
-          
-          const speed = Math.random() * 30 + 35
+          // Tight cone: most particles near center, few at edges
+          const r = Math.random()
+          // Gaussian-like spread: weight particles toward center of the jet
+          const spreadFactor = r < 0.6 ? 0.05 : r < 0.85 ? 0.14 : 0.22
+          const finalAngle = baseAngle + (Math.random() - 0.5) * spreadFactor * 2
+
+          // Core particles faster, edge particles slower
+          const isCoreParticle = spreadFactor === 0.05
+          const speed = isCoreParticle
+            ? Math.random() * 20 + 55
+            : Math.random() * 25 + 30
+
           sprayParticles.push({
             x: tip.x,
             y: tip.y,
             vx: Math.cos(finalAngle) * speed,
             vy: Math.sin(finalAngle) * speed,
-            size: Math.random() * 3 + 1,
-            alpha: Math.random() * 0.4 + 0.6,
-            color: Math.random() > 0.4 ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0, 201, 224, 0.75)',
+            // Core particles: tiny bright white. Edge particles: slightly larger cyan
+            size: isCoreParticle ? Math.random() * 0.8 + 0.4 : Math.random() * 1.5 + 0.6,
+            alpha: isCoreParticle ? 0.95 : Math.random() * 0.4 + 0.45,
+            color: isCoreParticle
+              ? 'rgba(200, 240, 255, 0.95)'
+              : (Math.random() > 0.5 ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 201, 224, 0.7)'),
             life: 0,
-            maxLife: Math.random() * 12 + 15
+            maxLife: Math.random() * 15 + 15
           })
         }
       }
 
       // 2. Generate dripping glass drops when screen is flooded
       if (animationStage === 'flooding') {
-        if (Math.random() < 0.35 && glassDrops.length < 90) {
-          glassDrops.push({
-            x: Math.random() * width,
-            y: Math.random() * (height * 0.5), // spawn upper half
-            r: Math.random() * 4 + 2,
-            vy: Math.random() * 1.5 + 0.8,
-            vx: (Math.random() - 0.5) * 0.2,
-            alpha: Math.random() * 0.3 + 0.6,
-            targetY: height + 20,
-            trail: []
-          })
+        const spawnCount = glassDrops.length < 200 ? 6 : 1
+        for (let j = 0; j < spawnCount; j++) {
+          if (Math.random() < 0.85 && glassDrops.length < 350) {
+            glassDrops.push({
+              x: Math.random() * width,
+              y: Math.random() * (height * 0.7),
+              r: Math.random() * 5 + 1.5,
+              vy: Math.random() * 2 + 1,
+              vx: (Math.random() - 0.5) * 0.3,
+              alpha: Math.random() * 0.4 + 0.5,
+              targetY: height + 20,
+              trail: []
+            })
+          }
         }
       }
 
-      // 3. Update & Draw high-pressure spray cone particles
+      // 3. Draw bright core beam line (the continuous high-pressure stream)
+      if (animationStage === 'spraying' || animationStage === 'flooding') {
+        const baseAngle = Math.atan2(sprayTarget.y - tip.y, sprayTarget.x - tip.x)
+        const beamLen = Math.min(width, height) * 0.55
+        const beamEndX = tip.x + Math.cos(baseAngle) * beamLen
+        const beamEndY = tip.y + Math.sin(baseAngle) * beamLen
+
+        // Outer glow beam
+        const beamGlow = ctx.createLinearGradient(tip.x, tip.y, beamEndX, beamEndY)
+        beamGlow.addColorStop(0, 'rgba(0, 201, 224, 0.18)')
+        beamGlow.addColorStop(0.4, 'rgba(0, 201, 224, 0.08)')
+        beamGlow.addColorStop(1, 'rgba(0, 201, 224, 0)')
+        ctx.beginPath()
+        ctx.strokeStyle = beamGlow
+        ctx.lineWidth = 14
+        ctx.lineCap = 'round'
+        ctx.moveTo(tip.x, tip.y)
+        ctx.lineTo(beamEndX, beamEndY)
+        ctx.stroke()
+
+        // Inner bright core
+        const coreGrad = ctx.createLinearGradient(tip.x, tip.y, beamEndX * 0.6, beamEndY * 0.6)
+        coreGrad.addColorStop(0, 'rgba(255, 255, 255, 0.55)')
+        coreGrad.addColorStop(0.5, 'rgba(180, 235, 255, 0.25)')
+        coreGrad.addColorStop(1, 'rgba(255, 255, 255, 0)')
+        ctx.beginPath()
+        ctx.strokeStyle = coreGrad
+        ctx.lineWidth = 2.5
+        ctx.moveTo(tip.x, tip.y)
+        ctx.lineTo(beamEndX * 0.6 + tip.x * 0.4, beamEndY * 0.6 + tip.y * 0.4)
+        ctx.stroke()
+      }
+
+      // 4. Update & Draw spray particles as motion streaks (not growing bubbles)
       for (let i = sprayParticles.length - 1; i >= 0; i--) {
         const p = sprayParticles[i]
+
+        // Save previous position for streak drawing
+        const prevX = p.x
+        const prevY = p.y
+
         p.x += p.vx
         p.y += p.vy
-        
-        // Dynamic air resistance & gravity
-        p.vx *= 0.98
-        p.vy *= 0.98
-        p.vy += 0.05 // subtle gravity bend
+
+        // Air resistance & subtle gravity
+        p.vx *= 0.97
+        p.vy *= 0.97
+        p.vy += 0.08
         p.life++
 
-        // Draw particle
-        ctx.beginPath()
-        // Mist effect: particles grow and fade out
-        const currentSize = p.size * (1 + (p.life / p.maxLife) * 4)
-        const currentAlpha = p.alpha * (1 - p.life / p.maxLife)
-        
-        // Radial glow for realistic water mist
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, currentSize)
-        gradient.addColorStop(0, p.color.replace(/[\d.]+\)$/, `${currentAlpha})`))
-        gradient.addColorStop(1, 'rgba(255,255,255,0)')
-        
-        ctx.fillStyle = gradient
-        ctx.arc(p.x, p.y, currentSize, 0, Math.PI * 2)
-        ctx.fill()
+        const lifeRatio = p.life / p.maxLife
+        const currentAlpha = p.alpha * (1 - lifeRatio)
 
-        // Splash on screen collision detection (around 70% life, they "hit" the glass)
-        if (p.life > p.maxLife * 0.65 && Math.random() < 0.12 && glassDrops.length < 120) {
+        // Draw as a motion streak (line in direction of travel) — this is what makes it look like real water
+        ctx.beginPath()
+        ctx.strokeStyle = p.color.replace(/[\d.]+\)$/, `${currentAlpha})`)
+        ctx.lineWidth = p.size
+        ctx.lineCap = 'round'
+        // Streak: from slightly behind to slightly ahead in velocity direction
+        ctx.moveTo(prevX - p.vx * 0.3, prevY - p.vy * 0.3)
+        ctx.lineTo(p.x + p.vx * 0.2, p.y + p.vy * 0.2)
+        ctx.stroke()
+
+        // Tiny sparkle dot at particle head for the mist shimmer effect
+        if (Math.random() > 0.6) {
+          ctx.beginPath()
+          ctx.fillStyle = `rgba(255, 255, 255, ${currentAlpha * 0.7})`
+          ctx.arc(p.x, p.y, p.size * 0.9, 0, Math.PI * 2)
+          ctx.fill()
+        }
+
+        // Splash glass drop when hitting far distance
+        if (lifeRatio > 0.6 && Math.random() < 0.25 && glassDrops.length < 350) {
           glassDrops.push({
-            x: p.x + (Math.random() - 0.5) * 40,
-            y: p.y + (Math.random() - 0.5) * 40,
-            r: Math.random() * 2.5 + 1.2,
-            vy: Math.random() * 2 + 1.5, // fast runs from splash impact
-            vx: p.vx * 0.04 + (Math.random() - 0.5) * 0.4,
-            alpha: Math.random() * 0.4 + 0.5,
+            x: p.x + (Math.random() - 0.5) * 30,
+            y: p.y + (Math.random() - 0.5) * 30,
+            r: Math.random() * 2 + 0.8,
+            vy: Math.random() * 2 + 1.2,
+            vx: p.vx * 0.05 + (Math.random() - 0.5) * 0.4,
+            alpha: Math.random() * 0.35 + 0.4,
             targetY: height + 20,
             trail: []
           })
@@ -883,9 +958,9 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
         const d = glassDrops[i]
         
         // Add current pos to trail for wet streak look
-        if (Math.random() < 0.4) {
-          d.trail.push({ x: d.x, y: d.y, r: d.r * 0.8 })
-          if (d.trail.length > 12) d.trail.shift()
+        if (Math.random() < 0.5) {
+          d.trail.push({ x: d.x, y: d.y, r: d.r * 0.85 })
+          if (d.trail.length > 24) d.trail.shift()
         }
 
         d.y += d.vy
@@ -903,8 +978,8 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
         // Draw trail (wet streak on glass)
         if (d.trail.length > 0) {
           ctx.beginPath()
-          ctx.strokeStyle = `rgba(255, 255, 255, ${d.alpha * 0.15})`
-          ctx.lineWidth = d.r * 1.2
+          ctx.strokeStyle = `rgba(200, 245, 255, ${d.alpha * 0.25})`
+          ctx.lineWidth = d.r * 1.4
           ctx.lineCap = 'round'
           ctx.lineJoin = 'round'
           ctx.moveTo(d.trail[0].x, d.trail[0].y)
@@ -999,7 +1074,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
 
       {/* Wet / Blurry Glass backdrop when screen gets flooded */}
       <div 
-        className={`absolute inset-0 bg-[#030b17]/10 backdrop-blur-[7px] transition-opacity duration-1000 ease-in-out pointer-events-none z-25
+        className={`absolute inset-0 bg-[#030b17]/10 backdrop-blur-[12px] transition-opacity duration-1000 ease-in-out pointer-events-none z-25
           ${animationStage === 'flooding' ? 'opacity-100' : 'opacity-0'}
         `}
       />
@@ -1014,7 +1089,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             ? 'none'
             : (animationStage === 'spraying' || animationStage === 'flooding')
               ? 'nozzle-recoil 0.08s infinite alternate'
-              : 'gun-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards'
+              : 'gun-enter 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards'
         }}
       >
         <img
@@ -1060,8 +1135,8 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
           100% { transform: translate(-1.2px, 0.8px) rotate(-0.15deg); }
         }
         @keyframes gun-enter {
-          0%   { transform: translate(120px, 120px) rotate(8deg); opacity: 0; }
-          60%  { opacity: 1; }
+          0%   { transform: translate(250px, 250px) rotate(15deg); opacity: 0; }
+          40%  { opacity: 0.8; }
           100% { transform: translate(0px, 0px) rotate(0deg); opacity: 1; }
         }
       `}</style>

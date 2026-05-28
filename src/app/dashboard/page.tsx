@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -35,6 +35,7 @@ import Link from 'next/link'
 export default function DashboardPage() {
   const supabase = createClient() as any
   const [loading, setLoading] = useState(true)
+  const [showWelcomeLoader, setShowWelcomeLoader] = useState(true)
   
   // Smart Utah Time & Weather greeting state
   const [greetingState, setGreetingState] = useState({
@@ -116,6 +117,10 @@ export default function DashboardPage() {
 
     updateGreeting()
     const interval = setInterval(updateGreeting, 30000)
+
+    // First session entry welcome pressure washer animation - FORCED ON EVERY REFRESH FOR TESTING
+    setShowWelcomeLoader(true)
+
     return () => clearInterval(interval)
   }, [])
   const [stats, setStats] = useState({
@@ -243,40 +248,48 @@ export default function DashboardPage() {
   }
 
   const fetchDashboardData = async () => {
-    setLoading(true)
-    
-    // 1. Fetch counts & Data
-    const { count: clientsCount } = await supabase.from('clientes').select('*', { count: 'exact', head: true })
-    const { count: jobsCount } = await supabase.from('trabajos').select('*', { count: 'exact', head: true }).neq('estado', 'completado')
-    const { data: incomeData } = await supabase.from('caja').select('monto').eq('tipo', 'ingreso')
-    const { data: stockItems } = await supabase.from('stock').select('cantidad_actual, cantidad_minima')
+    // We do not set loading to true here because the full page loader is active.
+    // Instead we load in the background in parallel so that dashboard is ready immediately when animation finishes.
+    try {
+      const { count: clientsCount } = await supabase.from('clientes').select('*', { count: 'exact', head: true })
+      const { count: jobsCount } = await supabase.from('trabajos').select('*', { count: 'exact', head: true }).neq('estado', 'completado')
+      const { data: incomeData } = await supabase.from('caja').select('monto').eq('tipo', 'ingreso')
+      const { data: stockItems } = await supabase.from('stock').select('cantidad_actual, cantidad_minima')
 
-    // Calculations
-    const totalIncome = incomeData?.reduce((acc: number, curr: any) => acc + (curr.monto || 0), 0) || 0
-    const lowStockCount = (stockItems as any[])?.filter(i => (i.cantidad_actual || 0) <= (i.cantidad_minima || 0)).length || 0
+      const totalIncome = incomeData?.reduce((acc: number, curr: any) => acc + (curr.monto || 0), 0) || 0
+      const lowStockCount = (stockItems as any[])?.filter(i => (i.cantidad_actual || 0) <= (i.cantidad_minima || 0)).length || 0
 
-    setStats({
-      totalClients: clientsCount || 0,
-      activeJobs: jobsCount || 0,
-      monthlyIncome: totalIncome,
-      lowStock: lowStockCount
-    })
+      setStats({
+        totalClients: clientsCount || 0,
+        activeJobs: jobsCount || 0,
+        monthlyIncome: totalIncome,
+        lowStock: lowStockCount
+      })
 
-    // 2. Fetch recent upcoming jobs
-    const { data: jobs } = await supabase
-        .from('trabajos')
-        .select(`
-            *,
-            clientes (nombre, apellido),
-            catalogo_servicios (nombre)
-        `)
-        .neq('estado', 'completado')
-        .order('fecha_servicio', { ascending: true })
-        .limit(5)
-    
-    if (jobs) setRecentJobs(jobs)
+      const { data: jobs } = await supabase
+          .from('trabajos')
+          .select(`
+              *,
+              clientes (nombre, apellido),
+              catalogo_servicios (nombre)
+          `)
+          .neq('estado', 'completado')
+          .order('fecha_servicio', { ascending: true })
+          .limit(5)
+      
+      if (jobs) setRecentJobs(jobs)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-    setLoading(false)
+  if (showWelcomeLoader) {
+    return <WelcomePressureWasherLoader onComplete={() => {
+      setShowWelcomeLoader(false)
+      sessionStorage.setItem('epotech_dashboard_loaded', 'true')
+    }} />
   }
 
   return (
@@ -316,9 +329,16 @@ export default function DashboardPage() {
                 {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
               </span>
             </div>
-            <div className="h-7 w-7 rounded-full bg-[#046bd2] text-white flex items-center justify-center font-extrabold text-[11px] shadow-lg shadow-blue-500/20 shrink-0 border border-white/20">
-              S
-            </div>
+            <Link 
+              href="/ajustes" 
+              className="h-7.5 w-7.5 rounded-full overflow-hidden shadow-lg shadow-blue-500/10 hover:shadow-blue-500/25 shrink-0 border border-slate-200 hover:border-[#00C9E0] transition-all hover:scale-105 active:scale-95 duration-200 relative group block"
+            >
+              <img 
+                src="/assets/profile.jpg" 
+                alt="Sebastián" 
+                className="h-full w-full object-cover" 
+              />
+            </Link>
           </div>
         </div>
       </header>
@@ -663,6 +683,388 @@ export default function DashboardPage() {
           </div>
         </div>
       </main>
+    </div>
+  )
+}
+
+function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void }) {
+  const [animationStage, setAnimationStage] = useState<'idle' | 'spraying' | 'flooding' | 'clearing'>('idle')
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  // Use a ref so the timer useEffect never re-runs due to onComplete changing identity each render.
+  // This was the root cause of the 3-4 second water delay on mobile: timers were being reset constantly.
+  const onCompleteRef = useRef(onComplete)
+  useEffect(() => { onCompleteRef.current = onComplete }, [onComplete])
+
+  useEffect(() => {
+    // 1. Start spraying immediately
+    const t1 = setTimeout(() => setAnimationStage('spraying'), 50)
+    // 2. Full water flooding effect on glass at 550ms
+    const t2 = setTimeout(() => setAnimationStage('flooding'), 550)
+    // 3. Clear/wipe screen with high-pressure sheet sweep at 1100ms
+    const t3 = setTimeout(() => setAnimationStage('clearing'), 1100)
+    // 4. Complete transition at 1750ms
+    const t4 = setTimeout(() => {
+      onCompleteRef.current()
+    }, 1750)
+
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+      clearTimeout(t3)
+      clearTimeout(t4)
+    }
+  }, []) // Empty array: runs exactly once, never resets
+
+  // Canvas particle simulation for high-pressure water spray
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    let animationFrameId: number
+    let width = (canvas.width = window.innerWidth)
+    let height = (canvas.height = window.innerHeight)
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth
+      height = canvas.height = window.innerHeight
+    }
+    window.addEventListener('resize', handleResize)
+
+    // Particle definitions
+    interface SprayParticle {
+      x: number
+      y: number
+      vx: number
+      vy: number
+      size: number
+      alpha: number
+      color: string
+      life: number
+      maxLife: number
+    }
+
+    interface GlassDrop {
+      x: number
+      y: number
+      r: number
+      vy: number
+      vx: number
+      alpha: number
+      targetY: number
+      trail: { x: number; y: number; r: number }[]
+    }
+
+    const sprayParticles: SprayParticle[] = []
+    const glassDrops: GlassDrop[] = []
+
+    // Wand tip coordinates (bottom right, pointing to center-left)
+    // The PNG image is 320x320px inside the container.
+    // The nozzle tip points to the upper-left corner of the image bounding box, roughly at (32px, 32px) relative to container top-left.
+    const getWandTip = () => {
+      // Base coordinates from the bottom right viewport corner
+      const containerLeft = window.innerWidth - 320 + 40; // 320px width, -40px right offset
+      const containerTop = window.innerHeight - 320 + 40;  // 320px height, -40px bottom offset
+
+      // Orifice tip coordinates relative to top-left of container for PNG image
+      const tipOffsetX = 32.0;
+      const tipOffsetY = 32.0;
+
+      const tipX = containerLeft + tipOffsetX;
+      const tipY = containerTop + tipOffsetY;
+
+      return { x: tipX, y: tipY };
+    }
+
+    // Dynamically adjust the spray direction based on mobile vs desktop.
+    // On mobile, the gun sits lower, so shooting straight to height/2 goes upward.
+    // We target a point further to the left (x: 15% width, y: 35% height) on narrow screens to achieve a natural diagonal spray.
+    const isMobile = window.innerWidth < 768
+    const sprayTarget = {
+      x: isMobile ? window.innerWidth * 0.15 : window.innerWidth / 2,
+      y: isMobile ? window.innerHeight * 0.35 : window.innerHeight / 2
+    }
+
+    // Animation Loop
+    const render = () => {
+      ctx.clearRect(0, 0, width, height)
+
+      const tip = getWandTip()
+
+      // 1. Generate spray particles when spraying/flooding
+      if (animationStage === 'spraying' || animationStage === 'flooding') {
+        const count = animationStage === 'flooding' ? 25 : 12
+        for (let i = 0; i < count; i++) {
+          // Calculate angle from nozzle tip to center screen with random fan spread
+          const angle = Math.atan2(sprayTarget.y - tip.y, sprayTarget.x - tip.x)
+          const spread = 0.28 // 25 degree fan angle
+          const finalAngle = angle + (Math.random() - 0.5) * spread
+          
+          const speed = Math.random() * 30 + 35
+          sprayParticles.push({
+            x: tip.x,
+            y: tip.y,
+            vx: Math.cos(finalAngle) * speed,
+            vy: Math.sin(finalAngle) * speed,
+            size: Math.random() * 3 + 1,
+            alpha: Math.random() * 0.4 + 0.6,
+            color: Math.random() > 0.4 ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0, 201, 224, 0.75)',
+            life: 0,
+            maxLife: Math.random() * 12 + 15
+          })
+        }
+      }
+
+      // 2. Generate dripping glass drops when screen is flooded
+      if (animationStage === 'flooding') {
+        if (Math.random() < 0.35 && glassDrops.length < 90) {
+          glassDrops.push({
+            x: Math.random() * width,
+            y: Math.random() * (height * 0.5), // spawn upper half
+            r: Math.random() * 4 + 2,
+            vy: Math.random() * 1.5 + 0.8,
+            vx: (Math.random() - 0.5) * 0.2,
+            alpha: Math.random() * 0.3 + 0.6,
+            targetY: height + 20,
+            trail: []
+          })
+        }
+      }
+
+      // 3. Update & Draw high-pressure spray cone particles
+      for (let i = sprayParticles.length - 1; i >= 0; i--) {
+        const p = sprayParticles[i]
+        p.x += p.vx
+        p.y += p.vy
+        
+        // Dynamic air resistance & gravity
+        p.vx *= 0.98
+        p.vy *= 0.98
+        p.vy += 0.05 // subtle gravity bend
+        p.life++
+
+        // Draw particle
+        ctx.beginPath()
+        // Mist effect: particles grow and fade out
+        const currentSize = p.size * (1 + (p.life / p.maxLife) * 4)
+        const currentAlpha = p.alpha * (1 - p.life / p.maxLife)
+        
+        // Radial glow for realistic water mist
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, currentSize)
+        gradient.addColorStop(0, p.color.replace(/[\d.]+\)$/, `${currentAlpha})`))
+        gradient.addColorStop(1, 'rgba(255,255,255,0)')
+        
+        ctx.fillStyle = gradient
+        ctx.arc(p.x, p.y, currentSize, 0, Math.PI * 2)
+        ctx.fill()
+
+        // Splash on screen collision detection (around 70% life, they "hit" the glass)
+        if (p.life > p.maxLife * 0.65 && Math.random() < 0.12 && glassDrops.length < 120) {
+          glassDrops.push({
+            x: p.x + (Math.random() - 0.5) * 40,
+            y: p.y + (Math.random() - 0.5) * 40,
+            r: Math.random() * 2.5 + 1.2,
+            vy: Math.random() * 2 + 1.5, // fast runs from splash impact
+            vx: p.vx * 0.04 + (Math.random() - 0.5) * 0.4,
+            alpha: Math.random() * 0.4 + 0.5,
+            targetY: height + 20,
+            trail: []
+          })
+        }
+
+        if (p.life >= p.maxLife) {
+          sprayParticles.splice(i, 1)
+        }
+      }
+
+      // 4. Update & Draw realistic refractive glass droplets
+      for (let i = glassDrops.length - 1; i >= 0; i--) {
+        const d = glassDrops[i]
+        
+        // Add current pos to trail for wet streak look
+        if (Math.random() < 0.4) {
+          d.trail.push({ x: d.x, y: d.y, r: d.r * 0.8 })
+          if (d.trail.length > 12) d.trail.shift()
+        }
+
+        d.y += d.vy
+        d.x += d.vx
+        
+        // Gravity acceleration & drag
+        d.vy += 0.04
+        d.vy *= 0.98
+
+        // Random organic crawling pattern
+        if (Math.random() < 0.08) {
+          d.vx += (Math.random() - 0.5) * 0.3
+        }
+
+        // Draw trail (wet streak on glass)
+        if (d.trail.length > 0) {
+          ctx.beginPath()
+          ctx.strokeStyle = `rgba(255, 255, 255, ${d.alpha * 0.15})`
+          ctx.lineWidth = d.r * 1.2
+          ctx.lineCap = 'round'
+          ctx.lineJoin = 'round'
+          ctx.moveTo(d.trail[0].x, d.trail[0].y)
+          for (let j = 1; j < d.trail.length; j++) {
+            ctx.lineTo(d.trail[j].x, d.trail[j].y)
+          }
+          ctx.stroke()
+        }
+
+        // Draw 3D refractive drop using high-fidelity gradient
+        ctx.beginPath()
+        // Create realistic drop shadow and light refractions
+        // Specs: 3D spheres on screen with specular top-left highlight and bottom shadow
+        const dropGrad = ctx.createRadialGradient(
+          d.x - d.r * 0.25,
+          d.y - d.r * 0.25,
+          d.r * 0.1,
+          d.x,
+          d.y,
+          d.r
+        )
+        dropGrad.addColorStop(0, 'rgba(255, 255, 255, 0.9)') // specular shine highlight
+        dropGrad.addColorStop(0.3, 'rgba(230, 245, 255, 0.4)')
+        dropGrad.addColorStop(0.85, 'rgba(3, 11, 23, 0.12)') // body refractive translucency
+        dropGrad.addColorStop(1, 'rgba(0, 201, 224, 0.35)') // color border fringe matching Epotech branding
+        
+        ctx.fillStyle = dropGrad
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2)
+        ctx.fill()
+
+        // Subtle dark shadow outline at bottom edge
+        ctx.beginPath()
+        ctx.strokeStyle = `rgba(0, 0, 0, ${d.alpha * 0.2})`
+        ctx.lineWidth = 0.5
+        ctx.arc(d.x, d.y + 0.5, d.r, 0, Math.PI, false)
+        ctx.stroke()
+
+        if (d.y > d.targetY) {
+          glassDrops.splice(i, 1)
+        }
+      }
+
+      // 5. Draw canvas high-pressure sweep ripple line during clearing stage
+      if (animationStage === 'clearing') {
+        // Clear droplets in the wake of the sweep
+        // Note: the clipPath CSS handles the screen wipe, we clear drops on the canvas
+        // sweep is synchronized left-to-right
+      }
+
+      animationFrameId = requestAnimationFrame(render)
+    }
+
+    render()
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      cancelAnimationFrame(animationFrameId)
+    }
+  }, [animationStage])
+
+  return (
+    <div 
+      className={`fixed inset-0 z-[9999] bg-[#02070f] select-none overflow-hidden font-sans transition-all duration-[650ms] cubic-bezier(0.4, 0, 0.2, 1)`}
+      style={{
+        clipPath: animationStage === 'clearing' ? 'inset(0 0 0 100%)' : 'inset(0 0 0 0)'
+      }}
+    >
+      {/* High-fidelity dark ambient glowing environment */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] rounded-full bg-gradient-to-tr from-[#046bd2]/8 to-[#00C9E0]/8 blur-[180px] pointer-events-none z-10" />
+
+      {/* Glass overlay grid pattern for realistic depth */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-30 z-20" />
+
+      {/* Canvas for rendering fluid dynamics / spray particles & refractive water drops */}
+      <canvas 
+        ref={canvasRef} 
+        className="absolute inset-0 z-30 pointer-events-none mix-blend-screen"
+      />
+
+      {/* High-pressure visual sheet line (Squeegee sweep) aligned with clipPath transition */}
+      <div 
+        className={`absolute top-0 bottom-0 w-[6px] bg-white transition-all duration-[650ms] cubic-bezier(0.4, 0, 0.2, 1) z-40 pointer-events-none`}
+        style={{
+          left: animationStage === 'clearing' ? '100%' : '0%',
+          boxShadow: '0 0 30px #00C9E0, -10px 0 50px rgba(0, 201, 224, 0.8), -25px 0 100px rgba(255,255,255,0.9), 0 0 10px white',
+          opacity: animationStage === 'clearing' ? 1 : 0
+        }}
+      >
+        {/* Spray residue mist behind the squeegee line */}
+        <div className="absolute top-0 bottom-0 right-full w-[240px] bg-gradient-to-r from-transparent via-[#00C9E0]/15 to-[#00C9E0]/30 blur-[15px] pointer-events-none" />
+      </div>
+
+      {/* Wet / Blurry Glass backdrop when screen gets flooded */}
+      <div 
+        className={`absolute inset-0 bg-[#030b17]/10 backdrop-blur-[7px] transition-opacity duration-1000 ease-in-out pointer-events-none z-25
+          ${animationStage === 'flooding' ? 'opacity-100' : 'opacity-0'}
+        `}
+      />
+
+      {/* 3D First Person Steel Nozzle Wand (extends from bottom-right corner) */}
+      <div 
+        className={`fixed bottom-[-40px] right-[-40px] w-[320px] h-[320px] z-50 pointer-events-none
+          ${animationStage === 'clearing' ? 'transition-all duration-[900ms] ease-out translate-x-40 translate-y-40 opacity-0' : ''}
+        `}
+        style={{
+          animation: animationStage === 'clearing'
+            ? 'none'
+            : (animationStage === 'spraying' || animationStage === 'flooding')
+              ? 'nozzle-recoil 0.08s infinite alternate'
+              : 'gun-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards'
+        }}
+      >
+        <img
+          src="/assets/real_gun.png"
+          alt="Epotech Pressure Gun"
+          className="pressure-gun w-full h-full object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.65)]"
+        />
+
+        {/* Dynamic bright spark flare at high-pressure jet orifice */}
+        {(animationStage === 'spraying' || animationStage === 'flooding') && (
+          <div className="absolute top-[32px] left-[32px] -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full blur-[2px] animate-ping opacity-95 z-30 pointer-events-none">
+            <div className="w-full h-full bg-[#00C9E0]/40 rounded-full scale-150 blur-[5px]" />
+          </div>
+        )}
+      </div>
+
+      {/* Elegant, clean loading copy (Minimal, sleek corporate styling) */}
+      <div 
+        className={`absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-35 transition-all duration-[800ms]
+          ${animationStage === 'flooding' ? 'opacity-0 scale-95 blur-[8px]' : 'opacity-100 scale-100'}
+        `}
+      >
+        <div className="flex flex-col items-center gap-6 mt-[-10vh]">
+          {/* Pulsing professional ring loader */}
+          <div className="relative w-20 h-20 flex items-center justify-center">
+            <div className="absolute inset-0 rounded-full border-[2px] border-slate-800" />
+            <div className="absolute inset-0 rounded-full border-[2px] border-t-[#00C9E0] border-r-[#046bd2] animate-spin duration-700" />
+            <Droplets className="w-7 h-7 text-[#00C9E0] animate-pulse" />
+          </div>
+
+          <div className="text-center">
+            <h2 className="text-white font-extrabold text-sm uppercase tracking-[0.35em] bg-gradient-to-r from-[#00C9E0] via-white to-[#046bd2] bg-clip-text text-transparent">
+              EPOTECH SOLUTIONS
+            </h2>
+            <p className="text-slate-400 text-[12px] font-medium uppercase mt-2">Cargando...</p>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes nozzle-recoil {
+          0%   { transform: translate(0px, 0px) rotate(0deg); }
+          100% { transform: translate(-1.2px, 0.8px) rotate(-0.15deg); }
+        }
+        @keyframes gun-enter {
+          0%   { transform: translate(120px, 120px) rotate(8deg); opacity: 0; }
+          60%  { opacity: 1; }
+          100% { transform: translate(0px, 0px) rotate(0deg); opacity: 1; }
+        }
+      `}</style>
     </div>
   )
 }

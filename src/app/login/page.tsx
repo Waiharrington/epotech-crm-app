@@ -287,7 +287,7 @@ export default function LoginPage() {
                 {/* Real Logo - Enlarged for greater brand presence */}
                 <div className="flex justify-center mb-1">
                   <img 
-                    src="/assets/logo.png" 
+                    src="/assets/logo_horizontal.png" 
                     alt="Epotech Solutions Logo" 
                     className="h-16 sm:h-[70px] w-auto object-contain transition-transform duration-300 hover:scale-101" 
                   />

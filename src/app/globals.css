@@ -201,15 +201,21 @@
 
 /* Glassmorphism Hover/Active States */
 .sidebar-link-active {
-  background: linear-gradient(90deg, rgba(4, 107, 210, 0.22) 0%, rgba(0, 201, 224, 0.32) 100%);
-  border: 1.2px solid rgba(0, 201, 224, 0.45);
-  box-shadow: 0 0 18px rgba(0, 201, 224, 0.25), inset 0 0 8px rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.2), 
+    inset 0 1px 0px rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .sidebar-premium-bg {
   background-color: #030b17 !important;
   background-image: 
-    radial-gradient(circle at 100% 95%, rgba(0, 201, 224, 0.38) 0%, rgba(4, 107, 210, 0.18) 30%, transparent 60%),
+    radial-gradient(circle at 100% 95%, rgba(0, 201, 224, 0.38) 0%, rgba(0, 151, 167, 0.18) 30%, transparent 60%),
     radial-gradient(circle at 0% 0%, rgba(0, 201, 224, 0.08) 0%, transparent 45%),
     linear-gradient(to bottom, #030b17 35%, transparent 75%),
     radial-gradient(circle, rgba(0, 201, 224, 0.16) 1.5px, transparent 1.5px) !important;

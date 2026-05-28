@@ -97,21 +97,25 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     style={{ animationDelay: `${index * 50}ms` }}
                     className={cn(
                       "flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-300 ease-out group relative overflow-hidden animate-sidebar-item",
-                      "before:absolute before:left-0 before:top-1/4 before:bottom-1/4 before:w-1 before:rounded-r-full before:bg-primary before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300",
                       isActive
-                        ? "sidebar-link-active text-white font-semibold shadow-lg shadow-primary/20"
-                        : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground hover:translate-x-1"
+                        ? "sidebar-link-active text-white font-semibold"
+                        : "text-sidebar-foreground/70 hover:bg-white/[0.03] hover:text-sidebar-foreground hover:translate-x-1"
                     )}
                   >
-                    <item.icon className={cn(
-                      "h-[17px] w-[17px] transition-all duration-300 flex-shrink-0",
-                      item.iconClass,
-                      isActive ? "text-white scale-110" : "text-sidebar-foreground/50 group-hover:text-primary"
+                    <div className={cn(
+                      "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out",
+                      isActive 
+                        ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
+                        : "scale-y-0 opacity-0 group-hover:scale-y-[1.1] group-hover:opacity-40"
                     )} />
-                    <span className="text-[13px] relative z-10">{item.name}</span>
-                    {isActive && (
-                      <span className="absolute right-3.5 h-2 w-2 rounded-full bg-[#00C9E0] shadow-[0_0_8px_rgba(0,201,224,0.9)] animate-pulse" />
-                    )}
+                    <item.icon className={cn(
+                       "h-[17px] w-[17px] transition-all duration-300 flex-shrink-0 relative z-10",
+                       item.iconClass,
+                       isActive 
+                         ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_8px_rgba(0,201,224,0.4)]" 
+                         : "text-sidebar-foreground/50 group-hover:text-primary group-hover:scale-105"
+                    )} />
+                    <span className="text-[13px] relative z-10 transition-colors duration-300">{item.name}</span>
                   </Link>
                 )
               })}
@@ -133,21 +137,25 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     style={{ animationDelay: `${globalIndex * 50}ms` }}
                     className={cn(
                       "flex items-center gap-3 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-300 ease-out group relative overflow-hidden animate-sidebar-item",
-                      "before:absolute before:left-0 before:top-1/4 before:bottom-1/4 before:w-1 before:rounded-r-full before:bg-primary before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300",
                       isActive
-                        ? "sidebar-link-active text-white font-semibold shadow-lg shadow-primary/20"
-                        : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground hover:translate-x-1"
+                        ? "sidebar-link-active text-white font-semibold"
+                        : "text-sidebar-foreground/70 hover:bg-white/[0.03] hover:text-sidebar-foreground hover:translate-x-1"
                     )}
                   >
-                    <item.icon className={cn(
-                      "h-[17px] w-[17px] transition-all duration-300 flex-shrink-0",
-                      item.iconClass,
-                      isActive ? "text-white scale-110" : "text-sidebar-foreground/50 group-hover:text-primary"
+                    <div className={cn(
+                      "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out",
+                      isActive 
+                        ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
+                        : "scale-y-0 opacity-0 group-hover:scale-y-[1.1] group-hover:opacity-40"
                     )} />
-                    <span className="text-[13px] relative z-10">{item.name}</span>
-                    {isActive && (
-                      <span className="absolute right-3.5 h-2 w-2 rounded-full bg-[#00C9E0] shadow-[0_0_8px_rgba(0,201,224,0.9)] animate-pulse" />
-                    )}
+                    <item.icon className={cn(
+                       "h-[17px] w-[17px] transition-all duration-300 flex-shrink-0 relative z-10",
+                       item.iconClass,
+                       isActive 
+                         ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_8px_rgba(0,201,224,0.4)]" 
+                         : "text-sidebar-foreground/50 group-hover:text-primary group-hover:scale-105"
+                    )} />
+                    <span className="text-[13px] relative z-10 transition-colors duration-300">{item.name}</span>
                   </Link>
                 )
               })}
@@ -176,8 +184,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-sidebar-border bg-sidebar/95 backdrop-blur-xl px-2 py-2 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
-        <div className="flex items-center justify-around max-w-lg mx-auto">
+      <nav className="md:hidden fixed bottom-5 left-4 right-4 z-50 h-16 rounded-2xl border border-sidebar-border/10 bg-sidebar/85 backdrop-blur-xl px-2 shadow-[0_12px_40px_rgba(0,0,0,0.3)] flex items-center justify-around">
+        <div className="flex items-center justify-around w-full max-w-lg mx-auto h-full">
           {mainNavItems.map((item) => {
             const isActive = pathname.startsWith(item.href)
             return (
@@ -185,22 +193,30 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-1 px-3 py-1.5 rounded-xl transition-all duration-200 ease-out",
+                  "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl transition-all duration-300 ease-out relative group",
                   isActive
-                    ? "text-primary font-semibold"
-                    : "text-sidebar-foreground/50 hover:text-sidebar-foreground"
+                    ? "sidebar-link-active text-white font-semibold scale-105 shadow-md"
+                    : "text-sidebar-foreground/50 hover:bg-white/[0.03] hover:text-sidebar-foreground hover:scale-102"
                 )}
               >
-                <item.icon className="h-5 w-5" />
-                <span className="text-[10px] font-medium tracking-tight">{item.name}</span>
+                <item.icon className={cn(
+                  "h-5 w-5 transition-all duration-300 relative z-10",
+                  isActive 
+                    ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_6px_rgba(0,201,224,0.4)]" 
+                    : "group-hover:scale-105 group-hover:text-sidebar-foreground"
+                )} />
+                <span className="text-[10px] font-medium tracking-tight relative z-10 transition-colors duration-300">{item.name}</span>
+                {isActive && (
+                  <div className="absolute bottom-1 w-4 h-[2px] rounded-full bg-[#00C9E0] shadow-[0_0_6px_rgba(0,201,224,0.7)] transition-all duration-300" />
+                )}
               </Link>
             )
           })}
           
           <Sheet>
             <SheetTrigger asChild>
-              <button className="flex flex-col items-center justify-center gap-1 px-3 py-1.5 rounded-xl text-sidebar-foreground/50 hover:text-sidebar-foreground transition-all duration-200">
-                <MoreHorizontal className="h-5.5 w-5.5" />
+              <button className="flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl text-sidebar-foreground/50 hover:bg-white/[0.03] hover:text-sidebar-foreground active:scale-95 transition-all duration-300 group relative">
+                <MoreHorizontal className="h-5.5 w-5.5 transition-transform duration-300 group-hover:scale-105" />
                 <span className="text-[10px] font-medium tracking-tight">Más</span>
               </button>
             </SheetTrigger>
@@ -221,14 +237,25 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center gap-4 px-4 py-3 text-sm font-medium transition-all duration-200 rounded-xl",
+                        "flex items-center gap-4 px-4 py-3 text-sm font-medium transition-all duration-300 ease-out group relative overflow-hidden rounded-xl",
                         isActive
-                          ? "bg-primary text-white font-semibold"
-                          : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                          ? "sidebar-link-active text-white font-semibold"
+                          : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground hover:translate-x-1"
                       )}
                     >
-                      <item.icon className={cn("h-[18px] w-[18px]", isActive ? "text-white" : "text-primary/70")} />
-                      {item.name}
+                      <div className={cn(
+                        "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out",
+                        isActive 
+                          ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
+                          : "scale-y-0 opacity-0 group-hover:scale-y-[1.1] group-hover:opacity-40"
+                      )} />
+                      <item.icon className={cn(
+                        "h-[18px] w-[18px] transition-all duration-300 relative z-10",
+                        isActive 
+                          ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_8px_rgba(0,201,224,0.4)]" 
+                          : "text-sidebar-foreground/50 group-hover:text-primary group-hover:scale-105"
+                      )} />
+                      <span className="relative z-10 transition-colors duration-300">{item.name}</span>
                     </Link>
                   )
                 })}

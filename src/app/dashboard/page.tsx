@@ -37,6 +37,36 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [showWelcomeLoader, setShowWelcomeLoader] = useState(true)
   
+  // Dynamic profile picture state with synchronization
+  const [profilePic, setProfilePic] = useState('/assets/profile.jpg')
+
+  useEffect(() => {
+    const savedPic = localStorage.getItem('epotech_profile_pic')
+    if (savedPic) {
+      setProfilePic(savedPic)
+    }
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'epotech_profile_pic') {
+        setProfilePic(e.newValue || '/assets/profile.jpg')
+      }
+    }
+
+    const handleCustomPicChange = () => {
+      const pic = localStorage.getItem('epotech_profile_pic')
+      setProfilePic(pic || '/assets/profile.jpg')
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    window.addEventListener('epotech_profile_pic_updated', handleCustomPicChange)
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('epotech_profile_pic_updated', handleCustomPicChange)
+    }
+  }, [])
+
+  
   // Smart Utah Time & Weather greeting state
   const [greetingState, setGreetingState] = useState({
     text: 'Hola, Sebastián',
@@ -68,9 +98,9 @@ export default function DashboardPage() {
             text: '¡Buenas tardes, Sebastián!',
             sub: 'El motor de tu negocio sigue con toda la presión hoy.',
             icon: 'sun',
-            glowClass: 'bg-[#046bd2]/8',
+            glowClass: 'bg-[#0097A7]/8',
             titleColor: 'text-[#0B1E3F]',
-            iconColor: 'text-[#046bd2]'
+            iconColor: 'text-[#0097A7]'
           })
         } else {
           setGreetingState({
@@ -98,9 +128,9 @@ export default function DashboardPage() {
             text: '¡Buenas tardes, Sebastián!',
             sub: 'El motor de tu negocio sigue con toda la presión hoy.',
             icon: 'sun',
-            glowClass: 'bg-[#046bd2]/8',
+            glowClass: 'bg-[#0097A7]/8',
             titleColor: 'text-[#0B1E3F]',
-            iconColor: 'text-[#046bd2]'
+            iconColor: 'text-[#0097A7]'
           })
         } else {
           setGreetingState({
@@ -296,7 +326,7 @@ export default function DashboardPage() {
     <div className="flex flex-col h-screen max-h-screen bg-[#F0F5FA] overflow-hidden p-4.5 gap-4 relative">
       {/* Premium Ambient Background Lighting - Dynamic color shifts based on Utah Time */}
       <div className={`absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full ${greetingState.glowClass} blur-[130px] pointer-events-none z-0 transition-all duration-1000`} />
-      <div className="absolute bottom-[-10%] left-[20%] w-[45%] h-[45%] rounded-full bg-[#046bd2]/6 blur-[130px] pointer-events-none z-0" />
+      <div className="absolute bottom-[-10%] left-[20%] w-[45%] h-[45%] rounded-full bg-[#0097A7]/6 blur-[130px] pointer-events-none z-0" />
 
       {/* Premium Compact Header */}
       <header className="bg-transparent shrink-0 relative z-10 animate-dashboard-item" style={{ animationDelay: '100ms' }}>
@@ -331,10 +361,10 @@ export default function DashboardPage() {
             </div>
             <Link 
               href="/ajustes" 
-              className="h-7.5 w-7.5 rounded-full overflow-hidden shadow-lg shadow-blue-500/10 hover:shadow-blue-500/25 shrink-0 border border-slate-200 hover:border-[#00C9E0] transition-all hover:scale-105 active:scale-95 duration-200 relative group block"
+              className="h-7.5 w-7.5 rounded-full overflow-hidden shadow-lg shadow-cyan-500/10 hover:shadow-cyan-500/25 shrink-0 border border-slate-200 hover:border-[#00C9E0] transition-all hover:scale-105 active:scale-95 duration-200 relative group block"
             >
               <img 
-                src="/assets/profile.jpg" 
+                src={profilePic} 
                 alt="Sebastián" 
                 className="h-full w-full object-cover" 
               />
@@ -348,7 +378,7 @@ export default function DashboardPage() {
         {/* Statistics Grid */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 shrink-0">
           {/* Card: Clientes Totales */}
-          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item" style={{ animationDelay: '150ms' }}>
+          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/20 hover:shadow-[0_8px_20px_rgba(0,151,167,0.03)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item" style={{ animationDelay: '150ms' }}>
             <div className="p-3.5 flex items-center justify-between">
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Clientes Totales</p>
@@ -357,14 +387,14 @@ export default function DashboardPage() {
                   +2 nuevos esta semana
                 </p>
               </div>
-              <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E5F2FF] group-hover:border-[#046bd2]/10">
-                <Users className="h-4 w-4 text-slate-500 group-hover:text-[#046bd2] transition-colors" />
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/10">
+                <Users className="h-4 w-4 text-slate-500 group-hover:text-[#0097A7] transition-colors" />
               </div>
             </div>
           </div>
 
           {/* Card: Trabajos Activos */}
-          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item" style={{ animationDelay: '200ms' }}>
+          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/20 hover:shadow-[0_8px_20px_rgba(0,151,167,0.03)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item" style={{ animationDelay: '200ms' }}>
             <div className="p-3.5 flex items-center justify-between">
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Trabajos Activos</p>
@@ -373,14 +403,14 @@ export default function DashboardPage() {
                   En el tablero Kanban
                 </p>
               </div>
-              <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E5F2FF] group-hover:border-[#046bd2]/10">
-                <Briefcase className="h-4 w-4 text-slate-500 group-hover:text-[#046bd2] transition-colors" />
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/10">
+                <Briefcase className="h-4 w-4 text-slate-500 group-hover:text-[#0097A7] transition-colors" />
               </div>
             </div>
           </div>
 
           {/* Card: Ingresos Totales */}
-          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item" style={{ animationDelay: '250ms' }}>
+          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/20 hover:shadow-[0_8px_20px_rgba(0,151,167,0.03)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item" style={{ animationDelay: '250ms' }}>
             <div className="p-3.5 flex items-center justify-between">
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Ingresos Totales</p>
@@ -389,14 +419,14 @@ export default function DashboardPage() {
                   Calculado de la Caja
                 </p>
               </div>
-              <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E5F2FF] group-hover:border-[#046bd2]/10">
-                <Wallet className="h-4 w-4 text-slate-500 group-hover:text-[#046bd2] transition-colors" />
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/10">
+                <Wallet className="h-4 w-4 text-slate-500 group-hover:text-[#0097A7] transition-colors" />
               </div>
             </div>
           </div>
 
           {/* Card: Alertas Stock */}
-          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item" style={{ animationDelay: '300ms' }}>
+          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/20 hover:shadow-[0_8px_20px_rgba(0,151,167,0.03)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item" style={{ animationDelay: '300ms' }}>
             <div className="p-3.5 flex items-center justify-between">
               <div className="flex-1 min-w-0">
                 <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Alertas Stock</p>
@@ -405,8 +435,8 @@ export default function DashboardPage() {
                   {stats.lowStock > 0 ? `${stats.lowStock} por reponer` : 'Inventario sano'}
                 </p>
               </div>
-              <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E5F2FF] group-hover:border-[#046bd2]/10">
-                <AlertTriangle className={`h-4 w-4 transition-colors ${stats.lowStock > 0 ? 'text-[#046bd2]' : 'text-slate-500 group-hover:text-[#046bd2]'}`} />
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/10">
+                <AlertTriangle className={`h-4 w-4 transition-colors ${stats.lowStock > 0 ? 'text-[#0097A7]' : 'text-slate-500 group-hover:text-[#0097A7]'}`} />
               </div>
             </div>
           </div>
@@ -429,10 +459,10 @@ export default function DashboardPage() {
             
             <div className="p-3 flex-1 overflow-y-auto no-scrollbar space-y-2 min-h-0 bg-gradient-to-b from-white to-slate-50/30">
               {loading ? (
-                <div className="flex justify-center py-6"><Loader2 className="h-5 w-5 text-[#046bd2] animate-spin" /></div>
+                <div className="flex justify-center py-6"><Loader2 className="h-5 w-5 text-[#0097A7] animate-spin" /></div>
               ) : recentJobs.length > 0 ? (
                 recentJobs.map(job => (
-                  <div key={job.id} className="flex items-center justify-between py-2 px-3 rounded-xl border border-slate-100/60 bg-white hover:bg-slate-50/80 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(4,107,210,0.02)] transition-all duration-300 group">
+                  <div key={job.id} className="flex items-center justify-between py-2 px-3 rounded-xl border border-slate-100/60 bg-white hover:bg-slate-50/80 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,151,167,0.02)] transition-all duration-300 group">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                       {/* Date block */}
                       <div className="h-10 w-10 rounded-xl overflow-hidden border border-slate-100 flex flex-col shrink-0 transition-transform group-hover:scale-102 group-hover:shadow-sm">
@@ -447,8 +477,8 @@ export default function DashboardPage() {
                       {/* detail */}
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-extrabold text-[11.5px] text-slate-800 group-hover:text-[#046bd2] transition-colors truncate">{job.catalogo_servicios?.nombre}</span>
-                          <span className="px-2 py-0.5 text-[6.5px] font-black uppercase rounded-full bg-[#E5F2FF] text-[#046bd2] tracking-widest border border-[#046bd2]/8">
+                          <span className="font-extrabold text-[11.5px] text-slate-800 group-hover:text-[#0097A7] transition-colors truncate">{job.catalogo_servicios?.nombre}</span>
+                          <span className="px-2 py-0.5 text-[6.5px] font-black uppercase rounded-full bg-[#E6F9FB] text-[#0097A7] tracking-widest border border-[#0097A7]/8">
                             {job.estado === 'en_progreso' ? 'EN_PROGRESO' : job.estado === 'pendiente' ? 'PENDIENTE' : job.estado}
                           </span>
                         </div>
@@ -476,56 +506,56 @@ export default function DashboardPage() {
           </div>
 
           {/* Acciones Rápidas */}
-          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col gap-2.5 min-h-0 animate-dashboard-item" style={{ animationDelay: '400ms' }}>
-            <div className="flex flex-col min-h-0 flex-1 overflow-y-auto no-scrollbar gap-2">
+          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-2.5 flex flex-col justify-between min-h-0 animate-dashboard-item" style={{ animationDelay: '400ms' }}>
+            <div className="flex flex-col gap-1.5 min-h-0">
               <div>
-                <h3 className="text-xs font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
-                <p className="text-[8.5px] text-slate-400 font-medium">Accesos directos operacionales.</p>
+                <h3 className="text-[10px] font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
+                <p className="text-[8px] text-slate-400 font-medium">Accesos directos operacionales.</p>
               </div>
               
-              <div className="grid gap-1.5">
-                <Link href="/clientes" className="flex items-center justify-between py-1.5 px-3 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E5F2FF]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group">
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)]">
-                      <Users className="h-3.5 w-3.5 text-[#046bd2] transition-transform group-hover:scale-105" />
+              <div className="grid gap-1">
+                <Link href="/clientes" className="flex items-center justify-between py-1 px-2.5 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group">
+                  <div className="flex items-center gap-2">
+                    <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)] shrink-0">
+                      <Users className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[10px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors">Nuevo Cliente</span>
+                    <span className="text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
                   </div>
-                  <ChevronRight className="h-3.5 w-3.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0]" />
+                  <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0" />
                 </Link>
 
-                <Link href="/trabajos" className="flex items-center justify-between py-1.5 px-3 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E5F2FF]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group">
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)]">
-                      <Calendar className="h-3.5 w-3.5 text-[#046bd2] transition-transform group-hover:scale-105" />
+                <Link href="/trabajos" className="flex items-center justify-between py-1 px-2.5 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group">
+                  <div className="flex items-center gap-2">
+                    <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)] shrink-0">
+                      <Calendar className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[10px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors">Agendar Servicio</span>
+                    <span className="text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
                   </div>
-                  <ChevronRight className="h-3.5 w-3.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0]" />
+                  <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0" />
                 </Link>
 
-                <Link href="/cotizaciones" className="flex items-center justify-between py-1.5 px-3 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E5F2FF]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group">
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)]">
-                      <FileText className="h-3.5 w-3.5 text-[#046bd2] transition-transform group-hover:scale-105" />
+                <Link href="/cotizaciones" className="flex items-center justify-between py-1 px-2.5 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group">
+                  <div className="flex items-center gap-2">
+                    <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)] shrink-0">
+                      <FileText className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[10px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors">Nueva Cotización</span>
+                    <span className="text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
                   </div>
-                  <ChevronRight className="h-3.5 w-3.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0]" />
+                  <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0" />
                 </Link>
               </div>
             </div>
 
             {/* Recommended Block */}
-            <div className="pt-2 border-t border-slate-100 shrink-0">
-              <div className="p-1.5 rounded-lg bg-gradient-to-tr from-[#E5F2FF]/40 to-[#E5F2FF]/10 border border-[#E5F2FF]/70 flex items-start gap-2 shadow-sm">
-                <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-white border border-[#E5F2FF] shadow-sm shrink-0">
-                  <Package className="h-3.5 w-3.5 text-[#046bd2]" />
+            <div className="pt-1.5 border-t border-slate-100 shrink-0">
+              <div className="p-1.5 rounded-lg bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB]/70 flex items-start gap-2 shadow-sm">
+                <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-white border border-[#E6F9FB] shadow-sm shrink-0">
+                  <Package className="h-3 w-3 text-[#0097A7]" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[9px] font-extrabold text-[#046bd2] leading-tight">Revisa tu Stock</p>
-                  <p className="text-[7.5px] text-slate-500 mt-0.5 font-medium leading-tight">Tienes consumibles por debajo del mínimo.</p>
-                  <Link href="/stock" className="text-[7.5px] font-black text-[#046bd2] hover:text-[#00C9E0] hover:underline mt-0.5 inline-flex items-center gap-0.5 transition-all">
+                  <p className="text-[9px] font-extrabold text-[#0097A7] leading-tight">Revisa tu Stock</p>
+                  <p className="text-[7.5px] text-slate-500 mt-0.5 font-medium leading-tight">Consumibles por debajo del mínimo.</p>
+                  <Link href="/stock" className="text-[7.5px] font-black text-[#0097A7] hover:text-[#00C9E0] hover:underline mt-0.5 inline-flex items-center gap-0.5 transition-all">
                     Ir al inventario <ChevronRight className="h-2 w-2" />
                   </Link>
                 </div>
@@ -542,12 +572,12 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between pb-2 border-b border-slate-50 shrink-0">
                 <div>
                   <h3 className="text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
-                    <Bell className="h-3.5 w-3.5 text-[#046bd2]" />
+                    <Bell className="h-3.5 w-3.5 text-[#0097A7]" />
                     Recordatorios y Pendientes
                   </h3>
                   <p className="text-[8.5px] text-slate-400 font-medium">Alertas programadas y avisos rápidos de la agenda.</p>
                 </div>
-                <Link href="/recordatorios" className="text-[10px] font-black text-[#046bd2] hover:text-[#00C9E0] hover:underline flex items-center gap-0.5 transition-colors">
+                <Link href="/recordatorios" className="text-[10px] font-black text-[#0097A7] hover:text-[#00C9E0] hover:underline flex items-center gap-0.5 transition-colors">
                   Gestionar <ChevronRight className="h-2.5 w-2.5" />
                 </Link>
               </div>
@@ -558,9 +588,9 @@ export default function DashboardPage() {
                   placeholder="Escribe un pendiente rápido para hoy..."
                   value={quickTitle}
                   onChange={e => setQuickTitle(e.target.value)}
-                  className="text-[10.5px] h-8 px-3 rounded-xl border-slate-200 focus-visible:ring-[#046bd2] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]"
+                  className="text-[10.5px] h-8 px-3 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]"
                 />
-                <Button type="submit" size="sm" className="h-8 text-[10.5px] font-black gap-1 px-3.5 bg-gradient-to-r from-[#00C9E0] to-[#046bd2] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
+                <Button type="submit" size="sm" className="h-8 text-[10.5px] font-black gap-1 px-3.5 bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
                   <Plus className="h-3 w-3 stroke-[3]" /> Agregar
                 </Button>
               </form>
@@ -572,7 +602,7 @@ export default function DashboardPage() {
                     const getPriorityStyle = (p: string) => {
                       switch (p) {
                         case 'urgente': return 'bg-[#0B1E3F] text-white border-[#0B1E3F]/10 hover:bg-[#0B1E3F]/90'
-                        case 'alta': return 'bg-[#E5F2FF] text-[#046bd2] border-[#046bd2]/10 hover:bg-[#E5F2FF]/80'
+                        case 'alta': return 'bg-[#E6F9FB] text-[#0097A7] border-[#0097A7]/10 hover:bg-[#E6F9FB]/80'
                         case 'baja': return 'bg-[#F0F5FA] text-slate-500 border-slate-200 hover:bg-[#F0F5FA]/80'
                         default: return 'bg-slate-50 text-slate-600 border-slate-100 hover:bg-slate-100/50'
                       }
@@ -594,9 +624,9 @@ export default function DashboardPage() {
                           <button
                             type="button"
                             onClick={() => handleToggleReminder(reminder.id)}
-                            className="h-4 w-4 rounded-full border border-slate-300 hover:border-[#046bd2] hover:bg-[#E5F2FF] flex items-center justify-center shrink-0 mt-0.5 transition-colors"
+                            className="h-4 w-4 rounded-full border border-slate-300 hover:border-[#0097A7] hover:bg-[#E6F9FB] flex items-center justify-center shrink-0 mt-0.5 transition-colors"
                           >
-                            <Check className="h-2 w-2 stroke-[3] text-transparent group-hover:text-[#046bd2] transition-colors" />
+                            <Check className="h-2 w-2 stroke-[3] text-transparent group-hover:text-[#0097A7] transition-colors" />
                           </button>
                           <div className="min-w-0">
                             <p className="font-bold text-[11px] text-slate-800 truncate">{reminder.titulo}</p>
@@ -622,7 +652,7 @@ export default function DashboardPage() {
                   })
                 ) : (
                   <div className="text-center py-5 text-[9px] text-slate-400 italic border border-dashed rounded-xl bg-slate-50/30 flex flex-col items-center justify-center gap-1.5">
-                    <div className="h-7 w-7 rounded-full flex items-center justify-center bg-white border border-[#E5F2FF] shadow-sm relative overflow-hidden active-indicator-pulse">
+                    <div className="h-7 w-7 rounded-full flex items-center justify-center bg-white border border-[#E6F9FB] shadow-sm relative overflow-hidden active-indicator-pulse">
                       <Check className="h-3.5 w-3.5 text-[#00C9E0] stroke-[3]" />
                     </div>
                     No hay recordatorios pendientes.
@@ -637,7 +667,7 @@ export default function DashboardPage() {
             <div className="min-h-0 flex flex-col flex-1">
               <div className="pb-2 border-b border-slate-50 shrink-0">
                 <h3 className="text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
-                  <AlertTriangle className="h-3.5 w-3.5 text-[#046bd2]" />
+                  <AlertTriangle className="h-3.5 w-3.5 text-[#0097A7]" />
                   Alertas y Operaciones
                 </h3>
                 <p className="text-[8.5px] text-slate-400 font-medium">Alertas críticas del inventario y flujo de caja diario.</p>
@@ -645,15 +675,15 @@ export default function DashboardPage() {
               
               <div className="space-y-2 pt-2.5 overflow-y-auto no-scrollbar flex-1 min-h-0">
                 {stats.lowStock > 0 ? (
-                  <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/10 flex items-start gap-2 shadow-sm">
-                    <AlertTriangle className="h-4 text-[#046bd2] shrink-0 mt-0.5 animate-pulse" />
+                  <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 flex items-start gap-2 shadow-sm">
+                    <AlertTriangle className="h-4 text-[#0097A7] shrink-0 mt-0.5 animate-pulse" />
                     <div>
                       <p className="font-extrabold text-[10.5px] text-[#0B1E3F]">{stats.lowStock} productos en bajo stock</p>
-                      <p className="text-[8.5px] text-[#046bd2] mt-0.5 font-medium leading-tight">Hay insumos por debajo de su cantidad mínima.</p>
+                      <p className="text-[8.5px] text-[#0097A7] mt-0.5 font-medium leading-tight">Hay insumos por debajo de su cantidad mínima.</p>
                     </div>
                   </div>
                 ) : (
-                  <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E5F2FF]/20 to-white/40 border border-[#046bd2]/5 flex items-start gap-2 shadow-sm">
+                  <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/20 to-white/40 border border-[#0097A7]/5 flex items-start gap-2 shadow-sm">
                     <Check className="h-4 text-[#00C9E0] shrink-0 mt-0.5" />
                     <div>
                       <p className="font-extrabold text-[10.5px] text-[#0B1E3F]">Inventario al día</p>
@@ -662,8 +692,8 @@ export default function DashboardPage() {
                   </div>
                 )}
 
-                <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E5F2FF]/40 to-[#E5F2FF]/10 border border-[#E5F2FF] flex items-start gap-2 shadow-sm">
-                  <Wallet className="h-4 text-[#046bd2] shrink-0 mt-0.5" />
+                <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB] flex items-start gap-2 shadow-sm">
+                  <Wallet className="h-4 text-[#0097A7] shrink-0 mt-0.5" />
                   <div>
                     <p className="font-extrabold text-[10.5px] text-[#0B1E3F]">Caja Mensual</p>
                     <p className="text-[8.5px] text-slate-500 mt-0.5 font-medium leading-tight">
@@ -675,7 +705,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="pt-2.5 border-t border-slate-100 mt-2.5 flex gap-2 shrink-0">
-              <Button variant="outline" size="sm" className="w-full h-8 text-[9px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#046bd2] hover:border-[#046bd2]/30 shadow-sm transition-all duration-300" asChild>
+              <Button variant="outline" size="sm" className="w-full h-8 text-[9px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#0097A7] hover:border-[#0097A7]/30 shadow-sm transition-all duration-300" asChild>
                 <Link href="/stock">Ver Inventario</Link>
               </Button>
               <Button variant="outline" size="sm" className="w-full h-8 text-[9px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#00C9E0] hover:border-[#00C9E0]/30 shadow-sm transition-all duration-300" asChild>
@@ -1063,7 +1093,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
       }}
     >
       {/* High-fidelity dark ambient glowing environment */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] rounded-full bg-gradient-to-tr from-[#046bd2]/8 to-[#00C9E0]/8 blur-[180px] pointer-events-none z-10" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] rounded-full bg-gradient-to-tr from-[#0097A7]/8 to-[#00C9E0]/8 blur-[180px] pointer-events-none z-10" />
 
       {/* Glass overlay grid pattern for realistic depth */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-30 z-20" />
@@ -1131,12 +1161,12 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
           {/* Pulsing professional ring loader */}
           <div className="relative w-20 h-20 flex items-center justify-center">
             <div className="absolute inset-0 rounded-full border-[2px] border-slate-800" />
-            <div className="absolute inset-0 rounded-full border-[2px] border-t-[#00C9E0] border-r-[#046bd2] animate-spin duration-700" />
+            <div className="absolute inset-0 rounded-full border-[2px] border-t-[#00C9E0] border-r-[#0097A7] animate-spin duration-700" />
             <Droplets className="w-7 h-7 text-[#00C9E0] animate-pulse" />
           </div>
 
           <div className="text-center">
-            <h2 className="text-white font-extrabold text-sm uppercase tracking-[0.35em] bg-gradient-to-r from-[#00C9E0] via-white to-[#046bd2] bg-clip-text text-transparent">
+            <h2 className="text-white font-extrabold text-sm uppercase tracking-[0.35em] bg-gradient-to-r from-[#00C9E0] via-white to-[#0097A7] bg-clip-text text-transparent">
               EPOTECH SOLUTIONS
             </h2>
             <p className="text-slate-400 text-[12px] font-medium uppercase mt-2">Cargando...</p>
@@ -1158,3 +1188,4 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
     </div>
   )
 }
+

@@ -800,8 +800,8 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
     // We target a point further to the left (x: 15% width, y: 35% height) on narrow screens to achieve a natural diagonal spray.
     const isMobile = window.innerWidth < 768
     const sprayTarget = {
-      x: isMobile ? window.innerWidth * 0.15 : window.innerWidth / 2,
-      y: isMobile ? window.innerHeight * 0.35 : window.innerHeight / 2
+      x: isMobile ? window.innerWidth * -0.25 : window.innerWidth / 2,
+      y: isMobile ? window.innerHeight * 0.48 : window.innerHeight / 2
     }
 
     // Animation Loop

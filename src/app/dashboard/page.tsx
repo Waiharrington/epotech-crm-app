@@ -720,10 +720,10 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
 
   useEffect(() => {
     const isMobileDevice = window.innerWidth < 768
-    const t1Delay = isMobileDevice ? 300 : 600
-    const t2Delay = isMobileDevice ? 700 : 1200
-    const t3Delay = isMobileDevice ? 1200 : 2000
-    const t4Delay = isMobileDevice ? 1650 : 2650
+    const t1Delay = isMobileDevice ? 100 : 600
+    const t2Delay = isMobileDevice ? 450 : 1200
+    const t3Delay = isMobileDevice ? 950 : 2000
+    const t4Delay = isMobileDevice ? 1350 : 2650
 
     // 1. Start spraying
     const t1 = setTimeout(() => setAnimationStage('spraying'), t1Delay)
@@ -1102,7 +1102,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             ? 'none'
             : (animationStage === 'spraying' || animationStage === 'flooding')
               ? 'nozzle-recoil 0.08s infinite alternate'
-              : `gun-enter ${isMobile ? '0.45s' : '0.8s'} cubic-bezier(0.19, 1, 0.22, 1) forwards`
+              : `gun-enter ${isMobile ? '0.25s' : '0.8s'} cubic-bezier(0.19, 1, 0.22, 1) forwards`
         }}
       >
         <img

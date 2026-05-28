@@ -166,7 +166,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen max-h-screen h-screen overflow-hidden bg-[#102A43] lg:bg-[#102A43] font-sans antialiased">
+    <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen lg:max-h-screen lg:h-screen lg:overflow-hidden bg-[#102A43] font-sans antialiased">
       
       {/* Left Column: Premium Private Operations Terminal for Sebastian (Only on desktop) */}
       <div 
@@ -228,7 +228,7 @@ export default function LoginPage() {
       </div>
 
       {/* Right Column: Premium Responsive Login Container */}
-      <div className="flex flex-col h-full max-h-screen overflow-hidden bg-[#102A43] lg:bg-[#F1F5F9] relative">
+      <div className="flex flex-col min-h-screen lg:h-full lg:max-h-screen lg:overflow-hidden bg-[#102A43] lg:bg-[#F1F5F9] relative">
         {/* Satisfying water droplet micro-particles */}
         <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-0 opacity-40" />
         
@@ -259,7 +259,7 @@ export default function LoginPage() {
         </div>
 
         {/* Card Container (Floats on solid dark navy on mobile, centered light grey on desktop) */}
-        <div className="flex-1 flex items-center justify-center p-3 sm:p-6 relative z-20 bg-[#102A43] lg:bg-transparent overflow-hidden">
+        <div className="flex-1 flex items-center justify-center p-4 sm:p-6 relative z-20 bg-[#102A43] lg:bg-transparent overflow-y-auto lg:overflow-hidden no-scrollbar">
           <div className="w-full max-w-[485px] my-auto flex-shrink-0">
             {/* Card compressed to h-auto and padding set to p-6 sm:p-8 */}
             <Card className="w-full shadow-[0_25px_60px_-15px_rgba(15,23,42,0.25)] border-0 bg-white rounded-[24px] overflow-hidden p-6 sm:p-8 flex flex-col gap-0 relative">

@@ -16,7 +16,15 @@ import {
   Loader2,
   Clock,
   Bell,
-  Check
+  Check,
+  FileText,
+  Package,
+  Droplets,
+  Sun,
+  Moon,
+  Sunrise,
+  Sunset,
+  Sparkles
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -27,6 +35,89 @@ import Link from 'next/link'
 export default function DashboardPage() {
   const supabase = createClient() as any
   const [loading, setLoading] = useState(true)
+  
+  // Smart Utah Time & Weather greeting state
+  const [greetingState, setGreetingState] = useState({
+    text: 'Hola, Sebastián',
+    sub: 'Aquí tienes el resumen de tu negocio para hoy.',
+    icon: 'droplets',
+    glowClass: 'bg-[#00C9E0]/8',
+    titleColor: 'text-[#0B1E3F]',
+    iconColor: 'text-[#00C9E0]'
+  })
+
+  useEffect(() => {
+    const updateGreeting = () => {
+      try {
+        const options = { timeZone: 'America/Denver', hour: '2-digit', hour12: false } as const;
+        const formatter = new Intl.DateTimeFormat('en-US', options);
+        const utahHour = parseInt(formatter.format(new Date()), 10);
+
+        if (utahHour >= 5 && utahHour < 12) {
+          setGreetingState({
+            text: '¡Buenos días, Sebastián!',
+            sub: 'Que tengas una excelente y productiva mañana en Utah.',
+            icon: 'sunrise',
+            glowClass: 'bg-[#00C9E0]/8',
+            titleColor: 'text-[#0B1E3F]',
+            iconColor: 'text-[#00C9E0]'
+          })
+        } else if (utahHour >= 12 && utahHour < 19) {
+          setGreetingState({
+            text: '¡Buenas tardes, Sebastián!',
+            sub: 'El motor de tu negocio sigue con toda la presión hoy.',
+            icon: 'sun',
+            glowClass: 'bg-[#046bd2]/8',
+            titleColor: 'text-[#0B1E3F]',
+            iconColor: 'text-[#046bd2]'
+          })
+        } else {
+          setGreetingState({
+            text: '¡Buenas noches, Sebastián!',
+            sub: 'Es hora de descansar y planificar las operaciones de mañana.',
+            icon: 'moon',
+            glowClass: 'bg-[#0B1E3F]/8',
+            titleColor: 'text-[#0B1E3F]',
+            iconColor: 'text-[#0B1E3F]/80'
+          })
+        }
+      } catch (e) {
+        const hour = new Date().getHours()
+        if (hour >= 5 && hour < 12) {
+          setGreetingState({
+            text: '¡Buenos días, Sebastián!',
+            sub: 'Que tengas una excelente mañana.',
+            icon: 'sunrise',
+            glowClass: 'bg-[#00C9E0]/8',
+            titleColor: 'text-[#0B1E3F]',
+            iconColor: 'text-[#00C9E0]'
+          })
+        } else if (hour >= 12 && hour < 19) {
+          setGreetingState({
+            text: '¡Buenas tardes, Sebastián!',
+            sub: 'El motor de tu negocio sigue con toda la presión hoy.',
+            icon: 'sun',
+            glowClass: 'bg-[#046bd2]/8',
+            titleColor: 'text-[#0B1E3F]',
+            iconColor: 'text-[#046bd2]'
+          })
+        } else {
+          setGreetingState({
+            text: '¡Buenas noches, Sebastián!',
+            sub: 'Es hora de descansar y planificar las operaciones de mañana.',
+            icon: 'moon',
+            glowClass: 'bg-[#0B1E3F]/8',
+            titleColor: 'text-[#0B1E3F]',
+            iconColor: 'text-[#0B1E3F]/80'
+          })
+        }
+      }
+    }
+
+    updateGreeting()
+    const interval = setInterval(updateGreeting, 30000)
+    return () => clearInterval(interval)
+  }, [])
   const [stats, setStats] = useState({
     totalClients: 0,
     activeJobs: 0,
@@ -189,296 +280,391 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-background overflow-hidden">
-      <header className="p-6 border-b bg-card">
-        <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
-            <div>
-                <h1 className="text-3xl font-bold tracking-tight">Hola, Sebastián</h1>
-                <p className="text-muted-foreground mt-1">Aquí tienes el resumen de tu negocio para hoy.</p>
+    <div className="flex flex-col h-screen max-h-screen bg-[#F0F5FA] overflow-hidden p-4.5 gap-4 relative">
+      {/* Premium Ambient Background Lighting - Dynamic color shifts based on Utah Time */}
+      <div className={`absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full ${greetingState.glowClass} blur-[130px] pointer-events-none z-0 transition-all duration-1000`} />
+      <div className="absolute bottom-[-10%] left-[20%] w-[45%] h-[45%] rounded-full bg-[#046bd2]/6 blur-[130px] pointer-events-none z-0" />
+
+      {/* Premium Compact Header */}
+      <header className="bg-transparent shrink-0 relative z-10">
+        <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-xl font-black tracking-tight text-[#0B1E3F]">
+                {greetingState.text}
+              </h1>
+              
+              {/* Dynamic Celestial Time-of-day Icon */}
+              <div className="flex items-center justify-center">
+                {greetingState.icon === 'sunrise' && (
+                  <Sunrise className={`h-4.5 w-4.5 ${greetingState.iconColor} filter drop-shadow-[0_0_4px_rgba(245,158,11,0.4)]`} />
+                )}
+                {greetingState.icon === 'sun' && (
+                  <Sun className={`h-4.5 w-4.5 ${greetingState.iconColor} filter drop-shadow-[0_0_6px_rgba(234,179,8,0.5)]`} style={{ animation: 'spin 12s linear infinite' }} />
+                )}
+                {greetingState.icon === 'moon' && (
+                  <Moon className={`h-4.5 w-4.5 ${greetingState.iconColor} filter drop-shadow-[0_0_4px_rgba(129,140,248,0.4)] animate-pulse`} />
+                )}
+              </div>
             </div>
-            <div className="hidden md:block text-right">
-                <p className="text-sm font-medium">{new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
-                <Badge variant="outline" className="mt-1">Vercel Pro Deployment</Badge>
+            <p className="text-slate-400 text-[10px] mt-0.5 font-medium">{greetingState.sub}</p>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-xl shadow-[0_4px_15px_-4px_rgba(0,0,0,0.03),inset_0_1px_1px_rgba(255,255,255,0.8)] border border-slate-100/90">
+              <Calendar className="h-3.5 w-3.5 text-[#00C9E0]" />
+              <span className="text-[9px] font-extrabold text-slate-700 uppercase tracking-widest">
+                {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
+              </span>
             </div>
+            <div className="h-7 w-7 rounded-full bg-[#046bd2] text-white flex items-center justify-center font-extrabold text-[11px] shadow-lg shadow-blue-500/20 shrink-0 border border-white/20">
+              S
+            </div>
+          </div>
         </div>
       </header>
 
-      <main className="p-6 max-w-7xl mx-auto w-full flex-1 overflow-y-auto space-y-8">
+      {/* Main Content scroll-free grid layout */}
+      <main className="flex-grow min-h-0 flex flex-col gap-4 overflow-hidden no-scrollbar relative z-10">
         {/* Statistics Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <Card className="hover:shadow-md transition-shadow cursor-default border-primary/20 bg-primary/5">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                    <CardTitle className="text-sm font-bold uppercase text-primary">Clientes Totales</CardTitle>
-                    <Users className="h-4 w-4 text-primary" />
-                </CardHeader>
-                <CardContent>
-                    <div className="text-3xl font-bold">{stats.totalClients}</div>
-                    <p className="text-xs text-muted-foreground mt-1">+2 nuevos esta semana</p>
-                </CardContent>
-            </Card>
-            <Card className="hover:shadow-md transition-shadow cursor-default">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                    <CardTitle className="text-sm font-bold uppercase">Trabajos Activos</CardTitle>
-                    <Briefcase className="h-4 w-4 text-orange-500" />
-                </CardHeader>
-                <CardContent>
-                    <div className="text-3xl font-bold">{stats.activeJobs}</div>
-                    <p className="text-xs text-muted-foreground mt-1">En el tablero Kanban</p>
-                </CardContent>
-            </Card>
-            <Card className="hover:shadow-md transition-shadow cursor-default">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                    <CardTitle className="text-sm font-bold uppercase">Ingresos Totales</CardTitle>
-                    <TrendingUp className="h-4 w-4 text-green-500" />
-                </CardHeader>
-                <CardContent>
-                    <div className="text-3xl font-bold">${stats.monthlyIncome.toLocaleString()}</div>
-                    <p className="text-xs text-muted-foreground mt-1">Calculado de la Caja</p>
-                </CardContent>
-            </Card>
-            <Card className="hover:shadow-md transition-shadow cursor-default">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                    <CardTitle className="text-sm font-bold uppercase">Alertas Stock</CardTitle>
-                    <AlertTriangle className="h-4 w-4 text-red-500" />
-                </CardHeader>
-                <CardContent>
-                    <div className="text-3xl font-bold">{stats.lowStock}</div>
-                    <p className="text-xs text-muted-foreground mt-1">Items por reponer</p>
-                </CardContent>
-            </Card>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 shrink-0">
+          {/* Card: Clientes Totales */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02),inset_0_1px_1px_rgba(255,255,255,0.7)] border-b-4 border-b-[#00C9E0] hover:border-b-[#046bd2] hover:-translate-y-0.5 hover:shadow-[0_12px_25px_-6px_rgba(4,107,210,0.05)] transition-all duration-300 group">
+            <div className="p-3 flex items-center justify-between">
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Clientes Totales</p>
+                <p className="text-xl font-black text-[#0B1E3F] mt-0.5 tracking-tight">{stats.totalClients}</p>
+                <p className="text-[9px] text-[#046bd2] mt-1 font-semibold flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00C9E0] animate-pulse"></span>
+                  +2 nuevos esta semana
+                </p>
+              </div>
+              <div className="h-9 w-9 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm shrink-0 transition-transform group-hover:scale-105">
+                <Users className="h-4.5 w-4.5 text-[#046bd2] transition-transform group-hover:rotate-[6deg]" />
+              </div>
+            </div>
+          </div>
+
+          {/* Card: Trabajos Activos */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02),inset_0_1px_1px_rgba(255,255,255,0.7)] border-b-4 border-b-[#046bd2] hover:border-b-[#00C9E0] hover:-translate-y-0.5 hover:shadow-[0_12px_25px_-6px_rgba(4,107,210,0.05)] transition-all duration-300 group">
+            <div className="p-3 flex items-center justify-between">
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Trabajos Activos</p>
+                <p className="text-xl font-black text-[#0B1E3F] mt-0.5 tracking-tight">{stats.activeJobs}</p>
+                <p className="text-[9px] text-[#046bd2] mt-1 font-semibold flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#046bd2] animate-pulse"></span>
+                  En el tablero Kanban
+                </p>
+              </div>
+              <div className="h-9 w-9 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm shrink-0 transition-transform group-hover:scale-105">
+                <Briefcase className="h-4.5 w-4.5 text-[#046bd2] transition-transform group-hover:-rotate-[6deg]" />
+              </div>
+            </div>
+          </div>
+
+          {/* Card: Ingresos Totales */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02),inset_0_1px_1px_rgba(255,255,255,0.7)] border-b-4 border-b-[#00C9E0] hover:border-b-[#046bd2] hover:-translate-y-0.5 hover:shadow-[0_12px_25px_-6px_rgba(4,107,210,0.05)] transition-all duration-300 group">
+            <div className="p-3 flex items-center justify-between">
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Ingresos Totales</p>
+                <p className="text-xl font-black text-[#0B1E3F] mt-0.5 tracking-tight">${stats.monthlyIncome.toLocaleString()}</p>
+                <p className="text-[9px] text-[#046bd2] mt-1 font-semibold flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00C9E0] animate-pulse"></span>
+                  Calculado de la Caja
+                </p>
+              </div>
+              <div className="h-9 w-9 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm shrink-0 transition-transform group-hover:scale-105">
+                <Wallet className="h-4.5 w-4.5 text-[#046bd2] transition-transform group-hover:scale-110" />
+              </div>
+            </div>
+          </div>
+
+          {/* Card: Alertas Stock */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02),inset_0_1px_1px_rgba(255,255,255,0.7)] border-b-4 border-b-[#046bd2] hover:border-b-[#00C9E0] hover:-translate-y-0.5 hover:shadow-[0_12px_25px_-6px_rgba(4,107,210,0.05)] transition-all duration-300 group">
+            <div className="p-3 flex items-center justify-between">
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Alertas Stock</p>
+                <p className="text-xl font-black text-[#0B1E3F] mt-0.5 tracking-tight">{stats.lowStock}</p>
+                <p className="text-[9px] text-[#046bd2] mt-1 font-semibold flex items-center gap-1.5">
+                  <span className={`w-1.5 h-1.5 rounded-full ${stats.lowStock > 0 ? 'bg-amber-500 animate-ping' : 'bg-[#00C9E0]'}`}></span>
+                  {stats.lowStock > 0 ? 'Reponer insumos' : 'Inventario sano'}
+                </p>
+              </div>
+              <div className="h-9 w-9 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm shrink-0 transition-transform group-hover:scale-105">
+                <AlertTriangle className="h-4.5 w-4.5 text-[#046bd2] transition-transform group-hover:scale-110" />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7 ">
-            {/* Recent/Next Services */}
-            <Card className="lg:col-span-4">
-                <CardHeader>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <CardTitle>Próximos Servicios</CardTitle>
-                            <CardDescription>Tus compromisos más cercanos en la agenda.</CardDescription>
+        {/* Middle Row Section */}
+        <div className="grid gap-4 lg:grid-cols-7 flex-1 min-h-0 overflow-hidden">
+          {/* Próximos Servicios */}
+          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col min-h-0">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-3 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+              <div>
+                <h3 className="text-xs font-black text-white tracking-wide uppercase">Próximos Servicios</h3>
+                <p className="text-[9px] text-[#00C9E0]/80 font-medium">Tus compromisos más cercanos en la agenda.</p>
+              </div>
+              <Link href="/trabajos" className="text-[10px] font-black text-[#00C9E0] hover:text-white hover:underline flex items-center gap-0.5 transition-colors">
+                Ver todos <ChevronRight className="h-2.5 w-2.5" />
+              </Link>
+            </div>
+            
+            <div className="p-3 flex-1 overflow-y-auto no-scrollbar space-y-2 min-h-0 bg-gradient-to-b from-white to-slate-50/30">
+              {loading ? (
+                <div className="flex justify-center py-6"><Loader2 className="h-5 w-5 text-[#046bd2] animate-spin" /></div>
+              ) : recentJobs.length > 0 ? (
+                recentJobs.map(job => (
+                  <div key={job.id} className="flex items-center justify-between py-2 px-3 rounded-xl border border-slate-100/60 bg-white hover:bg-slate-50/80 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(4,107,210,0.02)] transition-all duration-300 group">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      {/* Date block */}
+                      <div className="h-10 w-10 rounded-xl overflow-hidden border border-slate-100 flex flex-col shrink-0 transition-transform group-hover:scale-102 group-hover:shadow-sm">
+                        <div className="bg-gradient-to-b from-[#00C9E0] to-[#00b4ca] text-white text-[8px] font-black py-0.5 text-center uppercase tracking-wider">
+                          {new Date(job.fecha_servicio).toLocaleDateString('es-ES', { day: '2-digit' })}
                         </div>
-                        <Button variant="ghost" size="sm" asChild>
-                            <Link href="/trabajos">Ver todos <ChevronRight className="ml-1 h-4 w-4" /></Link>
-                        </Button>
+                        <div className="bg-white flex-1 flex items-center justify-center text-[8px] font-black text-slate-600 uppercase">
+                          {new Date(job.fecha_servicio).toLocaleDateString('es-ES', { month: 'short' }).replace('.', '').slice(0, 3)}
+                        </div>
+                      </div>
+                      
+                      {/* detail */}
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-extrabold text-[11.5px] text-slate-800 group-hover:text-[#046bd2] transition-colors truncate">{job.catalogo_servicios?.nombre}</span>
+                          <span className="px-2 py-0.5 text-[6.5px] font-black uppercase rounded-full bg-[#E5F2FF] text-[#046bd2] tracking-widest border border-[#046bd2]/8">
+                            {job.estado === 'en_progreso' ? 'EN_PROGRESO' : job.estado === 'pendiente' ? 'PENDIENTE' : job.estado}
+                          </span>
+                        </div>
+                        <p className="text-[9.5px] text-slate-400 mt-0.5 font-medium">{job.clientes?.nombre} {job.clientes?.apellido}</p>
+                      </div>
                     </div>
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-4">
-                        {loading ? (
-                            <div className="flex justify-center py-6"><Loader2 className="h-6 w-6 animate-spin" /></div>
-                        ) : recentJobs.length > 0 ? (
-                            recentJobs.map(job => (
-                                <div key={job.id} className="flex items-center gap-4 p-3 rounded-lg border hover:bg-muted/30 transition-colors">
-                                    <div className="h-12 w-12 rounded-xl bg-muted flex flex-col items-center justify-center">
-                                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                                        <span className="text-[10px] font-bold mt-1 uppercase">{new Date(job.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-2 mb-0.5">
-                                            <span className="font-bold text-sm truncate">{job.catalogo_servicios?.nombre}</span>
-                                            <Badge variant="outline" className="h-4 px-1 text-[8px] uppercase">{job.estado}</Badge>
-                                        </div>
-                                        <p className="text-xs text-muted-foreground truncate">{job.clientes.nombre} {job.clientes.apellido}</p>
-                                    </div>
-                                    <div className="text-right flex flex-col items-end gap-1">
-                                         <span className="font-bold text-sm">${job.precio_acordado}</span>
-                                         {job.hora_servicio && (
-                                            <div className="flex items-center text-[10px] text-muted-foreground">
-                                                <Clock className="mr-1 h-3 w-3" /> {job.hora_servicio}
-                                            </div>
-                                         )}
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <div className="text-center py-10 text-muted-foreground italic text-sm border-2 border-dashed rounded-xl">
-                                No hay servicios próximos agendados.
-                            </div>
-                        )}
+                    
+                    {/* Price */}
+                    <div className="text-right shrink-0">
+                      <span className="font-black text-xs text-slate-900">${job.precio_acordado}</span>
+                      {job.hora_servicio && (
+                        <div className="flex items-center text-[8.5px] text-slate-400 mt-0.5 font-medium justify-end">
+                          <Clock className="mr-0.5 h-2.5 w-2.5 text-[#00C9E0]" /> {job.hora_servicio.substring(0, 5)}
+                        </div>
+                      )}
                     </div>
-                </CardContent>
-            </Card>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-6 text-slate-400 italic text-[10px] border border-dashed rounded-xl bg-slate-50/50">
+                  No hay servicios próximos agendados.
+                </div>
+              )}
+            </div>
+          </div>
 
-            {/* Quick Actions */}
-            <Card className="lg:col-span-3">
-                <CardHeader>
-                    <CardTitle>Acciones Rápidas</CardTitle>
-                    <CardDescription>Accesos directos operacionales.</CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-3">
-                    <Button className="w-full h-12 justify-start font-bold text-base" variant="secondary" asChild>
-                        <Link href="/clientes">
-                            <Plus className="mr-3 h-5 w-5" /> Nuevo Cliente
-                        </Link>
-                    </Button>
-                    <Button className="w-full h-12 justify-start font-bold text-base" variant="secondary" asChild>
-                        <Link href="/trabajos">
-                            <Plus className="mr-3 h-5 w-5" /> Agendar Servicio
-                        </Link>
-                    </Button>
-                    <Button className="w-full h-12 justify-start font-bold text-base" variant="secondary" asChild>
-                        <Link href="/cotizaciones">
-                            <Plus className="mr-3 h-5 w-5" /> Nueva Cotización
-                        </Link>
-                    </Button>
-                    <div className="mt-4 pt-4 border-t">
-                         <h4 className="text-xs font-bold uppercase text-muted-foreground mb-3">Recomendado</h4>
-                         <div className="p-4 rounded-xl bg-primary/10 border border-primary/20 text-primary">
-                            <p className="text-sm font-bold">Revisa tu Stock</p>
-                            <p className="text-xs opacity-80 mt-1">Tienes algunos consumibles por debajo del mínimo.</p>
-                            <Button variant="link" className="p-0 h-auto text-primary text-xs mt-2" asChild>
-                                <Link href="/stock" className="flex items-center">Ir al inventario <ChevronRight className="ml-1 h-3 w-3" /></Link>
-                            </Button>
-                         </div>
+          {/* Acciones Rápidas */}
+          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0">
+            <div className="flex flex-col min-h-0">
+              <h3 className="text-xs font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
+              <p className="text-[8.5px] text-slate-400 font-medium">Accesos directos operacionales.</p>
+              
+              <div className="grid gap-1 mt-2.5">
+                <Link href="/clientes" className="flex items-center justify-between py-1.5 px-3 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E5F2FF]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group">
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)]">
+                      <Users className="h-3.5 w-3.5 text-[#046bd2] transition-transform group-hover:scale-105" />
                     </div>
-                </CardContent>
-            </Card>
+                    <span className="text-[10px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors">Nuevo Cliente</span>
+                  </div>
+                  <ChevronRight className="h-3.5 w-3.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0]" />
+                </Link>
+
+                <Link href="/trabajos" className="flex items-center justify-between py-1.5 px-3 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E5F2FF]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group">
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)]">
+                      <Calendar className="h-3.5 w-3.5 text-[#046bd2] transition-transform group-hover:scale-105" />
+                    </div>
+                    <span className="text-[10px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors">Agendar Servicio</span>
+                  </div>
+                  <ChevronRight className="h-3.5 w-3.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0]" />
+                </Link>
+
+                <Link href="/cotizaciones" className="flex items-center justify-between py-1.5 px-3 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E5F2FF]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group">
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)]">
+                      <FileText className="h-3.5 w-3.5 text-[#046bd2] transition-transform group-hover:scale-105" />
+                    </div>
+                    <span className="text-[10px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors">Nueva Cotización</span>
+                  </div>
+                  <ChevronRight className="h-3.5 w-3.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0]" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Recommended Block */}
+            <div className="mt-2 pt-2 border-t border-slate-100 shrink-0">
+              <div className="p-1.5 rounded-lg bg-gradient-to-tr from-[#E5F2FF]/40 to-[#E5F2FF]/10 border border-[#E5F2FF]/70 flex items-start gap-2 shadow-sm">
+                <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-white border border-[#E5F2FF] shadow-sm shrink-0">
+                  <Package className="h-3.5 w-3.5 text-[#046bd2]" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[9px] font-extrabold text-[#046bd2] leading-tight">Revisa tu Stock</p>
+                  <p className="text-[7.5px] text-slate-500 mt-0.5 font-medium leading-tight">Tienes consumibles por debajo del mínimo.</p>
+                  <Link href="/stock" className="text-[7.5px] font-black text-[#046bd2] hover:text-[#00C9E0] hover:underline mt-0.5 inline-flex items-center gap-0.5 transition-all">
+                    Ir al inventario <ChevronRight className="h-2 w-2" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Reminders & Alerts Row */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-            {/* Reminders Widget */}
-            <Card className="lg:col-span-4 border-primary/10">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <div className="space-y-1">
-                  <CardTitle className="text-base font-bold flex items-center gap-2">
-                    <Bell className="h-5 w-5 text-primary" />
+        {/* Lower Row: Reminders & Alerts */}
+        <div className="grid gap-4 lg:grid-cols-7 flex-1 min-h-0 overflow-hidden">
+          {/* Reminders Widget */}
+          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between min-h-0">
+            <div className="min-h-0 flex flex-col flex-1">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-50 shrink-0">
+                <div>
+                  <h3 className="text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
+                    <Bell className="h-3.5 w-3.5 text-[#046bd2]" />
                     Recordatorios y Pendientes
-                  </CardTitle>
-                  <CardDescription className="text-xs text-muted-foreground">Alertas programadas y avisos rápidos de la agenda.</CardDescription>
+                  </h3>
+                  <p className="text-[8.5px] text-slate-400 font-medium">Alertas programadas y avisos rápidos de la agenda.</p>
                 </div>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href="/recordatorios" className="text-xs flex items-center gap-1">
-                    Gestionar <ChevronRight className="h-3.5 w-3.5" />
-                  </Link>
-                </Button>
-              </CardHeader>
-              <CardContent>
-                {/* Formulario Rápido */}
-                <form onSubmit={handleQuickAddReminder} className="flex gap-2 mb-4">
-                  <Input
-                    placeholder="Escribe un pendiente rápido para hoy (presiona Enter)..."
-                    value={quickTitle}
-                    onChange={e => setQuickTitle(e.target.value)}
-                    className="text-xs h-9"
-                  />
-                  <Button type="submit" size="sm" className="h-9 font-bold gap-1 px-3">
-                    <Plus className="h-4 w-4" /> Agregar
-                  </Button>
-                </form>
+                <Link href="/recordatorios" className="text-[10px] font-black text-[#046bd2] hover:text-[#00C9E0] hover:underline flex items-center gap-0.5 transition-colors">
+                  Gestionar <ChevronRight className="h-2.5 w-2.5" />
+                </Link>
+              </div>
 
-                {/* Listado */}
-                <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
-                  {reminders.length > 0 ? (
-                    reminders.map((reminder) => {
-                      const getPriorityStyle = (p: string) => {
-                        switch (p) {
-                          case 'urgente': return 'bg-red-50 text-red-700 border-red-100 hover:bg-red-100/50'
-                          case 'alta': return 'bg-orange-50 text-orange-700 border-orange-100 hover:bg-orange-100/50'
-                          case 'baja': return 'bg-green-50 text-green-700 border-green-100 hover:bg-green-100/50'
-                          default: return 'bg-zinc-50 text-zinc-700 border-zinc-100 hover:bg-zinc-100/50'
-                        }
+              {/* Formulario Rápido */}
+              <form onSubmit={handleQuickAddReminder} className="flex gap-2 mt-2 shrink-0">
+                <Input
+                  placeholder="Escribe un pendiente rápido para hoy..."
+                  value={quickTitle}
+                  onChange={e => setQuickTitle(e.target.value)}
+                  className="text-[10.5px] h-8 px-3 rounded-xl border-slate-200 focus-visible:ring-[#046bd2] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]"
+                />
+                <Button type="submit" size="sm" className="h-8 text-[10.5px] font-black gap-1 px-3.5 bg-gradient-to-r from-[#00C9E0] to-[#046bd2] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
+                  <Plus className="h-3 w-3 stroke-[3]" /> Agregar
+                </Button>
+              </form>
+
+              {/* Listado */}
+              <div className="space-y-1.5 mt-2 overflow-y-auto pr-1 no-scrollbar flex-1 min-h-0">
+                {reminders.length > 0 ? (
+                  reminders.map((reminder) => {
+                    const getPriorityStyle = (p: string) => {
+                      switch (p) {
+                        case 'urgente': return 'bg-[#0B1E3F] text-white border-[#0B1E3F]/10 hover:bg-[#0B1E3F]/90'
+                        case 'alta': return 'bg-[#E5F2FF] text-[#046bd2] border-[#046bd2]/10 hover:bg-[#E5F2FF]/80'
+                        case 'baja': return 'bg-[#F0F5FA] text-slate-500 border-slate-200 hover:bg-[#F0F5FA]/80'
+                        default: return 'bg-slate-50 text-slate-600 border-slate-100 hover:bg-slate-100/50'
                       }
-                      const getPriorityLabel = (p: string) => {
-                        switch (p) {
-                          case 'urgente': return '🚨 Urgente'
-                          case 'alta': return '🔥 Alta'
-                          case 'baja': return '🟢 Baja'
-                          default: return 'Normal'
-                        }
+                    }
+                    const getPriorityLabel = (p: string) => {
+                      switch (p) {
+                        case 'urgente': return '⚡ Urgente'
+                        case 'alta': return '🔹 Alta'
+                        case 'baja': return '▫️ Baja'
+                        default: return 'Normal'
                       }
-                      return (
-                        <div 
-                          key={reminder.id} 
-                          className="flex items-center justify-between p-2.5 rounded-lg border bg-card hover:bg-muted/10 transition-all group"
-                        >
-                          <div className="flex items-start gap-2.5 min-w-0 flex-1">
-                            <button
-                              type="button"
-                              onClick={() => handleToggleReminder(reminder.id)}
-                              className="h-5 w-5 rounded-full border border-zinc-300 hover:border-primary hover:bg-primary/5 flex items-center justify-center shrink-0 mt-0.5 transition-colors"
-                            >
-                              <Check className="h-3 w-3 stroke-[3] text-transparent group-hover:text-primary transition-colors" />
-                            </button>
-                            <div className="min-w-0">
-                              <p className="font-bold text-xs truncate text-foreground">{reminder.titulo}</p>
-                              <div className="flex items-center gap-2 mt-1 text-[10px] text-muted-foreground">
+                    }
+                    return (
+                      <div 
+                        key={reminder.id} 
+                        className="flex items-center justify-between p-2 rounded-xl border border-slate-50 bg-white hover:bg-slate-50/20 transition-all duration-200 group shadow-sm"
+                      >
+                        <div className="flex items-start gap-2 min-w-0 flex-1">
+                          <button
+                            type="button"
+                            onClick={() => handleToggleReminder(reminder.id)}
+                            className="h-4 w-4 rounded-full border border-slate-300 hover:border-[#046bd2] hover:bg-[#E5F2FF] flex items-center justify-center shrink-0 mt-0.5 transition-colors"
+                          >
+                            <Check className="h-2 w-2 stroke-[3] text-transparent group-hover:text-[#046bd2] transition-colors" />
+                          </button>
+                          <div className="min-w-0">
+                            <p className="font-bold text-[11px] text-slate-800 truncate">{reminder.titulo}</p>
+                            <div className="flex items-center gap-2 mt-0.5 text-[8px] text-slate-400 font-medium">
+                              <span className="flex items-center gap-0.5">
+                                <Calendar className="h-2 w-2" />
+                                {new Date(reminder.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                              </span>
+                              {reminder.hora && (
                                 <span className="flex items-center gap-0.5">
-                                  <Calendar className="h-3 w-3" />
-                                  {new Date(reminder.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                                  <Clock className="h-2 w-2" />
+                                  {reminder.hora.substring(0, 5)}
                                 </span>
-                                {reminder.hora && (
-                                  <span className="flex items-center gap-0.5">
-                                    <Clock className="h-3 w-3" />
-                                    {reminder.hora.substring(0, 5)}
-                                  </span>
-                                )}
-                                <Badge variant="outline" className={`text-[8px] px-1 py-0 uppercase font-extrabold tracking-wider ${getPriorityStyle(reminder.prioridad)}`}>
-                                  {getPriorityLabel(reminder.prioridad)}
-                                </Badge>
-                              </div>
+                              )}
+                              <Badge variant="outline" className={`text-[6.5px] px-1 py-0 uppercase font-extrabold tracking-wider ${getPriorityStyle(reminder.prioridad)}`}>
+                                {getPriorityLabel(reminder.prioridad)}
+                              </Badge>
                             </div>
                           </div>
                         </div>
-                      )
-                    })
-                  ) : (
-                    <div className="text-center py-10 text-xs text-muted-foreground italic border border-dashed rounded-lg bg-muted/5">
-                      No hay recordatorios pendientes.
+                      </div>
+                    )
+                  })
+                ) : (
+                  <div className="text-center py-5 text-[9px] text-slate-400 italic border border-dashed rounded-xl bg-slate-50/30 flex flex-col items-center justify-center gap-1.5">
+                    <div className="h-7 w-7 rounded-full flex items-center justify-center bg-white border border-[#E5F2FF] shadow-sm relative overflow-hidden active-indicator-pulse">
+                      <Check className="h-3.5 w-3.5 text-[#00C9E0] stroke-[3]" />
                     </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                    No hay recordatorios pendientes.
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
 
-            {/* Stock & Cash Critical Alerts Widget */}
-            <Card className="lg:col-span-3 flex flex-col justify-between">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base font-bold flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-red-500" />
+          {/* Alertas y Operaciones */}
+          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0 overflow-hidden">
+            <div className="min-h-0 flex flex-col flex-1">
+              <div className="pb-2 border-b border-slate-50 shrink-0">
+                <h3 className="text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
+                  <AlertTriangle className="h-3.5 w-3.5 text-[#046bd2]" />
                   Alertas y Operaciones
-                </CardTitle>
-                <CardDescription className="text-xs text-muted-foreground">Alertas críticas del inventario y flujo de caja diario.</CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col justify-between pt-2">
-                <div className="space-y-3">
-                  {stats.lowStock > 0 ? (
-                    <div className="p-3 rounded-lg bg-red-50/50 border border-red-100 flex items-start gap-2.5">
-                      <AlertTriangle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
-                      <div>
-                        <p className="font-bold text-xs text-red-800">{stats.lowStock} productos en bajo stock</p>
-                        <p className="text-[10px] text-red-700 mt-0.5">Hay insumos que están por debajo de su cantidad mínima establecida.</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="p-3 rounded-lg bg-green-50/50 border border-green-100 flex items-start gap-2.5">
-                      <Check className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
-                      <div>
-                        <p className="font-bold text-xs text-green-800">Inventario al día</p>
-                        <p className="text-[10px] text-green-700/90 mt-0.5">Todos los insumos de lavado y resina epóxica tienen niveles adecuados.</p>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="p-3 rounded-lg bg-primary/5 border border-primary/10 flex items-start gap-2.5">
-                    <Wallet className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                </h3>
+                <p className="text-[8.5px] text-slate-400 font-medium">Alertas críticas del inventario y flujo de caja diario.</p>
+              </div>
+              
+              <div className="space-y-2 pt-2.5 overflow-y-auto no-scrollbar flex-1 min-h-0">
+                {stats.lowStock > 0 ? (
+                  <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/10 flex items-start gap-2 shadow-sm">
+                    <AlertTriangle className="h-4 text-[#046bd2] shrink-0 mt-0.5 animate-pulse" />
                     <div>
-                      <p className="font-bold text-xs text-foreground">Caja Mensual</p>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">El total registrado en caja este mes es de <strong className="text-foreground">${stats.monthlyIncome.toLocaleString()}</strong>.</p>
+                      <p className="font-extrabold text-[10.5px] text-[#0B1E3F]">{stats.lowStock} productos en bajo stock</p>
+                      <p className="text-[8.5px] text-[#046bd2] mt-0.5 font-medium leading-tight">Hay insumos por debajo de su cantidad mínima.</p>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E5F2FF]/20 to-white/40 border border-[#046bd2]/5 flex items-start gap-2 shadow-sm">
+                    <Check className="h-4 text-[#00C9E0] shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-extrabold text-[10.5px] text-[#0B1E3F]">Inventario al día</p>
+                      <p className="text-[8.5px] text-slate-405 mt-0.5 font-medium leading-tight">Todos los insumos tienen niveles adecuados.</p>
+                    </div>
+                  </div>
+                )}
 
-                <div className="pt-4 border-t mt-4 flex gap-2">
-                  <Button variant="outline" size="sm" className="w-full text-xs font-bold" asChild>
-                    <Link href="/stock">Ver Inventario</Link>
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full text-xs font-bold" asChild>
-                    <Link href="/caja">Ver Caja</Link>
-                  </Button>
+                <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E5F2FF]/40 to-[#E5F2FF]/10 border border-[#E5F2FF] flex items-start gap-2 shadow-sm">
+                  <Wallet className="h-4 text-[#046bd2] shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-extrabold text-[10.5px] text-[#0B1E3F]">Caja Mensual</p>
+                    <p className="text-[8.5px] text-slate-500 mt-0.5 font-medium leading-tight">
+                      El total registrado en caja este mes es de <strong className="text-slate-800">${stats.monthlyIncome.toLocaleString()}</strong>.
+                    </p>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
+
+            <div className="pt-2.5 border-t border-slate-100 mt-2.5 flex gap-2 shrink-0">
+              <Button variant="outline" size="sm" className="w-full h-8 text-[9px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#046bd2] hover:border-[#046bd2]/30 shadow-sm transition-all duration-300" asChild>
+                <Link href="/stock">Ver Inventario</Link>
+              </Button>
+              <Button variant="outline" size="sm" className="w-full h-8 text-[9px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#00C9E0] hover:border-[#00C9E0]/30 shadow-sm transition-all duration-300" asChild>
+                <Link href="/caja">Ver Caja</Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </main>
     </div>

@@ -64,27 +64,27 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-background">
       <ReminderPoller />
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-64 flex-col fixed inset-y-0 z-50 border-r border-sidebar-border bg-sidebar shadow-[4px_0_30px_rgba(0,0,0,0.06)]">
+      <aside className="hidden md:flex w-64 flex-col fixed inset-y-0 z-50 border-r border-sidebar-border/10 bg-sidebar shadow-[4px_0_30px_rgba(0,0,0,0.15)] rounded-tr-[2.2rem] rounded-br-[2.2rem] overflow-hidden sidebar-premium-bg">
         {/* Premium Logo Header */}
-        <div className="relative px-5 py-4 flex flex-col items-center bg-gradient-to-b from-[#f0f9ff] to-white border-b border-sidebar-border overflow-hidden">
+        <div className="relative px-5 py-6 flex flex-col items-center bg-transparent border-b border-sidebar-border/10 overflow-hidden">
           {/* Subtle turquoise glow in top corner */}
-          <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-[#00C9E0]/10 blur-2xl pointer-events-none animate-pulse" />
+          <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-[#00C9E0]/15 blur-2xl pointer-events-none animate-pulse" />
           <img 
             src="/assets/logo.png" 
             alt="Epotech Solutions" 
-            className="h-12 w-auto object-contain transition-all duration-500 hover:scale-105 hover:rotate-1 relative z-10 filter hover:drop-shadow-[0_0_8px_rgba(0,201,224,0.4)]" 
+            className="h-16 w-auto object-contain relative z-10 logo-premium" 
           />
           {/* Accent line + tagline */}
-          <div className="mt-2 flex items-center gap-2 relative z-10">
-            <div className="h-[1.5px] w-4 bg-[#00C9E0] rounded-full" />
-            <span className="text-[9px] font-black tracking-[0.22em] text-[#00C9E0] uppercase">Portal CRM</span>
-            <div className="h-[1.5px] w-4 bg-[#00C9E0] rounded-full" />
+          <div className="mt-3 flex items-center gap-2 relative z-10">
+            <div className="h-[1.5px] w-5 bg-[#00C9E0] rounded-full" />
+            <span className="text-[10px] font-black tracking-[0.25em] text-[#00C9E0] uppercase">Portal CRM</span>
+            <div className="h-[1.5px] w-5 bg-[#00C9E0] rounded-full" />
           </div>
         </div>
         
-        <nav className="flex-1 px-3 py-3 space-y-3 overflow-hidden">
+        <nav className="flex-1 px-3 py-4 space-y-4 overflow-y-auto no-scrollbar">
           <div>
-            <p className="px-3 mb-1 text-[9px] font-bold text-muted-foreground/40 tracking-[0.15em] uppercase">
+            <p className="px-3 mb-1.5 text-[10px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
               Principal
             </p>
             <div className="space-y-0.5">
@@ -110,7 +110,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     )} />
                     <span className="text-[13px] relative z-10">{item.name}</span>
                     {isActive && (
-                      <span className="absolute right-3.5 h-2 w-2 rounded-full bg-white active-indicator-pulse shadow-[0_0_8px_rgba(255,255,255,0.9)]" />
+                      <span className="absolute right-3.5 h-2 w-2 rounded-full bg-[#00C9E0] shadow-[0_0_8px_rgba(0,201,224,0.9)] animate-pulse" />
                     )}
                   </Link>
                 )
@@ -119,7 +119,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           </div>
           
           <div>
-            <p className="px-3 mb-1 text-[9px] font-bold text-muted-foreground/40 tracking-[0.15em] uppercase">
+            <p className="px-3 mb-1.5 text-[10px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
               Gestión
             </p>
             <div className="space-y-0.5">
@@ -146,7 +146,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     )} />
                     <span className="text-[13px] relative z-10">{item.name}</span>
                     {isActive && (
-                      <span className="absolute right-3.5 h-2 w-2 rounded-full bg-white active-indicator-pulse shadow-[0_0_8px_rgba(255,255,255,0.9)]" />
+                      <span className="absolute right-3.5 h-2 w-2 rounded-full bg-[#00C9E0] shadow-[0_0_8px_rgba(0,201,224,0.9)] animate-pulse" />
                     )}
                   </Link>
                 )
@@ -156,12 +156,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         </nav>
 
         {/* Logout Footer */}
-        <div className="border-t border-sidebar-border px-3 py-3 animate-sidebar-item" style={{ animationDelay: `${(mainNavItems.length + moreNavItems.length) * 50}ms` }}>
+        <div className="border-t border-sidebar-border px-4 py-4 animate-sidebar-item" style={{ animationDelay: `${(mainNavItems.length + moreNavItems.length) * 50}ms` }}>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] font-medium text-red-500/80 hover:bg-red-50 hover:text-red-600 transition-all duration-300 ease-out hover:translate-x-1 group relative overflow-hidden"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-[13px] font-bold text-red-500 border border-red-500/30 bg-red-950/10 hover:bg-red-500/15 hover:text-red-400 transition-all duration-300 ease-out group"
           >
-            <LogOut className="h-[17px] w-[17px] flex-shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:scale-105" />
+            <LogOut className="h-[16px] w-[16px] flex-shrink-0 transition-transform duration-300 group-hover:scale-105" />
             Cerrar Sesión
           </button>
         </div>
@@ -170,7 +170,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       {/* Main Content Area */}
       <main className={cn(
         "pb-24 md:pb-0 transition-all duration-300",
-        "md:pl-64 min-h-screen bg-background/50"
+        "md:pl-64 min-h-screen bg-[#F0F5FA]"
       )}>
         {children}
       </main>

@@ -79,15 +79,15 @@
   --chart-5: oklch(0.269 0 0);
   --radius: 0.75rem;
   
-  /* Sidebar: clean white/light theme with Epotech turquoise accents */
-  --sidebar: oklch(1 0 0);                           /* Pure white */
-  --sidebar-foreground: oklch(0.24 0.08 248.0);      /* Deep navy text */
-  --sidebar-primary: oklch(0.78 0.16 205.0);         /* Turquoise active */
-  --sidebar-primary-foreground: oklch(1 0 0);        /* White on turquoise */
-  --sidebar-accent: oklch(0.95 0.02 205.0);          /* Very light turquoise hover */
-  --sidebar-accent-foreground: oklch(0.24 0.08 248.0); /* Navy text on hover */
-  --sidebar-border: oklch(0.90 0.02 245.0);          /* Soft gray border */
-  --sidebar-ring: oklch(0.78 0.16 205.0);            /* Turquoise ring */
+  /* Sidebar: dark navy theme */
+  --sidebar: oklch(0.13 0.06 248.0);                 /* Deep navy */
+  --sidebar-foreground: oklch(0.92 0.01 245.0);      /* Near-white */
+  --sidebar-primary: oklch(0.78 0.16 205.0);          /* Turquoise active */
+  --sidebar-primary-foreground: oklch(1 0 0);         /* White */
+  --sidebar-accent: oklch(0.19 0.07 248.0);           /* Slightly lighter navy hover */
+  --sidebar-accent-foreground: oklch(0.92 0.01 245.0); /* White on hover */
+  --sidebar-border: oklch(0.22 0.07 248.0);           /* Dark navy border */
+  --sidebar-ring: oklch(0.78 0.16 205.0);
 }
 
 .dark {
@@ -201,8 +201,28 @@
 
 /* Glassmorphism Hover/Active States */
 .sidebar-link-active {
-  background: linear-gradient(135deg, var(--primary) 0%, oklch(0.82 0.15 200.0) 100%);
-  box-shadow: 0 4px 15px -3px rgba(0, 201, 224, 0.3), 0 2px 6px -2px rgba(0, 201, 224, 0.2);
+  background: linear-gradient(90deg, rgba(4, 107, 210, 0.22) 0%, rgba(0, 201, 224, 0.32) 100%);
+  border: 1.2px solid rgba(0, 201, 224, 0.45);
+  box-shadow: 0 0 18px rgba(0, 201, 224, 0.25), inset 0 0 8px rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-premium-bg {
+  background-color: #030b17 !important;
+  background-image: 
+    radial-gradient(circle at 100% 95%, rgba(0, 201, 224, 0.38) 0%, rgba(4, 107, 210, 0.18) 30%, transparent 60%),
+    radial-gradient(circle at 0% 0%, rgba(0, 201, 224, 0.08) 0%, transparent 45%),
+    linear-gradient(to bottom, #030b17 35%, transparent 75%),
+    radial-gradient(circle, rgba(0, 201, 224, 0.16) 1.5px, transparent 1.5px) !important;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 20px 20px !important;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* Water drop pulse on active indicator */
@@ -223,6 +243,25 @@
 
 .active-indicator-pulse {
   animation: water-drop 2s infinite ease-in-out;
+}
+
+/* Scrollbar Hider Utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Custom premium logo styling and transition */
+.logo-premium {
+  filter: drop-shadow(0 2px 8px rgba(0, 201, 224, 0.15)) !important;
+  transition: all 0.4s ease-out !important;
+}
+.logo-premium:hover {
+  filter: drop-shadow(0 0 12px rgba(0, 201, 224, 0.45)) !important;
+  transform: scale(1.04) rotate(0.5deg);
 }
 
 

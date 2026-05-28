@@ -713,16 +713,16 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
   useEffect(() => { onCompleteRef.current = onComplete }, [onComplete])
 
   useEffect(() => {
-    // 1. Start spraying at 1000ms (after gun has fully entered)
-    const t1 = setTimeout(() => setAnimationStage('spraying'), 1000)
-    // 2. Full water flooding effect on glass at 2200ms
-    const t2 = setTimeout(() => setAnimationStage('flooding'), 2200)
-    // 3. Clear/wipe screen with high-pressure sheet sweep at 3600ms
-    const t3 = setTimeout(() => setAnimationStage('clearing'), 3600)
-    // 4. Complete transition at 4400ms
+    // 1. Start spraying at 600ms (after gun has mostly entered)
+    const t1 = setTimeout(() => setAnimationStage('spraying'), 600)
+    // 2. Full water flooding effect on glass at 1200ms
+    const t2 = setTimeout(() => setAnimationStage('flooding'), 1200)
+    // 3. Clear/wipe screen with high-pressure sheet sweep at 2000ms
+    const t3 = setTimeout(() => setAnimationStage('clearing'), 2000)
+    // 4. Complete transition at 2650ms
     const t4 = setTimeout(() => {
       onCompleteRef.current()
-    }, 4400)
+    }, 2650)
 
     return () => {
       clearTimeout(t1)
@@ -1090,7 +1090,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             ? 'none'
             : (animationStage === 'spraying' || animationStage === 'flooding')
               ? 'nozzle-recoil 0.08s infinite alternate'
-              : 'gun-enter 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards'
+              : 'gun-enter 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards'
         }}
       >
         <img

@@ -17,7 +17,8 @@ import {
   BarChart3,
   BookOpen,
   Bell,
-  LogOut
+  LogOut,
+  ChevronRight
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
@@ -229,7 +230,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                   Accede a todos los módulos del sistema
                 </SheetDescription>
               </SheetHeader>
-              <div className="py-4 px-3 space-y-0.5 overflow-y-auto max-h-[calc(100vh-8rem)]">
+              <div className="py-6 px-4 space-y-3 overflow-y-auto max-h-[calc(100vh-9rem)]">
                 {moreNavItems.map((item) => {
                   const isActive = pathname.startsWith(item.href)
                   return (
@@ -237,36 +238,47 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center gap-4 px-4 py-3 text-sm font-medium transition-all duration-300 ease-out group relative overflow-hidden rounded-xl",
+                        "flex items-center justify-between gap-4 px-4 py-4.5 text-base font-medium transition-all duration-300 ease-out group relative overflow-hidden rounded-2xl border border-white/[0.01]",
                         isActive
-                          ? "sidebar-link-active text-white font-semibold"
-                          : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground hover:translate-x-1"
+                          ? "sidebar-link-active text-white font-bold shadow-md active:scale-95"
+                          : "text-sidebar-foreground/75 hover:bg-white/[0.02] hover:text-sidebar-foreground hover:translate-x-1 active:scale-[0.98]"
                       )}
                     >
-                      <div className={cn(
-                        "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out",
+                      <div className="flex items-center gap-4 relative z-10 w-full">
+                        <div className={cn(
+                          "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out",
+                          isActive 
+                            ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
+                            : "scale-y-0 opacity-0 group-hover:scale-y-[1.1] group-hover:opacity-40"
+                        )} />
+                        <item.icon className={cn(
+                          "h-[20px] w-[20px] transition-all duration-300 relative z-10 flex-shrink-0",
+                          isActive 
+                            ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_8px_rgba(0,201,224,0.4)]" 
+                            : "text-sidebar-foreground/50 group-hover:text-primary group-hover:scale-105"
+                        )} />
+                        <span className={cn(
+                          "relative z-10 transition-colors duration-300 text-[15px] tracking-wide",
+                          isActive ? "font-semibold text-white" : "font-medium"
+                        )}>{item.name}</span>
+                      </div>
+                      <ChevronRight className={cn(
+                        "h-5 w-5 transition-all duration-300 relative z-10 flex-shrink-0",
                         isActive 
-                          ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
-                          : "scale-y-0 opacity-0 group-hover:scale-y-[1.1] group-hover:opacity-40"
+                          ? "text-[#00C9E0] translate-x-0.5" 
+                          : "text-sidebar-foreground/20 group-hover:text-sidebar-foreground/50 group-hover:translate-x-1"
                       )} />
-                      <item.icon className={cn(
-                        "h-[18px] w-[18px] transition-all duration-300 relative z-10",
-                        isActive 
-                          ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_8px_rgba(0,201,224,0.4)]" 
-                          : "text-sidebar-foreground/50 group-hover:text-primary group-hover:scale-105"
-                      )} />
-                      <span className="relative z-10 transition-colors duration-300">{item.name}</span>
                     </Link>
                   )
                 })}
               </div>
               {/* Logout in sheet */}
-              <div className="absolute bottom-0 left-0 right-0 border-t border-sidebar-border px-3 py-3 bg-sidebar">
+              <div className="absolute bottom-0 left-0 right-0 border-t border-sidebar-border px-4 py-4 bg-sidebar">
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-500/80 hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
+                  className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-xl text-base font-bold text-red-400 border border-red-500/20 bg-red-950/20 hover:bg-red-500/10 hover:text-red-300 hover:border-red-500/40 active:scale-98 transition-all duration-300 ease-out group shadow-[0_4px_16px_rgba(239,68,68,0.1)]"
                 >
-                  <LogOut className="h-[18px] w-[18px] flex-shrink-0 transition-transform duration-200 group-hover:-translate-x-0.5" />
+                  <LogOut className="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-0.5" />
                   Cerrar Sesión
                 </button>
               </div>

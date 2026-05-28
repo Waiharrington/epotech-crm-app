@@ -270,4 +270,40 @@
   transform: scale(1.04) rotate(0.5deg);
 }
 
+/* Delicate Premium Scrollbar & Momentum Touch Scrolling for smooth mobile experience */
+html, body {
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch !important;
+  overflow-x: hidden;
+}
+
+/* Customize scrollbars globally to be ultra-delicate and premium */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.15); /* slate-400 with very low opacity */
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 201, 224, 0.4) !important; /* glowing cyan on hover */
+}
+
+/* Firefox scrollbar customization */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.15) transparent;
+}
+
+
 

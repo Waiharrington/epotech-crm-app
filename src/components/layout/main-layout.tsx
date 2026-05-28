@@ -191,7 +191,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-5 left-2.5 right-2.5 z-50 h-16 rounded-2xl border border-sidebar-border/10 bg-sidebar/85 backdrop-blur-xl px-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.3)] flex items-center justify-around">
+      <nav className="md:hidden fixed bottom-5 left-2.5 right-2.5 z-50 h-16 rounded-2xl border border-sidebar-border/10 sidebar-premium-bg overflow-hidden px-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.3)] flex items-center justify-around">
         <div className="flex items-center justify-between w-full h-full gap-0.5">
           {mainNavItems.map((item) => {
             const isActive = pathname.startsWith(item.href)
@@ -235,8 +235,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                 <span className="text-[9px] font-medium tracking-tight text-sidebar-foreground/50">Más</span>
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[85%] p-0 rounded-l-3xl border-l border-sidebar-border bg-sidebar backdrop-blur-xl">
-              <SheetHeader className="p-6 text-left border-b border-sidebar-border">
+            <SheetContent side="right" className="w-[85%] p-0 rounded-l-3xl border-l border-sidebar-border sidebar-premium-bg overflow-hidden">
+              <SheetHeader className="p-6 text-left border-b border-sidebar-border/15">
                 <SheetTitle className="font-extrabold text-xl tracking-tight text-sidebar-foreground">
                   Menú Principal
                 </SheetTitle>
@@ -290,7 +290,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                 })}
               </div>
               {/* Logout in sheet */}
-              <div className="absolute bottom-0 left-0 right-0 border-t border-sidebar-border px-4 py-4 bg-sidebar">
+              <div className="absolute bottom-0 left-0 right-0 border-t border-sidebar-border/15 px-4 py-4 bg-[#030b17]">
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-xl text-base font-bold text-red-400 border border-red-500/20 bg-red-950/20 hover:bg-red-500/10 hover:text-red-300 hover:border-red-500/40 active:scale-98 transition-all duration-300 ease-out group shadow-[0_4px_16px_rgba(239,68,68,0.1)]"

@@ -328,69 +328,65 @@ export default function DashboardPage() {
         {/* Statistics Grid */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 shrink-0">
           {/* Card: Clientes Totales */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02),inset_0_1px_1px_rgba(255,255,255,0.7)] border-b-4 border-b-[#00C9E0] hover:border-b-[#046bd2] hover:-translate-y-0.5 hover:shadow-[0_12px_25px_-6px_rgba(4,107,210,0.05)] transition-all duration-300 group">
-            <div className="p-3 flex items-center justify-between">
+          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group">
+            <div className="p-3.5 flex items-center justify-between">
               <div className="flex-1 min-w-0">
-                <p className="text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Clientes Totales</p>
-                <p className="text-xl font-black text-[#0B1E3F] mt-0.5 tracking-tight">{stats.totalClients}</p>
-                <p className="text-[9px] text-[#046bd2] mt-1 font-semibold flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00C9E0] animate-pulse"></span>
+                <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Clientes Totales</p>
+                <p className="text-xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.totalClients}</p>
+                <p className="text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1">
                   +2 nuevos esta semana
                 </p>
               </div>
-              <div className="h-9 w-9 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm shrink-0 transition-transform group-hover:scale-105">
-                <Users className="h-4.5 w-4.5 text-[#046bd2] transition-transform group-hover:rotate-[6deg]" />
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E5F2FF] group-hover:border-[#046bd2]/10">
+                <Users className="h-4 w-4 text-slate-500 group-hover:text-[#046bd2] transition-colors" />
               </div>
             </div>
           </div>
 
           {/* Card: Trabajos Activos */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02),inset_0_1px_1px_rgba(255,255,255,0.7)] border-b-4 border-b-[#046bd2] hover:border-b-[#00C9E0] hover:-translate-y-0.5 hover:shadow-[0_12px_25px_-6px_rgba(4,107,210,0.05)] transition-all duration-300 group">
-            <div className="p-3 flex items-center justify-between">
+          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group">
+            <div className="p-3.5 flex items-center justify-between">
               <div className="flex-1 min-w-0">
-                <p className="text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Trabajos Activos</p>
-                <p className="text-xl font-black text-[#0B1E3F] mt-0.5 tracking-tight">{stats.activeJobs}</p>
-                <p className="text-[9px] text-[#046bd2] mt-1 font-semibold flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#046bd2] animate-pulse"></span>
+                <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Trabajos Activos</p>
+                <p className="text-xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.activeJobs}</p>
+                <p className="text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1">
                   En el tablero Kanban
                 </p>
               </div>
-              <div className="h-9 w-9 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm shrink-0 transition-transform group-hover:scale-105">
-                <Briefcase className="h-4.5 w-4.5 text-[#046bd2] transition-transform group-hover:-rotate-[6deg]" />
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E5F2FF] group-hover:border-[#046bd2]/10">
+                <Briefcase className="h-4 w-4 text-slate-500 group-hover:text-[#046bd2] transition-colors" />
               </div>
             </div>
           </div>
 
           {/* Card: Ingresos Totales */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02),inset_0_1px_1px_rgba(255,255,255,0.7)] border-b-4 border-b-[#00C9E0] hover:border-b-[#046bd2] hover:-translate-y-0.5 hover:shadow-[0_12px_25px_-6px_rgba(4,107,210,0.05)] transition-all duration-300 group">
-            <div className="p-3 flex items-center justify-between">
+          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group">
+            <div className="p-3.5 flex items-center justify-between">
               <div className="flex-1 min-w-0">
-                <p className="text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Ingresos Totales</p>
-                <p className="text-xl font-black text-[#0B1E3F] mt-0.5 tracking-tight">${stats.monthlyIncome.toLocaleString()}</p>
-                <p className="text-[9px] text-[#046bd2] mt-1 font-semibold flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00C9E0] animate-pulse"></span>
+                <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Ingresos Totales</p>
+                <p className="text-xl font-bold text-slate-900 mt-0.5 tracking-tight">${stats.monthlyIncome.toLocaleString()}</p>
+                <p className="text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1">
                   Calculado de la Caja
                 </p>
               </div>
-              <div className="h-9 w-9 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm shrink-0 transition-transform group-hover:scale-105">
-                <Wallet className="h-4.5 w-4.5 text-[#046bd2] transition-transform group-hover:scale-110" />
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E5F2FF] group-hover:border-[#046bd2]/10">
+                <Wallet className="h-4 w-4 text-slate-500 group-hover:text-[#046bd2] transition-colors" />
               </div>
             </div>
           </div>
 
           {/* Card: Alertas Stock */}
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02),inset_0_1px_1px_rgba(255,255,255,0.7)] border-b-4 border-b-[#046bd2] hover:border-b-[#00C9E0] hover:-translate-y-0.5 hover:shadow-[0_12px_25px_-6px_rgba(4,107,210,0.05)] transition-all duration-300 group">
-            <div className="p-3 flex items-center justify-between">
+          <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#046bd2]/20 hover:shadow-[0_8px_20px_rgba(4,107,210,0.03)] hover:-translate-y-0.5 transition-all duration-300 group">
+            <div className="p-3.5 flex items-center justify-between">
               <div className="flex-1 min-w-0">
-                <p className="text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Alertas Stock</p>
-                <p className="text-xl font-black text-[#0B1E3F] mt-0.5 tracking-tight">{stats.lowStock}</p>
-                <p className="text-[9px] text-[#046bd2] mt-1 font-semibold flex items-center gap-1.5">
-                  <span className={`w-1.5 h-1.5 rounded-full ${stats.lowStock > 0 ? 'bg-amber-500 animate-ping' : 'bg-[#00C9E0]'}`}></span>
-                  {stats.lowStock > 0 ? 'Reponer insumos' : 'Inventario sano'}
+                <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">Alertas Stock</p>
+                <p className="text-xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.lowStock}</p>
+                <p className="text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1">
+                  {stats.lowStock > 0 ? `${stats.lowStock} por reponer` : 'Inventario sano'}
                 </p>
               </div>
-              <div className="h-9 w-9 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#E5F2FF] to-[#E5F2FF]/60 border border-[#046bd2]/5 shadow-sm shrink-0 transition-transform group-hover:scale-105">
-                <AlertTriangle className="h-4.5 w-4.5 text-[#046bd2] transition-transform group-hover:scale-110" />
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E5F2FF] group-hover:border-[#046bd2]/10">
+                <AlertTriangle className={`h-4 w-4 transition-colors ${stats.lowStock > 0 ? 'text-[#046bd2]' : 'text-slate-500 group-hover:text-[#046bd2]'}`} />
               </div>
             </div>
           </div>

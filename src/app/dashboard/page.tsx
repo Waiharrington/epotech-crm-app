@@ -358,9 +358,9 @@ export default function DashboardPage() {
       {/* Premium Dark Navy Header Banner */}
       <header className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-5 md:p-6 shrink-0 relative overflow-hidden z-10 animate-dashboard-item shadow-xl" style={{ animationDelay: '100ms' }}>
         <div className="relative z-10 flex flex-col gap-4.5">
-          {/* Top Row: Logo & Icons */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 md:hidden">
+          {/* Top Row: Logo & Icons (Mobile only) */}
+          <div className="flex items-center justify-between md:hidden">
+            <div className="flex items-center gap-2">
               <img 
                 src="/assets/logo.png" 
                 alt="Epotech Solutions" 
@@ -388,27 +388,51 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Middle Row: Greeting */}
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
-                {greetingState.text}
-              </h1>
-              
-              {/* Dynamic Celestial Time-of-day Icon */}
-              <div className="flex items-center justify-center">
-                {greetingState.icon === 'sunrise' && (
-                  <Sunrise className={`h-5 w-5 ${greetingState.iconColor} filter drop-shadow-[0_0_4px_rgba(0,201,224,0.4)]`} />
-                )}
-                {greetingState.icon === 'sun' && (
-                  <Sun className={`h-5 w-5 ${greetingState.iconColor} filter drop-shadow-[0_0_6px_rgba(234,179,8,0.5)]`} style={{ animation: 'spin 12s linear infinite' }} />
-                )}
-                {greetingState.icon === 'moon' && (
-                  <Moon className={`h-5 w-5 ${greetingState.iconColor} filter drop-shadow-[0_0_4px_rgba(129,140,248,0.4)] animate-pulse`} />
-                )}
+          {/* Middle Row: Greeting & Desktop Icons */}
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            {/* Left side: Greeting */}
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+                  {greetingState.text}
+                </h1>
+                
+                {/* Dynamic Celestial Time-of-day Icon */}
+                <div className="flex items-center justify-center">
+                  {greetingState.icon === 'sunrise' && (
+                    <Sunrise className={`h-5 w-5 ${greetingState.iconColor} filter drop-shadow-[0_0_4px_rgba(0,201,224,0.4)]`} />
+                  )}
+                  {greetingState.icon === 'sun' && (
+                    <Sun className={`h-5 w-5 ${greetingState.iconColor} filter drop-shadow-[0_0_6px_rgba(234,179,8,0.5)]`} style={{ animation: 'spin 12s linear infinite' }} />
+                  )}
+                  {greetingState.icon === 'moon' && (
+                    <Moon className={`h-5 w-5 ${greetingState.iconColor} filter drop-shadow-[0_0_4px_rgba(129,140,248,0.4)] animate-pulse`} />
+                  )}
+                </div>
               </div>
+              <p className="text-slate-300/80 text-[10px] md:text-xs mt-1 font-medium">{greetingState.sub}</p>
             </div>
-            <p className="text-slate-300/80 text-[10px] md:text-xs mt-1 font-medium">{greetingState.sub}</p>
+
+            {/* Right side: Desktop Icons (Notification bell & profile pic aligned vertically with the greeting) */}
+            <div className="hidden md:flex items-center gap-2.5">
+              {/* Notification Bell */}
+              <button className="h-7.5 w-7.5 rounded-xl flex items-center justify-center bg-white/5 border border-white/10 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-200 relative group">
+                <Bell className="h-4 w-4" />
+                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#00C9E0] animate-pulse" />
+              </button>
+
+              {/* Profile Avatar trigger */}
+              <Link 
+                href="/ajustes" 
+                className="h-7.5 w-7.5 rounded-xl overflow-hidden border border-white/20 hover:border-[#00C9E0] shadow-md hover:shadow-[#00C9E0]/20 transition-all hover:scale-105 active:scale-95 duration-200"
+              >
+                <img 
+                  src={profilePic} 
+                  alt="Sebastián" 
+                  className="h-full w-full object-cover" 
+                />
+              </Link>
+            </div>
           </div>
 
           {/* Bottom Row: Date & Vercel Pill */}

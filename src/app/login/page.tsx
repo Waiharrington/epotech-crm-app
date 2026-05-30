@@ -179,7 +179,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen lg:max-h-screen lg:h-screen lg:overflow-hidden bg-[#102A43] font-sans antialiased">
+    <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen lg:max-h-screen lg:h-screen lg:overflow-hidden bg-[#030b17] font-sans antialiased">
       
       {/* Left Column: Premium Private Operations Terminal for Sebastian (Only on desktop) */}
       <div 
@@ -246,7 +246,7 @@ export default function LoginPage() {
         <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-10 opacity-40" />
         
         {/* Mobile-Only Hero Header (Perfect h-[220px] to cover Dynamic Island and show Sebastian fully, text sits below it on solid blue) */}
-        <div className="lg:hidden w-full h-[220px] relative flex-shrink-0 bg-[#102A43] z-10 m-0 p-0 overflow-hidden">
+        <div className="lg:hidden w-full h-[220px] relative flex-shrink-0 bg-[#030b17] z-10 m-0 p-0 overflow-hidden">
           <img 
             src="/assets/worker.jpg"
             alt="Epotech Solutions Worker"
@@ -255,8 +255,8 @@ export default function LoginPage() {
               objectPosition: '38% 0%',
             }}
           />
-          {/* Elegant gradient overlay: clear at the top, rich solid navy blue (#102A43) at the bottom */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#102A43]/0 via-[#102A43]/30 to-[#102A43] z-10" />
+          {/* Elegant gradient overlay: clear at the top, rich solid deep navy (#030b17) at the bottom to blend seamlessly with the premium menu background */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#030b17]/30 to-[#030b17] z-10" />
         </div>
 
         {/* Card Container (Floats on solid dark navy on mobile, centered light grey on desktop) */}

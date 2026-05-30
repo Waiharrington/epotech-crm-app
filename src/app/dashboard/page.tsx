@@ -360,11 +360,11 @@ export default function DashboardPage() {
         <div className="relative z-10 flex flex-col gap-4.5">
           {/* Top Row: Logo & Icons */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 md:hidden">
               <img 
                 src="/assets/logo.png" 
                 alt="Epotech Solutions" 
-                className="h-6 md:h-7 w-auto object-contain relative z-10 logo-premium" 
+                className="h-6 w-auto object-contain relative z-10 logo-premium" 
               />
             </div>
             <div className="flex items-center gap-2.5">

@@ -271,10 +271,16 @@
 }
 
 /* Delicate Premium Scrollbar & Momentum Touch Scrolling for smooth mobile experience */
-html, body {
+html {
   scroll-behavior: smooth !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
   -webkit-overflow-scrolling: touch !important;
   overflow-x: hidden;
+  overflow-y: visible;
 }
 
 /* Customize scrollbars globally to be ultra-delicate and premium */

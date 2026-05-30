@@ -240,10 +240,10 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right Column: Premium Responsive Login Container */}
-      <div className="flex flex-col min-h-screen lg:h-full lg:max-h-screen lg:overflow-hidden bg-[#102A43] lg:bg-[#F1F5F9] relative">
+      {/* Right Column: Premium Responsive Login Container with luxury CRM menu background */}
+      <div className="flex flex-col min-h-screen lg:h-full lg:max-h-screen lg:overflow-hidden sidebar-premium-bg lg:bg-[#F1F5F9] relative">
         {/* Satisfying water droplet micro-particles */}
-        <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-0 opacity-40" />
+        <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-10 opacity-40" />
         
         {/* Mobile-Only Hero Header (Perfect h-[220px] to cover Dynamic Island and show Sebastian fully, text sits below it on solid blue) */}
         <div className="lg:hidden w-full h-[220px] relative flex-shrink-0 bg-[#102A43] z-10 m-0 p-0 overflow-hidden">
@@ -260,8 +260,12 @@ export default function LoginPage() {
         </div>
 
         {/* Card Container (Floats on solid dark navy on mobile, centered light grey on desktop) */}
-        <div className="flex-1 flex flex-col items-center justify-start lg:justify-center p-4 sm:p-6 relative z-20 bg-[#102A43] lg:bg-transparent overflow-y-auto lg:overflow-hidden no-scrollbar">
+        <div className="flex-1 flex flex-col items-center justify-start lg:justify-center p-4 sm:p-6 relative z-20 bg-transparent lg:bg-transparent overflow-y-auto lg:overflow-hidden no-scrollbar">
           
+          {/* Ambient Glow Spheres / Pulsing 3D light behind the login card */}
+          <div className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full bg-[#00C9E0]/8 blur-[100px] pointer-events-none z-0 animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-[#2563EB]/12 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '6s' }} />
+
           {/* Mobile-Only Greeting (Positioned on the solid blue background, exactly in the middle between the photo and the card) */}
           <div className="lg:hidden w-full max-w-[485px] text-center flex flex-col items-center pt-5 pb-5 px-4 z-20 flex-shrink-0">
             {/* Accent Line - Resized for premium proportions */}
@@ -274,9 +278,9 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <div ref={cardRef} className="w-full max-w-[485px] lg:my-auto flex-shrink-0">
-            {/* Card expanded upwards on mobile with pt-16 to occupy more of the top blue space, keeping sm:p-8 for desktop */}
-            <Card className="w-full shadow-[0_25px_60px_-15px_rgba(15,23,42,0.25)] border-0 bg-white rounded-[24px] overflow-hidden pt-16 pb-6 px-6 sm:p-8 flex flex-col gap-0 relative">
+          <div ref={cardRef} className="w-full max-w-[485px] lg:my-auto flex-shrink-0 z-20">
+            {/* Card with luxury glass border, premium deep shadows, and hover cyan glow */}
+            <Card className="w-full shadow-[0_25px_60px_-15px_rgba(15,23,42,0.25)] border border-slate-100 dark:border-slate-800 lg:border-slate-200/60 bg-white rounded-[24px] overflow-hidden pt-16 pb-6 px-6 sm:p-8 flex flex-col gap-0 relative transition-all duration-500 hover:shadow-[0_30px_70px_-15px_rgba(15,23,42,0.3),0_0_30px_rgba(0,201,224,0.06)] hover:border-[#00C9E0]/20 group/card">
               
               {/* 1. Satisfying Clean Reveal Frosted Glass Overlay (Fully animated on mobile & desktop via hardware-accelerated transform to bypass WebKit clip-path/blur repaint bugs. DOM-purged after 1.8s) */}
               {!animationDone && (
@@ -327,12 +331,12 @@ export default function LoginPage() {
                     </Alert>
                   )}
                   
-                  <div className="space-y-1.5">
-                    <Label htmlFor="email" className="text-[9px] font-extrabold text-[#102A43] uppercase tracking-widest pl-1">
+                  <div className="space-y-1.5 group/input">
+                    <Label htmlFor="email" className="text-[9px] font-extrabold text-[#102A43] uppercase tracking-widest pl-1 transition-colors duration-300 group-focus-within/input:text-[#00C9E0]">
                       Correo Electrónico
                     </Label>
                     <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400/80" />
+                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400/80 transition-all duration-300 group-focus-within/input:text-[#00C9E0] group-focus-within/input:scale-110 group-focus-within/input:drop-shadow-[0_0_4px_rgba(0,201,224,0.4)]" />
                       <Input
                         id="email"
                         type="email"
@@ -340,17 +344,17 @@ export default function LoginPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="rounded-[12px] border-slate-200 focus:border-[#00C9E0] focus:ring-3 focus:ring-[#00C9E0]/15 h-10.5 pl-11 pr-4 shadow-sm bg-white font-medium text-slate-800 focus:shadow-md transition-all duration-300 text-xs"
+                        className="rounded-[12px] border-slate-200 focus:border-[#00C9E0] focus:ring-4 focus:ring-[#00C9E0]/12 h-10.5 pl-11 pr-4 shadow-sm bg-white font-medium text-slate-800 focus:shadow-[0_0_15px_rgba(0,201,224,0.1)] transition-all duration-300 text-xs hover:border-[#00C9E0]/40"
                       />
                     </div>
                   </div>
                   
-                  <div className="space-y-1.5">
-                    <Label htmlFor="password" className="text-[9px] font-extrabold text-[#102A43] uppercase tracking-widest pl-1">
+                  <div className="space-y-1.5 group/input">
+                    <Label htmlFor="password" className="text-[9px] font-extrabold text-[#102A43] uppercase tracking-widest pl-1 transition-colors duration-300 group-focus-within/input:text-[#00C9E0]">
                       Contraseña
                     </Label>
                     <div className="relative">
-                      <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400/80" />
+                      <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400/80 transition-all duration-300 group-focus-within/input:text-[#00C9E0] group-focus-within/input:scale-110 group-focus-within/input:drop-shadow-[0_0_4px_rgba(0,201,224,0.4)]" />
                       <Input
                         id="password"
                         type={showPassword ? 'text' : 'password'}
@@ -358,7 +362,7 @@ export default function LoginPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className="rounded-[12px] border-slate-200 focus:border-[#00C9E0] focus:ring-3 focus:ring-[#00C9E0]/15 h-10.5 pl-11 pr-10 shadow-sm bg-white font-medium text-slate-800 focus:shadow-md transition-all duration-300 text-xs"
+                        className="rounded-[12px] border-slate-200 focus:border-[#00C9E0] focus:ring-4 focus:ring-[#00C9E0]/12 h-10.5 pl-11 pr-10 shadow-sm bg-white font-medium text-slate-800 focus:shadow-[0_0_15px_rgba(0,201,224,0.1)] transition-all duration-300 text-xs hover:border-[#00C9E0]/40"
                       />
                       <button
                         type="button"
@@ -377,7 +381,7 @@ export default function LoginPage() {
                 
                 <CardFooter className="px-2 pb-4 pt-3 bg-transparent border-0">
                   <Button 
-                    className="w-full h-11 rounded-[12px] font-extrabold bg-[#00C9E0] hover:bg-[#00B5CC] text-white transition-all duration-300 shadow-lg shadow-[#00C9E0]/25 text-xs hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 border border-transparent relative overflow-hidden" 
+                    className="w-full h-11 rounded-[12px] font-extrabold bg-[#00C9E0] hover:bg-[#00B5CC] text-white transition-all duration-300 shadow-lg shadow-[#00C9E0]/25 hover:shadow-[0_0_25px_rgba(0,201,224,0.45)] text-xs hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 border border-transparent relative overflow-hidden active:translate-y-px" 
                     type="submit" 
                     disabled={loading}
                   >

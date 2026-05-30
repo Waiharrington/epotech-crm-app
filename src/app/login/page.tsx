@@ -27,7 +27,7 @@ export default function LoginPage() {
   const [positionX, setPositionX] = useState(95)
   const [positionY, setPositionY] = useState(0)
   const [zoom, setZoom] = useState(108) // percentage scale: 20 to 300
-  const [imageUrl, setImageUrl] = useState('/assets/worker.jpg')
+  const [imageUrl, setImageUrl] = useState('/assets/login_hero_mobile.jpeg')
   const [showTuner, setShowTuner] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -45,6 +45,7 @@ export default function LoginPage() {
       if (savedY !== null) setPositionY(Number(savedY))
       if (savedZoom !== null) setZoom(Number(savedZoom))
       if (savedImg !== null) setImageUrl(savedImg)
+      else setImageUrl('/assets/login_hero_mobile.jpeg')
     }
   }, [])
 
@@ -73,7 +74,7 @@ export default function LoginPage() {
     setPositionX(95)
     setPositionY(0)
     setZoom(108)
-    setImageUrl('/assets/worker.jpg')
+    setImageUrl('/assets/login_hero_mobile.jpeg')
     localStorage.removeItem('login_hero_x')
     localStorage.removeItem('login_hero_y')
     localStorage.removeItem('login_hero_zoom')

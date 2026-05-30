@@ -319,7 +319,7 @@ export default function LoginPage() {
           <button 
             type="button"
             onClick={() => setShowTuner(!showTuner)}
-            className="absolute top-4 right-4 z-30 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/85 backdrop-blur-md border border-[#00C9E0]/40 text-white text-[10px] font-bold shadow-lg active:scale-95 transition-all duration-300"
+            className="absolute bottom-6 right-4 z-30 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/85 backdrop-blur-md border border-[#00C9E0]/40 text-white text-[10px] font-bold shadow-lg active:scale-95 transition-all duration-300"
           >
             <Sparkles className="h-3.5 w-3.5 text-[#00C9E0] animate-pulse" />
             <span>Ajustar Foto</span>

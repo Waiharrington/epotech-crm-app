@@ -350,7 +350,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen md:h-screen md:max-h-screen bg-[#F0F5FA] overflow-x-hidden overflow-y-auto md:overflow-hidden px-4.5 pb-4 pt-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] md:p-4.5 gap-4 relative no-scrollbar">
+    <div className="flex flex-col md:h-screen md:max-h-screen bg-[#F0F5FA] md:overflow-hidden px-4.5 pb-4 pt-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] md:p-4.5 gap-4 relative no-scrollbar">
       {/* Premium Ambient Background Lighting - Dynamic color shifts based on Utah Time */}
       <div className={`absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full ${greetingState.glowClass} blur-[130px] pointer-events-none z-0 transition-all duration-1000`} />
       <div className="absolute bottom-[-10%] left-[20%] w-[45%] h-[45%] rounded-full bg-[#0097A7]/6 blur-[130px] pointer-events-none z-0" />

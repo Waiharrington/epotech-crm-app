@@ -24,9 +24,9 @@ export default function LoginPage() {
   const [animationDone, setAnimationDone] = useState(false)
 
   // Mobile Hero Background Position, Zoom & Image Tuner states (Mobile-only, persistent)
-  const [positionX, setPositionX] = useState(33)
-  const [positionY, setPositionY] = useState(26)
-  const [zoom, setZoom] = useState(100) // percentage scale: 20 to 300
+  const [positionX, setPositionX] = useState(95)
+  const [positionY, setPositionY] = useState(0)
+  const [zoom, setZoom] = useState(108) // percentage scale: 20 to 300
   const [imageUrl, setImageUrl] = useState('/assets/worker.jpg')
   const [showTuner, setShowTuner] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -70,9 +70,9 @@ export default function LoginPage() {
   }
 
   const resetTuner = () => {
-    setPositionX(33)
-    setPositionY(26)
-    setZoom(100)
+    setPositionX(95)
+    setPositionY(0)
+    setZoom(108)
     setImageUrl('/assets/worker.jpg')
     localStorage.removeItem('login_hero_x')
     localStorage.removeItem('login_hero_y')

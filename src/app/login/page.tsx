@@ -253,10 +253,10 @@ export default function LoginPage() {
           <div className="lg:hidden w-full max-w-[485px] text-center flex flex-col items-center mb-6 mt-2 px-4 z-20 flex-shrink-0">
             {/* Accent Line - Resized for premium proportions */}
             <div className="w-16 h-[4px] bg-[#00C9E0] rounded-full mb-3" />
-            <span className="text-[34px] sm:text-[44px] font-black tracking-tight text-white uppercase block leading-tight">
+            <span className="text-[25px] min-[375px]:text-[28px] min-[415px]:text-[32px] sm:text-[40px] font-black tracking-tight text-white uppercase block leading-tight whitespace-nowrap">
               Gestión Inteligente
             </span>
-            <p className="text-[12px] sm:text-[14px] font-black text-[#00C9E0] tracking-[0.28em] uppercase mt-2">
+            <p className="text-[10.5px] min-[375px]:text-[11.5px] sm:text-[13px] font-black text-[#00C9E0] tracking-[0.22em] min-[375px]:tracking-[0.25em] uppercase mt-2 whitespace-nowrap">
               Portal CRM • Epotech Solutions
             </p>
           </div>

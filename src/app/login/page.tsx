@@ -22,11 +22,6 @@ export default function LoginPage() {
   // Custom pressure washing micro-effects
   const [revealed, setRevealed] = useState(false)
   const [animationDone, setAnimationDone] = useState(false)
-  
-  // Mobile Hero Background Position Tuner states
-  const [positionX, setPositionX] = useState(38)
-  const [positionY, setPositionY] = useState(0)
-  const [showTuner, setShowTuner] = useState(false)
 
   const cardRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -258,66 +253,11 @@ export default function LoginPage() {
             alt="Epotech Solutions Worker"
             className="w-full h-full object-cover m-0 p-0 block"
             style={{ 
-              objectPosition: `${positionX}% ${positionY}%`,
+              objectPosition: '33% 26%',
             }}
           />
           {/* Elegant gradient overlay: clear at the top, rich solid deep navy (#030b17) at the bottom to blend seamlessly with the premium menu background */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#030b17]/30 to-[#030b17] z-10" />
-
-          {/* Floating Position Tuner Toggle Button */}
-          <button 
-            onClick={() => setShowTuner(!showTuner)}
-            className="absolute top-4 right-4 z-30 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/85 backdrop-blur-md border border-[#00C9E0]/40 text-white text-[10px] font-bold shadow-lg active:scale-95 transition-all duration-300"
-          >
-            <Sparkles className="h-3.5 w-3.5 text-[#00C9E0] animate-pulse" />
-            <span>Ajustar Foto</span>
-          </button>
-
-          {/* Interactive Sliders Panel */}
-          {showTuner && (
-            <div className="absolute inset-x-4 top-14 z-30 p-4 rounded-xl bg-slate-950/98 backdrop-blur-lg border border-[#00C9E0]/30 text-white shadow-2xl flex flex-col gap-2.5 animate-in fade-in slide-in-from-top-2 duration-300">
-              <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
-                <span className="text-[10px] font-black uppercase text-[#00C9E0] tracking-wider">Alineador de Foto</span>
-                <span className="bg-[#00C9E0]/20 text-[#00C9E0] px-1.5 py-0.5 rounded text-[9px] font-mono font-bold">
-                  {positionX}% {positionY}%
-                </span>
-              </div>
-              
-              <div className="flex flex-col gap-1">
-                <div className="flex justify-between text-[9px] font-bold text-slate-300">
-                  <span>Horizontal (X):</span>
-                  <span>{positionX}%</span>
-                </div>
-                <input 
-                  type="range" 
-                  min="0" 
-                  max="100" 
-                  value={positionX} 
-                  onChange={(e) => setPositionX(Number(e.target.value))}
-                  className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <div className="flex justify-between text-[9px] font-bold text-slate-300">
-                  <span>Vertical (Y):</span>
-                  <span>{positionY}%</span>
-                </div>
-                <input 
-                  type="range" 
-                  min="0" 
-                  max="100" 
-                  value={positionY} 
-                  onChange={(e) => setPositionY(Number(e.target.value))}
-                  className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
-                />
-              </div>
-
-              <div className="bg-black/50 p-2 rounded text-[8px] font-mono text-center select-all border border-white/5 active:bg-black/75 transition-colors">
-                objectPosition: '{positionX}% {positionY}%'
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Card Container (Floats on solid dark navy on mobile, centered light grey on desktop) */}

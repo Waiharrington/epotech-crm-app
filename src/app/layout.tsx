@@ -20,6 +20,11 @@ export const metadata: Metadata = {
   title: "Epotech CRM",
   description: "Sistema de gestión para Epotech Solutions",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

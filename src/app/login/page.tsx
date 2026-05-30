@@ -21,13 +21,27 @@ export default function LoginPage() {
   
   // Custom pressure washing micro-effects
   const [revealed, setRevealed] = useState(false)
+  const [animationDone, setAnimationDone] = useState(false)
+  const cardRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
+  // Dedicated satisfying clean reveal sweep (triggers automatically 450ms after mount and purges from DOM after 1.95s)
   useEffect(() => {
-    // 1. Satisfying Clean Reveal sweep trigger
-    const timer = setTimeout(() => {
+    const revealTimer = setTimeout(() => {
       setRevealed(true)
     }, 450)
+
+    const doneTimer = setTimeout(() => {
+      setAnimationDone(true)
+    }, 1950)
+
+    return () => {
+      clearTimeout(revealTimer)
+      clearTimeout(doneTimer)
+    }
+  }, [])
+
+  useEffect(() => {
 
     // 2. Interactive Water Spray Particles / Ripple effect
     const canvas = canvasRef.current
@@ -136,7 +150,6 @@ export default function LoginPage() {
     render()
 
     return () => {
-      clearTimeout(timer)
       window.removeEventListener('resize', handleResize)
       if (parent) {
         parent.removeEventListener('mousemove', handleMouseMove)
@@ -232,63 +245,66 @@ export default function LoginPage() {
         {/* Satisfying water droplet micro-particles */}
         <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-0 opacity-40" />
         
-        {/* Mobile-Only Hero Header (Taller h-[320px] to cover Dynamic Island and shift photo and title down gracefully) */}
-        <div className="lg:hidden w-full h-[320px] relative flex-shrink-0 bg-[#102A43] z-10">
-          <div 
-            className="w-full h-full bg-cover"
+        {/* Mobile-Only Hero Header (Perfect h-[220px] to cover Dynamic Island and show Sebastian fully, text sits below it on solid blue) */}
+        <div className="lg:hidden w-full h-[220px] relative flex-shrink-0 bg-[#102A43] z-10 m-0 p-0 overflow-hidden">
+          <img 
+            src="/assets/worker.jpg"
+            alt="Epotech Solutions Worker"
+            className="w-full h-full object-cover m-0 p-0 block"
             style={{ 
-              backgroundImage: `url('/assets/worker.jpg')`,
-              backgroundPosition: '38% 12%',
-              backgroundRepeat: 'no-repeat'
+              objectPosition: '38% 0%',
             }}
           />
-          {/* Elegant gradient overlay: clear at the top, rich solid navy blue (#102A43) at the bottom to back the text */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#102A43]/0 via-[#102A43]/35 to-[#102A43]/98 z-10" />
-
-          {/* Welcome greeting absolute-positioned at the absolute bottom (Lowered to pb-4 for perfect contrast and positioning) */}
-          <div className="absolute inset-x-0 bottom-0 pb-4 pt-20 px-4 z-20 text-center flex flex-col items-center">
-            {/* Accent Line - Resized for premium proportions */}
-            <div className="w-16 h-[4px] bg-[#00C9E0] rounded-full mb-3.5" />
-            <span className="text-[34px] sm:text-[44px] font-black tracking-tight text-white uppercase block leading-tight">
-              Gestión Inteligente
-            </span>
-            <p className="text-[12px] sm:text-[14px] font-black text-[#00C9E0] tracking-[0.28em] uppercase mt-2">
-              Portal CRM • Epotech Solutions
-            </p>
-          </div>
+          {/* Elegant gradient overlay: clear at the top, rich solid navy blue (#102A43) at the bottom */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#102A43]/0 via-[#102A43]/30 to-[#102A43] z-10" />
         </div>
 
         {/* Card Container (Floats on solid dark navy on mobile, centered light grey on desktop) */}
-        <div className="flex-1 flex items-center justify-center p-4 sm:p-6 relative z-20 bg-[#102A43] lg:bg-transparent overflow-y-auto lg:overflow-hidden no-scrollbar">
-          <div className="w-full max-w-[485px] my-auto flex-shrink-0">
-            {/* Card expanded at the top on mobile with pt-12 pb-6 px-6 sm:p-8 to beautifully absorb empty blue space, with all inner elements adjusted for premium vertical harmony */}
-            <Card className="w-full shadow-[0_25px_60px_-15px_rgba(15,23,42,0.25)] border-0 bg-white rounded-[24px] overflow-hidden pt-12 pb-6 px-6 sm:p-8 flex flex-col gap-0 relative">
-              
-              {/* 1. Satisfying Clean Reveal Frosted Glass Overlay (Fully animated on mobile & desktop via hardware-accelerated transform to bypass WebKit clip-path/blur repaint bugs) */}
-              <div 
-                className="absolute inset-0 z-30 pointer-events-none rounded-[24px] overflow-hidden"
-                style={{ 
-                  transform: revealed ? 'translateX(100%)' : 'translateX(0%)',
-                  transition: 'transform 1400ms cubic-bezier(0.25, 1, 0.5, 1)',
-                  willChange: 'transform'
-                }}
-              >
-                {/* The frosted glass texture (dirt/matte layer to be cleaned) */}
-                <div 
-                  className="absolute inset-0 bg-slate-100/60" 
-                  style={{
-                    backdropFilter: 'blur(6px)',
-                    WebkitBackdropFilter: 'blur(6px)'
-                  }}
-                />
-                
-                {/* High-Pressure Water Jet Line (Sweeping cyan light effect, attached to leading edge) */}
-                <div className="absolute top-0 bottom-0 left-0 w-[6px] -translate-x-1/2 bg-gradient-to-b from-transparent via-[#00C9E0] to-transparent z-40" />
-              </div>
+        <div className="flex-1 flex flex-col items-center justify-start lg:justify-center p-4 sm:p-6 relative z-20 bg-[#102A43] lg:bg-transparent overflow-y-auto lg:overflow-hidden no-scrollbar">
+          
+          {/* Mobile-Only Greeting (Positioned on the solid blue background, exactly in the middle between the photo and the card) */}
+          <div className="lg:hidden w-full max-w-[485px] text-center flex flex-col items-center pt-5 pb-5 px-4 z-20 flex-shrink-0">
+            {/* Accent Line - Resized for premium proportions */}
+            <div className="w-16 h-[4px] bg-[#00C9E0] rounded-full mb-3" />
+            <span className="text-[24px] min-[375px]:text-[27px] min-[414px]:text-[30px] sm:text-[44px] font-black tracking-tight text-white uppercase block leading-tight whitespace-nowrap">
+              Gestión Inteligente
+            </span>
+            <p className="text-[12px] sm:text-[14px] font-black text-[#00C9E0] tracking-[0.28em] uppercase mt-2">
+              Portal CRM
+            </p>
+          </div>
 
-              <CardHeader className="space-y-3.5 pb-5 pt-0 px-2 text-center flex-shrink-0">
+          <div ref={cardRef} className="w-full max-w-[485px] lg:my-auto flex-shrink-0">
+            {/* Card expanded upwards on mobile with pt-16 to occupy more of the top blue space, keeping sm:p-8 for desktop */}
+            <Card className="w-full shadow-[0_25px_60px_-15px_rgba(15,23,42,0.25)] border-0 bg-white rounded-[24px] overflow-hidden pt-16 pb-6 px-6 sm:p-8 flex flex-col gap-0 relative">
+              
+              {/* 1. Satisfying Clean Reveal Frosted Glass Overlay (Fully animated on mobile & desktop via hardware-accelerated transform to bypass WebKit clip-path/blur repaint bugs. DOM-purged after 1.8s) */}
+              {!animationDone && (
+                <div 
+                  className="absolute inset-0 z-30 pointer-events-none rounded-[24px] overflow-hidden"
+                  style={{ 
+                    transform: revealed ? 'translateX(100%)' : 'translateX(0%)',
+                    transition: 'transform 1400ms cubic-bezier(0.25, 1, 0.5, 1)',
+                    willChange: 'transform'
+                  }}
+                >
+                  {/* The frosted glass texture (dirt/matte layer to be cleaned) */}
+                  <div 
+                    className="absolute inset-0 bg-slate-100/60" 
+                    style={{
+                      backdropFilter: 'blur(6px)',
+                      WebkitBackdropFilter: 'blur(6px)'
+                    }}
+                  />
+                  
+                  {/* High-Pressure Water Jet Line (Sweeping cyan light effect, attached to leading edge) */}
+                  <div className="absolute top-0 bottom-0 left-0 w-[6px] -translate-x-1/2 bg-gradient-to-b from-transparent via-[#00C9E0] to-transparent z-40" />
+                </div>
+              )}
+
+              <CardHeader className="space-y-3 pb-4 pt-1 px-2 text-center flex-shrink-0">
                 {/* Real Logo - Enlarged for greater brand presence */}
-                <div className="flex justify-center mb-1.5">
+                <div className="flex justify-center mb-1">
                   <img 
                     src="/assets/logo_horizontal.png" 
                     alt="Epotech Solutions Logo" 
@@ -296,14 +312,14 @@ export default function LoginPage() {
                   />
                 </div>
                 
-                <CardDescription className="text-[11.5px] text-slate-500 font-semibold max-w-xs mx-auto leading-relaxed pt-0.5">
+                <CardDescription className="text-[11px] text-slate-500 font-semibold max-w-xs mx-auto leading-relaxed pt-0.5">
                   Ingresa tus credenciales para acceder al sistema interno de gestión
                 </CardDescription>
               </CardHeader>
               
               <form onSubmit={handleLogin} className="flex flex-col gap-0">
                 {/* Space between input elements */}
-                <CardContent className="space-y-4.5 px-2 pb-4 pt-1">
+                <CardContent className="space-y-4 px-2 pb-3 pt-2">
                   {error && (
                     <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5 shadow-inner py-2 px-3">
                       <AlertCircle className="h-3.5 w-3.5 text-destructive" />

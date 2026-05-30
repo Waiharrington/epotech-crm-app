@@ -23,6 +23,14 @@ export default function LoginPage() {
   const [revealed, setRevealed] = useState(false)
   const [animationDone, setAnimationDone] = useState(false)
 
+  // Mobile Hero Background Position, Zoom & Image Tuner states (Mobile-only)
+  const [positionX, setPositionX] = useState(33)
+  const [positionY, setPositionY] = useState(26)
+  const [zoom, setZoom] = useState(100) // percentage scale: 100 to 300
+  const [imageUrl, setImageUrl] = useState('/assets/worker.jpg')
+  const [showTuner, setShowTuner] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   const cardRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -249,15 +257,123 @@ export default function LoginPage() {
         {/* Mobile-Only Hero Header (Perfect h-[220px] to cover Dynamic Island and show Sebastian fully, text sits below it on solid blue) */}
         <div className="lg:hidden w-full h-[220px] relative flex-shrink-0 bg-[#030b17] z-10 m-0 p-0 overflow-hidden">
           <img 
-            src="/assets/worker.jpg"
+            src={imageUrl}
             alt="Epotech Solutions Worker"
-            className="w-full h-full object-cover m-0 p-0 block"
+            className="w-full h-full object-cover m-0 p-0 block transition-transform duration-100 ease-out"
             style={{ 
-              objectPosition: '33% 26%',
+              objectPosition: `${positionX}% ${positionY}%`,
+              transform: `scale(${zoom / 100})`,
+              transformOrigin: `${positionX}% ${positionY}%`
             }}
           />
           {/* Elegant gradient overlay: clear at the top, rich solid deep navy (#030b17) at the bottom to blend seamlessly with the premium menu background */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#030b17]/30 to-[#030b17] z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#030b17]/30 to-[#030b17] z-10 pointer-events-none" />
+
+          {/* Floating Position Tuner Toggle Button */}
+          <button 
+            type="button"
+            onClick={() => setShowTuner(!showTuner)}
+            className="absolute top-4 right-4 z-30 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/85 backdrop-blur-md border border-[#00C9E0]/40 text-white text-[10px] font-bold shadow-lg active:scale-95 transition-all duration-300"
+          >
+            <Sparkles className="h-3.5 w-3.5 text-[#00C9E0] animate-pulse" />
+            <span>Ajustar Foto</span>
+          </button>
+
+          {/* Interactive Sliders Panel */}
+          {showTuner && (
+            <div className="absolute inset-x-4 top-14 z-30 p-4 rounded-xl bg-slate-950/98 backdrop-blur-lg border border-[#00C9E0]/30 text-white shadow-2xl flex flex-col gap-2.5 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
+                <span className="text-[10px] font-black uppercase text-[#00C9E0] tracking-wider">Alineador de Foto (Móvil)</span>
+                <span className="bg-[#00C9E0]/20 text-[#00C9E0] px-1.5 py-0.5 rounded text-[9px] font-mono font-bold">
+                  {positionX}% {positionY}% @ {zoom}%
+                </span>
+              </div>
+              
+              <div className="flex flex-col gap-1">
+                <div className="flex justify-between text-[9px] font-bold text-slate-300">
+                  <span>Horizontal (X):</span>
+                  <span>{positionX}%</span>
+                </div>
+                <input 
+                  type="range" 
+                  min="0" 
+                  max="100" 
+                  value={positionX} 
+                  onChange={(e) => setPositionX(Number(e.target.value))}
+                  className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <div className="flex justify-between text-[9px] font-bold text-slate-300">
+                  <span>Vertical (Y):</span>
+                  <span>{positionY}%</span>
+                </div>
+                <input 
+                  type="range" 
+                  min="0" 
+                  max="100" 
+                  value={positionY} 
+                  onChange={(e) => setPositionY(Number(e.target.value))}
+                  className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <div className="flex justify-between text-[9px] font-bold text-slate-300">
+                  <span>Zoom / Escala:</span>
+                  <span>{zoom}%</span>
+                </div>
+                <input 
+                  type="range" 
+                  min="100" 
+                  max="300" 
+                  value={zoom} 
+                  onChange={(e) => setZoom(Number(e.target.value))}
+                  className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+                />
+              </div>
+
+              <div className="flex gap-2 mt-1">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex-1 py-1.5 px-3 rounded-lg bg-[#00C9E0] hover:bg-[#00B5CC] text-white text-[9px] font-bold tracking-wider uppercase text-center active:scale-95 transition-all"
+                >
+                  Reemplazar Imagen
+                </button>
+                <input 
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) {
+                      setImageUrl(URL.createObjectURL(file))
+                    }
+                  }}
+                  className="hidden"
+                />
+                
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPositionX(33)
+                    setPositionY(26)
+                    setZoom(100)
+                    setImageUrl('/assets/worker.jpg')
+                  }}
+                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[9px] font-bold tracking-wider uppercase text-center active:scale-95 transition-all border border-slate-700"
+                >
+                  Reset
+                </button>
+              </div>
+
+              <div className="bg-black/50 p-2 rounded text-[8px] font-mono text-center select-all border border-white/5 active:bg-black/75 transition-colors">
+                objectPosition: '{positionX}% {positionY}%', zoom: '{zoom}%', src: '{imageUrl.startsWith('blob:') ? 'Imagen Cargada' : imageUrl}'
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Card Container (Floats on solid dark navy on mobile, centered light grey on desktop) */}

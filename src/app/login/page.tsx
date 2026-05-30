@@ -202,7 +202,7 @@ export default function LoginPage() {
               Gestión Inteligente
             </span>
             <p className="text-[10px] font-black text-[#00C9E0] tracking-[0.25em] uppercase pl-0.5">
-              Portal CRM • Epotech Solutions
+              Portal CRM
             </p>
           </div>
         </div>
@@ -261,6 +261,9 @@ export default function LoginPage() {
 
         {/* Card Container (Floats on solid dark navy on mobile, centered light grey on desktop) */}
         <div className="flex-1 flex flex-col items-center justify-start lg:justify-center p-4 sm:p-6 relative z-20 bg-transparent lg:bg-transparent overflow-y-auto lg:overflow-hidden no-scrollbar">
+          
+          {/* Seamless blending gradient to fade out the dotted pattern as it approaches the photo container, preventing any sharp visual cuts */}
+          <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#030b17] to-transparent pointer-events-none z-10 lg:hidden" />
           
           {/* Ambient Glow Spheres / Pulsing 3D light behind the login card */}
           <div className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full bg-[#00C9E0]/8 blur-[100px] pointer-events-none z-0 animate-pulse" />

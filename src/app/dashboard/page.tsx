@@ -350,7 +350,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen md:h-screen md:max-h-screen bg-[#F0F5FA] overflow-y-auto md:overflow-hidden p-4.5 pb-24 md:pb-4.5 gap-4 relative no-scrollbar">
+    <div className="flex flex-col min-h-screen md:h-screen md:max-h-screen bg-[#F0F5FA] overflow-x-hidden overflow-y-auto md:overflow-hidden px-4.5 pb-24 pt-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] md:p-4.5 gap-4 relative no-scrollbar">
       {/* Premium Ambient Background Lighting - Dynamic color shifts based on Utah Time */}
       <div className={`absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full ${greetingState.glowClass} blur-[130px] pointer-events-none z-0 transition-all duration-1000`} />
       <div className="absolute bottom-[-10%] left-[20%] w-[45%] h-[45%] rounded-full bg-[#0097A7]/6 blur-[130px] pointer-events-none z-0" />
@@ -596,33 +596,33 @@ export default function DashboardPage() {
                 <p className="text-[8px] text-slate-400 font-medium">Accesos directos operacionales.</p>
               </div>
               
-              <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
-                <Link href="/clientes" className="flex items-center justify-between py-1.5 px-2 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
-                  <div className="flex items-center gap-1.5 min-w-0 flex-1">
+              <div className="grid grid-cols-3 gap-1 sm:gap-2">
+                <Link href="/clientes" className="flex items-center justify-between py-1 px-1 sm:py-1.5 sm:px-2 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
+                  <div className="flex items-center gap-1 sm:gap-1.5 min-w-0 flex-1">
                     <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)] shrink-0">
                       <Users className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[8px] sm:text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
+                    <span className="text-[7px] min-[360px]:text-[8px] sm:text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
                   </div>
                   <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-0.5 hidden min-[400px]:block" />
                 </Link>
 
-                <Link href="/trabajos" className="flex items-center justify-between py-1.5 px-2 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
-                  <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                <Link href="/trabajos" className="flex items-center justify-between py-1 px-1 sm:py-1.5 sm:px-2 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
+                  <div className="flex items-center gap-1 sm:gap-1.5 min-w-0 flex-1">
                     <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)] shrink-0">
                       <Calendar className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[8px] sm:text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
+                    <span className="text-[7px] min-[360px]:text-[8px] sm:text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
                   </div>
                   <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-0.5 hidden min-[400px]:block" />
                 </Link>
 
-                <Link href="/cotizaciones" className="flex items-center justify-between py-1.5 px-2 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
-                  <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                <Link href="/cotizaciones" className="flex items-center justify-between py-1 px-1 sm:py-1.5 sm:px-2 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
+                  <div className="flex items-center gap-1 sm:gap-1.5 min-w-0 flex-1">
                     <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)] shrink-0">
                       <FileText className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[8px] sm:text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
+                    <span className="text-[7px] min-[360px]:text-[8px] sm:text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
                   </div>
                   <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-0.5 hidden min-[400px]:block" />
                 </Link>

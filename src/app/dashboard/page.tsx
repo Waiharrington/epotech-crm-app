@@ -357,7 +357,7 @@ export default function DashboardPage() {
       <div className="absolute bottom-[-10%] left-[20%] w-[45%] h-[45%] rounded-full bg-[#0097A7]/6 blur-[130px] pointer-events-none z-0" />
 
       {/* Premium Dark Navy Header Banner */}
-      <header className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-5 md:p-6 shrink-0 relative overflow-hidden z-10 animate-dashboard-item shadow-xl" style={{ animationDelay: '100ms' }}>
+      <header className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-5 md:p-6 shrink-0 relative z-10 animate-dashboard-item shadow-xl" style={{ animationDelay: '100ms' }}>
         <div className="relative z-10 flex flex-col gap-4.5">
           {/* Top Row: Logo & Icons (Mobile only) */}
           <div className="flex items-center justify-between md:hidden">

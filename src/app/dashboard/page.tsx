@@ -31,6 +31,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import Link from 'next/link'
+import { NotificationBell } from '@/components/notifications/notification-bell'
 
 export default function DashboardPage() {
   const supabase = createClient() as any
@@ -369,10 +370,7 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center gap-2.5">
               {/* Notification Bell */}
-              <button className="h-7.5 w-7.5 rounded-xl flex items-center justify-center bg-white/5 border border-white/10 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-200 relative group">
-                <Bell className="h-4 w-4" />
-                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#00C9E0] animate-pulse" />
-              </button>
+              <NotificationBell />
 
               {/* Profile Avatar trigger */}
               <Link 
@@ -416,10 +414,7 @@ export default function DashboardPage() {
             {/* Right side: Desktop Icons (Notification bell & profile pic aligned vertically with the greeting) */}
             <div className="hidden md:flex items-center gap-2.5">
               {/* Notification Bell */}
-              <button className="h-7.5 w-7.5 rounded-xl flex items-center justify-center bg-white/5 border border-white/10 text-white/80 hover:text-white hover:bg-white/10 active:scale-95 transition-all duration-200 relative group">
-                <Bell className="h-4 w-4" />
-                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#00C9E0] animate-pulse" />
-              </button>
+              <NotificationBell />
 
               {/* Profile Avatar trigger */}
               <Link 

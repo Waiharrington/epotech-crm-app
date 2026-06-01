@@ -460,7 +460,7 @@ export default function DashboardPage() {
       </header>
 
       {/* Main Content scroll-free grid layout */}
-      <main className="flex-grow md:min-h-0 flex flex-col gap-4 overflow-visible md:overflow-hidden no-scrollbar relative z-10">
+      <main className="flex-1 md:min-h-0 flex flex-col gap-4 overflow-visible md:overflow-hidden no-scrollbar relative z-10">
         {/* Statistics Grid */}
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 shrink-0">
           {/* Card: Clientes Totales */}
@@ -529,9 +529,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Middle Row Section */}
-        <div className="grid gap-4 lg:grid-cols-7 md:flex-1 md:min-h-0 h-auto overflow-visible md:overflow-hidden md:shrink-0">
+        <div className="grid gap-4 lg:grid-cols-7 flex-1 md:min-h-0 h-auto overflow-visible md:overflow-hidden">
           {/* Próximos Servicios */}
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col md:min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '350ms' }}>
+          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '350ms' }}>
             {/* Header */}
             <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-3 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
               <div>
@@ -543,7 +543,7 @@ export default function DashboardPage() {
               </Link>
             </div>
             
-            <div className="p-3 md:flex-1 md:overflow-y-auto no-scrollbar space-y-2 md:min-h-0 h-auto bg-gradient-to-b from-white to-slate-50/30">
+            <div className="p-3 flex-1 overflow-y-auto no-scrollbar space-y-2 min-h-0 h-auto bg-gradient-to-b from-white to-slate-50/30">
               {loading ? (
                 <div className="flex justify-center py-6"><Loader2 className="h-5 w-5 text-[#0097A7] animate-spin" /></div>
               ) : recentJobs.length > 0 ? (
@@ -592,8 +592,8 @@ export default function DashboardPage() {
           </div>
 
           {/* Acciones Rápidas */}
-          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-2.5 flex flex-col justify-between md:min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '400ms' }}>
-            <div className="flex flex-col gap-1.5 md:min-h-0 h-auto">
+          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-2.5 flex flex-col justify-between min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '400ms' }}>
+            <div className="flex flex-col gap-1.5 min-h-0 h-auto">
               <div>
                 <h3 className="text-[10px] font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
                 <p className="text-[8px] text-slate-400 font-medium">Accesos directos operacionales.</p>
@@ -651,10 +651,10 @@ export default function DashboardPage() {
         </div>
 
         {/* Lower Row: Reminders & Alerts */}
-        <div className="grid gap-4 lg:grid-cols-7 md:flex-1 md:min-h-0 h-auto overflow-visible md:overflow-hidden md:shrink-0">
+        <div className="grid gap-4 lg:grid-cols-7 flex-1 md:min-h-0 h-auto overflow-visible md:overflow-hidden">
           {/* Reminders Widget */}
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between md:min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '450ms' }}>
-            <div className="md:min-h-0 flex flex-col md:flex-1 h-auto">
+          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '450ms' }}>
+            <div className="min-h-0 flex flex-col flex-1 h-auto">
               <div className="flex items-center justify-between pb-2 border-b border-slate-50 shrink-0">
                 <div>
                   <h3 className="text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
@@ -682,7 +682,7 @@ export default function DashboardPage() {
               </form>
 
               {/* Listado */}
-              <div className="space-y-1.5 mt-2 md:overflow-y-auto pr-1 no-scrollbar md:flex-1 md:min-h-0 h-auto">
+              <div className="space-y-1.5 mt-2 overflow-y-auto pr-1 no-scrollbar flex-1 min-h-0 h-auto">
                 {reminders.length > 0 ? (
                   reminders.map((reminder) => {
                     const getPriorityStyle = (p: string) => {
@@ -749,9 +749,9 @@ export default function DashboardPage() {
           </div>
 
           {/* Alertas y Operaciones */}
-          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between md:min-h-0 h-auto overflow-visible md:overflow-hidden animate-dashboard-item" style={{ animationDelay: '500ms' }}>
-            <div className="md:min-h-0 flex flex-col md:flex-1 h-auto">
-              <div className="pb-2 border-b border-slate-50 shrink-0">
+          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0 h-auto overflow-hidden animate-dashboard-item" style={{ animationDelay: '500ms' }}>
+            <div className="min-h-0 flex flex-col flex-1 h-auto justify-between">
+              <div className="pb-1.5 border-b border-slate-50 shrink-0">
                 <h3 className="text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
                   <AlertTriangle className="h-3.5 w-3.5 text-[#0097A7]" />
                   Alertas y Operaciones
@@ -759,30 +759,30 @@ export default function DashboardPage() {
                 <p className="text-[8.5px] text-slate-400 font-medium">Alertas críticas del inventario y flujo de caja diario.</p>
               </div>
               
-              <div className="space-y-2 pt-2.5 md:overflow-y-auto no-scrollbar md:flex-1 md:min-h-0 h-auto">
+              <div className="space-y-1.5 pt-1.5 overflow-y-auto no-scrollbar flex-1 min-h-0 h-auto flex flex-col justify-center">
                 {stats.lowStock > 0 ? (
-                  <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 flex items-start gap-2 shadow-sm">
-                    <AlertTriangle className="h-4 text-[#0097A7] shrink-0 mt-0.5 animate-pulse" />
+                  <div className="p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 flex items-start gap-1.5 shadow-sm">
+                    <AlertTriangle className="h-3.5 text-[#0097A7] shrink-0 mt-0.5 animate-pulse" />
                     <div>
-                      <p className="font-extrabold text-[10.5px] text-[#0B1E3F]">{stats.lowStock} productos en bajo stock</p>
-                      <p className="text-[8.5px] text-[#0097A7] mt-0.5 font-medium leading-tight">Hay insumos por debajo de su cantidad mínima.</p>
+                      <p className="font-extrabold text-[10px] text-[#0B1E3F]">{stats.lowStock} productos en bajo stock</p>
+                      <p className="text-[8px] text-[#0097A7] mt-0.2 font-medium leading-tight">Hay insumos por debajo de su cantidad mínima.</p>
                     </div>
                   </div>
                 ) : (
-                  <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/20 to-white/40 border border-[#0097A7]/5 flex items-start gap-2 shadow-sm">
-                    <Check className="h-4 text-[#00C9E0] shrink-0 mt-0.5" />
+                  <div className="p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/20 to-white/40 border border-[#0097A7]/5 flex items-start gap-1.5 shadow-sm">
+                    <Check className="h-3.5 text-[#00C9E0] shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-extrabold text-[10.5px] text-[#0B1E3F]">Inventario al día</p>
-                      <p className="text-[8.5px] text-slate-405 mt-0.5 font-medium leading-tight">Todos los insumos tienen niveles adecuados.</p>
+                      <p className="font-extrabold text-[10px] text-[#0B1E3F]">Inventario al día</p>
+                      <p className="text-[8px] text-slate-405 mt-0.2 font-medium leading-tight">Todos los insumos tienen niveles adecuados.</p>
                     </div>
                   </div>
                 )}
 
-                <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB] flex items-start gap-2 shadow-sm">
-                  <Wallet className="h-4 text-[#0097A7] shrink-0 mt-0.5" />
+                <div className="p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB] flex items-start gap-1.5 shadow-sm">
+                  <Wallet className="h-3.5 text-[#0097A7] shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-extrabold text-[10.5px] text-[#0B1E3F]">Caja Mensual</p>
-                    <p className="text-[8.5px] text-slate-500 mt-0.5 font-medium leading-tight">
+                    <p className="font-extrabold text-[10px] text-[#0B1E3F]">Caja Mensual</p>
+                    <p className="text-[8px] text-slate-500 mt-0.2 font-medium leading-tight">
                       El total registrado en caja este mes es de <strong className="text-slate-800">${stats.monthlyIncome.toLocaleString()}</strong>.
                     </p>
                   </div>

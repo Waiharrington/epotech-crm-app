@@ -36,12 +36,7 @@ import { NotificationBell } from '@/components/notifications/notification-bell'
 export default function DashboardPage() {
   const supabase = createClient() as any
   const [loading, setLoading] = useState(true)
-  const [showWelcomeLoader, setShowWelcomeLoader] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return !sessionStorage.getItem('epotech_dashboard_loaded')
-    }
-    return true
-  })
+  const [showWelcomeLoader, setShowWelcomeLoader] = useState(true)
   
   // Dynamic profile picture state with synchronization
   const [profilePic, setProfilePic] = useState('/assets/profile.jpg')
@@ -180,6 +175,9 @@ export default function DashboardPage() {
 
     updateGreeting()
     const interval = setInterval(updateGreeting, 30000)
+
+    // First session entry welcome pressure washer animation - FORCED ON EVERY REFRESH FOR TESTING
+    setShowWelcomeLoader(true)
 
     return () => clearInterval(interval)
   }, [])
@@ -800,16 +798,15 @@ export default function DashboardPage() {
         @keyframes dashboard-fade-in {
           from {
             opacity: 0;
-            transform: translate3d(0, 12px, 0);
+            transform: translateY(12px);
           }
           to {
             opacity: 1;
-            transform: translate3d(0, 0, 0);
+            transform: translateY(0);
           }
         }
         .animate-dashboard-item {
           opacity: 0;
-          will-change: transform, opacity;
           animation: dashboard-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
       `}</style>
@@ -846,16 +843,37 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
     if (isMobileDevice) {
       const saved = localStorage.getItem('epotech_nozzle_mobile')
       if (saved) {
-        const parsed = JSON.parse(saved)
-        setNozzleX(parsed.nozzleX ?? 1.0)
-        setNozzleY(parsed.nozzleY ?? 27.0)
-        setTargetXPct(parsed.targetXPct ?? -0.23)
-        setTargetYPct(parsed.targetYPct ?? 0.50)
-        setGunDuration(parsed.gunDuration ?? 0.25)
-        setT1Delay(parsed.t1Delay ?? 300)
-        setT2Delay(parsed.t2Delay ?? 650)
-        setT3Delay(parsed.t3Delay ?? 1150)
-        setT4Delay(parsed.t4Delay ?? 1550)
+        try {
+          const parsed = JSON.parse(saved)
+          setNozzleX(typeof parsed.nozzleX === 'number' && !isNaN(parsed.nozzleX) ? parsed.nozzleX : 1.0)
+          setNozzleY(typeof parsed.nozzleY === 'number' && !isNaN(parsed.nozzleY) ? parsed.nozzleY : 27.0)
+          
+          let tx = parsed.targetXPct ?? -0.23
+          if (typeof tx !== 'number' || isNaN(tx)) tx = -0.23
+          else if (tx > 2.0 || tx < -2.0) tx = tx / 100
+          setTargetXPct(tx)
+          
+          let ty = parsed.targetYPct ?? 0.50
+          if (typeof ty !== 'number' || isNaN(ty)) ty = 0.50
+          else if (ty > 2.0 || ty < -2.0) ty = ty / 100
+          setTargetYPct(ty)
+          
+          setGunDuration(typeof parsed.gunDuration === 'number' && !isNaN(parsed.gunDuration) && parsed.gunDuration > 0 ? parsed.gunDuration : 0.25)
+          setT1Delay(typeof parsed.t1Delay === 'number' && !isNaN(parsed.t1Delay) && parsed.t1Delay > 0 ? parsed.t1Delay : 300)
+          setT2Delay(typeof parsed.t2Delay === 'number' && !isNaN(parsed.t2Delay) && parsed.t2Delay > 0 ? parsed.t2Delay : 650)
+          setT3Delay(typeof parsed.t3Delay === 'number' && !isNaN(parsed.t3Delay) && parsed.t3Delay > 0 ? parsed.t3Delay : 1150)
+          setT4Delay(typeof parsed.t4Delay === 'number' && !isNaN(parsed.t4Delay) && parsed.t4Delay > 0 ? parsed.t4Delay : 1550)
+        } catch (e) {
+          setNozzleX(1.0)
+          setNozzleY(27.0)
+          setTargetXPct(-0.23)
+          setTargetYPct(0.50)
+          setGunDuration(0.25)
+          setT1Delay(300)
+          setT2Delay(650)
+          setT3Delay(1150)
+          setT4Delay(1550)
+        }
       } else {
         setNozzleX(1.0)
         setNozzleY(27.0)
@@ -870,16 +888,37 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
     } else {
       const saved = localStorage.getItem('epotech_nozzle_desktop')
       if (saved) {
-        const parsed = JSON.parse(saved)
-        setNozzleX(parsed.nozzleX ?? 20.0)
-        setNozzleY(parsed.nozzleY ?? 33.0)
-        setTargetXPct(parsed.targetXPct ?? 0.33)
-        setTargetYPct(parsed.targetYPct ?? 0.29)
-        setGunDuration(parsed.gunDuration ?? 0.8)
-        setT1Delay(parsed.t1Delay ?? 600)
-        setT2Delay(parsed.t2Delay ?? 1200)
-        setT3Delay(parsed.t3Delay ?? 2000)
-        setT4Delay(parsed.t4Delay ?? 2650)
+        try {
+          const parsed = JSON.parse(saved)
+          setNozzleX(typeof parsed.nozzleX === 'number' && !isNaN(parsed.nozzleX) ? parsed.nozzleX : 20.0)
+          setNozzleY(typeof parsed.nozzleY === 'number' && !isNaN(parsed.nozzleY) ? parsed.nozzleY : 33.0)
+          
+          let tx = parsed.targetXPct ?? 0.33
+          if (typeof tx !== 'number' || isNaN(tx)) tx = 0.33
+          else if (tx > 2.0 || tx < -2.0) tx = tx / 100
+          setTargetXPct(tx)
+          
+          let ty = parsed.targetYPct ?? 0.29
+          if (typeof ty !== 'number' || isNaN(ty)) ty = 0.29
+          else if (ty > 2.0 || ty < -2.0) ty = ty / 100
+          setTargetYPct(ty)
+          
+          setGunDuration(typeof parsed.gunDuration === 'number' && !isNaN(parsed.gunDuration) && parsed.gunDuration > 0 ? parsed.gunDuration : 0.8)
+          setT1Delay(typeof parsed.t1Delay === 'number' && !isNaN(parsed.t1Delay) && parsed.t1Delay > 0 ? parsed.t1Delay : 600)
+          setT2Delay(typeof parsed.t2Delay === 'number' && !isNaN(parsed.t2Delay) && parsed.t2Delay > 0 ? parsed.t2Delay : 1200)
+          setT3Delay(typeof parsed.t3Delay === 'number' && !isNaN(parsed.t3Delay) && parsed.t3Delay > 0 ? parsed.t3Delay : 2000)
+          setT4Delay(typeof parsed.t4Delay === 'number' && !isNaN(parsed.t4Delay) && parsed.t4Delay > 0 ? parsed.t4Delay : 2650)
+        } catch (e) {
+          setNozzleX(20.0)
+          setNozzleY(33.0)
+          setTargetXPct(0.33)
+          setTargetYPct(0.29)
+          setGunDuration(0.8)
+          setT1Delay(600)
+          setT2Delay(1200)
+          setT3Delay(2000)
+          setT4Delay(2650)
+        }
       } else {
         setNozzleX(20.0)
         setNozzleY(33.0)

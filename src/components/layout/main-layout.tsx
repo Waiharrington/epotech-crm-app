@@ -18,7 +18,8 @@ import {
   BookOpen,
   Bell,
   LogOut,
-  ChevronRight
+  ChevronRight,
+  X
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
@@ -28,6 +29,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from '@/components/ui/sheet'
 import { ReminderPoller } from '@/components/recordatorios/reminder-poller'
 
@@ -235,14 +237,17 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                 <span className="text-[9px] font-medium tracking-tight text-sidebar-foreground/50">Más</span>
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[85%] p-0 rounded-l-3xl border-l border-sidebar-border sidebar-premium-bg overflow-hidden">
-              <SheetHeader className="p-6 text-left border-b border-sidebar-border/15">
+            <SheetContent side="right" className="w-[85%] p-0 rounded-l-3xl border-l border-sidebar-border sidebar-premium-bg overflow-hidden" showCloseButton={false}>
+              <SheetHeader className="pt-14 pb-5 px-6 text-left border-b border-sidebar-border/15 relative">
                 <SheetTitle className="font-extrabold text-xl tracking-tight text-sidebar-foreground">
                   Menú Principal
                 </SheetTitle>
                 <SheetDescription className="text-xs text-sidebar-foreground/50">
                   Accede a todos los módulos del sistema
                 </SheetDescription>
+                <SheetClose className="absolute right-6 top-[54px] rounded-full p-2 bg-white/5 hover:bg-white/10 active:scale-95 text-sidebar-foreground/70 transition-all border border-white/10 flex items-center justify-center">
+                  <X className="h-4 w-4" />
+                </SheetClose>
               </SheetHeader>
               <div className="py-6 px-4 space-y-3 overflow-y-auto max-h-[calc(100vh-9rem)]">
                 {moreNavItems.map((item) => {

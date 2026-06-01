@@ -1264,7 +1264,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
 
   return (
     <div 
-      className={`fixed inset-0 z-[9999] bg-[#02070f] select-none overflow-hidden font-sans transition-all duration-[650ms] cubic-bezier(0.4, 0, 0.2, 1)`}
+      className="fixed top-0 left-0 w-screen h-screen z-[99999] bg-[#02070f] select-none overflow-hidden font-sans transition-all duration-[650ms] cubic-bezier(0.4, 0, 0.2, 1)"
       style={{
         clipPath: animationStage === 'clearing' ? 'inset(0 0 0 100%)' : 'inset(0 0 0 0)'
       }}

@@ -1322,7 +1322,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             setAnimationStage('spraying')
             setShowTuner(!showTuner)
           }}
-          className="absolute top-4 left-4 z-[10000] px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/20 text-white font-bold text-[10px] uppercase tracking-wider backdrop-blur-md shadow-md flex items-center gap-1.5 transition-all duration-300"
+          className="absolute top-20 left-4 z-[10000] px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/20 text-white font-bold text-[10px] uppercase tracking-wider backdrop-blur-md shadow-md flex items-center gap-1.5 transition-all duration-300"
         >
           <span>⚙️ Calibrar Chorro (Celular)</span>
         </button>
@@ -1330,7 +1330,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
 
       {/* Tuner Control Panel Panel - ONLY visible on mobile */}
       {isMobile && showTuner && (
-        <div className="absolute top-16 left-4 z-[10000] w-[290px] sm:w-[320px] rounded-2xl border border-white/15 bg-[#030b17]/90 backdrop-blur-xl p-4 text-white shadow-2xl animate-in slide-in-from-left-4 duration-300 flex flex-col gap-3.5">
+        <div className="absolute top-[140px] left-4 z-[10000] w-[290px] sm:w-[320px] rounded-2xl border border-white/15 bg-[#030b17]/90 backdrop-blur-xl p-4 text-white shadow-2xl animate-in slide-in-from-left-4 duration-300 flex flex-col gap-3.5">
           <div className="flex items-center justify-between border-b border-white/10 pb-2">
             <span className="font-extrabold text-[11px] uppercase tracking-widest text-[#00C9E0] flex items-center gap-1">
               🔧 Calibrador de Chorro

@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
@@ -56,12 +56,36 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const supabase = createClient()
 
+  // Synchronous loading state to bypass sidebar/navbar painting while loading screen is active
+  const [isDashboardLoading, setIsDashboardLoading] = useState(() => {
+    if (typeof window !== 'undefined' && pathname === '/dashboard') {
+      return !sessionStorage.getItem('epotech_dashboard_loaded')
+    }
+    return pathname === '/dashboard' // Safe pre-rendering default
+  })
+
+  useEffect(() => {
+    if (pathname === '/dashboard') {
+      const checkLoaderStatus = () => {
+        if (sessionStorage.getItem('epotech_dashboard_loaded')) {
+          setIsDashboardLoading(false)
+        }
+      }
+      checkLoaderStatus()
+      const interval = setInterval(checkLoaderStatus, 50)
+      return () => clearInterval(interval)
+    } else {
+      setIsDashboardLoading(false)
+    }
+  }, [pathname])
+
   const handleLogout = async () => {
     await supabase.auth.signOut()
     router.push('/login')
   }
   
   if (pathname === '/login') return <>{children}</>
+  if (isDashboardLoading) return <>{children}</>
 
   return (
     <div className="min-h-screen bg-background">

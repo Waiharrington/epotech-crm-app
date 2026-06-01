@@ -800,15 +800,16 @@ export default function DashboardPage() {
         @keyframes dashboard-fade-in {
           from {
             opacity: 0;
-            transform: translateY(12px);
+            transform: translate3d(0, 12px, 0);
           }
           to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
           }
         }
         .animate-dashboard-item {
           opacity: 0;
+          will-change: transform, opacity;
           animation: dashboard-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
       `}</style>

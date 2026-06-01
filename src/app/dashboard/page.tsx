@@ -818,17 +818,59 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
   const [animationStage, setAnimationStage] = useState<'idle' | 'spraying' | 'flooding' | 'clearing'>('idle')
   const [isMobile, setIsMobile] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  
+  // Dynamic Tuner State
+  const [showTuner, setShowTuner] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
+  
+  const [nozzleX, setNozzleX] = useState(40.0)
+  const [nozzleY, setNozzleY] = useState(66.0)
+  const [targetXPct, setTargetXPct] = useState(0.50)
+  const [targetYPct, setTargetYPct] = useState(0.50)
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 768)
+    const isMobileDevice = window.innerWidth < 768
+    setIsMobile(isMobileDevice)
+    
+    // Load dynamic coordinates from localStorage based on screen width
+    if (isMobileDevice) {
+      const saved = localStorage.getItem('epotech_nozzle_mobile')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        setNozzleX(parsed.nozzleX ?? 45.5)
+        setNozzleY(parsed.nozzleY ?? 65.0)
+        setTargetXPct(parsed.targetXPct ?? -0.25)
+        setTargetYPct(parsed.targetYPct ?? 0.48)
+      } else {
+        setNozzleX(45.5)
+        setNozzleY(65.0)
+        setTargetXPct(-0.25)
+        setTargetYPct(0.48)
+      }
+    } else {
+      const saved = localStorage.getItem('epotech_nozzle_desktop')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        setNozzleX(parsed.nozzleX ?? 40.0)
+        setNozzleY(parsed.nozzleY ?? 66.0)
+        setTargetXPct(parsed.targetXPct ?? 0.50)
+        setTargetYPct(parsed.targetYPct ?? 0.50)
+      } else {
+        setNozzleX(40.0)
+        setNozzleY(66.0)
+        setTargetXPct(0.50)
+        setTargetYPct(0.50)
+      }
+    }
   }, [])
 
   // Use a ref so the timer useEffect never re-runs due to onComplete changing identity each render.
-  // This was the root cause of the 3-4 second water delay on mobile: timers were being reset constantly.
   const onCompleteRef = useRef(onComplete)
   useEffect(() => { onCompleteRef.current = onComplete }, [onComplete])
 
   useEffect(() => {
+    if (isPaused) return
+
     const isMobileDevice = window.innerWidth < 768
     const t1Delay = isMobileDevice ? 100 : 600
     const t2Delay = isMobileDevice ? 450 : 1200
@@ -852,7 +894,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
       clearTimeout(t3)
       clearTimeout(t4)
     }
-  }, []) // Empty array: runs exactly once, never resets
+  }, [isPaused]) // Empty array: runs exactly once, never resets
 
   // Canvas particle simulation for high-pressure water spray
   useEffect(() => {
@@ -900,16 +942,14 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
 
     // Wand tip coordinates (bottom right, pointing to center-left)
     // The PNG image is 320x320px inside the container.
-    // The nozzle tip points to the upper-left corner of the image bounding box, roughly at (32px, 32px) relative to container top-left.
     const getWandTip = () => {
-      const isMobile = window.innerWidth < 768;
       // Base coordinates from the bottom right viewport corner
       const containerLeft = window.innerWidth - 320 + 40; // 320px width, -40px right offset
       const containerTop = window.innerHeight - 320 + 40;  // 320px height, -40px bottom offset
 
       // Orifice tip coordinates relative to top-left of container for PNG image
-      const tipOffsetX = isMobile ? 48.0 : 32.0;
-      const tipOffsetY = isMobile ? 52.0 : 32.0;
+      const tipOffsetX = nozzleX;
+      const tipOffsetY = nozzleY;
 
       const tipX = containerLeft + tipOffsetX;
       const tipY = containerTop + tipOffsetY;
@@ -918,12 +958,9 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
     }
 
     // Dynamically adjust the spray direction based on mobile vs desktop.
-    // On mobile, the gun sits lower, so shooting straight to height/2 goes upward.
-    // We target a point further to the left (x: 15% width, y: 35% height) on narrow screens to achieve a natural diagonal spray.
-    const isMobile = window.innerWidth < 768
     const sprayTarget = {
-      x: isMobile ? window.innerWidth * -0.25 : window.innerWidth / 2,
-      y: isMobile ? window.innerHeight * 0.48 : window.innerHeight / 2
+      x: window.innerWidth * targetXPct,
+      y: window.innerHeight * targetYPct
     }
 
     // Animation Loop
@@ -1161,7 +1198,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
       window.removeEventListener('resize', handleResize)
       cancelAnimationFrame(animationFrameId)
     }
-  }, [animationStage])
+  }, [animationStage, nozzleX, nozzleY, targetXPct, targetYPct])
 
   return (
     <div 
@@ -1223,7 +1260,13 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
 
         {/* Dynamic bright spark flare at high-pressure jet orifice */}
         {(animationStage === 'spraying' || animationStage === 'flooding') && (
-          <div className="absolute top-[32px] left-[32px] -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full blur-[2px] animate-ping opacity-95 z-30 pointer-events-none">
+          <div 
+            style={{ 
+              top: `${nozzleY}px`, 
+              left: `${nozzleX}px` 
+            }}
+            className="absolute -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full blur-[2px] animate-ping opacity-95 z-30 pointer-events-none"
+          >
             <div className="w-full h-full bg-[#00C9E0]/40 rounded-full scale-150 blur-[5px]" />
           </div>
         )}
@@ -1251,6 +1294,130 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
           </div>
         </div>
       </div>
+
+      {/* Dynamic Tuner Widget Trigger Button */}
+      <button 
+        onClick={() => {
+          setIsPaused(true)
+          setAnimationStage('spraying')
+          setShowTuner(!showTuner)
+        }}
+        className="absolute top-4 left-4 z-[10000] px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/20 text-white font-bold text-[10px] uppercase tracking-wider backdrop-blur-md shadow-md flex items-center gap-1.5 transition-all duration-300"
+      >
+        <span>⚙️ Calibrar Chorro ({isMobile ? 'Celular' : 'PC'})</span>
+      </button>
+
+      {/* Tuner Control Panel Panel */}
+      {showTuner && (
+        <div className="absolute top-16 left-4 z-[10000] w-[290px] sm:w-[320px] rounded-2xl border border-white/15 bg-[#030b17]/90 backdrop-blur-xl p-4 text-white shadow-2xl animate-in slide-in-from-left-4 duration-300 flex flex-col gap-3.5">
+          <div className="flex items-center justify-between border-b border-white/10 pb-2">
+            <span className="font-extrabold text-[11px] uppercase tracking-widest text-[#00C9E0] flex items-center gap-1">
+              🔧 Calibrador de Chorro
+            </span>
+            <span className="text-[8px] px-2 py-0.5 rounded-full bg-white/10 font-bold uppercase tracking-wider text-slate-300">
+              {isMobile ? 'Celular' : 'PC'}
+            </span>
+          </div>
+
+          <div className="space-y-3.5 text-xs">
+            {/* Control: Nozzle X */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Orificio Boquilla X</span>
+                <span className="text-[#00C9E0]">{nozzleX.toFixed(1)}px</span>
+              </div>
+              <input 
+                type="range" 
+                min="-100" 
+                max="200" 
+                step="0.5" 
+                value={nozzleX} 
+                onChange={(e) => setNozzleX(parseFloat(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
+
+            {/* Control: Nozzle Y */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Orificio Boquilla Y</span>
+                <span className="text-[#00C9E0]">{nozzleY.toFixed(1)}px</span>
+              </div>
+              <input 
+                type="range" 
+                min="-100" 
+                max="200" 
+                step="0.5" 
+                value={nozzleY} 
+                onChange={(e) => setNozzleY(parseFloat(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
+
+            {/* Control: Target X */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Destino Chorro X (Ancho %)</span>
+                <span className="text-[#00C9E0]">{(targetXPct * 100).toFixed(0)}%</span>
+              </div>
+              <input 
+                type="range" 
+                min="-1.5" 
+                max="1.5" 
+                step="0.01" 
+                value={targetXPct} 
+                onChange={(e) => setTargetXPct(parseFloat(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
+
+            {/* Control: Target Y */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Destino Chorro Y (Alto %)</span>
+                <span className="text-[#00C9E0]">{(targetYPct * 100).toFixed(0)}%</span>
+              </div>
+              <input 
+                type="range" 
+                min="-1.5" 
+                max="1.5" 
+                step="0.01" 
+                value={targetYPct} 
+                onChange={(e) => setTargetYPct(parseFloat(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-2 pt-2.5 border-t border-white/10">
+            <button 
+              onClick={() => {
+                const payload = { nozzleX, nozzleY, targetXPct, targetYPct }
+                if (isMobile) {
+                  localStorage.setItem('epotech_nozzle_mobile', JSON.stringify(payload))
+                } else {
+                  localStorage.setItem('epotech_nozzle_desktop', JSON.stringify(payload))
+                }
+                toast.success('💾 ¡Coordenadas guardadas con éxito!', {
+                  description: `Valores guardados para ${isMobile ? 'Celular' : 'Computadora'}.`
+                })
+              }}
+              className="flex-1 py-2 rounded-xl bg-[#00C9E0] text-[#02070f] font-black text-[10px] uppercase tracking-wider hover:bg-[#00B4C8] transition-all shadow-[0_4px_10px_rgba(0,201,224,0.25)]"
+            >
+              Guardar
+            </button>
+            <button 
+              onClick={() => {
+                setShowTuner(false)
+                setIsPaused(false)
+              }}
+              className="py-2 px-3.5 rounded-xl bg-white/10 text-white font-bold text-[10px] uppercase tracking-wider hover:bg-white/20 transition-all"
+            >
+              Probar
+            </button>
+          </div>
+        </div>
+      )}
 
       <style>{`
         @keyframes nozzle-recoil {

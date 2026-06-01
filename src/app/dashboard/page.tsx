@@ -1314,10 +1314,227 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             <p className="text-slate-400 text-[12px] font-medium uppercase mt-2">Cargando...</p>
           </div>
         </div>
-      </div>
+      </div>      {/* Dynamic Tuner Widget Trigger Button - ONLY visible on mobile */}
+      {isMobile && (
+        <button 
+          onClick={() => {
+            setIsPaused(true)
+            setAnimationStage('spraying')
+            setShowTuner(!showTuner)
+          }}
+          className="absolute top-4 left-4 z-[10000] px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/20 text-white font-bold text-[10px] uppercase tracking-wider backdrop-blur-md shadow-md flex items-center gap-1.5 transition-all duration-300"
+        >
+          <span>⚙️ Calibrar Chorro (Celular)</span>
+        </button>
+      )}
 
+      {/* Tuner Control Panel Panel - ONLY visible on mobile */}
+      {isMobile && showTuner && (
+        <div className="absolute top-16 left-4 z-[10000] w-[290px] sm:w-[320px] rounded-2xl border border-white/15 bg-[#030b17]/90 backdrop-blur-xl p-4 text-white shadow-2xl animate-in slide-in-from-left-4 duration-300 flex flex-col gap-3.5">
+          <div className="flex items-center justify-between border-b border-white/10 pb-2">
+            <span className="font-extrabold text-[11px] uppercase tracking-widest text-[#00C9E0] flex items-center gap-1">
+              🔧 Calibrador de Chorro
+            </span>
+            <span className="text-[8px] px-2 py-0.5 rounded-full bg-white/10 font-bold uppercase tracking-wider text-slate-300">
+              Celular
+            </span>
+          </div>
 
+          <div className="space-y-3.5 text-xs">
+            {/* Control: Nozzle X */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Orificio Boquilla X</span>
+                <span className="text-[#00C9E0]">{nozzleX.toFixed(1)}px</span>
+              </div>
+              <input 
+                type="range" 
+                min="-100" 
+                max="200" 
+                step="0.5" 
+                value={nozzleX} 
+                onChange={(e) => setNozzleX(parseFloat(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
 
+            {/* Control: Nozzle Y */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Orificio Boquilla Y</span>
+                <span className="text-[#00C9E0]">{nozzleY.toFixed(1)}px</span>
+              </div>
+              <input 
+                type="range" 
+                min="-100" 
+                max="200" 
+                step="0.5" 
+                value={nozzleY} 
+                onChange={(e) => setNozzleY(parseFloat(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
+
+            {/* Control: Target X */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Destino Chorro X (Ancho %)</span>
+                <span className="text-[#00C9E0]">{(targetXPct * 100).toFixed(0)}%</span>
+              </div>
+              <input 
+                type="range" 
+                min="-1.5" 
+                max="1.5" 
+                step="0.01" 
+                value={targetXPct} 
+                onChange={(e) => setTargetXPct(parseFloat(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
+
+            {/* Control: Target Y */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Destino Chorro Y (Alto %)</span>
+                <span className="text-[#00C9E0]">{(targetYPct * 100).toFixed(0)}%</span>
+              </div>
+              <input 
+                type="range" 
+                min="-1.5" 
+                max="1.5" 
+                step="0.01" 
+                value={targetYPct} 
+                onChange={(e) => setTargetYPct(parseFloat(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
+
+            {/* Separator & Timing Controls */}
+            <div className="border-t border-white/10 pt-2.5 my-1 flex items-center justify-between font-extrabold text-[9px] uppercase tracking-widest text-[#00C9E0]">
+              <span>⏱️ Tiempos de Animación</span>
+            </div>
+
+            {/* Control: Gun Duration */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Entrada Pistola (s)</span>
+                <span className="text-[#00C9E0]">{gunDuration.toFixed(2)}s</span>
+              </div>
+              <input 
+                type="range" 
+                min="0.05" 
+                max="3.00" 
+                step="0.05" 
+                value={gunDuration} 
+                onChange={(e) => setGunDuration(parseFloat(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
+
+            {/* Control: Spray Delay (t1Delay) */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Inicio Chorro (ms)</span>
+                <span className="text-[#00C9E0]">{t1Delay}ms</span>
+              </div>
+              <input 
+                type="range" 
+                min="50" 
+                max="3000" 
+                step="50" 
+                value={t1Delay} 
+                onChange={(e) => setT1Delay(parseInt(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
+
+            {/* Control: Flood Delay (t2Delay) */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Inicio Inundación (ms)</span>
+                <span className="text-[#00C9E0]">{t2Delay}ms</span>
+              </div>
+              <input 
+                type="range" 
+                min="100" 
+                max="4000" 
+                step="50" 
+                value={t2Delay} 
+                onChange={(e) => setT2Delay(parseInt(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
+
+            {/* Control: Sweep Delay (t3Delay) */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Inicio Barrido (ms)</span>
+                <span className="text-[#00C9E0]">{t3Delay}ms</span>
+              </div>
+              <input 
+                type="range" 
+                min="200" 
+                max="5000" 
+                step="50" 
+                value={t3Delay} 
+                onChange={(e) => setT3Delay(parseInt(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
+
+            {/* Control: Close Delay (t4Delay) */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between font-bold text-[9px] uppercase tracking-wider text-slate-300">
+                <span>Tiempo de Cierre (ms)</span>
+                <span className="text-[#00C9E0]">{t4Delay}ms</span>
+              </div>
+              <input 
+                type="range" 
+                min="300" 
+                max="6000" 
+                step="50" 
+                value={t4Delay} 
+                onChange={(e) => setT4Delay(parseInt(e.target.value))}
+                className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-[#00C9E0]"
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-2 pt-2.5 border-t border-white/10">
+            <button 
+              onClick={() => {
+                const payload = { 
+                  nozzleX, 
+                  nozzleY, 
+                  targetXPct, 
+                  targetYPct,
+                  gunDuration,
+                  t1Delay,
+                  t2Delay,
+                  t3Delay,
+                  t4Delay
+                }
+                localStorage.setItem('epotech_nozzle_mobile', JSON.stringify(payload))
+                toast.success('💾 ¡Coordenadas guardadas con éxito!', {
+                  description: 'Valores guardados para Celular.'
+                })
+              }}
+              className="flex-1 py-2 rounded-xl bg-[#00C9E0] text-[#02070f] font-black text-[10px] uppercase tracking-wider hover:bg-[#00B4C8] transition-all shadow-[0_4px_10px_rgba(0,201,224,0.25)]"
+            >
+              Guardar
+            </button>
+            <button 
+              onClick={() => {
+                setShowTuner(false)
+                setIsPaused(false)
+              }}
+              className="py-2 px-3.5 rounded-xl bg-white/10 text-white font-bold text-[10px] uppercase tracking-wider hover:bg-white/20 transition-all"
+            >
+              Probar
+            </button>
+          </div>
+        </div>
+      )}
       <style>{`
         @keyframes nozzle-recoil {
           0%   { transform: translate(0px, 0px) rotate(0deg); }

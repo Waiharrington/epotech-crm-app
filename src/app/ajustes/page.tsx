@@ -456,46 +456,19 @@ export default function AjustesPage() {
                 </div>
               </div>
 
-              {/* Auxiliary tools like Rotation & Coordinate display */}
-              <div className="flex flex-col gap-4.5 pt-1">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setRotation((prev) => (prev + 90) % 360)}
-                    className="flex items-center gap-2 px-4 py-2 border border-slate-800 hover:border-slate-700 bg-slate-900/60 text-slate-300 hover:text-white rounded-xl text-xs font-bold transition-all duration-200 active:scale-95"
-                  >
-                    <RotateCw className="h-4 w-4 text-[#00C9E0]" />
-                    <span>Rotar 90°</span>
-                  </button>
+              {/* Auxiliary tools like Rotation */}
+              <div className="flex items-center justify-between gap-4 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setRotation((prev) => (prev + 90) % 360)}
+                  className="flex items-center gap-2 px-4 py-2 border border-slate-800 hover:border-slate-700 bg-slate-900/60 text-slate-300 hover:text-white rounded-xl text-xs font-bold transition-all duration-200 active:scale-95"
+                >
+                  <RotateCw className="h-4 w-4 text-[#00C9E0]" />
+                  <span>Rotar 90°</span>
+                </button>
 
-                  <div className="flex items-center gap-2 text-xs font-medium text-slate-400">
-                    <span>Arrastra la foto para encuadrar</span>
-                  </div>
-                </div>
-
-                {/* Highly visible Real-time Crop Coordinates HUD for Waiharrington pairing */}
-                <div className="bg-[#090D16] border border-slate-800/80 rounded-2xl p-4 space-y-2">
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#00C9E0] block mb-1">
-                    Coordenadas en Tiempo Real
-                  </span>
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="flex justify-between border-b border-slate-800/50 pb-1.5">
-                      <span className="text-slate-400 font-semibold">X (Desplazamiento):</span>
-                      <span className="text-white font-mono font-bold">{Math.round(pan.x)}px</span>
-                    </div>
-                    <div className="flex justify-between border-b border-slate-800/50 pb-1.5">
-                      <span className="text-slate-400 font-semibold">Y (Desplazamiento):</span>
-                      <span className="text-white font-mono font-bold">{Math.round(pan.y)}px</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 font-semibold">Zoom (Escala):</span>
-                      <span className="text-[#00C9E0] font-mono font-bold">{zoom.toFixed(2)}x</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 font-semibold">Rotación:</span>
-                      <span className="text-[#00C9E0] font-mono font-bold">{rotation}°</span>
-                    </div>
-                  </div>
+                <div className="flex items-center gap-2 text-xs font-medium text-slate-450">
+                  <span>Arrastra la foto para encuadrar</span>
                 </div>
               </div>
 

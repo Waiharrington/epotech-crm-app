@@ -47,9 +47,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning className="bg-[#02070f]">
+    <html lang="es" suppressHydrationWarning style={{ backgroundColor: '#02070f' }}>
       <body
-        className={`${inter.variable} ${caveat.variable} antialiased bg-[#02070f] text-slate-100`}
+        className={`${inter.variable} ${caveat.variable} antialiased`}
+        style={{ backgroundColor: '#02070f' }}
       >
         <MainLayout>{children}</MainLayout>
         <Toaster />

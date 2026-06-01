@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
@@ -56,28 +56,10 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const supabase = createClient()
 
-  // Synchronous loading state to bypass sidebar/navbar painting while loading screen is active
-  const [isDashboardLoading, setIsDashboardLoading] = useState(() => {
-    if (typeof window !== 'undefined' && pathname === '/dashboard') {
-      return !sessionStorage.getItem('epotech_dashboard_loaded')
-    }
-    return pathname === '/dashboard' // Safe pre-rendering default
-  })
-
-  useEffect(() => {
-    if (pathname === '/dashboard') {
-      const checkLoaderStatus = () => {
-        if (sessionStorage.getItem('epotech_dashboard_loaded')) {
-          setIsDashboardLoading(false)
-        }
-      }
-      checkLoaderStatus()
-      const interval = setInterval(checkLoaderStatus, 50)
-      return () => clearInterval(interval)
-    } else {
-      setIsDashboardLoading(false)
-    }
-  }, [pathname])
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -85,7 +67,6 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   }
   
   if (pathname === '/login') return <>{children}</>
-  if (isDashboardLoading) return <>{children}</>
 
   return (
     <div className="min-h-screen bg-background">
@@ -217,121 +198,123 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-5 left-2.5 right-2.5 z-50 h-16 rounded-2xl border border-sidebar-border/10 sidebar-premium-bg overflow-hidden px-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.3)] flex items-center justify-around">
-        <div className="flex items-center justify-between w-full h-full gap-0.5">
-          {mainNavItems.map((item) => {
-            const isActive = pathname.startsWith(item.href)
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex flex-col items-center justify-center gap-0.5 rounded-xl transition-[transform,color] duration-300 ease-out relative group min-w-0 flex-1 py-1.5 h-[85%]",
-                  isActive
-                    ? "text-white font-semibold scale-105 px-1"
-                    : "text-sidebar-foreground/50 active:scale-95 px-1"
-                )}
-              >
-                {isActive && (
-                  <div className="absolute inset-0 rounded-xl sidebar-link-active z-0 shadow-md animate-in fade-in zoom-in-95 duration-200" />
-                )}
-                <item.icon className={cn(
-                  "h-5 w-5 transition-all duration-300 relative z-10",
-                  isActive 
-                    ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_6px_rgba(0,201,224,0.4)]" 
-                    : "group-hover:scale-105 group-hover:text-sidebar-foreground"
-                )} />
-                <span className={cn(
-                  "text-[9px] font-medium tracking-tight relative z-10 transition-colors duration-300 truncate w-full text-center px-0.5",
-                  isActive ? "text-white font-semibold" : "text-sidebar-foreground/50"
-                )}>
-                  {item.mobileName || item.name}
-                </span>
-                {isActive && (
-                  <div className="absolute bottom-0.5 w-3.5 h-[1.5px] rounded-full bg-[#00C9E0] shadow-[0_0_6px_rgba(0,201,224,0.7)] transition-all duration-300 z-10" />
-                )}
-              </Link>
-            )
-          })}
-          
-          <Sheet>
-            <SheetTrigger asChild>
-              <button className="flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 rounded-xl text-sidebar-foreground/50 active:scale-95 transition-all duration-300 group relative min-w-0 flex-1 h-[85%]">
-                <MoreHorizontal className="h-5 w-5 transition-transform duration-300 group-hover:scale-105" />
-                <span className="text-[9px] font-medium tracking-tight text-sidebar-foreground/50">Más</span>
-              </button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[85%] p-0 rounded-l-3xl border-l border-sidebar-border sidebar-premium-bg overflow-hidden" showCloseButton={false}>
-              <SheetHeader className="pt-14 pb-5 px-6 text-left border-b border-sidebar-border/15 relative">
-                <SheetTitle className="font-extrabold text-xl tracking-tight text-sidebar-foreground">
-                  Menú Principal
-                </SheetTitle>
-                <SheetDescription className="text-xs text-sidebar-foreground/50">
-                  Accede a todos los módulos del sistema
-                </SheetDescription>
-                <SheetClose className="absolute right-6 top-[54px] rounded-full p-2 bg-white/5 hover:bg-white/10 active:scale-95 text-sidebar-foreground/70 transition-all border border-white/10 flex items-center justify-center">
-                  <X className="h-4 w-4" />
-                </SheetClose>
-              </SheetHeader>
-              <div className="py-6 px-4 space-y-3 overflow-y-auto max-h-[calc(100vh-9rem)]">
-                {moreNavItems.map((item) => {
-                  const isActive = pathname.startsWith(item.href)
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={cn(
-                        "flex items-center justify-between gap-4 px-4 py-4.5 text-base font-medium transition-[transform,color] duration-300 ease-out group relative overflow-hidden rounded-2xl border border-white/[0.01]",
-                        isActive
-                          ? "text-white font-bold active:scale-95"
-                          : "text-sidebar-foreground/75 hover:bg-white/[0.02] hover:text-sidebar-foreground hover:translate-x-1 active:scale-[0.98]"
-                      )}
-                    >
-                      {isActive && (
-                        <div className="absolute inset-0 rounded-2xl sidebar-link-active z-0 animate-in fade-in zoom-in-95 duration-200" />
-                      )}
-                      <div className="flex items-center gap-4 relative z-10 w-full">
-                        <div className={cn(
-                          "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out z-10",
-                          isActive 
-                            ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
-                            : "scale-y-0 opacity-0 group-hover:scale-y-[1.1] group-hover:opacity-40"
-                        )} />
-                        <item.icon className={cn(
-                          "h-[20px] w-[20px] transition-all duration-300 relative z-10 flex-shrink-0",
-                          isActive 
-                            ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_8px_rgba(0,201,224,0.4)]" 
-                            : "text-sidebar-foreground/50 group-hover:text-primary group-hover:scale-105"
-                        )} />
-                        <span className={cn(
-                          "relative z-10 transition-colors duration-300 text-[15px] tracking-wide",
-                          isActive ? "font-semibold text-white" : "font-medium"
-                        )}>{item.name}</span>
-                      </div>
-                      <ChevronRight className={cn(
-                        "h-5 w-5 transition-all duration-300 relative z-10 flex-shrink-0",
-                        isActive 
-                          ? "text-[#00C9E0] translate-x-0.5" 
-                          : "text-sidebar-foreground/20 group-hover:text-sidebar-foreground/50 group-hover:translate-x-1"
-                      )} />
-                    </Link>
-                  )
-                })}
-              </div>
-              {/* Logout in sheet */}
-              <div className="absolute bottom-0 left-0 right-0 border-t border-sidebar-border/15 px-4 py-4 bg-[#030b17]">
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-xl text-base font-bold text-red-400 border border-red-500/20 bg-red-950/20 hover:bg-red-500/10 hover:text-red-300 hover:border-red-500/40 active:scale-98 transition-all duration-300 ease-out group shadow-[0_4px_16px_rgba(239,68,68,0.1)]"
+      {mounted && (
+        <nav className="md:hidden fixed bottom-5 left-2.5 right-2.5 z-50 h-16 rounded-2xl border border-sidebar-border/10 sidebar-premium-bg overflow-hidden px-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.3)] flex items-center justify-around">
+          <div className="flex items-center justify-between w-full h-full gap-0.5">
+            {mainNavItems.map((item) => {
+              const isActive = pathname.startsWith(item.href)
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "flex flex-col items-center justify-center gap-0.5 rounded-xl transition-[transform,color] duration-300 ease-out relative group min-w-0 flex-1 py-1.5 h-[85%]",
+                    isActive
+                      ? "text-white font-semibold scale-105 px-1"
+                      : "text-sidebar-foreground/50 active:scale-95 px-1"
+                  )}
                 >
-                  <LogOut className="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-0.5" />
-                  Cerrar Sesión
+                  {isActive && (
+                    <div className="absolute inset-0 rounded-xl sidebar-link-active z-0 shadow-md animate-in fade-in zoom-in-95 duration-200" />
+                  )}
+                  <item.icon className={cn(
+                    "h-5 w-5 transition-all duration-300 relative z-10",
+                    isActive 
+                      ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_6px_rgba(0,201,224,0.4)]" 
+                      : "group-hover:scale-105 group-hover:text-sidebar-foreground"
+                  )} />
+                  <span className={cn(
+                    "text-[9px] font-medium tracking-tight relative z-10 transition-colors duration-300 truncate w-full text-center px-0.5",
+                    isActive ? "text-white font-semibold" : "text-sidebar-foreground/50"
+                  )}>
+                    {item.mobileName || item.name}
+                  </span>
+                  {isActive && (
+                    <div className="absolute bottom-0.5 w-3.5 h-[1.5px] rounded-full bg-[#00C9E0] shadow-[0_0_6px_rgba(0,201,224,0.7)] transition-all duration-300 z-10" />
+                  )}
+                </Link>
+              )
+            })}
+            
+            <Sheet>
+              <SheetTrigger asChild>
+                <button className="flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 rounded-xl text-sidebar-foreground/50 active:scale-95 transition-all duration-300 group relative min-w-0 flex-1 h-[85%]">
+                  <MoreHorizontal className="h-5 w-5 transition-transform duration-300 group-hover:scale-105" />
+                  <span className="text-[9px] font-medium tracking-tight text-sidebar-foreground/50">Más</span>
                 </button>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </nav>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[85%] p-0 rounded-l-3xl border-l border-sidebar-border sidebar-premium-bg overflow-hidden" showCloseButton={false}>
+                <SheetHeader className="pt-14 pb-5 px-6 text-left border-b border-sidebar-border/15 relative">
+                  <SheetTitle className="font-extrabold text-xl tracking-tight text-sidebar-foreground">
+                    Menú Principal
+                  </SheetTitle>
+                  <SheetDescription className="text-xs text-sidebar-foreground/50">
+                    Accede a todos los módulos del sistema
+                  </SheetDescription>
+                  <SheetClose className="absolute right-6 top-[54px] rounded-full p-2 bg-white/5 hover:bg-white/10 active:scale-95 text-sidebar-foreground/70 transition-all border border-white/10 flex items-center justify-center">
+                    <X className="h-4 w-4" />
+                  </SheetClose>
+                </SheetHeader>
+                <div className="py-6 px-4 space-y-3 overflow-y-auto max-h-[calc(100vh-9rem)]">
+                  {moreNavItems.map((item) => {
+                    const isActive = pathname.startsWith(item.href)
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          "flex items-center justify-between gap-4 px-4 py-4.5 text-base font-medium transition-[transform,color] duration-300 ease-out group relative overflow-hidden rounded-2xl border border-white/[0.01]",
+                          isActive
+                            ? "text-white font-bold active:scale-95"
+                            : "text-sidebar-foreground/75 hover:bg-white/[0.02] hover:text-sidebar-foreground hover:translate-x-1 active:scale-[0.98]"
+                        )}
+                      >
+                        {isActive && (
+                          <div className="absolute inset-0 rounded-2xl sidebar-link-active z-0 animate-in fade-in zoom-in-95 duration-200" />
+                        )}
+                        <div className="flex items-center gap-4 relative z-10 w-full">
+                          <div className={cn(
+                            "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out z-10",
+                            isActive 
+                              ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
+                              : "scale-y-0 opacity-0 group-hover:scale-y-[1.1] group-hover:opacity-40"
+                          )} />
+                          <item.icon className={cn(
+                            "h-[20px] w-[20px] transition-all duration-300 relative z-10 flex-shrink-0",
+                            isActive 
+                              ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_8px_rgba(0,201,224,0.4)]" 
+                              : "text-sidebar-foreground/50 group-hover:text-primary group-hover:scale-105"
+                          )} />
+                          <span className={cn(
+                            "relative z-10 transition-colors duration-300 text-[15px] tracking-wide",
+                            isActive ? "font-semibold text-white" : "font-medium"
+                          )}>{item.name}</span>
+                        </div>
+                        <ChevronRight className={cn(
+                          "h-5 w-5 transition-all duration-300 relative z-10 flex-shrink-0",
+                          isActive 
+                            ? "text-[#00C9E0] translate-x-0.5" 
+                            : "text-sidebar-foreground/20 group-hover:text-sidebar-foreground/50 group-hover:translate-x-1"
+                        )} />
+                      </Link>
+                    )
+                  })}
+                </div>
+                {/* Logout in sheet */}
+                <div className="absolute bottom-0 left-0 right-0 border-t border-sidebar-border/15 px-4 py-4 bg-[#030b17]">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-xl text-base font-bold text-red-400 border border-red-500/20 bg-red-950/20 hover:bg-red-500/10 hover:text-red-300 hover:border-red-500/40 active:scale-98 transition-all duration-300 ease-out group shadow-[0_4px_16px_rgba(239,68,68,0.1)]"
+                  >
+                    <LogOut className="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:translate-x-0.5" />
+                    Cerrar Sesión
+                  </button>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </nav>
+      )}
     </div>
   )
 }

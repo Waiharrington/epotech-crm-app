@@ -295,7 +295,7 @@ export default function AjustesPage() {
                               src={profilePic} 
                               alt="Foto de perfil" 
                               className="w-full h-full object-cover"
-                              style={{ objectPosition: 'center 20%' }}
+                              style={{ objectPosition: '72% 0%' }}
                           />
                           <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white cursor-pointer transition-opacity duration-300 gap-1.5 text-xs font-bold">
                               <Camera className="h-5 w-5 text-[#00C9E0]" />

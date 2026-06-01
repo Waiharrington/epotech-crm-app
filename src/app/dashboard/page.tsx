@@ -36,7 +36,14 @@ import { NotificationBell } from '@/components/notifications/notification-bell'
 export default function DashboardPage() {
   const supabase = createClient() as any
   const [loading, setLoading] = useState(true)
-  const [showWelcomeLoader, setShowWelcomeLoader] = useState(() => { if (typeof window !== 'undefined') { return !sessionStorage.getItem('epotech_dashboard_loaded') } return true })
+  const [showWelcomeLoader, setShowWelcomeLoader] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const isDesktop = window.innerWidth >= 768
+      if (isDesktop) return true // Always show welcome loader on computer refresh
+      return !sessionStorage.getItem('epotech_dashboard_loaded') // Use sessionStorage on mobile
+    }
+    return true
+  })
   
   // Dynamic profile picture state with synchronization
   const [profilePic, setProfilePic] = useState('/assets/profile.jpg')

@@ -387,7 +387,7 @@ export default function DashboardPage() {
                   src={profilePic} 
                   alt="Sebastián" 
                   className="h-full w-full object-cover"
-                  style={{ objectPosition: '72% 0%' }}
+                  style={{ objectPosition: '28% 0%' }}
                 />
               </Link>
             </div>
@@ -432,7 +432,7 @@ export default function DashboardPage() {
                   src={profilePic} 
                   alt="Sebastián" 
                   className="h-full w-full object-cover"
-                  style={{ objectPosition: '72% 0%' }}
+                  style={{ objectPosition: '28% 0%' }}
                 />
               </Link>
             </div>

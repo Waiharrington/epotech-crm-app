@@ -36,7 +36,12 @@ import { NotificationBell } from '@/components/notifications/notification-bell'
 export default function DashboardPage() {
   const supabase = createClient() as any
   const [loading, setLoading] = useState(true)
-  const [showWelcomeLoader, setShowWelcomeLoader] = useState(true)
+  const [showWelcomeLoader, setShowWelcomeLoader] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !sessionStorage.getItem('epotech_dashboard_loaded')
+    }
+    return true
+  })
   
   // Dynamic profile picture state with synchronization
   const [profilePic, setProfilePic] = useState('/assets/profile.jpg')
@@ -175,9 +180,6 @@ export default function DashboardPage() {
 
     updateGreeting()
     const interval = setInterval(updateGreeting, 30000)
-
-    // First session entry welcome pressure washer animation - FORCED ON EVERY REFRESH FOR TESTING
-    setShowWelcomeLoader(true)
 
     return () => clearInterval(interval)
   }, [])

@@ -243,7 +243,7 @@ export default function AjustesPage() {
                             value={settings.leadCost}
                             onChange={e => setSettings({...settings, leadCost: parseFloat(e.target.value) || 0})}
                         />
-                        <span className="text-sm text-muted-foreground">USD por cada cliente nuevo adquirido vía Marketing.</span>
+                        <span className="text-sm text-muted-foreground">Dólares por cada cliente nuevo adquirido vía Marketing.</span>
                     </div>
                 </div>
             </CardContent>

@@ -452,6 +452,14 @@ export default function LoginPage() {
               padding-bottom: 32px !important;
             }
           }
+          @media (min-width: 760px) and (max-width: 800px) and (min-height: 1000px) and (max-height: 1030px) {
+            .login-hero-height {
+              height: 210px !important;
+            }
+            .login-greeting-padding {
+              margin-bottom: 12px !important;
+            }
+          }
         `}</style>
       </div>
     </div>

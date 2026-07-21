@@ -180,11 +180,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-2 h-screen max-h-screen overflow-hidden bg-[#030b17] font-sans antialiased">
+    <div className="grid grid-cols-1 md:grid-cols-2 h-screen max-h-screen overflow-hidden bg-[#030b17] font-sans antialiased">
       
-      {/* Left Column: Premium Private Operations Terminal for Sebastian (Only on desktop) */}
+      {/* Left Column: Premium Private Operations Terminal for Sebastian (Only on desktop and tablets) */}
       <div 
-        className="hidden xl:flex flex-col justify-between p-16 relative text-white overflow-hidden h-full"
+        className="hidden md:flex flex-col justify-between p-10 lg:p-16 relative text-white overflow-hidden h-full"
         style={{ 
           backgroundImage: `url('/assets/worker.jpg')`,
           backgroundSize: 'cover',
@@ -199,7 +199,7 @@ export default function LoginPage() {
         <div className="relative z-20 space-y-4">
           <div className="w-12 h-[3px] bg-[#00C9E0] rounded-full mb-1" />
           <div className="flex flex-col space-y-1">
-            <span className="text-3xl font-black tracking-tight text-white uppercase">
+            <span className="text-2xl lg:text-3xl font-black tracking-tight text-white uppercase">
               Gestión Inteligente
             </span>
             <p className="text-[10px] font-black text-[#00C9E0] tracking-[0.25em] uppercase pl-0.5">
@@ -209,7 +209,7 @@ export default function LoginPage() {
         </div>
 
         {/* Bottom Feature Badges Grid */}
-        <div className="relative z-20 grid grid-cols-4 gap-4 border-t border-white/10 pt-10">
+        <div className="relative z-20 grid grid-cols-2 lg:grid-cols-4 gap-4 border-t border-white/10 pt-10">
           <div className="flex flex-col items-center text-center space-y-2.5">
             <ShieldCheck className="h-9 w-9 text-[#00C9E0]" />
             <div className="flex flex-col leading-tight">
@@ -242,12 +242,12 @@ export default function LoginPage() {
       </div>
 
       {/* Right Column: Premium Responsive Login Container with luxury CRM menu background */}
-      <div className="flex flex-col h-screen max-h-screen overflow-hidden sidebar-premium-bg xl:bg-[#F1F5F9] relative">
+      <div className="flex flex-col h-screen max-h-screen overflow-hidden sidebar-premium-bg md:bg-[#F1F5F9] relative">
         {/* Satisfying water droplet micro-particles */}
         <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-10 opacity-40" />
         
-        {/* Mobile-Only Hero Header — final calibrated coordinates: X=23%, Y=12%, zoom=103% */}
-        <div className="xl:hidden w-full relative flex-shrink-0 bg-[#030b17] z-10 m-0 p-0 overflow-hidden login-hero-height" style={{ height: '270px' }}>
+        {/* Mobile-Only Hero Header */}
+        <div className="md:hidden w-full relative flex-shrink-0 bg-[#030b17] z-10 m-0 p-0 overflow-hidden login-hero-height" style={{ height: '270px' }}>
           <img 
             src="/assets/login_hero_mobile.jpeg"
             alt="Epotech Solutions Worker"
@@ -263,15 +263,15 @@ export default function LoginPage() {
         </div>
 
         {/* Card Container (Floats on solid dark navy on mobile, centered light grey on desktop) */}
-        <div className="flex-1 flex flex-col items-center justify-center xl:justify-center pt-4 pb-8 px-4 sm:pt-6 sm:pb-12 sm:px-6 relative z-20 bg-transparent xl:bg-transparent overflow-y-visible xl:overflow-hidden no-scrollbar">
+        <div className="flex-1 flex flex-col items-center justify-center md:justify-center p-4 sm:p-6 relative z-20 bg-transparent md:bg-transparent overflow-y-visible md:overflow-hidden no-scrollbar">
           
           {/* Seamless blending gradient to fade out the dotted pattern as it approaches the photo container, preventing any sharp visual cuts */}
-          <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#030b17] to-transparent pointer-events-none z-10 xl:hidden" />
+          <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#030b17] to-transparent pointer-events-none z-10 md:hidden" />
           
 
 
           {/* Mobile-Only Greeting (Positioned on the solid blue background, exactly in the middle between the photo and the card) */}
-          <div className="xl:hidden w-full max-w-[485px] text-center flex flex-col items-center pt-2 pb-2 sm:pt-5 sm:pb-5 px-4 z-20 flex-shrink-0 login-greeting-padding mb-4 sm:mb-0">
+          <div className="md:hidden w-full max-w-[485px] text-center flex flex-col items-center pt-2 pb-2 sm:pt-5 sm:pb-5 px-4 z-20 flex-shrink-0 login-greeting-padding mb-4 sm:mb-0">
             {/* Accent Line - Resized for premium proportions */}
             <div className="w-16 h-[4px] bg-[#00C9E0] rounded-full mb-2 sm:mb-3" />
             <span className="text-[20px] sm:text-[30px] md:text-[44px] font-black tracking-tight text-white uppercase block leading-tight">
@@ -282,9 +282,9 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <div ref={cardRef} className="w-full max-w-[485px] xl:my-auto flex-shrink-0 z-20">
+          <div ref={cardRef} className="w-full max-w-[485px] md:my-auto flex-shrink-0 z-20">
             {/* Card with luxury glass border, premium deep shadows, and hover cyan glow */}
-            <Card className="w-full shadow-[0_25px_60px_-15px_rgba(15,23,42,0.25)] border border-slate-100 dark:border-slate-800 xl:border-slate-200/60 bg-white rounded-[24px] overflow-hidden pt-10 pb-6 px-6 sm:p-8 flex flex-col gap-0 relative transition-all duration-500 hover:shadow-[0_30px_70px_-15px_rgba(15,23,42,0.3),0_0_30px_rgba(0,201,224,0.06)] hover:border-[#00C9E0]/20 group/card login-card-padding">
+            <Card className="w-full shadow-[0_25px_60px_-15px_rgba(15,23,42,0.25)] border border-slate-100 dark:border-slate-800 md:border-slate-200/60 bg-white rounded-[24px] overflow-hidden pt-10 pb-6 px-6 sm:p-8 flex flex-col gap-0 relative transition-all duration-500 hover:shadow-[0_30px_70px_-15px_rgba(15,23,42,0.3),0_0_30px_rgba(0,201,224,0.06)] hover:border-[#00C9E0]/20 group/card login-card-padding">
               
               {/* 1. Satisfying Clean Reveal Frosted Glass Overlay (Fully animated on mobile & desktop via hardware-accelerated transform to bypass WebKit clip-path/blur repaint bugs. DOM-purged after 1.8s) */}
               {!animationDone && (

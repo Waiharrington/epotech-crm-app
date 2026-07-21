@@ -263,7 +263,7 @@ export default function LoginPage() {
         </div>
 
         {/* Card Container (Floats on solid dark navy on mobile, centered light grey on desktop) */}
-        <div className="flex-1 flex flex-col items-center justify-center xl:justify-center p-4 sm:p-6 relative z-20 bg-transparent xl:bg-transparent overflow-y-visible xl:overflow-hidden no-scrollbar">
+        <div className="flex-1 flex flex-col items-center justify-center xl:justify-center pt-4 pb-8 px-4 sm:pt-6 sm:pb-12 sm:px-6 relative z-20 bg-transparent xl:bg-transparent overflow-y-visible xl:overflow-hidden no-scrollbar">
           
           {/* Seamless blending gradient to fade out the dotted pattern as it approaches the photo container, preventing any sharp visual cuts */}
           <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#030b17] to-transparent pointer-events-none z-10 xl:hidden" />

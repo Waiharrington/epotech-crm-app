@@ -268,9 +268,7 @@ export default function LoginPage() {
           {/* Seamless blending gradient to fade out the dotted pattern as it approaches the photo container, preventing any sharp visual cuts */}
           <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#030b17] to-transparent pointer-events-none z-10 xl:hidden" />
           
-          {/* Ambient Glow Spheres / Pulsing 3D light behind the login card */}
-          <div className="absolute top-1/4 left-1/4 w-80 h-80 rounded-full bg-[#00C9E0]/8 blur-[100px] pointer-events-none z-0 animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-[#2563EB]/12 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '6s' }} />
+
 
           {/* Mobile-Only Greeting (Positioned on the solid blue background, exactly in the middle between the photo and the card) */}
           <div className="xl:hidden w-full max-w-[485px] text-center flex flex-col items-center pt-2 pb-2 sm:pt-5 sm:pb-5 px-4 z-20 flex-shrink-0 login-greeting-padding mb-4 sm:mb-0">

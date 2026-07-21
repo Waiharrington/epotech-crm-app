@@ -276,7 +276,7 @@ export default function LoginPage() {
           <div className="lg:hidden w-full max-w-[485px] text-center flex flex-col items-center pt-5 pb-5 px-4 z-20 flex-shrink-0">
             {/* Accent Line - Resized for premium proportions */}
             <div className="w-16 h-[4px] bg-[#00C9E0] rounded-full mb-3" />
-            <span className="text-[24px] min-[375px]:text-[27px] min-[414px]:text-[30px] sm:text-[44px] font-black tracking-tight text-white uppercase block leading-tight whitespace-nowrap">
+            <span className="text-[24px] min-[375px]:text-[27px] min-[414px]:text-[30px] sm:text-[44px] font-black tracking-tight text-white uppercase block leading-tight">
               Gestión Inteligente
             </span>
             <p className="text-[12px] sm:text-[14px] font-black text-[#00C9E0] tracking-[0.28em] uppercase mt-2">

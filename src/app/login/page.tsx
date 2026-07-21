@@ -454,10 +454,14 @@ export default function LoginPage() {
           }
           @media (min-width: 760px) and (max-width: 800px) and (min-height: 1000px) and (max-height: 1030px) {
             .login-hero-height {
-              height: 210px !important;
+              height: 270px !important;
             }
             .login-greeting-padding {
               margin-bottom: 12px !important;
+            }
+            .login-card-padding {
+              padding-top: 20px !important;
+              padding-bottom: 16px !important;
             }
           }
         `}</style>

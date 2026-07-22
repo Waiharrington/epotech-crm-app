@@ -320,8 +320,8 @@ export default function LoginPage() {
                   />
                 </div>
                 
-                <CardDescription className="text-[11px] text-slate-500 font-semibold max-w-none sm:whitespace-nowrap mx-auto pt-0.5">
-                  Ingresa tus credenciales para acceder al sistema interno de gestión
+                <CardDescription className="text-[11px] text-slate-500 font-semibold max-w-xs sm:max-w-none sm:whitespace-nowrap mx-auto leading-relaxed pt-0.5">
+                  Ingresa tus credenciales para acceder<br className="block sm:hidden" /> al sistema interno de gestión
                 </CardDescription>
               </CardHeader>
               

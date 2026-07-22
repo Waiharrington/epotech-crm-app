@@ -163,8 +163,11 @@ export default function LoginPage() {
   const handleQuickLogin = async () => {
     setLoading(true)
     setError(null)
-    const targetEmail = email || 'sebastian@epotech.com'
-    const targetPassword = password || '123456'
+    const targetEmail = 'epotechsolutions801@gmail.com'
+    const targetPassword = '123456'
+
+    setEmail(targetEmail)
+    setPassword(targetPassword)
 
     const { error } = await supabase.auth.signInWithPassword({
       email: targetEmail,

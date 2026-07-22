@@ -1283,7 +1283,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
       }}
     >
       {/* High-fidelity dark ambient glowing environment */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] rounded-full bg-gradient-to-tr from-[#0097A7]/8 to-[#00C9E0]/8 blur-[180px] pointer-events-none z-10" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#030b17] via-[#051325] to-[#02070f] pointer-events-none z-10" />
 
       {/* Glass overlay grid pattern for realistic depth */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-30 z-20" />
@@ -1362,7 +1362,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
           </div>
 
           <div className="text-center">
-            <h2 className="text-white font-extrabold text-sm uppercase tracking-[0.35em] bg-gradient-to-r from-[#00C9E0] via-white to-[#0097A7] bg-clip-text text-transparent">
+            <h2 className="text-[#00C9E0] font-black text-sm uppercase tracking-[0.35em] drop-shadow-[0_0_12px_rgba(0,201,224,0.4)]">
               EPOTECH SOLUTIONS
             </h2>
             <p className="text-slate-400 text-[12px] font-medium uppercase mt-2">Cargando...</p>

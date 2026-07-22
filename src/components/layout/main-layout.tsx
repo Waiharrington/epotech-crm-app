@@ -191,7 +191,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main Content Area */}
       <main className={cn(
-        "pb-24 md:pb-0 transition-all duration-300",
+        "pb-32 md:pb-0 transition-all duration-300",
         "md:pl-64 min-h-screen bg-[#F0F5FA]"
       )}>
         {children}

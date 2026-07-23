@@ -457,11 +457,11 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F0F5FA] px-4.5 pb-12 pt-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-6 gap-6 relative">
+    <div className="flex flex-col min-h-screen 2xl:h-screen 2xl:max-h-screen bg-[#F0F5FA] px-4.5 pb-12 pt-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-6 2xl:p-6 gap-5 2xl:gap-4 relative 2xl:overflow-hidden">
 
       {/* Premium Dark Navy Header Banner */}
-      <header className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-5 md:p-6 shrink-0 relative z-30 animate-dashboard-item shadow-xl" style={{ animationDelay: '100ms' }}>
-        <div className="relative z-10 flex flex-col gap-4.5">
+      <header className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-5 md:p-6 2xl:p-5 shrink-0 relative z-30 animate-dashboard-item shadow-xl" style={{ animationDelay: '100ms' }}>
+        <div className="relative z-10 flex flex-col gap-4.5 2xl:gap-3">
           {/* Top Row: Logo & Icons (Mobile only) */}
           <div className="flex items-center justify-between md:hidden">
             <div className="flex items-center gap-2">
@@ -556,9 +556,9 @@ export default function DashboardPage() {
       </header>
 
       {/* Main Content layout */}
-      <main className="flex flex-col gap-6 relative z-10">
+      <main className="flex flex-col 2xl:flex-1 2xl:min-h-0 gap-5 2xl:gap-4 relative z-10">
         {/* Statistics Grid */}
-        <div className="p-1 -m-1 overflow-visible">
+        <div className="p-1 -m-1 overflow-visible shrink-0">
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4.5 shrink-0">
             {/* Card: Clientes Totales */}
             <Link href="/clientes" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/40 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '150ms' }}>
@@ -627,9 +627,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Middle Row Section */}
-        <div className="grid gap-6 xl:grid-cols-7">
+        <div className="grid gap-5 2xl:gap-4 xl:grid-cols-7 2xl:flex-1 2xl:min-h-0">
           {/* Próximos Servicios */}
-          <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col animate-dashboard-item" style={{ animationDelay: '350ms' }}>
+          <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col 2xl:min-h-0 2xl:h-full animate-dashboard-item" style={{ animationDelay: '350ms' }}>
             {/* Header */}
             <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-3 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
               <div>
@@ -641,7 +641,7 @@ export default function DashboardPage() {
               </Link>
             </div>
             
-            <div className="p-3.5 space-y-2.5 bg-gradient-to-b from-white to-slate-50/30">
+            <div className="p-3.5 space-y-2.5 bg-gradient-to-b from-white to-slate-50/30 2xl:flex-1 2xl:overflow-y-auto no-scrollbar">
               {loading ? (
                 <div className="flex justify-center py-6"><Loader2 className="h-5 w-5 text-[#0097A7] animate-spin" /></div>
               ) : recentJobs.length > 0 ? (
@@ -682,7 +682,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Acciones Rápidas */}
-          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-4 flex flex-col justify-between animate-dashboard-item" style={{ animationDelay: '400ms' }}>
+          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-4 flex flex-col justify-between animate-dashboard-item 2xl:min-h-0 2xl:h-full" style={{ animationDelay: '400ms' }}>
             <div className="flex flex-col gap-2.5">
               <div>
                 <h3 className="text-xs font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
@@ -754,9 +754,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Lower Row: Reminders & Alerts */}
-        <div className="grid gap-6 xl:grid-cols-7">
+        <div className="grid gap-5 2xl:gap-4 xl:grid-cols-7 2xl:flex-1 2xl:min-h-0">
           {/* Reminders Widget */}
-          <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '450ms' }}>
+          <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between 2xl:min-h-0 2xl:h-full animate-dashboard-item" style={{ animationDelay: '450ms' }}>
             <div className="min-h-0 flex flex-col flex-1 h-auto">
               <div className="flex items-center justify-between pb-2 border-b border-slate-50 shrink-0">
                 <div>
@@ -1022,7 +1022,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Alertas y Operaciones */}
-          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0 h-auto overflow-hidden animate-dashboard-item" style={{ animationDelay: '500ms' }}>
+          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between 2xl:min-h-0 2xl:h-full overflow-hidden animate-dashboard-item" style={{ animationDelay: '500ms' }}>
             <div className="min-h-0 flex flex-col flex-1 h-auto justify-between">
               <div className="pb-1.5 border-b border-slate-50 shrink-0">
                 <h3 className="text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">

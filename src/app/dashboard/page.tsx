@@ -228,6 +228,11 @@ export default function DashboardPage() {
   // Reminders state
   const [reminders, setReminders] = useState<any[]>([])
   const [quickTitle, setQuickTitle] = useState('')
+  const [quickDate, setQuickDate] = useState(new Date().toISOString().substring(0, 10))
+  const [quickTime, setQuickTime] = useState(() => {
+    const now = new Date()
+    return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
+  })
   const [isDbOffline, setIsDbOffline] = useState(false)
 
   useEffect(() => {
@@ -319,21 +324,19 @@ export default function DashboardPage() {
     e.preventDefault()
     if (!quickTitle.trim()) return
 
-    const now = new Date()
-    const localHours = String(now.getHours()).padStart(2, '0')
-    const localMinutes = String(now.getMinutes()).padStart(2, '0')
-    const currentTimeStr = `${localHours}:${localMinutes}:00`
+    const selectedDate = quickDate || new Date().toISOString().substring(0, 10)
+    const selectedTime = quickTime ? `${quickTime}:00` : '09:00:00'
 
     const newReminderObj = {
       id: `rem-${Date.now()}`,
       titulo: quickTitle.trim(),
       descripcion: 'Creado desde el panel principal.',
-      fecha: now.toISOString().substring(0, 10),
-      hora: currentTimeStr,
+      fecha: selectedDate,
+      hora: selectedTime,
       prioridad: 'normal',
       completado: false,
       notificado: false,
-      created_at: now.toISOString()
+      created_at: new Date().toISOString()
     }
 
     // Optimistic UI Update immediately
@@ -778,14 +781,26 @@ export default function DashboardPage() {
               </div>
 
               {/* Formulario Rápido */}
-              <form onSubmit={handleQuickAddReminder} className="flex gap-2 mt-2 shrink-0">
+              <form onSubmit={handleQuickAddReminder} className="flex gap-1.5 mt-2 shrink-0 flex-wrap sm:flex-nowrap">
                 <Input
-                  placeholder="Escribe un pendiente rápido para hoy..."
+                  placeholder="Escribe un pendiente rápido..."
                   value={quickTitle}
                   onChange={e => setQuickTitle(e.target.value)}
-                  className="text-[10.5px] h-8 px-3 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]"
+                  className="text-[10.5px] h-8 px-2.5 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex-1 min-w-[140px]"
                 />
-                <Button type="submit" size="sm" className="h-8 text-[10.5px] font-black gap-1 px-3.5 bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
+                <Input
+                  type="date"
+                  value={quickDate}
+                  onChange={e => setQuickDate(e.target.value)}
+                  className="text-[10px] h-8 px-2 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white w-[115px] shrink-0 font-medium text-slate-700"
+                />
+                <Input
+                  type="time"
+                  value={quickTime}
+                  onChange={e => setQuickTime(e.target.value)}
+                  className="text-[10px] h-8 px-2 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white w-[88px] shrink-0 font-medium text-slate-700"
+                />
+                <Button type="submit" size="sm" className="h-8 text-[10.5px] font-black gap-1 px-3 bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
                   <Plus className="h-3 w-3 stroke-[3]" /> Agregar
                 </Button>
               </form>

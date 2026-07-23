@@ -1652,20 +1652,26 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
       </div>
 
       {/* Floating Tuner Toggle Button & Controls */}
-      <div className="fixed top-4 right-4 z-[9999999] pointer-events-auto flex items-center gap-2 touch-manipulation">
+      <div className="fixed top-4 right-4 z-[9999999] pointer-events-auto flex items-center gap-2 touch-none">
         <button
           type="button"
-          onClick={() => setIsPaused(p => !p)}
-          onTouchEnd={(e) => { e.preventDefault(); setIsPaused(p => !p); }}
-          className="h-8 px-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-[11px] font-bold shadow-lg backdrop-blur-md hover:bg-slate-800 active:scale-95 flex items-center gap-1.5 cursor-pointer touch-manipulation"
+          onPointerDown={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            setIsPaused(p => !p)
+          }}
+          className="h-9 px-3.5 rounded-xl bg-slate-900/95 border border-slate-700/80 text-white text-[11px] font-bold shadow-2xl backdrop-blur-md hover:bg-slate-800 active:scale-95 flex items-center gap-1.5 cursor-pointer touch-none select-none"
         >
           {isPaused ? '▶️ Reanudar' : '⏸️ Pausar'}
         </button>
         <button
           type="button"
-          onClick={() => setShowTuner(s => !s)}
-          onTouchEnd={(e) => { e.preventDefault(); setShowTuner(s => !s); }}
-          className="h-8 px-3 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white text-[11px] font-black shadow-lg hover:brightness-110 active:scale-95 flex items-center gap-1.5 cursor-pointer touch-manipulation"
+          onPointerDown={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            setShowTuner(s => !s)
+          }}
+          className="h-9 px-3.5 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white text-[11px] font-black shadow-2xl hover:brightness-110 active:scale-95 flex items-center gap-1.5 cursor-pointer touch-none select-none"
         >
           ⚙️ Adjust Spray & Gun
         </button>
@@ -1680,9 +1686,12 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             </span>
             <button
               type="button"
-              onClick={() => setShowTuner(false)}
-              onTouchEnd={(e) => { e.preventDefault(); setShowTuner(false); }}
-              className="text-slate-400 hover:text-white font-bold text-sm px-1.5 py-1"
+              onPointerDown={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setShowTuner(false)
+              }}
+              className="text-slate-400 hover:text-white font-bold text-sm px-2 py-1 cursor-pointer"
             >
               ✕
             </button>
@@ -1757,18 +1766,24 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between gap-2">
             <button
               type="button"
-              onClick={handleSaveTuner}
-              onTouchEnd={(e) => { e.preventDefault(); handleSaveTuner(); }}
-              className="flex-1 py-2 bg-[#0097A7] hover:bg-[#00C9E0] active:scale-95 text-white font-bold rounded-xl text-[11px] transition-all cursor-pointer text-center touch-manipulation"
+              onPointerDown={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                handleSaveTuner()
+              }}
+              className="flex-1 py-2 bg-[#0097A7] hover:bg-[#00C9E0] active:scale-95 text-white font-bold rounded-xl text-[11px] transition-all cursor-pointer text-center touch-none select-none"
             >
               💾 Guardar Ajuste
             </button>
 
             <button
               type="button"
-              onClick={handleResetTuner}
-              onTouchEnd={(e) => { e.preventDefault(); handleResetTuner(); }}
-              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 font-bold rounded-xl text-[11px] transition-all cursor-pointer touch-manipulation"
+              onPointerDown={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                handleResetTuner()
+              }}
+              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 font-bold rounded-xl text-[11px] transition-all cursor-pointer touch-none select-none"
             >
               🔄 Reset
             </button>

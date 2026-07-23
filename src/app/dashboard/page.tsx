@@ -780,27 +780,68 @@ export default function DashboardPage() {
                 </button>
               </div>
 
-              {/* Formulario Rápido */}
-              <form onSubmit={handleQuickAddReminder} className="flex gap-1.5 mt-2 shrink-0 flex-wrap sm:flex-nowrap">
+              {/* Formulario Rápido con selectores UI estilizados */}
+              <form onSubmit={handleQuickAddReminder} className="flex items-center gap-1.5 mt-2 shrink-0 flex-wrap sm:flex-nowrap">
                 <Input
                   placeholder="Escribe un pendiente rápido..."
                   value={quickTitle}
                   onChange={e => setQuickTitle(e.target.value)}
-                  className="text-[10.5px] h-8 px-2.5 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex-1 min-w-[140px]"
+                  className="text-[10.5px] h-8 px-3 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex-1 min-w-[130px]"
                 />
-                <Input
-                  type="date"
-                  value={quickDate}
-                  onChange={e => setQuickDate(e.target.value)}
-                  className="text-[10px] h-8 px-2 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white w-[115px] shrink-0 font-medium text-slate-700"
-                />
-                <Input
-                  type="time"
-                  value={quickTime}
-                  onChange={e => setQuickTime(e.target.value)}
-                  className="text-[10px] h-8 px-2 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white w-[88px] shrink-0 font-medium text-slate-700"
-                />
-                <Button type="submit" size="sm" className="h-8 text-[10.5px] font-black gap-1 px-3 bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
+
+                {/* Date Picker Button */}
+                <div className="relative shrink-0">
+                  <Input
+                    type="date"
+                    id="quick-date-picker"
+                    value={quickDate}
+                    onChange={e => setQuickDate(e.target.value)}
+                    className="sr-only opacity-0 absolute pointer-events-auto w-full h-full inset-0 z-10 cursor-pointer"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const el = document.getElementById('quick-date-picker') as any
+                      if (el) {
+                        if (typeof el.showPicker === 'function') el.showPicker()
+                        else if (typeof el.focus === 'function') el.focus()
+                      }
+                    }}
+                    className="h-8 px-2.5 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[10px] font-bold text-slate-700 flex items-center gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                  >
+                    <Calendar className="h-3 w-3 text-[#0097A7]" />
+                    <span>
+                      {new Date(quickDate + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                    </span>
+                  </button>
+                </div>
+
+                {/* Time Picker Button */}
+                <div className="relative shrink-0">
+                  <Input
+                    type="time"
+                    id="quick-time-picker"
+                    value={quickTime}
+                    onChange={e => setQuickTime(e.target.value)}
+                    className="sr-only opacity-0 absolute pointer-events-auto w-full h-full inset-0 z-10 cursor-pointer"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const el = document.getElementById('quick-time-picker') as any
+                      if (el) {
+                        if (typeof el.showPicker === 'function') el.showPicker()
+                        else if (typeof el.focus === 'function') el.focus()
+                      }
+                    }}
+                    className="h-8 px-2.5 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[10px] font-bold text-slate-700 flex items-center gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                  >
+                    <Clock className="h-3 w-3 text-[#0097A7]" />
+                    <span>{formatTime12h(`${quickTime}:00`)}</span>
+                  </button>
+                </div>
+
+                <Button type="submit" size="sm" className="h-8 text-[10.5px] font-black gap-1 px-3.5 bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
                   <Plus className="h-3 w-3 stroke-[3]" /> Agregar
                 </Button>
               </form>

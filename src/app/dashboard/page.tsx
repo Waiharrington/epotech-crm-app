@@ -356,18 +356,28 @@ export default function DashboardPage() {
         lowestItemName: lowestItem
       })
 
-      const { data: jobs } = await supabase
-          .from('trabajos')
-          .select(`
-              *,
-              clientes (nombre, apellido),
-              catalogo_servicios (nombre)
-          `)
-          .neq('estado', 'completado')
-          .order('fecha_servicio', { ascending: true })
-          .limit(5)
-      
-      if (jobs) setRecentJobs(jobs)
+      try {
+        const { data: jobs, error: jobsErr } = await supabase
+            .from('trabajos')
+            .select(`
+                *,
+                clientes (nombre, apellido),
+                catalogo_servicios (nombre)
+            `)
+            .neq('estado', 'completado')
+            .order('fecha_servicio', { ascending: true })
+            .limit(5)
+        
+        if (jobsErr) {
+          const { data: fallbackJobs } = await supabase.from('trabajos').select('*').neq('estado', 'completado').limit(5)
+          setRecentJobs(fallbackJobs || [])
+        } else if (jobs) {
+          setRecentJobs(jobs)
+        }
+      } catch (errJobs) {
+        console.error("Jobs query error:", errJobs)
+        setRecentJobs([])
+      }
     } catch (e) {
       console.error(e)
     } finally {

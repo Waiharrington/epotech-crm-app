@@ -131,13 +131,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                 <div className="h-[1.5px] w-5 bg-[#00C9E0] rounded-full" />
               </div>
             </>
-          ) : (
-            <div className="mt-3 flex flex-col items-center">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-[#00C9E0] to-[#0097A7] flex items-center justify-center shadow-[0_0_12px_rgba(0,201,224,0.4)]">
-                <span className="font-black text-white text-xs tracking-wider">E</span>
-              </div>
-            </div>
-          )}
+          ) : null}
         </div>
         
         <nav className="flex-1 px-2.5 py-4 space-y-4 overflow-y-auto no-scrollbar">

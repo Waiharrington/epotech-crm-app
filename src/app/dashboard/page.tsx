@@ -654,8 +654,8 @@ export default function DashboardPage() {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="font-extrabold text-[11.5px] text-slate-800 group-hover:text-[#0097A7] transition-colors truncate">{job.catalogo_servicios?.nombre}</span>
-                          <span className="px-2 py-0.5 text-[6.5px] font-black uppercase rounded-full bg-[#E6F9FB] text-[#0097A7] tracking-widest border border-[#0097A7]/8">
-                            {job.estado === 'en_progreso' ? 'EN_PROGRESO' : job.estado === 'pendiente' ? 'PENDIENTE' : job.estado}
+                          <span className="px-2 py-0.5 text-[7px] font-black uppercase rounded-full bg-[#E6F9FB] text-[#0097A7] tracking-wider border border-[#0097A7]/10">
+                            {job.estado === 'en_progreso' ? 'En Progreso' : job.estado === 'pendiente' ? 'Pendiente' : job.estado?.replace('_', ' ')}
                           </span>
                         </div>
                         <p className="text-[9.5px] text-slate-400 mt-0.5 font-medium">{job.clientes?.nombre} {job.clientes?.apellido}</p>

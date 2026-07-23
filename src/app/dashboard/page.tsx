@@ -1159,6 +1159,40 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
   const [t3Delay, setT3Delay] = useState(2000)
   const [t4Delay, setT4Delay] = useState(2650)
 
+  const handleSaveTuner = () => {
+    const key = isMobile ? 'epotech_nozzle_mobile' : 'epotech_nozzle_desktop'
+    const config = {
+      nozzleX,
+      nozzleY,
+      targetXPct,
+      targetYPct,
+      gunDuration,
+      t1Delay,
+      t2Delay,
+      t3Delay,
+      t4Delay
+    }
+    localStorage.setItem(key, JSON.stringify(config))
+    toast.success('¡Coordenadas guardadas perfectamente!')
+  }
+
+  const handleResetTuner = () => {
+    const key = isMobile ? 'epotech_nozzle_mobile' : 'epotech_nozzle_desktop'
+    localStorage.removeItem(key)
+    if (isMobile) {
+      setNozzleX(1.0)
+      setNozzleY(27.0)
+      setTargetXPct(-0.23)
+      setTargetYPct(0.50)
+    } else {
+      setNozzleX(31.0)
+      setNozzleY(42.0)
+      setTargetXPct(-0.46)
+      setTargetYPct(0.23)
+    }
+    toast.success('Restaurado por defecto')
+  }
+
   useEffect(() => {
     const isMobileDevice = window.innerWidth < 768
     setIsMobile(isMobileDevice)
@@ -1618,18 +1652,20 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
       </div>
 
       {/* Floating Tuner Toggle Button & Controls */}
-      <div className="fixed top-4 right-4 z-[100000] pointer-events-auto flex items-center gap-2">
+      <div className="fixed top-4 right-4 z-[9999999] pointer-events-auto flex items-center gap-2 touch-manipulation">
         <button
           type="button"
           onClick={() => setIsPaused(p => !p)}
-          className="h-8 px-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-[11px] font-bold shadow-lg backdrop-blur-md hover:bg-slate-800 flex items-center gap-1.5 cursor-pointer"
+          onTouchEnd={(e) => { e.preventDefault(); setIsPaused(p => !p); }}
+          className="h-8 px-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-[11px] font-bold shadow-lg backdrop-blur-md hover:bg-slate-800 active:scale-95 flex items-center gap-1.5 cursor-pointer touch-manipulation"
         >
-          {isPaused ? '▶️ Reanudar' : '⏸️ Pausar Animación'}
+          {isPaused ? '▶️ Reanudar' : '⏸️ Pausar'}
         </button>
         <button
           type="button"
           onClick={() => setShowTuner(s => !s)}
-          className="h-8 px-3 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white text-[11px] font-black shadow-lg hover:brightness-110 flex items-center gap-1.5 cursor-pointer"
+          onTouchEnd={(e) => { e.preventDefault(); setShowTuner(s => !s); }}
+          className="h-8 px-3 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white text-[11px] font-black shadow-lg hover:brightness-110 active:scale-95 flex items-center gap-1.5 cursor-pointer touch-manipulation"
         >
           ⚙️ Adjust Spray & Gun
         </button>
@@ -1637,7 +1673,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
 
       {/* Live Calibration Panel */}
       {showTuner && (
-        <div className="fixed top-14 right-4 w-80 p-4 rounded-2xl bg-slate-950/95 border border-cyan-500/30 text-white z-[100000] shadow-2xl backdrop-blur-xl pointer-events-auto text-xs space-y-3">
+        <div className="fixed top-14 right-4 left-4 sm:left-auto sm:w-80 p-4 rounded-2xl bg-slate-950/95 border border-cyan-500/30 text-white z-[9999999] shadow-2xl backdrop-blur-xl pointer-events-auto text-xs space-y-3 touch-manipulation">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <span className="font-black text-[#00C9E0] uppercase tracking-wider text-[11px]">
               🎯 Calibrador de Chorro ({isMobile ? 'Mobile' : 'Desktop'})
@@ -1645,7 +1681,8 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             <button
               type="button"
               onClick={() => setShowTuner(false)}
-              className="text-slate-400 hover:text-white font-bold text-sm px-1.5"
+              onTouchEnd={(e) => { e.preventDefault(); setShowTuner(false); }}
+              className="text-slate-400 hover:text-white font-bold text-sm px-1.5 py-1"
             >
               ✕
             </button>
@@ -1720,46 +1757,18 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
           <div className="pt-2 border-t border-slate-800 flex items-center justify-between gap-2">
             <button
               type="button"
-              onClick={() => {
-                const key = isMobile ? 'epotech_nozzle_mobile' : 'epotech_nozzle_desktop'
-                const config = {
-                  nozzleX,
-                  nozzleY,
-                  targetXPct,
-                  targetYPct,
-                  gunDuration,
-                  t1Delay,
-                  t2Delay,
-                  t3Delay,
-                  t4Delay
-                }
-                localStorage.setItem(key, JSON.stringify(config))
-                toast.success('¡Coordenadas guardadas perfectamente!')
-              }}
-              className="flex-1 py-1.5 bg-[#0097A7] hover:bg-[#00C9E0] text-white font-bold rounded-xl text-[10.5px] transition-colors cursor-pointer text-center"
+              onClick={handleSaveTuner}
+              onTouchEnd={(e) => { e.preventDefault(); handleSaveTuner(); }}
+              className="flex-1 py-2 bg-[#0097A7] hover:bg-[#00C9E0] active:scale-95 text-white font-bold rounded-xl text-[11px] transition-all cursor-pointer text-center touch-manipulation"
             >
               💾 Guardar Ajuste
             </button>
 
             <button
               type="button"
-              onClick={() => {
-                const key = isMobile ? 'epotech_nozzle_mobile' : 'epotech_nozzle_desktop'
-                localStorage.removeItem(key)
-                if (isMobile) {
-                  setNozzleX(1.0)
-                  setNozzleY(27.0)
-                  setTargetXPct(-0.23)
-                  setTargetYPct(0.50)
-                } else {
-                  setNozzleX(31.0)
-                  setNozzleY(42.0)
-                  setTargetXPct(-0.46)
-                  setTargetYPct(0.23)
-                }
-                toast.success('Restaurado por defecto')
-              }}
-              className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-[10.5px] transition-colors cursor-pointer"
+              onClick={handleResetTuner}
+              onTouchEnd={(e) => { e.preventDefault(); handleResetTuner(); }}
+              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 font-bold rounded-xl text-[11px] transition-all cursor-pointer touch-manipulation"
             >
               🔄 Reset
             </button>

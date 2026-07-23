@@ -691,8 +691,8 @@ export default function DashboardPage() {
           </div>
 
           {/* Acciones Rápidas */}
-          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0 h-auto animate-dashboard-item overflow-visible" style={{ animationDelay: '400ms' }}>
-            <div className="flex flex-col gap-2 min-h-0 h-auto">
+          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between animate-dashboard-item overflow-visible" style={{ animationDelay: '400ms' }}>
+            <div className="flex flex-col gap-2">
               <div>
                 <h3 className="text-xs font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
                 <p className="text-[8.5px] text-slate-400 font-medium">Accesos directos operacionales.</p>
@@ -701,59 +701,59 @@ export default function DashboardPage() {
               <div className="flex flex-col gap-1.5">
                 <button 
                   onClick={() => setShowClientWizard(true)}
-                  className="flex items-center justify-between py-2 px-3 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
+                  className="flex items-center justify-between py-1.5 px-3 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
-                      <Users className="h-3.5 w-3.5 text-[#0097A7] transition-transform group-hover:scale-105" />
+                    <div className="h-5.5 w-5.5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
+                      <Users className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[10.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
+                    <span className="text-[10px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
                   </div>
-                  <ChevronRight className="h-3.5 w-3.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
+                  <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
                 </button>
 
                 <button 
                   onClick={() => setShowJobWizard(true)}
-                  className="flex items-center justify-between py-2 px-3 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
+                  className="flex items-center justify-between py-1.5 px-3 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
-                      <Calendar className="h-3.5 w-3.5 text-[#0097A7] transition-transform group-hover:scale-105" />
+                    <div className="h-5.5 w-5.5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
+                      <Calendar className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[10.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
+                    <span className="text-[10px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
                   </div>
-                  <ChevronRight className="h-3.5 w-3.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
+                  <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
                 </button>
 
                 <button 
                   onClick={() => setShowQuoteWizard(true)}
-                  className="flex items-center justify-between py-2 px-3 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
+                  className="flex items-center justify-between py-1.5 px-3 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
-                      <FileText className="h-3.5 w-3.5 text-[#0097A7] transition-transform group-hover:scale-105" />
+                    <div className="h-5.5 w-5.5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
+                      <FileText className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[10.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
+                    <span className="text-[10px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
                   </div>
-                  <ChevronRight className="h-3.5 w-3.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
+                  <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
                 </button>
               </div>
             </div>
 
             {/* Recommended Block */}
-            <div className="pt-1.5 border-t border-slate-100 shrink-0">
-              <div className="p-1.5 rounded-lg bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB]/70 flex items-start gap-2 shadow-sm">
-                <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-white border border-[#E6F9FB] shadow-sm shrink-0">
+            <div className="pt-2 border-t border-slate-100 shrink-0 mt-2">
+              <div className="p-2 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB]/70 flex items-start gap-2 shadow-xs">
+                <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-white border border-[#E6F9FB] shadow-xs shrink-0">
                   <Package className="h-3 w-3 text-[#0097A7]" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[9px] font-extrabold text-[#0097A7] leading-tight">
+                  <p className="text-[9.5px] font-extrabold text-[#0097A7] leading-tight">
                     {stats.lowStock > 0 ? `Reponer: ${stats.lowestItemName}` : 'Inventario 100% Ok'}
                   </p>
-                  <p className="text-[7.5px] text-slate-500 mt-0.5 font-medium leading-tight">
+                  <p className="text-[8px] text-slate-500 mt-0.5 font-medium leading-tight">
                     {stats.lowStock > 0 ? `${stats.lowStock} producto${stats.lowStock > 1 ? 's' : ''} por debajo del mínimo.` : 'Todos los insumos con stock suficiente.'}
                   </p>
-                  <Link href="/stock" className="text-[7.5px] font-black text-[#0097A7] hover:text-[#00C9E0] hover:underline mt-0.5 inline-flex items-center gap-0.5 transition-all">
+                  <Link href="/stock" className="text-[8px] font-black text-[#0097A7] hover:text-[#00C9E0] hover:underline mt-0.5 inline-flex items-center gap-0.5 transition-all">
                     Ir al inventario <ChevronRight className="h-2 w-2" />
                   </Link>
                 </div>

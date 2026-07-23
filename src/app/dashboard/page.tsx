@@ -728,26 +728,6 @@ export default function DashboardPage() {
                 </button>
               </div>
             </div>
-
-            {/* Recommended Block */}
-            <div className="pt-2 xl:pt-1 border-t border-slate-100 shrink-0 mt-1 xl:mt-0.5">
-              <div className="p-2 xl:p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB]/70 flex items-start gap-2 shadow-xs">
-                <div className="h-5 w-5 xl:h-4 xl:w-4 rounded-lg flex items-center justify-center bg-white border border-[#E6F9FB] shadow-xs shrink-0 mt-0.5">
-                  <Package className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7]" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[9.5px] xl:text-[9px] font-extrabold text-[#0097A7] leading-tight">
-                    {stats.lowStock > 0 ? `Reponer: ${stats.lowestItemName}` : 'Inventario 100% Ok'}
-                  </p>
-                  <p className="text-[8px] xl:text-[7.5px] text-slate-500 mt-0.5 font-medium leading-tight">
-                    {stats.lowStock > 0 ? `${stats.lowStock} productos bajo stock.` : 'Insumos con stock suficiente.'}
-                  </p>
-                  <Link href="/stock" className="text-[8px] xl:text-[7.5px] font-black text-[#0097A7] hover:text-[#00C9E0] hover:underline mt-0.5 inline-flex items-center gap-0.5 transition-all">
-                    Ir al inventario <ChevronRight className="h-2 w-2" />
-                  </Link>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 

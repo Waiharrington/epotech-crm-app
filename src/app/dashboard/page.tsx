@@ -560,70 +560,72 @@ export default function DashboardPage() {
       {/* Main Content scroll-free grid layout */}
       <main className="flex-1 lg:min-h-0 flex flex-col gap-4 overflow-visible lg:overflow-hidden no-scrollbar relative z-10">
         {/* Statistics Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 shrink-0">
-          {/* Card: Clientes Totales */}
-          <Link href="/clientes" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/30 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '150ms' }}>
-            <div className="p-3 sm:p-3.5 flex items-center justify-between">
-              <div className="flex-1 min-w-0">
-                <p className="text-[8.5px] sm:text-[9px] font-extrabold text-slate-400 uppercase tracking-wider sm:tracking-widest truncate">Clientes Totales</p>
-                <p className="text-lg sm:text-xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.totalClients}</p>
-                <p className="text-[8px] sm:text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1 truncate">
-                  {stats.newClientsThisWeek > 0 ? `+${stats.newClientsThisWeek} nuevo${stats.newClientsThisWeek > 1 ? 's' : ''} esta semana` : 'Sin registros esta semana'}
-                </p>
+        <div className="p-1 -m-1 overflow-visible">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 shrink-0">
+            {/* Card: Clientes Totales */}
+            <Link href="/clientes" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/40 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '150ms' }}>
+              <div className="p-3 sm:p-3.5 flex items-center justify-between">
+                <div className="flex-1 min-w-0">
+                  <p className="text-[8.5px] sm:text-[9px] font-extrabold text-slate-400 uppercase tracking-wider sm:tracking-widest truncate">Clientes Totales</p>
+                  <p className="text-lg sm:text-xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.totalClients}</p>
+                  <p className="text-[8px] sm:text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1 truncate">
+                    {stats.newClientsThisWeek > 0 ? `+${stats.newClientsThisWeek} nuevo${stats.newClientsThisWeek > 1 ? 's' : ''} esta semana` : 'Sin registros esta semana'}
+                  </p>
+                </div>
+                <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
+                  <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500 group-hover:text-[#0097A7] transition-colors" />
+                </div>
               </div>
-              <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
-                <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500 group-hover:text-[#0097A7] transition-colors" />
-              </div>
-            </div>
-          </Link>
+            </Link>
 
-          {/* Card: Trabajos Activos */}
-          <Link href="/trabajos" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/30 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '200ms' }}>
-            <div className="p-3 sm:p-3.5 flex items-center justify-between">
-              <div className="flex-1 min-w-0">
-                <p className="text-[8.5px] sm:text-[9px] font-extrabold text-slate-400 uppercase tracking-wider sm:tracking-widest truncate">Trabajos Activos</p>
-                <p className="text-lg sm:text-xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.activeJobs}</p>
-                <p className="text-[8px] sm:text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1 truncate">
-                  En el tablero Kanban
-                </p>
+            {/* Card: Trabajos Activos */}
+            <Link href="/trabajos" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/40 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '200ms' }}>
+              <div className="p-3 sm:p-3.5 flex items-center justify-between">
+                <div className="flex-1 min-w-0">
+                  <p className="text-[8.5px] sm:text-[9px] font-extrabold text-slate-400 uppercase tracking-wider sm:tracking-widest truncate">Trabajos Activos</p>
+                  <p className="text-lg sm:text-xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.activeJobs}</p>
+                  <p className="text-[8px] sm:text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1 truncate">
+                    En el tablero Kanban
+                  </p>
+                </div>
+                <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
+                  <Briefcase className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500 group-hover:text-[#0097A7] transition-colors animate-none" />
+                </div>
               </div>
-              <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
-                <Briefcase className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500 group-hover:text-[#0097A7] transition-colors animate-none" />
-              </div>
-            </div>
-          </Link>
+            </Link>
 
-          {/* Card: Ingresos Totales */}
-          <Link href="/caja" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/30 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '250ms' }}>
-            <div className="p-3 sm:p-3.5 flex items-center justify-between">
-              <div className="flex-1 min-w-0">
-                <p className="text-[8.5px] sm:text-[9px] font-extrabold text-slate-400 uppercase tracking-wider sm:tracking-widest truncate">Ingresos Totales</p>
-                <p className="text-lg sm:text-xl font-bold text-slate-900 mt-0.5 tracking-tight">${stats.monthlyIncome.toLocaleString()}</p>
-                <p className="text-[8px] sm:text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1 truncate">
-                  Neto: ${stats.netIncome.toLocaleString()}
-                </p>
+            {/* Card: Ingresos Totales */}
+            <Link href="/caja" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/40 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '250ms' }}>
+              <div className="p-3 sm:p-3.5 flex items-center justify-between">
+                <div className="flex-1 min-w-0">
+                  <p className="text-[8.5px] sm:text-[9px] font-extrabold text-slate-400 uppercase tracking-wider sm:tracking-widest truncate">Ingresos Totales</p>
+                  <p className="text-lg sm:text-xl font-bold text-slate-900 mt-0.5 tracking-tight">${stats.monthlyIncome.toLocaleString()}</p>
+                  <p className="text-[8px] sm:text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1 truncate">
+                    Neto: ${stats.netIncome.toLocaleString()}
+                  </p>
+                </div>
+                <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
+                  <Wallet className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500 group-hover:text-[#0097A7] transition-colors" />
+                </div>
               </div>
-              <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
-                <Wallet className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500 group-hover:text-[#0097A7] transition-colors" />
-              </div>
-            </div>
-          </Link>
+            </Link>
 
-          {/* Card: Alertas Stock */}
-          <Link href="/stock" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/30 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '300ms' }}>
-            <div className="p-3 sm:p-3.5 flex items-center justify-between">
-              <div className="flex-1 min-w-0">
-                <p className="text-[8.5px] sm:text-[9px] font-extrabold text-slate-400 uppercase tracking-wider sm:tracking-widest truncate">Alertas Stock</p>
-                <p className="text-lg sm:text-xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.lowStock}</p>
-                <p className="text-[8px] sm:text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1 truncate">
-                  {stats.lowStock > 0 ? `${stats.lowStock} por reponer` : 'Inventario sano'}
-                </p>
+            {/* Card: Alertas Stock */}
+            <Link href="/stock" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/40 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '300ms' }}>
+              <div className="p-3 sm:p-3.5 flex items-center justify-between">
+                <div className="flex-1 min-w-0">
+                  <p className="text-[8.5px] sm:text-[9px] font-extrabold text-slate-400 uppercase tracking-wider sm:tracking-widest truncate">Alertas Stock</p>
+                  <p className="text-lg sm:text-xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.lowStock}</p>
+                  <p className="text-[8px] sm:text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1 truncate">
+                    {stats.lowStock > 0 ? `${stats.lowStock} por reponer` : 'Inventario sano'}
+                  </p>
+                </div>
+                <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
+                  <AlertTriangle className={`h-3.5 w-3.5 sm:h-4 sm:w-4 transition-colors ${stats.lowStock > 0 ? 'text-[#0097A7]' : 'text-slate-500 group-hover:text-[#0097A7]'}`} />
+                </div>
               </div>
-              <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
-                <AlertTriangle className={`h-3.5 w-3.5 sm:h-4 sm:w-4 transition-colors ${stats.lowStock > 0 ? 'text-[#0097A7]' : 'text-slate-500 group-hover:text-[#0097A7]'}`} />
-              </div>
-            </div>
-          </Link>
+            </Link>
+          </div>
         </div>
 
         {/* Middle Row Section */}

@@ -36,6 +36,18 @@ import { NewClientWizard } from '@/components/clientes/new-client-wizard'
 import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 import { NewQuoteWizard } from '@/components/presupuestos/new-quote-wizard'
 
+const formatTime12h = (timeStr?: string | null) => {
+  if (!timeStr) return ''
+  const parts = timeStr.split(':')
+  if (parts.length < 2) return timeStr
+  let hours = parseInt(parts[0], 10)
+  const minutes = parts[1]
+  const ampm = hours >= 12 ? 'PM' : 'AM'
+  hours = hours % 12
+  hours = hours ? hours : 12
+  return `${hours}:${minutes} ${ampm}`
+}
+
 export default function DashboardPage() {
   const supabase = createClient() as any
   const [loading, setLoading] = useState(true)
@@ -637,7 +649,7 @@ export default function DashboardPage() {
                       <span className="font-black text-xs text-slate-900">${job.precio_acordado}</span>
                       {job.hora_servicio && (
                         <div className="flex items-center text-[8.5px] text-slate-400 mt-0.5 font-medium justify-end">
-                          <Clock className="mr-0.5 h-2.5 w-2.5 text-[#00C9E0]" /> {job.hora_servicio.substring(0, 5)}
+                          <Clock className="mr-0.5 h-2.5 w-2.5 text-[#00C9E0]" /> {formatTime12h(job.hora_servicio)}
                         </div>
                       )}
                     </div>
@@ -797,7 +809,7 @@ export default function DashboardPage() {
                               {reminder.hora && (
                                 <span className="flex items-center gap-0.5">
                                   <Clock className="h-2 w-2" />
-                                  {reminder.hora.substring(0, 5)}
+                                  {formatTime12h(reminder.hora)}
                                 </span>
                               )}
                               <Badge variant="outline" className={`text-[6.5px] px-1 py-0 uppercase font-extrabold tracking-wider ${getPriorityStyle(reminder.prioridad)}`}>

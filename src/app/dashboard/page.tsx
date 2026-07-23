@@ -1563,15 +1563,15 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
 
       {/* 3D First Person Steel Nozzle Wand (extends from bottom-right corner) */}
       <div 
-        className={`fixed bottom-[-40px] right-[-40px] w-[320px] h-[320px] z-50 pointer-events-none
-          ${animationStage === 'clearing' ? 'transition-all duration-[900ms] ease-out translate-x-40 translate-y-40 opacity-0' : ''}
+        className={`fixed bottom-[-40px] right-[-40px] w-[320px] h-[320px] z-50 pointer-events-none transition-all duration-[750ms] cubic-bezier(0.16, 1, 0.3, 1)
+          ${animationStage === 'clearing' ? 'translate-x-60 translate-y-60 opacity-0 scale-90' : 'translate-x-0 translate-y-0 opacity-100 scale-100'}
         `}
         style={{
-          animation: animationStage === 'clearing'
-            ? 'none'
+          animation: animationStage === 'idle'
+            ? `gun-enter ${gunDuration}s cubic-bezier(0.22, 1, 0.36, 1) forwards`
             : (animationStage === 'spraying' || animationStage === 'flooding')
               ? 'nozzle-recoil 0.08s infinite alternate'
-              : `gun-enter ${gunDuration}s cubic-bezier(0.19, 1, 0.22, 1) forwards`
+              : 'none'
         }}
       >
         <img
@@ -1773,9 +1773,9 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
           100% { transform: translate(-1.2px, 0.8px) rotate(-0.15deg); }
         }
         @keyframes gun-enter {
-          0%   { transform: translate(250px, 250px) rotate(15deg); opacity: 0; }
-          40%  { opacity: 0.8; }
-          100% { transform: translate(0px, 0px) rotate(0deg); opacity: 1; }
+          0%   { transform: translate(320px, 320px) rotate(12deg) scale(0.85); opacity: 0; }
+          50%  { opacity: 0.9; }
+          100% { transform: translate(0px, 0px) rotate(0deg) scale(1); opacity: 1; }
         }
       `}</style>
     </div>

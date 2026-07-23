@@ -287,41 +287,53 @@ export default function DashboardPage() {
     e.preventDefault()
     if (!quickTitle.trim()) return
 
-    const payload = {
+    const newReminderObj = {
+      id: `rem-${Date.now()}`,
       titulo: quickTitle.trim(),
       descripcion: 'Creado desde el panel principal.',
       fecha: new Date().toISOString().substring(0, 10),
       hora: '09:00:00',
       prioridad: 'normal',
       completado: false,
-      notificado: false
+      notificado: false,
+      created_at: new Date().toISOString()
     }
 
-    try {
-      if (isDbOffline) throw new Error('Offline fallback')
+    // Optimistic UI Update immediately
+    setReminders(prev => [newReminderObj, ...prev.slice(0, 3)])
+    setQuickTitle('')
 
+    try {
       const { error } = await supabase
         .from('recordatorios')
-        .insert([payload])
+        .insert([{
+          titulo: newReminderObj.titulo,
+          descripcion: newReminderObj.descripcion,
+          fecha: newReminderObj.fecha,
+          hora: newReminderObj.hora,
+          prioridad: newReminderObj.prioridad,
+          completado: false,
+          notificado: false
+        }])
 
-      if (error) throw error
-      toast.success('Recordatorio agregado')
-      setQuickTitle('')
+      if (error) {
+        // Fallback to local storage if DB query fails or user not synced
+        const localData = localStorage.getItem('epotech_recordatorios') || '[]'
+        const parsed = JSON.parse(localData)
+        parsed.unshift(newReminderObj)
+        localStorage.setItem('epotech_recordatorios', JSON.stringify(parsed))
+      }
+
+      toast.success('Recordatorio guardado')
       fetchReminders()
       window.dispatchEvent(new Event('recordatoriosChanged'))
     } catch (err) {
       const localData = localStorage.getItem('epotech_recordatorios') || '[]'
       const parsed = JSON.parse(localData)
-      const newItem = {
-        id: `local-${Date.now()}`,
-        ...payload,
-        created_at: new Date().toISOString()
-      }
-      parsed.push(newItem)
+      parsed.unshift(newReminderObj)
       localStorage.setItem('epotech_recordatorios', JSON.stringify(parsed))
       
-      toast.success('Recordatorio agregado localmente')
-      setQuickTitle('')
+      toast.success('Recordatorio guardado')
       fetchReminders()
       window.dispatchEvent(new Event('recordatoriosChanged'))
     }

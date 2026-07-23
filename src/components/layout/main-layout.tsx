@@ -263,13 +263,15 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             <LogOut className="h-[16px] w-[16px] flex-shrink-0 transition-transform duration-300 group-hover:scale-105" />
             {!isCollapsed && <span>Cerrar Sesión</span>}
           </button>
-          {/* Custom Brand Tooltip for Logout */}
-          <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/logout:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-red-500/40 text-red-400 text-[11px] font-extrabold shadow-[0_4px_20px_rgba(239,68,68,0.3)] tracking-wide flex items-center gap-1.5">
-              <LogOut className="h-3.5 w-3.5 text-red-400" />
-              <span>Cerrar Sesión</span>
+          {/* Custom Brand Tooltip for Logout - Shown ONLY when sidebar is collapsed */}
+          {isCollapsed && (
+            <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/logout:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
+              <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-red-500/40 text-red-400 text-[11px] font-extrabold shadow-[0_4px_20px_rgba(239,68,68,0.3)] tracking-wide flex items-center gap-1.5">
+                <LogOut className="h-3.5 w-3.5 text-red-400" />
+                <span>Cerrar Sesión</span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </aside>
 

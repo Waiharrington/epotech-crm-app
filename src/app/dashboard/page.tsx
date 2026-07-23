@@ -32,12 +32,20 @@ import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import { NotificationBell } from '@/components/notifications/notification-bell'
+import { NewClientWizard } from '@/components/clientes/new-client-wizard'
+import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
+import { NewQuoteWizard } from '@/components/presupuestos/new-quote-wizard'
 
 export default function DashboardPage() {
   const supabase = createClient() as any
   const [loading, setLoading] = useState(true)
   const [showWelcomeLoader, setShowWelcomeLoader] = useState(false)
   const [mounted, setMounted] = useState(false)
+
+  // Quick Action Modal Wizards State
+  const [showClientWizard, setShowClientWizard] = useState(false)
+  const [showJobWizard, setShowJobWizard] = useState(false)
+  const [showQuoteWizard, setShowQuoteWizard] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -635,7 +643,10 @@ export default function DashboardPage() {
               </div>
               
               <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-3 gap-1.5">
-                <Link href="/clientes" className="flex items-center justify-between py-1.5 px-2.5 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
+                <button 
+                  onClick={() => setShowClientWizard(true)}
+                  className="flex items-center justify-between py-1.5 px-2.5 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/30 hover:shadow-[0_4px_12px_rgba(0,201,224,0.08)] transition-all duration-300 shadow-sm group min-w-0 text-left active:scale-[0.98]"
+                >
                   <div className="flex items-center gap-1.5 min-w-0 flex-1">
                     <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)] shrink-0">
                       <Users className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
@@ -643,9 +654,12 @@ export default function DashboardPage() {
                     <span className="text-[9px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
                   </div>
                   <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-0.5" />
-                </Link>
+                </button>
 
-                <Link href="/trabajos" className="flex items-center justify-between py-1.5 px-2.5 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
+                <button 
+                  onClick={() => setShowJobWizard(true)}
+                  className="flex items-center justify-between py-1.5 px-2.5 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/30 hover:shadow-[0_4px_12px_rgba(0,201,224,0.08)] transition-all duration-300 shadow-sm group min-w-0 text-left active:scale-[0.98]"
+                >
                   <div className="flex items-center gap-1.5 min-w-0 flex-1">
                     <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)] shrink-0">
                       <Calendar className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
@@ -653,9 +667,12 @@ export default function DashboardPage() {
                     <span className="text-[9px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
                   </div>
                   <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-0.5" />
-                </Link>
+                </button>
 
-                <Link href="/cotizaciones" className="flex items-center justify-between py-1.5 px-2.5 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
+                <button 
+                  onClick={() => setShowQuoteWizard(true)}
+                  className="flex items-center justify-between py-1.5 px-2.5 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/30 hover:shadow-[0_4px_12px_rgba(0,201,224,0.08)] transition-all duration-300 shadow-sm group min-w-0 text-left active:scale-[0.98]"
+                >
                   <div className="flex items-center gap-1.5 min-w-0 flex-1">
                     <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)] shrink-0">
                       <FileText className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
@@ -663,7 +680,7 @@ export default function DashboardPage() {
                     <span className="text-[9px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
                   </div>
                   <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-0.5" />
-                </Link>
+                </button>
               </div>
             </div>
 
@@ -837,9 +854,38 @@ export default function DashboardPage() {
                 <Link href="/caja">Ver Caja</Link>
               </Button>
             </div>
-          </div>
-        </div>
       </main>
+
+      {/* Direct Interactive Modal Wizards for Acciones Rápidas */}
+      {showClientWizard && (
+        <NewClientWizard 
+          onClose={() => setShowClientWizard(false)}
+          onSuccess={() => {
+            setShowClientWizard(false)
+            toast.success('Cliente creado con éxito')
+          }}
+        />
+      )}
+
+      {showJobWizard && (
+        <NewJobWizard 
+          onClose={() => setShowJobWizard(false)}
+          onSuccess={() => {
+            setShowJobWizard(false)
+            toast.success('Servicio agendado con éxito')
+          }}
+        />
+      )}
+
+      {showQuoteWizard && (
+        <NewQuoteWizard 
+          onClose={() => setShowQuoteWizard(false)}
+          onSuccess={() => {
+            setShowQuoteWizard(false)
+            toast.success('Cotización creada con éxito')
+          }}
+        />
+      )}
 
       <style>{`
         @keyframes dashboard-fade-in {

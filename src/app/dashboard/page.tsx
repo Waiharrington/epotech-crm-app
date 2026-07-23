@@ -1163,97 +1163,32 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
     const isMobileDevice = window.innerWidth < 768
     setIsMobile(isMobileDevice)
     
-    // Load dynamic coordinates and timings from localStorage based on screen width
+    // Force-clear old cached tunings so the new fixed coordinates take effect immediately
+    try {
+      localStorage.removeItem('epotech_nozzle_desktop')
+      localStorage.removeItem('epotech_nozzle_mobile')
+    } catch {}
+
     if (isMobileDevice) {
-      const saved = localStorage.getItem('epotech_nozzle_mobile')
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved)
-          setNozzleX(typeof parsed.nozzleX === 'number' && !isNaN(parsed.nozzleX) ? parsed.nozzleX : 1.0)
-          setNozzleY(typeof parsed.nozzleY === 'number' && !isNaN(parsed.nozzleY) ? parsed.nozzleY : 27.0)
-          
-          let tx = parsed.targetXPct ?? -0.23
-          if (typeof tx !== 'number' || isNaN(tx)) tx = -0.23
-          else if (tx > 2.0 || tx < -2.0) tx = tx / 100
-          setTargetXPct(tx)
-          
-          let ty = parsed.targetYPct ?? 0.50
-          if (typeof ty !== 'number' || isNaN(ty)) ty = 0.50
-          else if (ty > 2.0 || ty < -2.0) ty = ty / 100
-          setTargetYPct(ty)
-          
-          setGunDuration(typeof parsed.gunDuration === 'number' && !isNaN(parsed.gunDuration) && parsed.gunDuration > 0 ? parsed.gunDuration : 0.25)
-          setT1Delay(typeof parsed.t1Delay === 'number' && !isNaN(parsed.t1Delay) && parsed.t1Delay > 0 ? parsed.t1Delay : 300)
-          setT2Delay(typeof parsed.t2Delay === 'number' && !isNaN(parsed.t2Delay) && parsed.t2Delay > 0 ? parsed.t2Delay : 650)
-          setT3Delay(typeof parsed.t3Delay === 'number' && !isNaN(parsed.t3Delay) && parsed.t3Delay > 0 ? parsed.t3Delay : 1150)
-          setT4Delay(typeof parsed.t4Delay === 'number' && !isNaN(parsed.t4Delay) && parsed.t4Delay > 0 ? parsed.t4Delay : 1550)
-        } catch (e) {
-          setNozzleX(1.0)
-          setNozzleY(27.0)
-          setTargetXPct(-0.23)
-          setTargetYPct(0.50)
-          setGunDuration(0.25)
-          setT1Delay(300)
-          setT2Delay(650)
-          setT3Delay(1150)
-          setT4Delay(1550)
-        }
-      } else {
-        setNozzleX(1.0)
-        setNozzleY(27.0)
-        setTargetXPct(-0.23)
-        setTargetYPct(0.50)
-        setGunDuration(0.25)
-        setT1Delay(300)
-        setT2Delay(650)
-        setT3Delay(1150)
-        setT4Delay(1550)
-      }
+      setNozzleX(1.0)
+      setNozzleY(27.0)
+      setTargetXPct(-0.23)
+      setTargetYPct(0.50)
+      setGunDuration(0.25)
+      setT1Delay(300)
+      setT2Delay(650)
+      setT3Delay(1150)
+      setT4Delay(1550)
     } else {
-      const saved = localStorage.getItem('epotech_nozzle_desktop')
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved)
-          setNozzleX(typeof parsed.nozzleX === 'number' && !isNaN(parsed.nozzleX) ? parsed.nozzleX : 78.0)
-          setNozzleY(typeof parsed.nozzleY === 'number' && !isNaN(parsed.nozzleY) ? parsed.nozzleY : 38.0)
-          
-          let tx = parsed.targetXPct ?? -0.64
-          if (typeof tx !== 'number' || isNaN(tx)) tx = -0.64
-          else if (tx > 2.0 || tx < -2.0) tx = tx / 100
-          setTargetXPct(tx)
-          
-          let ty = parsed.targetYPct ?? 0.29
-          if (typeof ty !== 'number' || isNaN(ty)) ty = 0.29
-          else if (ty > 2.0 || ty < -2.0) ty = ty / 100
-          setTargetYPct(ty)
-          
-          setGunDuration(typeof parsed.gunDuration === 'number' && !isNaN(parsed.gunDuration) && parsed.gunDuration > 0 ? parsed.gunDuration : 0.8)
-          setT1Delay(typeof parsed.t1Delay === 'number' && !isNaN(parsed.t1Delay) && parsed.t1Delay > 0 ? parsed.t1Delay : 600)
-          setT2Delay(typeof parsed.t2Delay === 'number' && !isNaN(parsed.t2Delay) && parsed.t2Delay > 0 ? parsed.t2Delay : 1200)
-          setT3Delay(typeof parsed.t3Delay === 'number' && !isNaN(parsed.t3Delay) && parsed.t3Delay > 0 ? parsed.t3Delay : 2000)
-          setT4Delay(typeof parsed.t4Delay === 'number' && !isNaN(parsed.t4Delay) && parsed.t4Delay > 0 ? parsed.t4Delay : 2650)
-        } catch (e) {
-          setNozzleX(78.0)
-          setNozzleY(38.0)
-          setTargetXPct(-0.64)
-          setTargetYPct(0.29)
-          setGunDuration(0.8)
-          setT1Delay(600)
-          setT2Delay(1200)
-          setT3Delay(2000)
-          setT4Delay(2650)
-        }
-      } else {
-        setNozzleX(78.0)
-        setNozzleY(38.0)
-        setTargetXPct(-0.64)
-        setTargetYPct(0.29)
-        setGunDuration(0.8)
-        setT1Delay(600)
-        setT2Delay(1200)
-        setT3Delay(2000)
-        setT4Delay(2650)
-      }
+      setNozzleX(78.0)
+      setNozzleY(38.0)
+      setTargetXPct(-0.64)
+      setTargetYPct(0.29)
+      setGunDuration(0.8)
+      setT1Delay(600)
+      setT2Delay(1200)
+      setT3Delay(2000)
+      setT4Delay(2650)
     }
   }, [])
 

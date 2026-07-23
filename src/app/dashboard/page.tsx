@@ -1796,28 +1796,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
         }
       `}</style>
 
-      {/* Independent Floating Action Bar (Outside clip-path container) */}
-      <div 
-        className="fixed top-4 right-4 z-[99999999] flex items-center gap-2 pointer-events-auto"
-        style={{ touchAction: 'none', WebkitTapHighlightColor: 'transparent' }}
-      >
-        <button
-          type="button"
-          onClick={() => setIsPaused(p => !p)}
-          onTouchStart={() => setIsPaused(p => !p)}
-          className="h-10 px-3.5 rounded-xl bg-slate-900/95 border border-slate-700/80 text-white text-[11px] font-bold shadow-2xl backdrop-blur-md active:scale-95 flex items-center gap-1.5 cursor-pointer"
-        >
-          {isPaused ? '▶️ Reanudar' : '⏸️ Pausar'}
-        </button>
-        <button
-          type="button"
-          onClick={() => setShowTuner(s => !s)}
-          onTouchStart={() => setShowTuner(s => !s)}
-          className="h-10 px-3.5 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white text-[11px] font-black shadow-2xl active:scale-95 flex items-center gap-1.5 cursor-pointer"
-        >
-          ⚙️ Adjust Spray & Gun
-        </button>
-      </div>
+      {/* Tuner overlay removed for production display */}
     </div>
   )
 }

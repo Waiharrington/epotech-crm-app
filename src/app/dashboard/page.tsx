@@ -394,7 +394,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col md:h-screen md:max-h-screen bg-[#F0F5FA] md:overflow-hidden px-4.5 pb-12 pt-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] md:p-4.5 gap-4 relative no-scrollbar">
+    <div className="flex flex-col lg:h-screen lg:max-h-screen bg-[#F0F5FA] lg:overflow-hidden px-4.5 pb-12 pt-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-4.5 gap-4 relative no-scrollbar">
 
 
       {/* Premium Dark Navy Header Banner */}
@@ -495,7 +495,7 @@ export default function DashboardPage() {
       </header>
 
       {/* Main Content scroll-free grid layout */}
-      <main className="flex-1 md:min-h-0 flex flex-col gap-4 overflow-visible md:overflow-hidden no-scrollbar relative z-10">
+      <main className="flex-1 lg:min-h-0 flex flex-col gap-4 overflow-visible lg:overflow-hidden no-scrollbar relative z-10">
         {/* Statistics Grid */}
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 shrink-0">
           {/* Card: Clientes Totales */}
@@ -564,7 +564,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Middle Row Section */}
-        <div className="grid gap-4 lg:grid-cols-7 flex-1 md:min-h-0 h-auto overflow-visible md:overflow-hidden">
+        <div className="grid gap-4 lg:grid-cols-7 flex-1 lg:min-h-0 h-auto overflow-visible lg:overflow-hidden">
           {/* Próximos Servicios */}
           <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '350ms' }}>
             {/* Header */}
@@ -578,7 +578,7 @@ export default function DashboardPage() {
               </Link>
             </div>
             
-            <div className="p-3 flex-1 md:overflow-y-auto no-scrollbar space-y-2 min-h-0 h-auto bg-gradient-to-b from-white to-slate-50/30">
+            <div className="p-3 flex-1 lg:overflow-y-auto no-scrollbar space-y-2 min-h-0 h-auto bg-gradient-to-b from-white to-slate-50/30">
               {loading ? (
                 <div className="flex justify-center py-6"><Loader2 className="h-5 w-5 text-[#0097A7] animate-spin" /></div>
               ) : recentJobs.length > 0 ? (
@@ -690,7 +690,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Lower Row: Reminders & Alerts */}
-        <div className="grid gap-4 lg:grid-cols-7 flex-1 md:min-h-0 h-auto overflow-visible md:overflow-hidden">
+        <div className="grid gap-4 lg:grid-cols-7 flex-1 lg:min-h-0 h-auto overflow-visible lg:overflow-hidden">
           {/* Reminders Widget */}
           <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '450ms' }}>
             <div className="min-h-0 flex flex-col flex-1 h-auto">

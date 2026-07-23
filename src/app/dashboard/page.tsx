@@ -1147,9 +1147,9 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
   const [showTuner, setShowTuner] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   
-  const [nozzleX, setNozzleX] = useState(20.0)
-  const [nozzleY, setNozzleY] = useState(33.0)
-  const [targetXPct, setTargetXPct] = useState(0.33)
+  const [nozzleX, setNozzleX] = useState(78.0)
+  const [nozzleY, setNozzleY] = useState(38.0)
+  const [targetXPct, setTargetXPct] = useState(-0.64)
   const [targetYPct, setTargetYPct] = useState(0.29)
 
   // Timing controls
@@ -1214,11 +1214,11 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
       if (saved) {
         try {
           const parsed = JSON.parse(saved)
-          setNozzleX(typeof parsed.nozzleX === 'number' && !isNaN(parsed.nozzleX) ? parsed.nozzleX : 20.0)
-          setNozzleY(typeof parsed.nozzleY === 'number' && !isNaN(parsed.nozzleY) ? parsed.nozzleY : 33.0)
+          setNozzleX(typeof parsed.nozzleX === 'number' && !isNaN(parsed.nozzleX) ? parsed.nozzleX : 78.0)
+          setNozzleY(typeof parsed.nozzleY === 'number' && !isNaN(parsed.nozzleY) ? parsed.nozzleY : 38.0)
           
-          let tx = parsed.targetXPct ?? 0.33
-          if (typeof tx !== 'number' || isNaN(tx)) tx = 0.33
+          let tx = parsed.targetXPct ?? -0.64
+          if (typeof tx !== 'number' || isNaN(tx)) tx = -0.64
           else if (tx > 2.0 || tx < -2.0) tx = tx / 100
           setTargetXPct(tx)
           
@@ -1233,9 +1233,9 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
           setT3Delay(typeof parsed.t3Delay === 'number' && !isNaN(parsed.t3Delay) && parsed.t3Delay > 0 ? parsed.t3Delay : 2000)
           setT4Delay(typeof parsed.t4Delay === 'number' && !isNaN(parsed.t4Delay) && parsed.t4Delay > 0 ? parsed.t4Delay : 2650)
         } catch (e) {
-          setNozzleX(20.0)
-          setNozzleY(33.0)
-          setTargetXPct(0.33)
+          setNozzleX(78.0)
+          setNozzleY(38.0)
+          setTargetXPct(-0.64)
           setTargetYPct(0.29)
           setGunDuration(0.8)
           setT1Delay(600)
@@ -1244,9 +1244,9 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
           setT4Delay(2650)
         }
       } else {
-        setNozzleX(20.0)
-        setNozzleY(33.0)
-        setTargetXPct(0.33)
+        setNozzleX(78.0)
+        setNozzleY(38.0)
+        setTargetXPct(-0.64)
         setTargetYPct(0.29)
         setGunDuration(0.8)
         setT1Delay(600)

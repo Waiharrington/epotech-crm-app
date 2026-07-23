@@ -87,12 +87,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       <ReminderPoller />
       {/* Desktop & Tablet Sidebar */}
       <aside className={cn(
-        "hidden md:flex flex-col fixed inset-y-0 z-50 border-r border-sidebar-border/10 bg-sidebar shadow-[4px_0_30px_rgba(0,0,0,0.15)] rounded-tr-[2.2rem] rounded-br-[2.2rem] overflow-hidden sidebar-premium-bg transition-all duration-300 ease-in-out",
+        "hidden md:flex flex-col fixed inset-y-0 z-50 border-r border-sidebar-border/10 bg-sidebar shadow-[4px_0_30px_rgba(0,0,0,0.15)] rounded-tr-[2.2rem] rounded-br-[2.2rem] overflow-visible sidebar-premium-bg transition-all duration-300 ease-in-out",
         isCollapsed ? "w-20" : "w-64"
       )}>
         {/* Premium Logo Header & Toggle Button */}
         <div className={cn(
-          "relative px-4 py-5 flex flex-col items-center bg-transparent border-b border-sidebar-border/10 overflow-hidden transition-all duration-300",
+          "relative px-4 py-5 flex flex-col items-center bg-transparent border-b border-sidebar-border/10 overflow-visible transition-all duration-300",
           isCollapsed ? "px-2 py-4" : "px-5 py-6"
         )}>
           {/* Toggle Button with Brand Cyan Tooltip */}

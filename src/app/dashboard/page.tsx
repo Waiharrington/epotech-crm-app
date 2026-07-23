@@ -1022,9 +1022,9 @@ export default function DashboardPage() {
           </div>
 
           {/* Alertas y Operaciones */}
-          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between 2xl:min-h-0 2xl:h-full overflow-hidden animate-dashboard-item" style={{ animationDelay: '500ms' }}>
-            <div className="min-h-0 flex flex-col flex-1 h-auto justify-between">
-              <div className="pb-1.5 border-b border-slate-50 shrink-0">
+          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-4 flex flex-col justify-between 2xl:min-h-0 2xl:h-full animate-dashboard-item" style={{ animationDelay: '500ms' }}>
+            <div className="min-h-0 flex flex-col flex-1 h-auto">
+              <div className="pb-2 border-b border-slate-50 shrink-0">
                 <h3 className="text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
                   <AlertTriangle className="h-3.5 w-3.5 text-[#0097A7]" />
                   Alertas y Operaciones
@@ -1032,42 +1032,46 @@ export default function DashboardPage() {
                 <p className="text-[8.5px] text-slate-400 font-medium">Alertas críticas del inventario y flujo de caja diario.</p>
               </div>
               
-              <div className="space-y-1.5 pt-1.5 overflow-y-auto no-scrollbar flex-1 min-h-0 h-auto flex flex-col justify-center">
+              <div className="space-y-2.5 pt-3 overflow-y-auto no-scrollbar flex-1 min-h-0 h-auto">
                 {stats.lowStock > 0 ? (
-                  <div className="p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 flex items-start gap-1.5 shadow-sm">
-                    <AlertTriangle className="h-3.5 text-[#0097A7] shrink-0 mt-0.5 animate-pulse" />
+                  <div className="p-2.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/15 flex items-start gap-2.5 shadow-2xs hover:border-[#0097A7]/30 transition-all">
+                    <AlertTriangle className="h-4 w-4 text-[#0097A7] shrink-0 mt-0.5 animate-pulse" />
                     <div>
-                      <p className="font-extrabold text-[10px] text-[#0B1E3F]">{stats.lowStock} productos en bajo stock</p>
-                      <p className="text-[8px] text-[#0097A7] mt-0.2 font-medium leading-tight">Hay insumos por debajo de su cantidad mínima.</p>
+                      <p className="font-extrabold text-[11px] text-[#0B1E3F]">{stats.lowStock} productos en bajo stock</p>
+                      <p className="text-[9px] text-[#0097A7] mt-0.5 font-medium leading-tight">Hay insumos por debajo de su cantidad mínima requerida.</p>
                     </div>
                   </div>
                 ) : (
-                  <div className="p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/20 to-white/40 border border-[#0097A7]/5 flex items-start gap-1.5 shadow-sm">
-                    <Check className="h-3.5 text-[#00C9E0] shrink-0 mt-0.5" />
+                  <div className="p-2.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/30 to-white border border-[#0097A7]/10 flex items-start gap-2.5 shadow-2xs hover:border-[#0097A7]/20 transition-all">
+                    <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-[#E6F9FB] text-[#0097A7] shrink-0 mt-0.5 border border-[#0097A7]/10">
+                      <Check className="h-3 w-3 stroke-[3]" />
+                    </div>
                     <div>
-                      <p className="font-extrabold text-[10px] text-[#0B1E3F]">Inventario al día</p>
-                      <p className="text-[8px] text-slate-405 mt-0.2 font-medium leading-tight">Todos los insumos tienen niveles adecuados.</p>
+                      <p className="font-extrabold text-[11px] text-[#0B1E3F]">Inventario al día</p>
+                      <p className="text-[9px] text-slate-500 mt-0.5 font-medium leading-tight">Todos los insumos tienen niveles de stock adecuados.</p>
                     </div>
                   </div>
                 )}
 
-                <div className="p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB] flex items-start gap-1.5 shadow-sm">
-                  <Wallet className="h-3.5 text-[#0097A7] shrink-0 mt-0.5" />
+                <div className="p-2.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB] flex items-start gap-2.5 shadow-2xs hover:border-[#0097A7]/20 transition-all">
+                  <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-white text-[#0097A7] shrink-0 mt-0.5 border border-[#E6F9FB] shadow-2xs">
+                    <Wallet className="h-3 w-3" />
+                  </div>
                   <div>
-                    <p className="font-extrabold text-[10px] text-[#0B1E3F]">Balance de Caja</p>
-                    <p className="text-[8px] text-slate-500 mt-0.2 font-medium leading-tight">
-                      Ganancia Neta: <strong className="text-slate-900 font-bold">${stats.netIncome.toLocaleString()}</strong> <span className="text-slate-400">(${stats.monthlyIncome.toLocaleString()} ing. / ${stats.totalExpenses.toLocaleString()} eg.)</span>
+                    <p className="font-extrabold text-[11px] text-[#0B1E3F]">Balance de Caja</p>
+                    <p className="text-[9px] text-slate-500 mt-0.5 font-medium leading-tight">
+                      Ganancia Neta: <strong className="text-slate-900 font-extrabold">${stats.netIncome.toLocaleString()}</strong> <span className="text-slate-400">(${stats.monthlyIncome.toLocaleString()} ing. / ${stats.totalExpenses.toLocaleString()} eg.)</span>
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="pt-2.5 border-t border-slate-100 mt-2.5 flex gap-2 shrink-0">
-              <Button variant="outline" size="sm" className="flex-1 h-8 text-[9px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#0097A7] hover:border-[#0097A7]/30 shadow-sm transition-all duration-300" asChild>
+            <div className="pt-3 border-t border-slate-100 mt-3 flex gap-2.5 shrink-0">
+              <Button variant="outline" size="sm" className="flex-1 h-8.5 text-[9.5px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#0097A7] hover:border-[#0097A7]/30 shadow-xs transition-all duration-300" asChild>
                 <Link href="/stock">Ver Inventario</Link>
               </Button>
-              <Button variant="outline" size="sm" className="flex-1 h-8 text-[9px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#00C9E0] hover:border-[#00C9E0]/30 shadow-sm transition-all duration-300" asChild>
+              <Button variant="outline" size="sm" className="flex-1 h-8.5 text-[9.5px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#00C9E0] hover:border-[#00C9E0]/30 shadow-xs transition-all duration-300" asChild>
                 <Link href="/caja">Ver Caja</Link>
               </Button>
             </div>

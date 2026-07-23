@@ -8,6 +8,11 @@ export function ReminderPoller() {
   const supabase = createClient() as any
 
   useEffect(() => {
+    // Automatically request Browser Notification permissions if default
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission()
+    }
+
     // Run initial check after 2 seconds
     const initialTimeout = setTimeout(() => {
       checkDueReminders()
@@ -72,22 +77,31 @@ export function ReminderPoller() {
 
       if (dueReminders.length === 0) return
 
+      // Play soft notification chime sound
+      try {
+        const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3')
+        audio.volume = 0.6
+        audio.play().catch(() => {})
+      } catch (audioErr) {}
+
       for (const reminder of dueReminders) {
-        // 1. Sonner App Toast
-        toast('🔔 Recordatorio Pendiente', {
-          description: `${reminder.titulo}: ${reminder.descripcion || ''}`,
+        // 1. Sonner App Toast banner (high visibility cyan notification)
+        toast('🔔 RECORDATORIO VENCIDO', {
+          description: `${reminder.titulo}${reminder.descripcion ? `: ${reminder.descripcion}` : ''}`,
           action: {
-            label: 'Completar',
+            label: '✓ Completar',
             onClick: () => markReminderAsCompleted(reminder.id)
           },
-          duration: 10000,
+          duration: 12000,
         })
 
-        // 2. OS Native Notification
+        // 2. OS Native Desktop / Mobile Push Notification
         if ('Notification' in window && Notification.permission === 'granted') {
           try {
-            new Notification(`🔔 Recordatorio: ${reminder.titulo}`, {
-              body: reminder.descripcion || 'Tienes una tarea programada ahora.',
+            new Notification(`🔔 Epotech: ${reminder.titulo}`, {
+              body: reminder.descripcion || 'Tienes una tarea programada para ahora.',
+              icon: '/favicon.ico',
+              tag: reminder.id
             })
           } catch (e) {
             console.error('Error displaying native notification:', e)

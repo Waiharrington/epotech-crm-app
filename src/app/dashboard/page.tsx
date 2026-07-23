@@ -1180,9 +1180,9 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
     const key = isMobile ? 'epotech_nozzle_mobile' : 'epotech_nozzle_desktop'
     localStorage.removeItem(key)
     if (isMobile) {
-      setNozzleX(1.0)
-      setNozzleY(27.0)
-      setTargetXPct(-0.23)
+      setNozzleX(19.0)
+      setNozzleY(33.0)
+      setTargetXPct(-0.67)
       setTargetYPct(0.50)
     } else {
       setNozzleX(24.0)
@@ -1204,9 +1204,9 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
     } catch {}
 
     if (isMobileDevice) {
-      setNozzleX(1.0)
-      setNozzleY(27.0)
-      setTargetXPct(-0.23)
+      setNozzleX(19.0)
+      setNozzleY(33.0)
+      setTargetXPct(-0.67)
       setTargetYPct(0.50)
       setGunDuration(0.8)
       setT1Delay(600)

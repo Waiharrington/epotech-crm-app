@@ -854,6 +854,8 @@ export default function DashboardPage() {
                 <Link href="/caja">Ver Caja</Link>
               </Button>
             </div>
+          </div>
+        </div>
       </main>
 
       {/* Direct Interactive Modal Wizards for Acciones Rápidas */}

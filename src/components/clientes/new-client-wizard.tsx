@@ -307,3 +307,514 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
     </Dialog>
   )
 }
+
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from '@/components/ui/sheet'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { Badge } from '@/components/ui/badge'
+import {
+  Clock,
+  Trash2,
+  GripVertical,
+  Bell
+} from 'lucide-react'
+import { useEffect } from 'react'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { toast } from 'sonner'
+
+const formatTime12h = (timeStr?: string | null) => {
+  if (!timeStr) return ''
+  const parts = timeStr.split(':')
+  if (parts.length < 2) return timeStr
+  let hours = parseInt(parts[0], 10)
+  const minutes = parts[1]
+  const ampm = hours >= 12 ? 'PM' : 'AM'
+  hours = hours % 12
+  hours = hours ? hours : 12
+  return `${hours}:${minutes} ${ampm}`
+}
+
+function SortableReminderItem({
+  reminder,
+  onToggle,
+  onDelete,
+  onChangePriority
+}: {
+  reminder: any
+  onToggle: (id: string) => void
+  onDelete: (id: string) => void
+  onChangePriority: (id: string, current: string) => void
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: reminder.id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : 1,
+    opacity: isDragging ? 0.7 : 1
+  }
+
+  const getPriorityStyle = (p: string) => {
+    switch (p) {
+      case 'urgente':
+        return 'bg-[#0B1E3F] text-white border-[#0B1E3F]/10 hover:bg-[#0B1E3F]/90'
+      case 'alta':
+        return 'bg-[#E6F9FB] text-[#0097A7] border-[#0097A7]/10 hover:bg-[#E6F9FB]/80'
+      case 'baja':
+        return 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200/80'
+      default:
+        return 'bg-slate-50 text-slate-600 border-slate-100 hover:bg-slate-100/50'
+    }
+  }
+
+  const getPriorityLabel = (p: string) => {
+    switch (p) {
+      case 'urgente':
+        return '⚡ Urgente'
+      case 'alta':
+        return '🔹 Alta'
+      case 'baja':
+        return '▫️ Baja'
+      default:
+        return 'Normal'
+    }
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center justify-between p-2.5 rounded-xl border border-slate-100 bg-white hover:bg-slate-50/50 transition-all duration-200 group shadow-xs"
+    >
+      <div className="flex items-center gap-2 min-w-0 flex-1">
+        <button
+          type="button"
+          {...attributes}
+          {...listeners}
+          className="cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-500 p-0.5"
+          title="Arrastrar para reordenar prioridad"
+        >
+          <GripVertical className="h-3.5 w-3.5" />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onToggle(reminder.id)}
+          className="h-4 w-4 rounded-full border border-slate-300 hover:border-[#0097A7] hover:bg-[#E6F9FB] flex items-center justify-center shrink-0 transition-colors"
+        >
+          <Check className="h-2.5 w-2.5 stroke-[3] text-transparent group-hover:text-[#0097A7] transition-colors" />
+        </button>
+
+        <div className="min-w-0 flex-1">
+          <p className="font-bold text-xs text-slate-800 truncate">{reminder.titulo}</p>
+          <div className="flex items-center gap-2 mt-0.5 text-[9px] text-slate-400 font-medium">
+            {reminder.hora && (
+              <span className="flex items-center gap-0.5">
+                <Clock className="h-2.5 w-2.5 text-[#00C9E0]" />
+                {formatTime12h(reminder.hora)}
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={() => onChangePriority(reminder.id, reminder.prioridad)}
+              title="Haz clic para cambiar prioridad"
+            >
+              <Badge
+                variant="outline"
+                className={`text-[7px] px-1.5 py-0 uppercase font-extrabold tracking-wider cursor-pointer transition-all ${getPriorityStyle(
+                  reminder.prioridad
+                )}`}
+              >
+                {getPriorityLabel(reminder.prioridad)}
+              </Badge>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => onDelete(reminder.id)}
+        className="ml-2 shrink-0 opacity-0 group-hover:opacity-100 transition-all duration-200 h-6 w-6 rounded-lg flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50"
+        title="Eliminar recordatorio"
+      >
+        <Trash2 className="h-3.5 w-3.5" />
+      </button>
+    </div>
+  )
+}
+
+export function GestionarDrawer({
+  open,
+  onOpenChange,
+  reminders,
+  onRefresh
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  reminders: any[]
+  onRefresh: () => void
+}) {
+  const supabase = createClient() as any
+  const [localItems, setLocalItems] = useState<any[]>([])
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  )
+
+  useEffect(() => {
+    setLocalItems(reminders)
+  }, [reminders, open])
+
+  const todayStr = new Date().toISOString().substring(0, 10)
+  const tomorrowObj = new Date()
+  tomorrowObj.setDate(tomorrowObj.getDate() + 1)
+  const tomorrowStr = tomorrowObj.toISOString().substring(0, 10)
+
+  const todayItems = localItems.filter((r) => r.fecha === todayStr || !r.fecha)
+  const tomorrowItems = localItems.filter((r) => r.fecha === tomorrowStr)
+  const otherItems = localItems.filter(
+    (r) => r.fecha !== todayStr && r.fecha !== tomorrowStr
+  )
+
+  const handleDragEnd = (event: DragEndEvent, listType: 'today' | 'tomorrow') => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const currentList = listType === 'today' ? todayItems : tomorrowItems
+    const oldIndex = currentList.findIndex((item) => item.id === active.id)
+    const newIndex = currentList.findIndex((item) => item.id === over.id)
+
+    if (oldIndex !== -1 && newIndex !== -1) {
+      const reorderedList = arrayMove(currentList, oldIndex, newIndex)
+      
+      let updatedAll: any[] = []
+      if (listType === 'today') {
+        updatedAll = [...reorderedList, ...tomorrowItems, ...otherItems]
+      } else {
+        updatedAll = [...todayItems, ...reorderedList, ...otherItems]
+      }
+      
+      setLocalItems(updatedAll)
+      localStorage.setItem('epotech_recordatorios_order', JSON.stringify(updatedAll.map(i => i.id)))
+      toast.success('Prioridad reordenada')
+    }
+  }
+
+  const handleToggle = async (id: string) => {
+    setLocalItems((prev) => prev.filter((r) => r.id !== id))
+    try {
+      await supabase.from('recordatorios').update({ completado: true }).eq('id', id)
+      toast.success('Recordatorio completado')
+      onRefresh()
+      window.dispatchEvent(new Event('recordatoriosChanged'))
+    } catch {
+      const localData = localStorage.getItem('epotech_recordatorios')
+      if (localData) {
+        const parsed = JSON.parse(localData)
+        const updated = parsed.map((r: any) => (r.id === id ? { ...r, completado: true } : r))
+        localStorage.setItem('epotech_recordatorios', JSON.stringify(updated))
+        onRefresh()
+        window.dispatchEvent(new Event('recordatoriosChanged'))
+      }
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    setLocalItems((prev) => prev.filter((r) => r.id !== id))
+    try {
+      await supabase.from('recordatorios').delete().eq('id', id)
+      toast.success('Eliminado correctamente')
+      onRefresh()
+      window.dispatchEvent(new Event('recordatoriosChanged'))
+    } catch {
+      const localData = localStorage.getItem('epotech_recordatorios')
+      if (localData) {
+        const parsed = JSON.parse(localData)
+        const updated = parsed.filter((r: any) => r.id !== id)
+        localStorage.setItem('epotech_recordatorios', JSON.stringify(updated))
+        onRefresh()
+        window.dispatchEvent(new Event('recordatoriosChanged'))
+      }
+    }
+  }
+
+  const handleChangePriority = async (id: string, current: string) => {
+    const priorities = ['normal', 'alta', 'urgente', 'baja']
+    const nextPriority = priorities[(priorities.indexOf(current) + 1) % priorities.length]
+
+    setLocalItems((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, prioridad: nextPriority } : r))
+    )
+
+    try {
+      await supabase.from('recordatorios').update({ prioridad: nextPriority }).eq('id', id)
+      onRefresh()
+      window.dispatchEvent(new Event('recordatoriosChanged'))
+    } catch {
+      const localData = localStorage.getItem('epotech_recordatorios')
+      if (localData) {
+        const parsed = JSON.parse(localData)
+        const updated = parsed.map((r: any) =>
+          r.id === id ? { ...r, prioridad: nextPriority } : r
+        )
+        localStorage.setItem('epotech_recordatorios', JSON.stringify(updated))
+        onRefresh()
+        window.dispatchEvent(new Event('recordatoriosChanged'))
+      }
+    }
+  }
+
+  const getWeekDays = () => {
+    const curr = new Date()
+    const first = curr.getDate() - curr.getDay() + 1
+    const days = []
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(curr.setDate(first + i))
+      const dateStr = d.toISOString().substring(0, 10)
+      const dayName = d.toLocaleDateString('es-ES', { weekday: 'short' })
+      const dayNum = d.getDate()
+      const itemsForDay = localItems.filter((r) => r.fecha === dateStr)
+      days.push({ dateStr, dayName, dayNum, items: itemsForDay, isToday: dateStr === todayStr })
+    }
+    return days
+  }
+
+  const weekDays = getWeekDays()
+
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col bg-white border-l border-slate-100 z-[120]">
+        <SheetHeader className="p-4 pb-3 border-b border-slate-100 bg-gradient-to-r from-[#030b17] to-[#0B1E3F] text-white">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-xl bg-[#00C9E0]/20 border border-[#00C9E0]/30 flex items-center justify-center text-[#00C9E0]">
+              <Bell className="h-4 w-4" />
+            </div>
+            <div>
+              <SheetTitle className="text-sm font-black text-white tracking-wide uppercase">
+                Panel de Recordatorios
+              </SheetTitle>
+              <SheetDescription className="text-[10px] text-slate-300">
+                Organiza la jornada de Sebastián: prioridades y vista semanal.
+              </SheetDescription>
+            </div>
+          </div>
+        </SheetHeader>
+
+        <Tabs defaultValue="today_tomorrow" className="flex-1 flex flex-col min-h-0">
+          <div className="px-4 pt-3 pb-2 border-b border-slate-100 bg-slate-50/50">
+            <TabsList className="grid grid-cols-2 w-full bg-slate-200/60 p-1 rounded-xl h-9">
+              <TabsTrigger
+                value="today_tomorrow"
+                className="text-[11px] font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs"
+              >
+                📅 Hoy vs. Mañana
+              </TabsTrigger>
+              <TabsTrigger
+                value="week"
+                className="text-[11px] font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs"
+              >
+                🗓️ Vista Semanal
+              </TabsTrigger>
+            </TabsList>
+          </div>
+
+          <TabsContent value="today_tomorrow" className="flex-1 overflow-y-auto p-4 space-y-5 m-0">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-black uppercase text-[#0B1E3F] tracking-wider flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-[#00C9E0] animate-pulse" />
+                  Hoy ({todayItems.length})
+                </span>
+                <span className="text-[9px] text-slate-400 italic">Arrastra para priorizar</span>
+              </div>
+
+              {todayItems.length > 0 ? (
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={(e) => handleDragEnd(e, 'today')}
+                >
+                  <SortableContext
+                    items={todayItems.map((i) => i.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    <div className="space-y-1.5">
+                      {todayItems.map((item) => (
+                        <SortableReminderItem
+                          key={item.id}
+                          reminder={item}
+                          onToggle={handleToggle}
+                          onDelete={handleDelete}
+                          onChangePriority={handleChangePriority}
+                        />
+                      ))}
+                    </div>
+                  </SortableContext>
+                </DndContext>
+              ) : (
+                <div className="p-3 text-center text-[10px] text-slate-400 bg-slate-50/50 border border-dashed border-slate-200 rounded-xl">
+                  Sin pendientes registrados para hoy 🎉
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-2 pt-2 border-t border-slate-100">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-black uppercase text-slate-600 tracking-wider flex items-center gap-1.5">
+                  <Calendar className="h-3 w-3 text-slate-400" />
+                  Mañana ({tomorrowItems.length})
+                </span>
+              </div>
+
+              {tomorrowItems.length > 0 ? (
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={(e) => handleDragEnd(e, 'tomorrow')}
+                >
+                  <SortableContext
+                    items={tomorrowItems.map((i) => i.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    <div className="space-y-1.5">
+                      {tomorrowItems.map((item) => (
+                        <SortableReminderItem
+                          key={item.id}
+                          reminder={item}
+                          onToggle={handleToggle}
+                          onDelete={handleDelete}
+                          onChangePriority={handleChangePriority}
+                        />
+                      ))}
+                    </div>
+                  </SortableContext>
+                </DndContext>
+              ) : (
+                <div className="p-3 text-center text-[10px] text-slate-400 bg-slate-50/50 border border-dashed border-slate-200 rounded-xl">
+                  Nada agendado para mañana por ahora.
+                </div>
+              )}
+            </div>
+
+            {otherItems.length > 0 && (
+              <div className="space-y-2 pt-2 border-t border-slate-100">
+                <span className="text-[11px] font-black uppercase text-slate-400 tracking-wider">
+                  Más Adelante ({otherItems.length})
+                </span>
+                <div className="space-y-1.5">
+                  {otherItems.map((item) => (
+                    <SortableReminderItem
+                      key={item.id}
+                      reminder={item}
+                      onToggle={handleToggle}
+                      onDelete={handleDelete}
+                      onChangePriority={handleChangePriority}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="week" className="flex-1 overflow-y-auto p-4 space-y-3 m-0">
+            <p className="text-[10px] text-slate-400 font-medium mb-1">
+              Resumen semanal de tareas y compromisos:
+            </p>
+            <div className="space-y-2">
+              {weekDays.map((day) => (
+                <div
+                  key={day.dateStr}
+                  className={`p-3 rounded-xl border transition-all ${
+                    day.isToday
+                      ? 'border-[#00C9E0]/40 bg-[#E6F9FB]/30 shadow-xs'
+                      : 'border-slate-100 bg-white'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`h-7 w-7 rounded-lg flex flex-col items-center justify-center font-black text-[10px] ${
+                          day.isToday
+                            ? 'bg-[#0097A7] text-white'
+                            : 'bg-slate-100 text-slate-700'
+                        }`}
+                      >
+                        <span className="uppercase text-[7px] leading-none">{day.dayName}</span>
+                        <span className="leading-none mt-0.5">{day.dayNum}</span>
+                      </div>
+                      <span className="font-bold text-xs text-slate-800 capitalize">
+                        {day.dayName} {day.dayNum}
+                      </span>
+                    </div>
+
+                    <Badge
+                      variant="secondary"
+                      className={`text-[9px] font-extrabold ${
+                        day.items.length > 0
+                          ? 'bg-[#00C9E0]/15 text-[#0097A7]'
+                          : 'bg-slate-100 text-slate-400'
+                      }`}
+                    >
+                      {day.items.length} {day.items.length === 1 ? 'pendiente' : 'pendientes'}
+                    </Badge>
+                  </div>
+
+                  {day.items.length > 0 && (
+                    <div className="mt-2.5 pt-2 border-t border-slate-100/60 space-y-1.5">
+                      {day.items.map((item) => (
+                        <div
+                          key={item.id}
+                          className="flex items-center justify-between text-xs p-1.5 rounded-lg bg-slate-50 border border-slate-100"
+                        >
+                          <span className="font-semibold text-slate-700 text-[11px] truncate">
+                            {item.titulo}
+                          </span>
+                          {item.hora && (
+                            <span className="text-[9px] text-[#0097A7] font-bold">
+                              {formatTime12h(item.hora)}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
+      </SheetContent>
+    </Sheet>
+  )
+}
+

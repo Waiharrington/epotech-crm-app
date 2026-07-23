@@ -33,7 +33,7 @@ import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import { NotificationBell } from '@/components/notifications/notification-bell'
-import { NewClientWizard } from '@/components/clientes/new-client-wizard'
+import { NewClientWizard, GestionarDrawer } from '@/components/clientes/new-client-wizard'
 import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 import { NewQuoteWizard } from '@/components/presupuestos/new-quote-wizard'
 
@@ -59,6 +59,7 @@ export default function DashboardPage() {
   const [showClientWizard, setShowClientWizard] = useState(false)
   const [showJobWizard, setShowJobWizard] = useState(false)
   const [showQuoteWizard, setShowQuoteWizard] = useState(false)
+  const [showGestionar, setShowGestionar] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -767,9 +768,13 @@ export default function DashboardPage() {
                   </h3>
                   <p className="text-[8.5px] text-slate-400 font-medium">Alertas programadas y avisos rápidos de la agenda.</p>
                 </div>
-                <Link href="/recordatorios" className="text-[10px] font-black text-[#0097A7] hover:text-[#00C9E0] hover:underline flex items-center gap-0.5 transition-colors">
+                <button 
+                  type="button"
+                  onClick={() => setShowGestionar(true)} 
+                  className="text-[10px] font-black text-[#0097A7] hover:text-[#00C9E0] hover:underline flex items-center gap-0.5 transition-colors cursor-pointer"
+                >
                   Gestionar <ChevronRight className="h-2.5 w-2.5" />
-                </Link>
+                </button>
               </div>
 
               {/* Formulario Rápido */}
@@ -941,6 +946,13 @@ export default function DashboardPage() {
           setShowQuoteWizard(false)
           toast.success('Cotización creada con éxito')
         }}
+      />
+
+      <GestionarDrawer
+        open={showGestionar}
+        onOpenChange={setShowGestionar}
+        reminders={reminders}
+        onRefresh={fetchReminders}
       />
 
       <style>{`

@@ -457,8 +457,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col lg:h-screen lg:max-h-screen bg-[#F0F5FA] lg:overflow-hidden px-4.5 pb-12 pt-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-4.5 gap-4 relative no-scrollbar">
-
+    <div className="flex flex-col lg:h-screen lg:max-h-screen bg-[#F0F5FA] overflow-y-auto lg:overflow-y-auto px-4.5 pb-12 pt-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-4.5 gap-4 relative no-scrollbar">
 
       {/* Premium Dark Navy Header Banner */}
       <header className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-5 md:p-6 shrink-0 relative z-30 animate-dashboard-item shadow-xl" style={{ animationDelay: '100ms' }}>
@@ -558,7 +557,7 @@ export default function DashboardPage() {
       </header>
 
       {/* Main Content scroll-free grid layout */}
-      <main className="flex-1 lg:min-h-0 flex flex-col gap-4 overflow-visible lg:overflow-hidden no-scrollbar relative z-10">
+      <main className="flex-1 lg:min-h-0 flex flex-col gap-4 overflow-visible relative z-10">
         {/* Statistics Grid */}
         <div className="p-1 -m-1 overflow-visible">
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 shrink-0">
@@ -629,7 +628,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Middle Row Section */}
-        <div className="grid gap-4 xl:grid-cols-7 flex-1 lg:min-h-0 h-auto overflow-visible lg:overflow-hidden">
+        <div className="grid gap-4 xl:grid-cols-7 flex-1 lg:min-h-0 h-auto overflow-visible">
           {/* Próximos Servicios */}
           <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '350ms' }}>
             {/* Header */}

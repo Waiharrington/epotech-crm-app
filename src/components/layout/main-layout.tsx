@@ -177,13 +177,15 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                         <span className="text-[13px] relative z-10 transition-colors duration-300 truncate">{item.name}</span>
                       )}
                     </Link>
-                    {/* Custom Brand Tooltip for Link */}
-                    <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/navitem:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
-                      <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-[#00C9E0]/40 text-[#00C9E0] text-[11px] font-extrabold shadow-[0_4px_20px_rgba(0,201,224,0.3)] tracking-wide flex items-center gap-1.5">
-                        <item.icon className="h-3.5 w-3.5 text-[#00C9E0]" />
-                        <span>{item.name}</span>
+                    {/* Custom Brand Tooltip for Link - Shown ONLY when sidebar is collapsed */}
+                    {isCollapsed && (
+                      <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/navitem:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
+                        <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-[#00C9E0]/40 text-[#00C9E0] text-[11px] font-extrabold shadow-[0_4px_20px_rgba(0,201,224,0.3)] tracking-wide flex items-center gap-1.5">
+                          <item.icon className="h-3.5 w-3.5 text-[#00C9E0]" />
+                          <span>{item.name}</span>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 )
               })}
@@ -233,13 +235,15 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                         <span className="text-[13px] relative z-10 transition-colors duration-300 truncate">{item.name}</span>
                       )}
                     </Link>
-                    {/* Custom Brand Tooltip for Link */}
-                    <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/navitem:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
-                      <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-[#00C9E0]/40 text-[#00C9E0] text-[11px] font-extrabold shadow-[0_4px_20px_rgba(0,201,224,0.3)] tracking-wide flex items-center gap-1.5">
-                        <item.icon className="h-3.5 w-3.5 text-[#00C9E0]" />
-                        <span>{item.name}</span>
+                    {/* Custom Brand Tooltip for Link - Shown ONLY when sidebar is collapsed */}
+                    {isCollapsed && (
+                      <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/navitem:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
+                        <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-[#00C9E0]/40 text-[#00C9E0] text-[11px] font-extrabold shadow-[0_4px_20px_rgba(0,201,224,0.3)] tracking-wide flex items-center gap-1.5">
+                          <item.icon className="h-3.5 w-3.5 text-[#00C9E0]" />
+                          <span>{item.name}</span>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 )
               })}

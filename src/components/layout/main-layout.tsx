@@ -93,19 +93,19 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         {/* Premium Logo Header & Toggle Button */}
         <div className={cn(
           "relative flex flex-col items-center bg-transparent border-b border-sidebar-border/10 overflow-visible transition-all duration-300 shrink-0",
-          isCollapsed ? "px-2 py-3" : "px-4 py-4"
+          isCollapsed ? "px-2 py-2" : "px-3.5 py-2.5"
         )}>
           {/* Toggle Button with Brand Cyan Tooltip */}
           <div className="relative group/toggle z-30">
             <button
               onClick={toggleSidebar}
-              className="p-1.5 rounded-xl bg-slate-800/80 hover:bg-[#00C9E0]/20 border border-slate-700/60 hover:border-[#00C9E0]/50 text-slate-300 hover:text-[#00C9E0] transition-all duration-300 shadow-md group active:scale-95"
+              className="p-1 rounded-xl bg-slate-800/80 hover:bg-[#00C9E0]/20 border border-slate-700/60 hover:border-[#00C9E0]/50 text-slate-300 hover:text-[#00C9E0] transition-all duration-300 shadow-md group active:scale-95"
               aria-label={isCollapsed ? "Expandir menú" : "Minimizar menú"}
             >
               {isCollapsed ? (
-                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
               ) : (
-                <ChevronRight className="h-4 w-4 rotate-180 transition-transform group-hover:-translate-x-0.5" />
+                <ChevronRight className="h-3.5 w-3.5 rotate-180 transition-transform group-hover:-translate-x-0.5" />
               )}
             </button>
             {/* Custom Brand Tooltip */}
@@ -122,26 +122,26 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
               <img 
                 src="/assets/logo.png" 
                 alt="Epotech Solutions" 
-                className="h-12 w-auto object-contain relative z-10 logo-premium mt-1.5" 
+                className="h-[38px] w-auto object-contain relative z-10 logo-premium mt-0.5" 
               />
               {/* Accent line + tagline */}
-              <div className="mt-1.5 flex items-center gap-2 relative z-10">
-                <div className="h-[1.5px] w-4 bg-[#00C9E0] rounded-full" />
-                <span className="text-[10px] font-black tracking-[0.22em] text-[#00C9E0] uppercase">Portal CRM</span>
-                <div className="h-[1.5px] w-4 bg-[#00C9E0] rounded-full" />
+              <div className="mt-0.5 flex items-center gap-1.5 relative z-10">
+                <div className="h-[1px] w-3 bg-[#00C9E0] rounded-full" />
+                <span className="text-[9px] font-black tracking-[0.2em] text-[#00C9E0] uppercase">Portal CRM</span>
+                <div className="h-[1px] w-3 bg-[#00C9E0] rounded-full" />
               </div>
             </>
           ) : null}
         </div>
         
-        <nav className="flex-1 px-3 py-3 space-y-3 overflow-y-auto no-scrollbar">
+        <nav className="flex-1 px-2.5 py-2 space-y-2 overflow-y-auto no-scrollbar flex flex-col justify-between">
           <div>
             {!isCollapsed && (
-              <p className="px-3 mb-1.5 text-[10px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
+              <p className="px-3 mb-1 text-[9.5px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
                 Principal
               </p>
             )}
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {mainNavItems.map((item, index) => {
                 const isActive = pathname.startsWith(item.href)
                 return (
@@ -150,8 +150,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                       href={item.href}
                       style={{ animationDelay: `${index * 50}ms` }}
                       className={cn(
-                        "flex items-center gap-3 py-2 rounded-xl text-sm font-medium transition-all duration-300 ease-out relative overflow-hidden animate-sidebar-item",
-                        isCollapsed ? "justify-center px-0" : "px-3.5",
+                        "flex items-center gap-2.5 py-1.5 rounded-xl text-sm font-medium transition-all duration-300 ease-out relative overflow-hidden animate-sidebar-item",
+                        isCollapsed ? "justify-center px-0" : "px-3",
                         isActive
                           ? "text-white font-semibold"
                           : "text-sidebar-foreground/70 hover:bg-white/[0.03] hover:text-sidebar-foreground"
@@ -161,20 +161,20 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                         <div className="absolute inset-0 rounded-xl sidebar-link-active z-0 animate-in fade-in zoom-in-95 duration-200" />
                       )}
                       <div className={cn(
-                        "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out z-10",
+                        "absolute left-0 top-1/4 bottom-1/4 w-[3px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out z-10",
                         isActive 
                           ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
                           : "scale-y-0 opacity-0 group-hover/navitem:scale-y-[1.1] group-hover/navitem:opacity-40"
                       )} />
                       <item.icon className={cn(
-                         "h-[18px] w-[18px] transition-all duration-300 flex-shrink-0 relative z-10",
+                         "h-[17px] w-[17px] transition-all duration-300 flex-shrink-0 relative z-10",
                          item.iconClass,
                          isActive 
                            ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_8px_rgba(0,201,224,0.4)]" 
                            : "text-sidebar-foreground/50 group-hover/navitem:text-primary group-hover/navitem:scale-105"
                       )} />
                       {!isCollapsed && (
-                        <span className="text-[13px] relative z-10 transition-colors duration-300 truncate">{item.name}</span>
+                        <span className="text-[12.5px] relative z-10 transition-colors duration-300 truncate">{item.name}</span>
                       )}
                     </Link>
                     {/* Custom Brand Tooltip for Link - Shown ONLY when sidebar is collapsed */}
@@ -194,11 +194,11 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           
           <div>
             {!isCollapsed && (
-              <p className="px-3 mb-1.5 text-[10px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
+              <p className="px-3 mb-1 text-[9.5px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
                 Gestión
               </p>
             )}
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {moreNavItems.map((item, index) => {
                 const isActive = pathname.startsWith(item.href)
                 const globalIndex = mainNavItems.length + index
@@ -208,8 +208,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                       href={item.href}
                       style={{ animationDelay: `${globalIndex * 50}ms` }}
                       className={cn(
-                        "flex items-center gap-3 py-2 rounded-xl text-sm font-medium transition-all duration-300 ease-out relative overflow-hidden animate-sidebar-item",
-                        isCollapsed ? "justify-center px-0" : "px-3.5",
+                        "flex items-center gap-2.5 py-1.5 rounded-xl text-sm font-medium transition-all duration-300 ease-out relative overflow-hidden animate-sidebar-item",
+                        isCollapsed ? "justify-center px-0" : "px-3",
                         isActive
                           ? "text-white font-semibold"
                           : "text-sidebar-foreground/70 hover:bg-white/[0.03] hover:text-sidebar-foreground"
@@ -219,20 +219,20 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                         <div className="absolute inset-0 rounded-xl sidebar-link-active z-0 animate-in fade-in zoom-in-95 duration-200" />
                       )}
                       <div className={cn(
-                        "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out z-10",
+                        "absolute left-0 top-1/4 bottom-1/4 w-[3px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out z-10",
                         isActive 
                           ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
                           : "scale-y-0 opacity-0 group-hover/navitem:scale-y-[1.1] group-hover/navitem:opacity-40"
                       )} />
                       <item.icon className={cn(
-                         "h-[18px] w-[18px] transition-all duration-300 flex-shrink-0 relative z-10",
+                         "h-[17px] w-[17px] transition-all duration-300 flex-shrink-0 relative z-10",
                          item.iconClass,
                          isActive 
                            ? "text-[#00C9E0] scale-110 drop-shadow-[0_0_8px_rgba(0,201,224,0.4)]" 
                            : "text-sidebar-foreground/50 group-hover/navitem:text-primary group-hover/navitem:scale-105"
                       )} />
                       {!isCollapsed && (
-                        <span className="text-[13px] relative z-10 transition-colors duration-300 truncate">{item.name}</span>
+                        <span className="text-[12.5px] relative z-10 transition-colors duration-300 truncate">{item.name}</span>
                       )}
                     </Link>
                     {/* Custom Brand Tooltip for Link - Shown ONLY when sidebar is collapsed */}
@@ -252,15 +252,15 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         </nav>
 
         {/* Logout Footer */}
-        <div className="border-t border-sidebar-border/10 px-3 py-3 shrink-0 animate-sidebar-item relative group/logout" style={{ animationDelay: `${(mainNavItems.length + moreNavItems.length) * 50}ms` }}>
+        <div className="border-t border-sidebar-border/10 px-2.5 py-2 shrink-0 animate-sidebar-item relative group/logout" style={{ animationDelay: `${(mainNavItems.length + moreNavItems.length) * 50}ms` }}>
           <button
             onClick={handleLogout}
             className={cn(
-              "w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[13px] font-bold text-red-500 border border-red-500/30 bg-red-950/10 hover:bg-red-500/15 hover:text-red-400 transition-all duration-300 ease-out group",
+              "w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[12.5px] font-bold text-red-500 border border-red-500/30 bg-red-950/10 hover:bg-red-500/15 hover:text-red-400 transition-all duration-300 ease-out group",
               isCollapsed ? "px-0" : "px-3"
             )}
           >
-            <LogOut className="h-[16px] w-[16px] flex-shrink-0 transition-transform duration-300 group-hover:scale-105" />
+            <LogOut className="h-[15px] w-[15px] flex-shrink-0 transition-transform duration-300 group-hover:scale-105" />
             {!isCollapsed && <span>Cerrar Sesión</span>}
           </button>
           {/* Custom Brand Tooltip for Logout - Shown ONLY when sidebar is collapsed */}

@@ -287,16 +287,21 @@ export default function DashboardPage() {
     e.preventDefault()
     if (!quickTitle.trim()) return
 
+    const now = new Date()
+    const localHours = String(now.getHours()).padStart(2, '0')
+    const localMinutes = String(now.getMinutes()).padStart(2, '0')
+    const currentTimeStr = `${localHours}:${localMinutes}:00`
+
     const newReminderObj = {
       id: `rem-${Date.now()}`,
       titulo: quickTitle.trim(),
       descripcion: 'Creado desde el panel principal.',
-      fecha: new Date().toISOString().substring(0, 10),
-      hora: '09:00:00',
+      fecha: now.toISOString().substring(0, 10),
+      hora: currentTimeStr,
       prioridad: 'normal',
       completado: false,
       notificado: false,
-      created_at: new Date().toISOString()
+      created_at: now.toISOString()
     }
 
     // Optimistic UI Update immediately

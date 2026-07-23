@@ -485,14 +485,35 @@ export function GestionarDrawer({
 }) {
   const supabase = createClient() as any
   const [localItems, setLocalItems] = useState<any[]>([])
+  const [completedReminders, setCompletedReminders] = useState<any[]>([])
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   )
 
+  const fetchCompletedReminders = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('recordatorios')
+        .select('*')
+        .eq('completado', true)
+        .order('created_at', { ascending: false })
+        .limit(20)
+      if (error) throw error
+      setCompletedReminders(data || [])
+    } catch {
+      const localData = localStorage.getItem('epotech_recordatorios')
+      if (localData) {
+        const parsed = JSON.parse(localData)
+        setCompletedReminders(parsed.filter((r: any) => r.completado))
+      }
+    }
+  }
+
   useEffect(() => {
     setLocalItems(reminders)
+    fetchCompletedReminders()
   }, [reminders, open])
 
   const todayStr = new Date().toISOString().substring(0, 10)
@@ -632,18 +653,24 @@ export function GestionarDrawer({
 
         <Tabs defaultValue="today_tomorrow" className="flex-1 flex flex-col min-h-0">
           <div className="px-4 pt-3 pb-2 border-b border-slate-100 bg-slate-50/50">
-            <TabsList className="grid grid-cols-2 w-full bg-slate-200/60 p-1 rounded-xl h-9">
+            <TabsList className="grid grid-cols-3 w-full bg-slate-200/60 p-1 rounded-xl h-9">
               <TabsTrigger
                 value="today_tomorrow"
-                className="text-[11px] font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs"
+                className="text-[10px] font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1"
               >
                 📅 Hoy vs. Mañana
               </TabsTrigger>
               <TabsTrigger
                 value="week"
-                className="text-[11px] font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs"
+                className="text-[10px] font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1"
               >
-                🗓️ Vista Semanal
+                🗓️ Semanal
+              </TabsTrigger>
+              <TabsTrigger
+                value="history"
+                className="text-[10px] font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1"
+              >
+                ✅ Completados
               </TabsTrigger>
             </TabsList>
           </div>
@@ -811,6 +838,54 @@ export function GestionarDrawer({
                 </div>
               ))}
             </div>
+          </TabsContent>
+
+          <TabsContent value="history" className="flex-1 overflow-y-auto p-4 space-y-3 m-0">
+            <p className="text-[10px] text-slate-400 font-medium mb-1">
+              Historial de recordatorios completados recientemente:
+            </p>
+            
+            {completedReminders.length > 0 ? (
+              <div className="space-y-2">
+                {completedReminders.map((item) => (
+                  <div
+                    key={item.id}
+                    className="p-3 rounded-xl border border-slate-100 bg-slate-50/60 flex items-center justify-between transition-all hover:bg-white hover:border-slate-200"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                      <div className="h-6 w-6 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-600 shrink-0">
+                        <Check className="h-3.5 w-3.5 stroke-[3]" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-bold text-xs text-slate-700 line-through truncate">{item.titulo}</p>
+                        <div className="flex items-center gap-2 mt-0.5 text-[9px] text-slate-400 font-medium">
+                          {item.fecha && (
+                            <span className="flex items-center gap-0.5">
+                              <Calendar className="h-2.5 w-2.5" />
+                              {item.fecha}
+                            </span>
+                          )}
+                          {item.hora && (
+                            <span className="flex items-center gap-0.5">
+                              <Clock className="h-2.5 w-2.5 text-[#0097A7]" />
+                              {formatTime12h(item.hora)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <Badge variant="outline" className="text-[7.5px] px-1.5 py-0.5 font-bold bg-emerald-50 text-emerald-700 border-emerald-200 uppercase tracking-wider shrink-0">
+                      Completado
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-4 text-center text-[10px] text-slate-400 bg-slate-50/50 border border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center gap-1">
+                <Check className="h-4 w-4 text-slate-300" />
+                Aún no hay recordatorios en el historial de completados.
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </SheetContent>

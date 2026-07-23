@@ -55,7 +55,7 @@ const formatTime12h = (timeStr?: string | null) => {
 export default function DashboardPage() {
   const supabase = createClient() as any
   const [loading, setLoading] = useState(true)
-  const [showWelcomeLoader, setShowWelcomeLoader] = useState(false)
+  const [showWelcomeLoader, setShowWelcomeLoader] = useState(true)
   const [mounted, setMounted] = useState(false)
 
   // Quick Action Modal Wizards State

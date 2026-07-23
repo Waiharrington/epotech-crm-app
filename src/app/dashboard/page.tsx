@@ -24,7 +24,8 @@ import {
   Moon,
   Sunrise,
   Sunset,
-  Sparkles
+  Sparkles,
+  Trash2
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -290,6 +291,24 @@ export default function DashboardPage() {
         localStorage.setItem('epotech_recordatorios', JSON.stringify(updated))
         toast.success('¡Recordatorio completado!')
         fetchReminders()
+        window.dispatchEvent(new Event('recordatoriosChanged'))
+      }
+    }
+  }
+
+  const handleDeleteReminder = async (id: string) => {
+    // Optimistic UI: remove immediately
+    setReminders(prev => prev.filter(r => r.id !== id))
+    try {
+      if (isDbOffline) throw new Error('Offline fallback')
+      await supabase.from('recordatorios').delete().eq('id', id)
+      window.dispatchEvent(new Event('recordatoriosChanged'))
+    } catch (e) {
+      const localData = localStorage.getItem('epotech_recordatorios')
+      if (localData) {
+        const parsed = JSON.parse(localData)
+        const updated = parsed.filter((r: any) => r.id !== id)
+        localStorage.setItem('epotech_recordatorios', JSON.stringify(updated))
         window.dispatchEvent(new Event('recordatoriosChanged'))
       }
     }
@@ -818,6 +837,15 @@ export default function DashboardPage() {
                             </div>
                           </div>
                         </div>
+                        {/* Delete button */}
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteReminder(reminder.id)}
+                          className="ml-1 shrink-0 opacity-0 group-hover:opacity-100 transition-all duration-200 h-5 w-5 rounded-lg flex items-center justify-center text-slate-300 hover:text-red-400 hover:bg-red-50"
+                          title="Eliminar recordatorio"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
                       </div>
                     )
                   })

@@ -193,9 +193,13 @@ export default function DashboardPage() {
   }, [])
   const [stats, setStats] = useState({
     totalClients: 0,
+    newClientsThisWeek: 0,
     activeJobs: 0,
     monthlyIncome: 0,
-    lowStock: 0
+    totalExpenses: 0,
+    netIncome: 0,
+    lowStock: 0,
+    lowestItemName: ''
   })
   const [recentJobs, setRecentJobs] = useState<any[]>([])
   
@@ -316,22 +320,40 @@ export default function DashboardPage() {
   }
 
   const fetchDashboardData = async () => {
-    // We do not set loading to true here because the full page loader is active.
-    // Instead we load in the background in parallel so that dashboard is ready immediately when animation finishes.
     try {
+      // 1. Total clients & new clients this week
       const { count: clientsCount } = await supabase.from('clientes').select('*', { count: 'exact', head: true })
+      
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+      const { count: newClientsCount } = await supabase.from('clientes').select('*', { count: 'exact', head: true }).gte('created_at', sevenDaysAgo)
+
+      // 2. Active jobs
       const { count: jobsCount } = await supabase.from('trabajos').select('*', { count: 'exact', head: true }).neq('estado', 'completado')
+      
+      // 3. Caja finances: Ingresos, Egresos and Net Income
       const { data: incomeData } = await supabase.from('caja').select('monto').eq('tipo', 'ingreso')
-      const { data: stockItems } = await supabase.from('stock').select('cantidad_actual, cantidad_minima')
+      const { data: expenseData } = await supabase.from('caja').select('monto').eq('tipo', 'egreso')
 
       const totalIncome = incomeData?.reduce((acc: number, curr: any) => acc + (curr.monto || 0), 0) || 0
-      const lowStockCount = (stockItems as any[])?.filter(i => (i.cantidad_actual || 0) <= (i.cantidad_minima || 0)).length || 0
+      const totalExpenses = expenseData?.reduce((acc: number, curr: any) => acc + (curr.monto || 0), 0) || 0
+      const netIncome = totalIncome - totalExpenses
+
+      // 4. Stock items calculation
+      const { data: stockItems } = await supabase.from('stock').select('nombre, cantidad_actual, cantidad_minima')
+      
+      const lowStockList = (stockItems as any[])?.filter(i => (i.cantidad_actual || 0) <= (i.cantidad_minima || 0)) || []
+      const lowStockCount = lowStockList.length
+      const lowestItem = lowStockList.length > 0 ? lowStockList[0].nombre : ''
 
       setStats({
         totalClients: clientsCount || 0,
+        newClientsThisWeek: newClientsCount || 0,
         activeJobs: jobsCount || 0,
         monthlyIncome: totalIncome,
-        lowStock: lowStockCount
+        totalExpenses: totalExpenses,
+        netIncome: netIncome,
+        lowStock: lowStockCount,
+        lowestItemName: lowestItem
       })
 
       const { data: jobs } = await supabase
@@ -472,7 +494,7 @@ export default function DashboardPage() {
                 <p className="text-[8.5px] sm:text-[9px] font-extrabold text-slate-400 uppercase tracking-wider sm:tracking-widest truncate">Clientes Totales</p>
                 <p className="text-lg sm:text-xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.totalClients}</p>
                 <p className="text-[8px] sm:text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1 truncate">
-                  +2 nuevos esta semana
+                  {stats.newClientsThisWeek > 0 ? `+${stats.newClientsThisWeek} nuevo${stats.newClientsThisWeek > 1 ? 's' : ''} esta semana` : 'Sin registros esta semana'}
                 </p>
               </div>
               <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/10 ml-1">
@@ -504,7 +526,7 @@ export default function DashboardPage() {
                 <p className="text-[8.5px] sm:text-[9px] font-extrabold text-slate-400 uppercase tracking-wider sm:tracking-widest truncate">Ingresos Totales</p>
                 <p className="text-lg sm:text-xl font-bold text-slate-900 mt-0.5 tracking-tight">${stats.monthlyIncome.toLocaleString()}</p>
                 <p className="text-[8px] sm:text-[9px] text-slate-400 mt-1 font-medium flex items-center gap-1 truncate">
-                  Calculado de la Caja
+                  Neto: ${stats.netIncome.toLocaleString()}
                 </p>
               </div>
               <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/10 ml-1">
@@ -641,8 +663,12 @@ export default function DashboardPage() {
                   <Package className="h-3 w-3 text-[#0097A7]" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[9px] font-extrabold text-[#0097A7] leading-tight">Revisa tu Stock</p>
-                  <p className="text-[7.5px] text-slate-500 mt-0.5 font-medium leading-tight">Consumibles por debajo del mínimo.</p>
+                  <p className="text-[9px] font-extrabold text-[#0097A7] leading-tight">
+                    {stats.lowStock > 0 ? `Reponer: ${stats.lowestItemName}` : 'Inventario 100% Ok'}
+                  </p>
+                  <p className="text-[7.5px] text-slate-500 mt-0.5 font-medium leading-tight">
+                    {stats.lowStock > 0 ? `${stats.lowStock} producto${stats.lowStock > 1 ? 's' : ''} por debajo del mínimo.` : 'Todos los insumos con stock suficiente.'}
+                  </p>
                   <Link href="/stock" className="text-[7.5px] font-black text-[#0097A7] hover:text-[#00C9E0] hover:underline mt-0.5 inline-flex items-center gap-0.5 transition-all">
                     Ir al inventario <ChevronRight className="h-2 w-2" />
                   </Link>
@@ -783,9 +809,9 @@ export default function DashboardPage() {
                 <div className="p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB] flex items-start gap-1.5 shadow-sm">
                   <Wallet className="h-3.5 text-[#0097A7] shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-extrabold text-[10px] text-[#0B1E3F]">Caja Mensual</p>
+                    <p className="font-extrabold text-[10px] text-[#0B1E3F]">Balance de Caja</p>
                     <p className="text-[8px] text-slate-500 mt-0.2 font-medium leading-tight">
-                      El total registrado en caja este mes es de <strong className="text-slate-800">${stats.monthlyIncome.toLocaleString()}</strong>.
+                      Ganancia Neta: <strong className="text-slate-900 font-bold">${stats.netIncome.toLocaleString()}</strong> <span className="text-slate-400">(${stats.monthlyIncome.toLocaleString()} ing. / ${stats.totalExpenses.toLocaleString()} eg.)</span>
                     </p>
                   </div>
                 </div>

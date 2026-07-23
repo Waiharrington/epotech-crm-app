@@ -791,7 +791,7 @@ export default function DashboardPage() {
               </form>
 
               {/* Listado */}
-              <div className="space-y-1.5 mt-2 overflow-y-auto pr-1 no-scrollbar flex-1 min-h-0 h-auto">
+              <div className="space-y-1.5 mt-2 overflow-y-auto pr-1 pb-1.5 no-scrollbar flex-1 min-h-0 h-auto">
                 {reminders.length > 0 ? (
                   reminders.map((reminder) => {
                     const getPriorityStyle = (p: string) => {
@@ -813,7 +813,7 @@ export default function DashboardPage() {
                     return (
                       <div 
                         key={reminder.id} 
-                        className="flex items-center justify-between p-2 rounded-xl border border-slate-50 bg-white hover:bg-slate-50/20 transition-all duration-200 group shadow-sm"
+                        className="flex items-center justify-between p-2 rounded-xl border border-slate-100/80 bg-white hover:bg-slate-50/40 transition-all duration-200 group shadow-2xs"
                       >
                         <div className="flex items-start gap-2 min-w-0 flex-1">
                           <button

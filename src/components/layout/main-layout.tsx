@@ -75,8 +75,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
       <aside className="hidden md:flex w-64 flex-col fixed inset-y-0 z-50 border-r border-sidebar-border/10 bg-sidebar shadow-[4px_0_30px_rgba(0,0,0,0.15)] rounded-tr-[2.2rem] rounded-br-[2.2rem] overflow-hidden sidebar-premium-bg">
         {/* Premium Logo Header */}
         <div className="relative px-5 py-6 flex flex-col items-center bg-transparent border-b border-sidebar-border/10 overflow-hidden">
-          {/* Subtle turquoise glow in top corner */}
-          <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-[#00C9E0]/15 blur-2xl pointer-events-none animate-pulse" />
+
           <img 
             src="/assets/logo.png" 
             alt="Epotech Solutions" 

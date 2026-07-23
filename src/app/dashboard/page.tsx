@@ -1574,6 +1574,157 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
           </div>
         </div>
       </div>
+
+      {/* Floating Tuner Toggle Button & Controls */}
+      <div className="fixed top-4 right-4 z-[100000] pointer-events-auto flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setIsPaused(p => !p)}
+          className="h-8 px-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-[11px] font-bold shadow-lg backdrop-blur-md hover:bg-slate-800 flex items-center gap-1.5 cursor-pointer"
+        >
+          {isPaused ? '▶️ Reanudar' : '⏸️ Pausar Animación'}
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowTuner(s => !s)}
+          className="h-8 px-3 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white text-[11px] font-black shadow-lg hover:brightness-110 flex items-center gap-1.5 cursor-pointer"
+        >
+          ⚙️ Adjust Spray & Gun
+        </button>
+      </div>
+
+      {/* Live Calibration Panel */}
+      {showTuner && (
+        <div className="fixed top-14 right-4 w-80 p-4 rounded-2xl bg-slate-950/95 border border-cyan-500/30 text-white z-[100000] shadow-2xl backdrop-blur-xl pointer-events-auto text-xs space-y-3">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span className="font-black text-[#00C9E0] uppercase tracking-wider text-[11px]">
+              🎯 Calibrador de Chorro ({isMobile ? 'Mobile' : 'Desktop'})
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowTuner(false)}
+              className="text-slate-400 hover:text-white font-bold text-sm px-1.5"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="space-y-2">
+            <div>
+              <div className="flex justify-between text-[10px] text-slate-300">
+                <span>Orificio Nozzle X (px):</span>
+                <span className="font-mono text-[#00C9E0]">{nozzleX}px</span>
+              </div>
+              <input
+                type="range"
+                min="-100"
+                max="300"
+                step="1"
+                value={nozzleX}
+                onChange={e => setNozzleX(parseFloat(e.target.value))}
+                className="w-full accent-[#00C9E0] cursor-pointer h-1 bg-slate-800 rounded-lg"
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between text-[10px] text-slate-300">
+                <span>Orificio Nozzle Y (px):</span>
+                <span className="font-mono text-[#00C9E0]">{nozzleY}px</span>
+              </div>
+              <input
+                type="range"
+                min="-100"
+                max="300"
+                step="1"
+                value={nozzleY}
+                onChange={e => setNozzleY(parseFloat(e.target.value))}
+                className="w-full accent-[#00C9E0] cursor-pointer h-1 bg-slate-800 rounded-lg"
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between text-[10px] text-slate-300">
+                <span>Dirección X (Target %):</span>
+                <span className="font-mono text-[#00C9E0]">{(targetXPct * 100).toFixed(0)}%</span>
+              </div>
+              <input
+                type="range"
+                min="-100"
+                max="200"
+                step="1"
+                value={targetXPct * 100}
+                onChange={e => setTargetXPct(parseFloat(e.target.value) / 100)}
+                className="w-full accent-[#00C9E0] cursor-pointer h-1 bg-slate-800 rounded-lg"
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between text-[10px] text-slate-300">
+                <span>Dirección Y (Target %):</span>
+                <span className="font-mono text-[#00C9E0]">{(targetYPct * 100).toFixed(0)}%</span>
+              </div>
+              <input
+                type="range"
+                min="-100"
+                max="200"
+                step="1"
+                value={targetYPct * 100}
+                onChange={e => setTargetYPct(parseFloat(e.target.value) / 100)}
+                className="w-full accent-[#00C9E0] cursor-pointer h-1 bg-slate-800 rounded-lg"
+              />
+            </div>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 flex items-center justify-between gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                const key = isMobile ? 'epotech_nozzle_mobile' : 'epotech_nozzle_desktop'
+                const config = {
+                  nozzleX,
+                  nozzleY,
+                  targetXPct,
+                  targetYPct,
+                  gunDuration,
+                  t1Delay,
+                  t2Delay,
+                  t3Delay,
+                  t4Delay
+                }
+                localStorage.setItem(key, JSON.stringify(config))
+                toast.success('¡Coordenadas guardadas perfectamente!')
+              }}
+              className="flex-1 py-1.5 bg-[#0097A7] hover:bg-[#00C9E0] text-white font-bold rounded-xl text-[10.5px] transition-colors cursor-pointer text-center"
+            >
+              💾 Guardar Ajuste
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                const key = isMobile ? 'epotech_nozzle_mobile' : 'epotech_nozzle_desktop'
+                localStorage.removeItem(key)
+                if (isMobile) {
+                  setNozzleX(1.0)
+                  setNozzleY(27.0)
+                  setTargetXPct(-0.23)
+                  setTargetYPct(0.50)
+                } else {
+                  setNozzleX(20.0)
+                  setNozzleY(33.0)
+                  setTargetXPct(0.33)
+                  setTargetYPct(0.29)
+                }
+                toast.success('Restaurado por defecto')
+              }}
+              className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-[10.5px] transition-colors cursor-pointer"
+            >
+              🔄 Reset
+            </button>
+          </div>
+        </div>
+      )}
+
       <style>{`
         @keyframes nozzle-recoil {
           0%   { transform: translate(0px, 0px) rotate(0deg); }

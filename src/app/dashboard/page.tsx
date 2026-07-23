@@ -154,7 +154,7 @@ export default function DashboardPage() {
             sub: 'Que tengas una excelente y productiva mañana en Utah.',
             icon: 'sunrise',
             glowClass: 'bg-[#00C9E0]/8',
-            titleColor: 'text-[#0B1E3F]',
+            titleColor: 'text-white',
             iconColor: 'text-[#00C9E0]'
           })
         } else if (utahHour >= 12 && utahHour < 19) {
@@ -163,17 +163,17 @@ export default function DashboardPage() {
             sub: 'El motor de tu negocio sigue con toda la presión hoy.',
             icon: 'sun',
             glowClass: 'bg-[#0097A7]/8',
-            titleColor: 'text-[#0B1E3F]',
-            iconColor: 'text-[#0097A7]'
+            titleColor: 'text-white',
+            iconColor: 'text-amber-400'
           })
         } else {
           setGreetingState({
             text: '¡Buenas noches, Sebastián!',
             sub: 'Es hora de descansar y planificar las operaciones de mañana.',
             icon: 'moon',
-            glowClass: 'bg-[#0B1E3F]/8',
-            titleColor: 'text-[#0B1E3F]',
-            iconColor: 'text-[#0B1E3F]/80'
+            glowClass: 'bg-cyan-500/10',
+            titleColor: 'text-white',
+            iconColor: 'text-cyan-300'
           })
         }
       } catch (e) {
@@ -184,7 +184,7 @@ export default function DashboardPage() {
             sub: 'Que tengas una excelente mañana.',
             icon: 'sunrise',
             glowClass: 'bg-[#00C9E0]/8',
-            titleColor: 'text-[#0B1E3F]',
+            titleColor: 'text-white',
             iconColor: 'text-[#00C9E0]'
           })
         } else if (hour >= 12 && hour < 19) {
@@ -193,17 +193,17 @@ export default function DashboardPage() {
             sub: 'El motor de tu negocio sigue con toda la presión hoy.',
             icon: 'sun',
             glowClass: 'bg-[#0097A7]/8',
-            titleColor: 'text-[#0B1E3F]',
-            iconColor: 'text-[#0097A7]'
+            titleColor: 'text-white',
+            iconColor: 'text-amber-400'
           })
         } else {
           setGreetingState({
             text: '¡Buenas noches, Sebastián!',
             sub: 'Es hora de descansar y planificar las operaciones de mañana.',
             icon: 'moon',
-            glowClass: 'bg-[#0B1E3F]/8',
-            titleColor: 'text-[#0B1E3F]',
-            iconColor: 'text-[#0B1E3F]/80'
+            glowClass: 'bg-cyan-500/10',
+            titleColor: 'text-white',
+            iconColor: 'text-cyan-300'
           })
         }
       }
@@ -501,15 +501,15 @@ export default function DashboardPage() {
                 </h1>
                 
                 {/* Dynamic Celestial Time-of-day Icon */}
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center p-1.5 rounded-xl bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
                   {greetingState.icon === 'sunrise' && (
-                    <Sunrise className={`h-5 w-5 ${greetingState.iconColor} filter drop-shadow-[0_0_4px_rgba(0,201,224,0.4)]`} />
+                    <Sunrise className="h-5 w-5 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.8)]" />
                   )}
                   {greetingState.icon === 'sun' && (
-                    <Sun className={`h-5 w-5 ${greetingState.iconColor} filter drop-shadow-[0_0_6px_rgba(234,179,8,0.5)]`} style={{ animation: 'spin 12s linear infinite' }} />
+                    <Sun className="h-5 w-5 text-amber-400 filter drop-shadow-[0_0_10px_rgba(251,191,36,0.9)] animate-spin-slow" />
                   )}
                   {greetingState.icon === 'moon' && (
-                    <Moon className={`h-5 w-5 ${greetingState.iconColor} filter drop-shadow-[0_0_4px_rgba(129,140,248,0.4)] animate-pulse`} />
+                    <Moon className="h-5 w-5 text-cyan-300 fill-cyan-300/30 filter drop-shadow-[0_0_10px_rgba(0,201,224,0.9)]" />
                   )}
                 </div>
               </div>

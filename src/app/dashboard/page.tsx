@@ -1152,6 +1152,8 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
   const [targetXPct, setTargetXPct] = useState(0.07)
   const [targetYPct, setTargetYPct] = useState(0.23)
 
+  const [deviceMode, setDeviceMode] = useState<'mobile' | 'tablet' | 'desktop'>('desktop')
+
   // Timing controls
   const [gunDuration, setGunDuration] = useState(0.8)
   const [t1Delay, setT1Delay] = useState(600)
@@ -1160,7 +1162,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
   const [t4Delay, setT4Delay] = useState(2650)
 
   const handleSaveTuner = () => {
-    const key = isMobile ? 'epotech_nozzle_mobile' : 'epotech_nozzle_desktop'
+    const key = `epotech_nozzle_${deviceMode}`
     const config = {
       nozzleX,
       nozzleY,
@@ -1177,13 +1179,18 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
   }
 
   const handleResetTuner = () => {
-    const key = isMobile ? 'epotech_nozzle_mobile' : 'epotech_nozzle_desktop'
+    const key = `epotech_nozzle_${deviceMode}`
     localStorage.removeItem(key)
-    if (isMobile) {
+    if (deviceMode === 'mobile') {
       setNozzleX(19.0)
       setNozzleY(33.0)
       setTargetXPct(-0.67)
       setTargetYPct(0.50)
+    } else if (deviceMode === 'tablet') {
+      setNozzleX(24.0)
+      setNozzleY(32.0)
+      setTargetXPct(-1.00)
+      setTargetYPct(0.23)
     } else {
       setNozzleX(24.0)
       setNozzleY(38.0)
@@ -1194,36 +1201,48 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
   }
 
   useEffect(() => {
-    const isMobileDevice = window.innerWidth < 768
-    setIsMobile(isMobileDevice)
+    const width = window.innerWidth
+    let mode: 'mobile' | 'tablet' | 'desktop' = 'desktop'
+    if (width < 768) {
+      mode = 'mobile'
+    } else if (width >= 768 && width <= 1024) {
+      mode = 'tablet'
+    } else {
+      mode = 'desktop'
+    }
     
+    setDeviceMode(mode)
+    setIsMobile(mode === 'mobile')
+
     // Force-clear old cached tunings so the new fixed coordinates take effect immediately
     try {
       localStorage.removeItem('epotech_nozzle_desktop')
       localStorage.removeItem('epotech_nozzle_mobile')
+      localStorage.removeItem('epotech_nozzle_tablet')
     } catch {}
 
-    if (isMobileDevice) {
+    if (mode === 'mobile') {
       setNozzleX(19.0)
       setNozzleY(33.0)
       setTargetXPct(-0.67)
       setTargetYPct(0.50)
-      setGunDuration(0.8)
-      setT1Delay(600)
-      setT2Delay(1200)
-      setT3Delay(2000)
-      setT4Delay(2650)
+    } else if (mode === 'tablet') {
+      setNozzleX(24.0)
+      setNozzleY(32.0)
+      setTargetXPct(-1.00)
+      setTargetYPct(0.23)
     } else {
       setNozzleX(24.0)
       setNozzleY(38.0)
       setTargetXPct(0.07)
       setTargetYPct(0.23)
-      setGunDuration(0.8)
-      setT1Delay(600)
-      setT2Delay(1200)
-      setT3Delay(2000)
-      setT4Delay(2650)
     }
+
+    setGunDuration(0.8)
+    setT1Delay(600)
+    setT2Delay(1200)
+    setT3Delay(2000)
+    setT4Delay(2650)
   }, [])
 
   // Use a ref so the timer useEffect never re-runs due to onComplete changing identity each render.
@@ -1656,7 +1675,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
         <div className="fixed top-14 right-4 left-4 sm:left-auto sm:w-80 p-4 rounded-2xl bg-slate-950/95 border border-cyan-500/30 text-white z-[9999999] shadow-2xl backdrop-blur-xl pointer-events-auto text-xs space-y-3 touch-manipulation">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <span className="font-black text-[#00C9E0] uppercase tracking-wider text-[11px]">
-              🎯 Calibrador de Chorro ({isMobile ? 'Mobile' : 'Desktop'})
+              🎯 Calibrador de Chorro ({deviceMode.toUpperCase()})
             </span>
             <button
               type="button"

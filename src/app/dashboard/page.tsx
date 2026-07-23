@@ -859,35 +859,32 @@ export default function DashboardPage() {
       </main>
 
       {/* Direct Interactive Modal Wizards for Acciones Rápidas */}
-      {showClientWizard && (
-        <NewClientWizard 
-          onClose={() => setShowClientWizard(false)}
-          onSuccess={() => {
-            setShowClientWizard(false)
-            toast.success('Cliente creado con éxito')
-          }}
-        />
-      )}
+      <NewClientWizard 
+        open={showClientWizard}
+        onClose={() => setShowClientWizard(false)}
+        onSuccess={() => {
+          setShowClientWizard(false)
+          toast.success('Cliente creado con éxito')
+        }}
+      />
 
-      {showJobWizard && (
-        <NewJobWizard 
-          onClose={() => setShowJobWizard(false)}
-          onSuccess={() => {
-            setShowJobWizard(false)
-            toast.success('Servicio agendado con éxito')
-          }}
-        />
-      )}
+      <NewJobWizard 
+        open={showJobWizard}
+        onClose={() => setShowJobWizard(false)}
+        onSuccess={() => {
+          setShowJobWizard(false)
+          toast.success('Servicio agendado con éxito')
+        }}
+      />
 
-      {showQuoteWizard && (
-        <NewQuoteWizard 
-          onClose={() => setShowQuoteWizard(false)}
-          onSuccess={() => {
-            setShowQuoteWizard(false)
-            toast.success('Cotización creada con éxito')
-          }}
-        />
-      )}
+      <NewQuoteWizard 
+        open={showQuoteWizard}
+        onClose={() => setShowQuoteWizard(false)}
+        onSuccess={() => {
+          setShowQuoteWizard(false)
+          toast.success('Cotización creada con éxito')
+        }}
+      />
 
       <style>{`
         @keyframes dashboard-fade-in {

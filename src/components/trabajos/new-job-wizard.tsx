@@ -32,6 +32,7 @@ type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
 }
 
 interface NewJobWizardProps {
+  open?: boolean
   onClose: () => void
   onSuccess: (job?: Trabajo) => void
   initialClientId?: string
@@ -39,7 +40,7 @@ interface NewJobWizardProps {
   initialData?: Partial<TrabajoInsert>
 }
 
-export function NewJobWizard({ onClose, onSuccess, initialClientId, initialState = 'proximo', initialData }: NewJobWizardProps) {
+export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId, initialState = 'proximo', initialData }: NewJobWizardProps) {
   const supabase = createClient()
   const [step, setStep] = useState(initialData?.servicio_id ? 3 : initialClientId ? 2 : 1)
   const [loading, setLoading] = useState(false)
@@ -103,7 +104,7 @@ export function NewJobWizard({ onClose, onSuccess, initialClientId, initialState
   }
 
   return (
-    <Dialog open onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={(val) => { if (!val) onClose() }}>
       <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden bg-background">
         <DialogHeader className="p-6 pb-0">
           <DialogTitle>Agendar Nuevo Trabajo</DialogTitle>

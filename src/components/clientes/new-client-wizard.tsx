@@ -28,11 +28,12 @@ import { cn } from '@/lib/utils'
 type ClienteInsert = Database['public']['Tables']['clientes']['Insert']
 
 interface NewClientWizardProps {
+  open?: boolean
   onClose: () => void
   onSuccess: () => void
 }
 
-export function NewClientWizard({ onClose, onSuccess }: NewClientWizardProps) {
+export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWizardProps) {
   const router = useRouter()
   const supabase = createClient()
   const [step, setStep] = useState(1)
@@ -85,17 +86,13 @@ export function NewClientWizard({ onClose, onSuccess }: NewClientWizardProps) {
       onSuccess()
       router.push(`/clientes/${client.id}`)
     } else {
-      // For now, redirect to works with a flag to open the agenda modal?
-      // Or just go to profile and then we'll handle agenda there.
-      // In the documentation, it says "Sub-formulario de agendamiento".
-      // I'll implement that later, for now view profile.
       onSuccess()
       router.push(`/clientes/${client.id}?action=agendar`)
     }
   }
 
   return (
-    <Dialog open onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={(val) => { if (!val) onClose() }}>
       <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden bg-background">
         <DialogHeader className="p-6 pb-0">
           <DialogTitle>Nuevo Cliente</DialogTitle>

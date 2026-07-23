@@ -27,12 +27,13 @@ interface LineItem {
 }
 
 interface NewQuoteWizardProps {
+  open?: boolean
   onClose: () => void
   onSuccess: () => void
   quoteToEdit?: any
 }
 
-export function NewQuoteWizard({ onClose, onSuccess, quoteToEdit }: NewQuoteWizardProps) {
+export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }: NewQuoteWizardProps) {
   const supabase = createClient()
   const [step, setStep] = useState(quoteToEdit ? 2 : 1)
   const [loading, setLoading] = useState(false)
@@ -110,7 +111,7 @@ export function NewQuoteWizard({ onClose, onSuccess, quoteToEdit }: NewQuoteWiza
   }
 
   return (
-    <Dialog open onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={(val) => { if (!val) onClose() }}>
       <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden bg-background">
         <DialogHeader className="p-6 pb-0">
           <DialogTitle>{quoteToEdit ? 'Editar Cotización' : 'Nueva Cotización'}</DialogTitle>

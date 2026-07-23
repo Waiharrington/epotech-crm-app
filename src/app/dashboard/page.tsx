@@ -763,7 +763,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Lower Row: Reminders & Alerts */}
-        <div className="grid gap-4 xl:grid-cols-7 flex-1 lg:min-h-0 h-auto overflow-visible lg:overflow-hidden">
+        <div className="grid gap-5 xl:grid-cols-7 flex-1 lg:min-h-0 h-auto overflow-visible mt-3">
           {/* Reminders Widget */}
           <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '450ms' }}>
             <div className="min-h-0 flex flex-col flex-1 h-auto">

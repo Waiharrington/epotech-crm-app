@@ -789,57 +789,35 @@ export default function DashboardPage() {
                   className="text-[10.5px] h-8 px-3 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex-1 min-w-[130px]"
                 />
 
-                {/* Date Picker Button */}
-                <div className="relative shrink-0">
+                {/* Custom Date Picker Label Trigger */}
+                <label className="relative shrink-0 cursor-pointer group">
                   <Input
                     type="date"
-                    id="quick-date-picker"
                     value={quickDate}
                     onChange={e => setQuickDate(e.target.value)}
-                    className="sr-only opacity-0 absolute pointer-events-auto w-full h-full inset-0 z-10 cursor-pointer"
+                    className="absolute inset-0 w-full h-full opacity-0 z-20 cursor-pointer"
                   />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const el = document.getElementById('quick-date-picker') as any
-                      if (el) {
-                        if (typeof el.showPicker === 'function') el.showPicker()
-                        else if (typeof el.focus === 'function') el.focus()
-                      }
-                    }}
-                    className="h-8 px-2.5 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[10px] font-bold text-slate-700 flex items-center gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
-                  >
+                  <div className="h-8 px-2.5 rounded-xl border border-slate-200 bg-slate-50/60 group-hover:bg-slate-100/70 text-[10px] font-bold text-slate-700 flex items-center gap-1.5 transition-all shadow-2xs group-hover:border-[#00C9E0]/40">
                     <Calendar className="h-3 w-3 text-[#0097A7]" />
                     <span>
                       {new Date(quickDate + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
                     </span>
-                  </button>
-                </div>
+                  </div>
+                </label>
 
-                {/* Time Picker Button */}
-                <div className="relative shrink-0">
+                {/* Custom Time Picker Label Trigger */}
+                <label className="relative shrink-0 cursor-pointer group">
                   <Input
                     type="time"
-                    id="quick-time-picker"
                     value={quickTime}
                     onChange={e => setQuickTime(e.target.value)}
-                    className="sr-only opacity-0 absolute pointer-events-auto w-full h-full inset-0 z-10 cursor-pointer"
+                    className="absolute inset-0 w-full h-full opacity-0 z-20 cursor-pointer"
                   />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const el = document.getElementById('quick-time-picker') as any
-                      if (el) {
-                        if (typeof el.showPicker === 'function') el.showPicker()
-                        else if (typeof el.focus === 'function') el.focus()
-                      }
-                    }}
-                    className="h-8 px-2.5 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[10px] font-bold text-slate-700 flex items-center gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
-                  >
+                  <div className="h-8 px-2.5 rounded-xl border border-slate-200 bg-slate-50/60 group-hover:bg-slate-100/70 text-[10px] font-bold text-slate-700 flex items-center gap-1.5 transition-all shadow-2xs group-hover:border-[#00C9E0]/40">
                     <Clock className="h-3 w-3 text-[#0097A7]" />
                     <span>{formatTime12h(`${quickTime}:00`)}</span>
-                  </button>
-                </div>
+                  </div>
+                </label>
 
                 <Button type="submit" size="sm" className="h-8 text-[10.5px] font-black gap-1 px-3.5 bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
                   <Plus className="h-3 w-3 stroke-[3]" /> Agregar

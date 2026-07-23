@@ -1651,32 +1651,6 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
         </div>
       </div>
 
-      {/* Floating Tuner Toggle Button & Controls */}
-      <div className="fixed top-4 right-4 z-[9999999] pointer-events-auto flex items-center gap-2 touch-none">
-        <button
-          type="button"
-          onPointerDown={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            setIsPaused(p => !p)
-          }}
-          className="h-9 px-3.5 rounded-xl bg-slate-900/95 border border-slate-700/80 text-white text-[11px] font-bold shadow-2xl backdrop-blur-md hover:bg-slate-800 active:scale-95 flex items-center gap-1.5 cursor-pointer touch-none select-none"
-        >
-          {isPaused ? '▶️ Reanudar' : '⏸️ Pausar'}
-        </button>
-        <button
-          type="button"
-          onPointerDown={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            setShowTuner(s => !s)
-          }}
-          className="h-9 px-3.5 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white text-[11px] font-black shadow-2xl hover:brightness-110 active:scale-95 flex items-center gap-1.5 cursor-pointer touch-none select-none"
-        >
-          ⚙️ Adjust Spray & Gun
-        </button>
-      </div>
-
       {/* Live Calibration Panel */}
       {showTuner && (
         <div className="fixed top-14 right-4 left-4 sm:left-auto sm:w-80 p-4 rounded-2xl bg-slate-950/95 border border-cyan-500/30 text-white z-[9999999] shadow-2xl backdrop-blur-xl pointer-events-auto text-xs space-y-3 touch-manipulation">
@@ -1802,6 +1776,29 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
           100% { transform: translate(0px, 0px) rotate(0deg) scale(1); opacity: 1; }
         }
       `}</style>
+
+      {/* Independent Floating Action Bar (Outside clip-path container) */}
+      <div 
+        className="fixed top-4 right-4 z-[99999999] flex items-center gap-2 pointer-events-auto"
+        style={{ touchAction: 'none', WebkitTapHighlightColor: 'transparent' }}
+      >
+        <button
+          type="button"
+          onClick={() => setIsPaused(p => !p)}
+          onTouchStart={() => setIsPaused(p => !p)}
+          className="h-10 px-3.5 rounded-xl bg-slate-900/95 border border-slate-700/80 text-white text-[11px] font-bold shadow-2xl backdrop-blur-md active:scale-95 flex items-center gap-1.5 cursor-pointer"
+        >
+          {isPaused ? '▶️ Reanudar' : '⏸️ Pausar'}
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowTuner(s => !s)}
+          onTouchStart={() => setShowTuner(s => !s)}
+          className="h-10 px-3.5 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white text-[11px] font-black shadow-2xl active:scale-95 flex items-center gap-1.5 cursor-pointer"
+        >
+          ⚙️ Adjust Spray & Gun
+        </button>
+      </div>
     </div>
   )
 }

@@ -280,6 +280,10 @@ export default function DashboardPage() {
   }
 
   const handleToggleReminder = async (id: string) => {
+    // Optimistic UI: remove completed reminder immediately from local list
+    setReminders(prev => prev.filter(r => r.id !== id))
+    toast.success('¡Recordatorio completado!')
+
     try {
       if (isDbOffline) throw new Error('Offline fallback')
       
@@ -289,8 +293,6 @@ export default function DashboardPage() {
         .eq('id', id)
 
       if (error) throw error
-      toast.success('¡Recordatorio completado!')
-      fetchReminders()
       window.dispatchEvent(new Event('recordatoriosChanged'))
     } catch (e) {
       const localData = localStorage.getItem('epotech_recordatorios')
@@ -298,8 +300,6 @@ export default function DashboardPage() {
         const parsed = JSON.parse(localData)
         const updated = parsed.map((r: any) => r.id === id ? { ...r, completado: true } : r)
         localStorage.setItem('epotech_recordatorios', JSON.stringify(updated))
-        toast.success('¡Recordatorio completado!')
-        fetchReminders()
         window.dispatchEvent(new Event('recordatoriosChanged'))
       }
     }
@@ -981,9 +981,10 @@ export default function DashboardPage() {
                           <button
                             type="button"
                             onClick={() => handleToggleReminder(reminder.id)}
-                            className="h-4 w-4 rounded-full border border-slate-300 hover:border-[#0097A7] hover:bg-[#E6F9FB] flex items-center justify-center shrink-0 mt-0.5 transition-colors"
+                            className="h-5 w-5 rounded-full border border-slate-300 hover:border-[#0097A7] bg-slate-50/50 hover:bg-[#E6F9FB] flex items-center justify-center shrink-0 mt-0.5 transition-all cursor-pointer group/check"
+                            title="Marcar como completado"
                           >
-                            <Check className="h-2 w-2 stroke-[3] text-transparent group-hover:text-[#0097A7] transition-colors" />
+                            <Check className="h-3 w-3 stroke-[3] text-slate-300 group-hover/check:text-[#0097A7] transition-colors" />
                           </button>
                           <div className="min-w-0">
                             <p className="font-bold text-[11px] text-slate-800 truncate">{reminder.titulo}</p>

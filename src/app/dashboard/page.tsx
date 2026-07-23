@@ -680,7 +680,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Acciones Rápidas */}
-          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3.5 xl:p-2.5 2xl:p-4 flex flex-col justify-between animate-dashboard-item xl:min-h-0 xl:h-full" style={{ animationDelay: '400ms' }}>
+          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3.5 xl:p-2.5 2xl:p-4 flex flex-col gap-2 xl:gap-1.5 animate-dashboard-item xl:min-h-0 xl:h-full" style={{ animationDelay: '400ms' }}>
             <div className="flex flex-col gap-2 xl:gap-1.5">
               <div>
                 <h3 className="text-[11px] xl:text-[10px] 2xl:text-xs font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
@@ -730,7 +730,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Recommended Block */}
-            <div className="pt-2 xl:pt-1.5 border-t border-slate-100 shrink-0 mt-2 xl:mt-1">
+            <div className="pt-2 xl:pt-1 border-t border-slate-100 shrink-0 mt-1 xl:mt-0.5">
               <div className="p-2 xl:p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB]/70 flex items-start gap-2 shadow-xs">
                 <div className="h-5 w-5 xl:h-4 xl:w-4 rounded-lg flex items-center justify-center bg-white border border-[#E6F9FB] shadow-xs shrink-0 mt-0.5">
                   <Package className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7]" />

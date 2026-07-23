@@ -564,9 +564,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Middle Row Section */}
-        <div className="grid gap-4 lg:grid-cols-7 flex-1 lg:min-h-0 h-auto overflow-visible lg:overflow-hidden">
+        <div className="grid gap-4 xl:grid-cols-7 flex-1 lg:min-h-0 h-auto overflow-visible lg:overflow-hidden">
           {/* Próximos Servicios */}
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '350ms' }}>
+          <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '350ms' }}>
             {/* Header */}
             <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-3 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
               <div>
@@ -627,40 +627,40 @@ export default function DashboardPage() {
           </div>
 
           {/* Acciones Rápidas */}
-          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-2.5 flex flex-col justify-between min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '400ms' }}>
+          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-2.5 flex flex-col justify-between min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '400ms' }}>
             <div className="flex flex-col gap-1.5 min-h-0 h-auto">
               <div>
                 <h3 className="text-[10px] font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
                 <p className="text-[8px] text-slate-400 font-medium">Accesos directos operacionales.</p>
               </div>
               
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
-                <Link href="/clientes" className="flex items-center justify-between py-1.5 px-2 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
+              <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-3 gap-1.5">
+                <Link href="/clientes" className="flex items-center justify-between py-1.5 px-2.5 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
                   <div className="flex items-center gap-1.5 min-w-0 flex-1">
                     <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)] shrink-0">
                       <Users className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[8.5px] sm:text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
+                    <span className="text-[9px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
                   </div>
                   <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-0.5" />
                 </Link>
 
-                <Link href="/trabajos" className="flex items-center justify-between py-1.5 px-2 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
+                <Link href="/trabajos" className="flex items-center justify-between py-1.5 px-2.5 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
                   <div className="flex items-center gap-1.5 min-w-0 flex-1">
                     <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)] shrink-0">
                       <Calendar className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[8.5px] sm:text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
+                    <span className="text-[9px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
                   </div>
                   <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-0.5" />
                 </Link>
 
-                <Link href="/cotizaciones" className="flex items-center justify-between py-1.5 px-2 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
+                <Link href="/cotizaciones" className="flex items-center justify-between py-1.5 px-2.5 rounded-xl border border-slate-100/70 bg-white/80 hover:bg-[#E6F9FB]/30 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,201,224,0.05)] transition-all duration-300 shadow-sm group min-w-0">
                   <div className="flex items-center gap-1.5 min-w-0 flex-1">
                     <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/5 shadow-sm group-hover:shadow-[0_0_8px_rgba(0,201,224,0.2)] shrink-0">
                       <FileText className="h-3 w-3 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[8.5px] sm:text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
+                    <span className="text-[9px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
                   </div>
                   <ChevronRight className="h-3 w-3 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-0.5" />
                 </Link>
@@ -690,9 +690,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Lower Row: Reminders & Alerts */}
-        <div className="grid gap-4 lg:grid-cols-7 flex-1 lg:min-h-0 h-auto overflow-visible lg:overflow-hidden">
+        <div className="grid gap-4 xl:grid-cols-7 flex-1 lg:min-h-0 h-auto overflow-visible lg:overflow-hidden">
           {/* Reminders Widget */}
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '450ms' }}>
+          <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 flex flex-col justify-between min-h-0 h-auto animate-dashboard-item" style={{ animationDelay: '450ms' }}>
             <div className="min-h-0 flex flex-col flex-1 h-auto">
               <div className="flex items-center justify-between pb-2 border-b border-slate-50 shrink-0">
                 <div>
@@ -788,7 +788,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Alertas y Operaciones */}
-          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0 h-auto overflow-hidden animate-dashboard-item" style={{ animationDelay: '500ms' }}>
+          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3 flex flex-col justify-between min-h-0 h-auto overflow-hidden animate-dashboard-item" style={{ animationDelay: '500ms' }}>
             <div className="min-h-0 flex flex-col flex-1 h-auto justify-between">
               <div className="pb-1.5 border-b border-slate-50 shrink-0">
                 <h3 className="text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">

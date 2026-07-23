@@ -134,7 +134,10 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           ) : null}
         </div>
         
-        <nav className="flex-1 px-2.5 py-2 space-y-3 overflow-y-auto no-scrollbar">
+        <nav className={cn(
+          "flex-1 px-2.5 py-2 space-y-3 no-scrollbar",
+          isCollapsed ? "overflow-visible" : "overflow-y-auto"
+        )}>
           <div>
             {!isCollapsed && (
               <p className="px-3 mb-1 text-[9.5px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">

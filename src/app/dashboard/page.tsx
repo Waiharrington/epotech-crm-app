@@ -320,6 +320,7 @@ export default function DashboardPage() {
   }
 
   const fetchDashboardData = async () => {
+    setLoading(false)
     try {
       // 1. Total clients & new clients this week
       const { count: clientsCount } = await supabase.from('clientes').select('*', { count: 'exact', head: true })

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Calendar, DollarSign, PenTool, Droplets, FlaskConical, StickyNote, CheckCircle2, Clock, Edit, Package, Archive, User, MapPin, ExternalLink } from 'lucide-react'
+import { Calendar, DollarSign, PenTool, Droplets, FlaskConical, StickyNote, CheckCircle2, Clock, Edit, Package, Archive, User, MapPin, ExternalLink, TrendingUp, AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
@@ -28,175 +28,237 @@ interface JobDetailModalProps {
 
 export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailModalProps) {
   const isCompleted = job.estado === 'completado'
+  const ganancia = (job.precio_cobrado || 0) - ((job as any).costo_variable || 0)
 
   return (
     <Dialog open onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <div className="flex items-center justify-between gap-4 mr-6">
-            <DialogTitle className="text-xl">Detalle del Servicio</DialogTitle>
-            <div className="flex items-center gap-2">
-              {isCompleted && onArchive && (
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-8 w-8 text-zinc-400 hover:text-amber-600 hover:bg-amber-50"
-                  onClick={() => onArchive(job)}
-                  title="Archivar Servicio"
-                >
-                  <Archive className="h-4 w-4" />
-                </Button>
-              )}
-              {onEdit && (
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-8 w-8" 
-                  onClick={() => onEdit(job)}
-                  title="Editar Servicio"
-                >
-                  <Edit className="h-4 w-4" />
-                </Button>
-              )}
-              <Badge variant={isCompleted ? 'default' : 'outline'} className={cn(
-                isCompleted ? "bg-green-500 hover:bg-green-600" : ""
+      <DialogContent className="sm:max-w-[520px] max-h-[90vh] overflow-y-auto p-0 gap-0 border-0 shadow-[0_25px_60px_rgba(0,0,0,0.15)] rounded-3xl bg-[#F0F5FA]">
+        {/* ── Header con gradiente ── */}
+        <div className="relative overflow-hidden rounded-t-3xl">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#00C9E0] via-[#0097A7] to-[#006570]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
+          {/* Decorative dots */}
+          <div className="absolute top-3 right-3 flex gap-1 opacity-20">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="w-1 h-1 rounded-full bg-white" />
+            ))}
+          </div>
+
+          <div className="relative px-6 pt-6 pb-5">
+            <DialogHeader className="space-y-0 p-0">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <DialogDescription className="text-[10px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                    Detalle del Servicio
+                  </DialogDescription>
+                  <DialogTitle className="text-lg font-black text-white leading-tight truncate">
+                    {job.catalogo_servicios?.nombre || 'Servicio Personalizado'}
+                  </DialogTitle>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0 mt-1">
+                  {isCompleted && onArchive && (
+                    <button
+                      onClick={() => onArchive(job)}
+                      title="Archivar"
+                      className="h-8 w-8 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-200 active:scale-95"
+                    >
+                      <Archive className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                  {onEdit && (
+                    <button
+                      onClick={() => onEdit(job)}
+                      title="Editar"
+                      className="h-8 w-8 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-200 active:scale-95"
+                    >
+                      <Edit className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </DialogHeader>
+
+            {/* Status + Date row */}
+            <div className="flex items-center gap-2.5 mt-3.5">
+              <span className={cn(
+                "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider",
+                isCompleted
+                  ? "bg-emerald-400/20 text-emerald-100 ring-1 ring-emerald-400/30"
+                  : "bg-amber-400/20 text-amber-100 ring-1 ring-amber-400/30"
               )}>
+                {isCompleted ? <CheckCircle2 className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
                 {isCompleted ? 'Completado' : 'Pendiente'}
-              </Badge>
+              </span>
+              <span className="text-[10px] font-bold text-white/50">
+                <Calendar className="h-3 w-3 inline mr-1" />
+                {new Date(job.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </span>
             </div>
           </div>
-          <DialogDescription>
-            {job.catalogo_servicios?.nombre || 'Servicio Personalizado'}
-          </DialogDescription>
-        </DialogHeader>
+        </div>
 
-        <div className="space-y-6 py-4">
-          {/* Main Info */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-              <Calendar className="h-5 w-5 text-primary mt-0.5" />
-              <div>
-                <p className="text-xs text-muted-foreground uppercase font-semibold">Fecha</p>
-                <p className="text-sm font-medium">
-                  {new Date(job.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+        {/* ── Body ── */}
+        <div className="px-5 py-4 space-y-3.5">
+
+          {/* Quick Stats Cards */}
+          <div className="grid grid-cols-2 gap-2.5">
+            <div className="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+              <div className="flex items-center gap-2 mb-1.5">
+                <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-[#E6F9FB] to-[#E6F9FB]/60 flex items-center justify-center">
+                  <DollarSign className="h-3.5 w-3.5 text-[#0097A7]" />
+                </div>
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">Precio Acordado</p>
+              </div>
+              <p className="text-xl font-black text-slate-800 pl-0.5">${job.precio_acordado?.toLocaleString()}</p>
+            </div>
+
+            {isCompleted && job.precio_cobrado !== null ? (
+              <div className="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-emerald-50 to-emerald-100/60 flex items-center justify-center">
+                    <TrendingUp className="h-3.5 w-3.5 text-emerald-600" />
+                  </div>
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">Cobrado</p>
+                </div>
+                <p className="text-xl font-black text-emerald-600 pl-0.5">${job.precio_cobrado?.toLocaleString()}</p>
+              </div>
+            ) : (
+              <div className="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-[#E6F9FB] to-[#E6F9FB]/60 flex items-center justify-center">
+                    <Calendar className="h-3.5 w-3.5 text-[#0097A7]" />
+                  </div>
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">Fecha</p>
+                </div>
+                <p className="text-sm font-bold text-slate-700 pl-0.5">
+                  {new Date(job.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
                 </p>
               </div>
-            </div>
-            <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-              <DollarSign className="h-5 w-5 text-primary mt-0.5" />
-              <div>
-                <p className="text-xs text-muted-foreground uppercase font-semibold">Precio Acordado</p>
-                <p className="text-sm font-medium">${job.precio_acordado?.toLocaleString()}</p>
-              </div>
-            </div>
+            )}
           </div>
 
-          {/* Customer Info */}
-          <div className="p-4 rounded-xl border bg-primary/5 border-primary/10">
-            <h4 className="text-[10px] font-bold uppercase tracking-wider text-primary mb-3 flex items-center gap-2">
-              <User className="h-3.3 w-3.3" /> Información del Cliente
-            </h4>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Link 
-                  href={`/clientes/${job.clientes.id}`}
-                  className="group flex items-center gap-2 hover:text-primary transition-colors"
-                >
-                  <span className="text-sm font-bold">{job.clientes.nombre} {job.clientes.apellido}</span>
-                  <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Link>
-                <Badge variant="outline" className="text-[10px] bg-white">ID: {job.clientes.id.substring(0, 5)}</Badge>
+          {/* Customer Info Card */}
+          {job.clientes && (
+            <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="h-6 w-6 rounded-lg bg-gradient-to-r from-[#00C9E0] to-[#0097A7] flex items-center justify-center">
+                  <User className="h-3 w-3 text-white" />
+                </div>
+                <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-[#0097A7]">Cliente</h4>
               </div>
-              
-              <div className="flex items-start gap-2 text-muted-foreground">
-                <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
-                <p className="text-xs leading-relaxed">
-                  {job.clientes.direccion || 'Sin dirección registrada'}
-                </p>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Link
+                    href={`/clientes/${job.clientes.id}`}
+                    className="group flex items-center gap-2 hover:text-[#0097A7] transition-colors"
+                  >
+                    <span className="text-sm font-bold text-slate-800 group-hover:text-[#0097A7] transition-colors">{job.clientes.nombre} {job.clientes.apellido}</span>
+                    <ExternalLink className="h-3 w-3 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                  <Badge variant="outline" className="text-[9px] font-black bg-slate-50 border-slate-200 text-slate-400 rounded-lg">
+                    {job.clientes.id.substring(0, 6).toUpperCase()}
+                  </Badge>
+                </div>
+                <div className="flex items-start gap-2 text-slate-400">
+                  <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                  <p className="text-[11px] leading-relaxed">
+                    {job.clientes.direccion || 'Sin dirección registrada'}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
           {/* Technical Details (if completed) */}
           {isCompleted && (
-            <div className="space-y-4">
-               <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-bold uppercase tracking-wider text-primary flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4" /> Ficha Técnica del Servicio
-                  </h4>
-                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 text-[10px]">LOG FINAL</Badge>
-               </div>
-              
-              <div className="grid grid-cols-1 gap-2">
-                <div className="grid grid-cols-2 gap-2">
-                   {job.maquina_usada && (
-                     <div className="bg-muted/30 p-3 rounded-xl border border-dashed">
-                        <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1 flex items-center gap-1">
-                           <PenTool className="h-3 w-3" /> Máquina
-                        </p>
-                        <p className="text-sm font-semibold">{job.maquina_usada}</p>
-                     </div>
-                   )}
-                   {job.presion_agua && (
-                     <div className="bg-muted/30 p-3 rounded-xl border border-dashed">
-                        <p className="text-[10px] font-bold text-muted-foreground uppercase mb-1 flex items-center gap-1">
-                           <Droplets className="h-3 w-3" /> Presión
-                        </p>
-                        <p className="text-sm font-semibold">{job.presion_agua}</p>
-                     </div>
-                   )}
+            <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-6 w-6 rounded-lg bg-gradient-to-r from-[#00C9E0] to-[#0097A7] flex items-center justify-center">
+                    <CheckCircle2 className="h-3 w-3 text-white" />
+                  </div>
+                  <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-[#0097A7]">Ficha Técnica</h4>
                 </div>
+                <span className="text-[8px] font-black uppercase tracking-wider text-[#0097A7] bg-[#E6F9FB] px-2.5 py-1 rounded-lg">Log Final</span>
+              </div>
 
-                {job.quimicos_aplicados && (
-                  <div className="bg-primary/5 p-3 rounded-xl border border-primary/10">
-                     <p className="text-[10px] font-bold text-primary uppercase mb-1 flex items-center gap-1">
-                        <FlaskConical className="h-3 w-3" /> Mezcla / Químicos
-                     </p>
-                     <p className="text-sm font-medium">{job.quimicos_aplicados}</p>
+              <div className="space-y-2.5">
+                {/* Machine + Pressure row */}
+                {(job.maquina_usada || job.presion_agua) && (
+                  <div className="grid grid-cols-2 gap-2">
+                    {job.maquina_usada && (
+                      <div className="bg-[#F0F5FA] p-3 rounded-xl">
+                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                          <PenTool className="h-3 w-3" /> Máquina
+                        </p>
+                        <p className="text-[12px] font-bold text-slate-700">{job.maquina_usada}</p>
+                      </div>
+                    )}
+                    {job.presion_agua && (
+                      <div className="bg-[#F0F5FA] p-3 rounded-xl">
+                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                          <Droplets className="h-3 w-3" /> Presión
+                        </p>
+                        <p className="text-[12px] font-bold text-slate-700">{job.presion_agua}</p>
+                      </div>
+                    )}
                   </div>
                 )}
 
+                {/* Chemicals */}
+                {job.quimicos_aplicados && (
+                  <div className="bg-gradient-to-r from-[#E6F9FB] to-[#E6F9FB]/40 p-3 rounded-xl border border-[#0097A7]/10">
+                    <p className="text-[9px] font-black text-[#0097A7] uppercase tracking-wider mb-1 flex items-center gap-1">
+                      <FlaskConical className="h-3 w-3" /> Mezcla / Químicos
+                    </p>
+                    <p className="text-[12px] font-semibold text-slate-700">{job.quimicos_aplicados}</p>
+                  </div>
+                )}
+
+                {/* Materials */}
                 {(job as any).materiales_utilizados && (job as any).materiales_utilizados.length > 0 && (
-                  <div className="bg-zinc-900 p-4 rounded-xl text-white shadow-lg">
-                     <p className="text-[10px] font-bold text-zinc-400 uppercase mb-3 flex items-center gap-1">
-                        <Package className="h-3 w-3" /> Materiales del Inventario
-                     </p>
-                     <div className="space-y-2">
-                        {(job as any).materiales_utilizados.map((m: any, idx: number) => (
-                           <div key={idx} className="flex justify-between items-center text-xs border-b border-white/10 pb-1 last:border-0 last:pb-0">
-                              <span className="text-zinc-300">{m.nombre}</span>
-                              <span className="bg-white/10 px-2 py-0.5 rounded font-bold">{m.cantidad} {m.unidad || 'ud'}</span>
-                           </div>
-                        ))}
-                     </div>
+                  <div className="bg-slate-800 p-4 rounded-2xl text-white shadow-lg">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <Package className="h-3 w-3" /> Materiales del Inventario
+                    </p>
+                    <div className="space-y-1.5">
+                      {(job as any).materiales_utilizados.map((m: any, idx: number) => (
+                        <div key={idx} className="flex justify-between items-center text-[11px] border-b border-white/[0.06] pb-1.5 last:border-0 last:pb-0">
+                          <span className="text-slate-300 font-medium">{m.nombre}</span>
+                          <span className="bg-white/10 px-2.5 py-0.5 rounded-lg font-black text-[10px]">{m.cantidad} {m.unidad || 'ud'}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 
                 {/* Financial Summary */}
                 {job.precio_cobrado !== null && (
-                  <div className="space-y-2 mt-2">
-                    <div className="flex justify-between items-center p-3 bg-green-50 rounded-xl border border-green-100">
-                      <span className="text-sm font-bold text-green-700 uppercase tracking-tight">Monto Cobrado</span>
-                      <span className="text-lg font-black text-green-600">${job.precio_cobrado?.toLocaleString()}</span>
-                    </div>
-
+                  <div className="space-y-2 pt-1">
                     {(job as any).costo_variable > 0 && (
-                      <div className="flex justify-between items-center p-3 bg-orange-50 rounded-xl border border-orange-100">
-                        <span className="text-xs font-bold text-orange-700 uppercase">Gastos Adicionales</span>
-                        <span className="text-sm font-black text-orange-600">-${(job as any).costo_variable}</span>
+                      <div className="flex justify-between items-center p-3 bg-amber-50/80 rounded-xl border border-amber-100/80">
+                        <span className="text-[10px] font-black text-amber-700 uppercase tracking-wider">Gastos Adicionales</span>
+                        <span className="text-sm font-black text-amber-600">-${(job as any).costo_variable}</span>
                       </div>
                     )}
 
-                    <div className="flex justify-between items-center p-4 bg-primary/5 rounded-xl border-2 border-primary/20">
-                      <div>
-                        <span className="text-sm font-black text-primary uppercase tracking-tight">Ganancia Neta</span>
-                        <p className="text-[10px] text-muted-foreground">Cobrado - Gastos</p>
+                    <div className="relative overflow-hidden rounded-2xl">
+                      <div className={cn(
+                        "absolute inset-0",
+                        ganancia >= 0
+                          ? "bg-gradient-to-r from-emerald-500 to-emerald-600"
+                          : "bg-gradient-to-r from-red-500 to-red-600"
+                      )} />
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_60%)]" />
+                      <div className="relative flex justify-between items-center p-4">
+                        <div>
+                          <span className="text-[10px] font-black text-white/70 uppercase tracking-wider block">Ganancia Neta</span>
+                          <p className="text-[9px] text-white/40 mt-0.5">Cobrado - Gastos</p>
+                        </div>
+                        <span className="text-2xl font-black text-white">
+                          ${ganancia.toFixed(2)}
+                        </span>
                       </div>
-                      <span className={cn(
-                        "text-xl font-black",
-                        ((job.precio_cobrado || 0) - ((job as any).costo_variable || 0)) >= 0 ? "text-green-600" : "text-destructive"
-                      )}>
-                        ${((job.precio_cobrado || 0) - ((job as any).costo_variable || 0)).toFixed(2)}
-                      </span>
                     </div>
                   </div>
                 )}
@@ -205,36 +267,43 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
           )}
 
           {/* Notes */}
-          <div className="space-y-3">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-              <StickyNote className="h-4 w-4" /> Notas del Servicio
-            </h4>
-            <div className="space-y-2">
-              {job.notas_pre && (
-                <div className="p-3 rounded-lg border bg-blue-50/30">
-                  <p className="text-xs font-bold text-blue-600 uppercase mb-1">Notas Previas</p>
-                  <p className="text-sm italic">"{job.notas_pre}"</p>
+          {(job.notas_pre || job.notas_post) && (
+            <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="h-6 w-6 rounded-lg bg-gradient-to-r from-[#00C9E0] to-[#0097A7] flex items-center justify-center">
+                  <StickyNote className="h-3 w-3 text-white" />
                 </div>
-              )}
-              {job.notas_post && (
-                <div className="p-3 rounded-lg border bg-green-50/30">
-                  <p className="text-xs font-bold text-green-600 uppercase mb-1">Notas Posteriores (Log)</p>
-                  <p className="text-sm italic">"{job.notas_post}"</p>
-                </div>
-              )}
-              {!job.notas_pre && !job.notas_post && (
-                <p className="text-sm text-muted-foreground italic">No hay notas registradas para este servicio.</p>
-              )}
+                <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-[#0097A7]">Notas</h4>
+              </div>
+              <div className="space-y-2">
+                {job.notas_pre && (
+                  <div className="p-3 rounded-xl bg-blue-50/50 border border-blue-100/60">
+                    <p className="text-[9px] font-black text-blue-500 uppercase tracking-wider mb-1">Previas</p>
+                    <p className="text-[12px] text-slate-600 leading-relaxed italic">"{job.notas_pre}"</p>
+                  </div>
+                )}
+                {job.notas_post && (
+                  <div className="p-3 rounded-xl bg-emerald-50/50 border border-emerald-100/60">
+                    <p className="text-[9px] font-black text-emerald-500 uppercase tracking-wider mb-1">Posteriores (Log)</p>
+                    <p className="text-[12px] text-slate-600 leading-relaxed italic">"{job.notas_post}"</p>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Recurrence Info */}
           {job.es_recurrente && (
-            <div className="flex items-center gap-2 p-3 rounded-lg border border-primary/20 bg-primary/5">
-              <Clock className="h-4 w-4 text-primary" />
-              <p className="text-xs font-medium">
-                Este servicio es recurrente. Próxima fecha sugerida: {job.fecha_proximo_serv ? new Date(job.fecha_proximo_serv).toLocaleDateString('es-ES') : 'Pendiente'}
-              </p>
+            <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-[#E6F9FB] to-[#E6F9FB]/40 border border-[#0097A7]/10">
+              <div className="h-8 w-8 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] flex items-center justify-center shrink-0 shadow-sm shadow-cyan-500/20">
+                <Clock className="h-3.5 w-3.5 text-white" />
+              </div>
+              <div>
+                <p className="text-[9px] font-black text-[#0097A7] uppercase tracking-wider">Servicio Recurrente</p>
+                <p className="text-[11px] font-medium text-slate-500 mt-0.5">
+                  Próxima fecha: {job.fecha_proximo_serv ? new Date(job.fecha_proximo_serv).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }) : 'Pendiente'}
+                </p>
+              </div>
             </div>
           )}
         </div>

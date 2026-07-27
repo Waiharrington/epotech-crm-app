@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
+import { toast } from 'sonner'
 import {
   Dialog,
   DialogContent,
@@ -22,10 +23,16 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from '@/components/ui/textarea'
-import { Check, ChevronRight, ChevronLeft, User, Home, Calendar, Loader2 } from 'lucide-react'
+import { Check, ChevronRight, ChevronLeft, User, Home, Calendar, Loader2, X, Building2, Eye, CalendarPlus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type ClienteInsert = Database['public']['Tables']['clientes']['Insert']
+
+/* Shared premium field styles (Epotech design system) */
+const fieldLabel = "text-[9px] font-extrabold text-slate-400 uppercase tracking-wider"
+const fieldInput = "h-9 text-[11px] rounded-xl border-slate-200 bg-slate-50/40 focus:bg-white focus-visible:ring-[#00C9E0]/30 focus-visible:border-[#00C9E0]/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all placeholder:text-slate-300"
+const fieldArea = "text-[11px] rounded-xl border-slate-200 bg-slate-50/40 focus:bg-white focus-visible:ring-[#00C9E0]/30 focus-visible:border-[#00C9E0]/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all placeholder:text-slate-300 resize-none"
+const btnPrimary = "h-9 px-4 text-[10px] font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98]"
 
 interface NewClientWizardProps {
   open?: boolean
@@ -72,7 +79,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
 
     setLoading(false)
     if (error) {
-      alert('Error al guardar: ' + error.message)
+      toast.error('Error al guardar: ' + error.message)
       return null
     }
     return data[0]
@@ -91,97 +98,189 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
     }
   }
 
+  const fillDemoData = () => {
+    const demoNames = ['Juan', 'María', 'Carlos', 'Ana', 'Pedro', 'Sofia', 'Miguel', 'Laura']
+    const demoLastnames = ['García', 'Rodríguez', 'Martínez', 'López', 'Pérez', 'González', 'Hernández']
+    const demoCities = ['Caracas', 'Maracaibo', 'Valencia', 'Barquisimeto', 'Ciudad Bolívar', 'Mérida']
+    const demoSurfaces = ['Concreto', 'Cerámica', 'Baldosa', 'Mármol', 'Vinilo']
+
+    const randomName = demoNames[Math.floor(Math.random() * demoNames.length)]
+    const randomLastname = demoLastnames[Math.floor(Math.random() * demoLastnames.length)]
+    const randomCity = demoCities[Math.floor(Math.random() * demoCities.length)]
+    const randomSurface = demoSurfaces[Math.floor(Math.random() * demoSurfaces.length)]
+
+    updateFields({
+      nombre: randomName,
+      apellido: randomLastname,
+      telefono: `+58 ${Math.floor(Math.random() * 9000) + 1000}-${Math.floor(Math.random() * 9000) + 1000}`,
+      ciudad: randomCity,
+      direccion: `Avenida Principal, Edif. Demo ${Math.floor(Math.random() * 100) + 1}, Apto ${Math.floor(Math.random() * 50) + 1}`,
+      tipo_propiedad: Math.random() > 0.5 ? 'comercial' : 'residencial',
+      metros_cuadrados: Math.floor(Math.random() * 500) + 50,
+      tipo_superficie: randomSurface,
+      obs_propiedad: 'Propiedad en excelente estado, lista para servicio de limpieza profesional.',
+      fuente_adq: ['referido', 'publicidad', 'redes', 'app_leads'][Math.floor(Math.random() * 4)]
+    })
+  }
+
   return (
     <Dialog open={open} onOpenChange={(val) => { if (!val) onClose() }}>
-      <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden bg-background">
-        <DialogHeader className="p-6 pb-0">
-          <DialogTitle>Nuevo Cliente</DialogTitle>
-          <DialogDescription>Completa los datos para dar de alta al cliente.</DialogDescription>
+      <DialogContent
+        showCloseButton={false}
+        className="sm:max-w-[500px] p-0 gap-0 overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-[0_25px_60px_-12px_rgba(3,11,23,0.35)]"
+      >
+        {/* Premium Dark Navy Header */}
+        <DialogHeader className="sidebar-premium-bg p-4 md:p-5 space-y-0 text-left relative">
+          <div className="relative z-10 flex items-center gap-2.5">
+            <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
+              <User className="h-4.5 w-4.5 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <DialogTitle className="text-base font-bold tracking-tight text-white">
+                Nuevo Cliente
+              </DialogTitle>
+              <DialogDescription className="text-slate-300/80 text-[10px] mt-0.5 font-medium">
+                Completa los datos para dar de alta al cliente.
+              </DialogDescription>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-4 right-4 z-20 h-7 w-7 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
+            aria-label="Cerrar"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
         </DialogHeader>
 
         {/* Step Progress Indicators */}
-        <div className="px-6 py-4 flex items-center justify-between">
-          {[1, 2, 3].map((s) => (
-            <div key={s} className="flex items-center">
-              <div 
-                className={cn(
-                  "h-8 w-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors",
-                  step === s ? "bg-primary text-primary-foreground" : 
-                  step > s ? "bg-green-500 text-white" : "bg-muted text-muted-foreground"
-                )}
-              >
-                {step > s ? <Check className="h-5 w-5" /> : s}
+        <div className="px-6 py-3.5 flex items-center justify-between bg-slate-50/60 border-b border-slate-100">
+          <div className="flex items-center flex-1">
+          {[
+            { n: 1, label: 'Datos' },
+            { n: 2, label: 'Propiedad' },
+            { n: 3, label: 'Listo' },
+          ].map((s, i) => (
+            <div key={s.n} className={cn("flex items-center", i < 2 && "flex-1")}>
+              <div className="flex flex-col items-center gap-1 shrink-0">
+                <div
+                  className={cn(
+                    "h-7 w-7 rounded-xl flex items-center justify-center text-[11px] font-black transition-all duration-300",
+                    step === s.n
+                      ? "bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white shadow-md shadow-cyan-500/25 scale-105"
+                      : step > s.n
+                      ? "bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 text-[#0097A7] border border-[#0097A7]/20"
+                      : "bg-white text-slate-300 border border-slate-200"
+                  )}
+                >
+                  {step > s.n ? <Check className="h-3.5 w-3.5 stroke-[3]" /> : s.n}
+                </div>
+                <span
+                  className={cn(
+                    "text-[8px] font-extrabold uppercase tracking-wider transition-colors",
+                    step >= s.n ? "text-[#0097A7]" : "text-slate-300"
+                  )}
+                >
+                  {s.label}
+                </span>
               </div>
-              {s < 3 && <div className={cn("h-1 w-12 mx-2", step > s ? "bg-green-500" : "bg-muted")} />}
+              {i < 2 && (
+                <div className="flex-1 h-[2px] mx-2 mb-4 rounded-full bg-slate-200 overflow-hidden">
+                  <div
+                    className={cn(
+                      "h-full rounded-full bg-gradient-to-r from-[#00C9E0] to-[#0097A7] transition-all duration-500 ease-out",
+                      step > s.n ? "w-full" : "w-0"
+                    )}
+                  />
+                </div>
+              )}
             </div>
           ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={fillDemoData}
+            className="shrink-0 h-8 px-2.5 text-[9px] font-black rounded-lg bg-white border border-slate-200 text-[#0097A7] hover:bg-[#E6F9FB] hover:border-[#00C9E0]/40 hover:shadow-[0_2px_8px_rgba(0,201,224,0.1)] transition-all active:scale-95"
+            title="Rellenar con datos de prueba"
+          >
+            📋 Demo
+          </button>
         </div>
 
-        <div className="p-6 max-h-[60vh] overflow-y-auto">
+        <div className="p-5 md:p-6 max-h-[55vh] overflow-y-auto">
           {step === 1 && (
-            <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="nombre">Nombre</Label>
-                  <Input 
-                    id="nombre" 
-                    value={formData.nombre} 
-                    onChange={e => updateFields({ nombre: e.target.value })} 
+            <div className="space-y-3.5 animate-in fade-in slide-in-from-right-4 duration-300">
+              <div className="grid grid-cols-2 gap-3.5">
+                <div className="space-y-1.5">
+                  <Label htmlFor="nombre" className={fieldLabel}>Nombre</Label>
+                  <Input
+                    id="nombre"
+                    className={fieldInput}
+                    value={formData.nombre}
+                    onChange={e => updateFields({ nombre: e.target.value })}
                     placeholder="Ej: Juan"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="apellido">Apellido</Label>
-                  <Input 
-                    id="apellido" 
-                    value={formData.apellido} 
-                    onChange={e => updateFields({ apellido: e.target.value })} 
+                <div className="space-y-1.5">
+                  <Label htmlFor="apellido" className={fieldLabel}>Apellido</Label>
+                  <Input
+                    id="apellido"
+                    className={fieldInput}
+                    value={formData.apellido}
+                    onChange={e => updateFields({ apellido: e.target.value })}
                     placeholder="Ej: Pérez"
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="telefono">Teléfono</Label>
-                <Input 
-                  id="telefono" 
-                  value={formData.telefono} 
-                  onChange={e => updateFields({ telefono: e.target.value })} 
+              <div className="space-y-1.5">
+                <Label htmlFor="telefono" className={fieldLabel}>Teléfono</Label>
+                <Input
+                  id="telefono"
+                  className={fieldInput}
+                  value={formData.telefono}
+                  onChange={e => updateFields({ telefono: e.target.value })}
                   placeholder="+1 (555) 000-0000"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="ciudad">Ciudad / Zona</Label>
-                <Input 
-                  id="ciudad" 
-                  value={formData.ciudad || ''} 
-                  onChange={e => updateFields({ ciudad: e.target.value })} 
+              <div className="space-y-1.5">
+                <Label htmlFor="ciudad" className={fieldLabel}>Ciudad / Zona</Label>
+                <Input
+                  id="ciudad"
+                  className={fieldInput}
+                  value={formData.ciudad || ''}
+                  onChange={e => updateFields({ ciudad: e.target.value })}
                   placeholder="Ej: Caracas"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="direccion">Dirección</Label>
-                <Textarea 
-                  id="direccion" 
-                  value={formData.direccion || ''} 
-                  onChange={e => updateFields({ direccion: e.target.value })} 
+              <div className="space-y-1.5">
+                <Label htmlFor="direccion" className={fieldLabel}>Dirección</Label>
+                <Textarea
+                  id="direccion"
+                  rows={3}
+                  className={fieldArea}
+                  value={formData.direccion || ''}
+                  onChange={e => updateFields({ direccion: e.target.value })}
                   placeholder="Dirección completa..."
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Fuente del Cliente</Label>
-                <Select 
-                  value={formData.fuente_adq || 'referido'} 
+              <div className="space-y-1.5">
+                <Label className={fieldLabel}>Fuente del Cliente</Label>
+                <Select
+                  value={formData.fuente_adq || 'referido'}
                   onValueChange={v => updateFields({ fuente_adq: v })}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-9 text-[11px] rounded-xl border-slate-200 bg-slate-50/40 focus:bg-white focus-visible:ring-[#00C9E0]/30 focus-visible:border-[#00C9E0]/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all placeholder:text-slate-300 w-full">
                     <SelectValue placeholder="¿Cómo nos conoció?" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="referido">Referido</SelectItem>
-                    <SelectItem value="publicidad">Publicidad Pagada</SelectItem>
-                    <SelectItem value="redes">Redes Sociales</SelectItem>
-                    <SelectItem value="app_leads">App de Leads</SelectItem>
-                    <SelectItem value="otro">Otro</SelectItem>
+                  <SelectContent className="rounded-xl border-slate-100 shadow-xl z-[9999]">
+                    <SelectItem value="referido" className="text-[11px]">Referido</SelectItem>
+                    <SelectItem value="publicidad" className="text-[11px]">Publicidad Pagada</SelectItem>
+                    <SelectItem value="redes" className="text-[11px]">Redes Sociales</SelectItem>
+                    <SelectItem value="app_leads" className="text-[11px]">App de Leads</SelectItem>
+                    <SelectItem value="otro" className="text-[11px]">Otro</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -189,67 +288,98 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
           )}
 
           {step === 2 && (
-            <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
-              <div className="space-y-2">
-                <Label>Tipo de Propiedad</Label>
-                <div className="flex gap-4">
-                  <Button 
-                    variant={formData.tipo_propiedad === 'residencial' ? 'default' : 'outline'}
-                    className="flex-1"
-                    onClick={() => updateFields({ tipo_propiedad: 'residencial' })}
-                  >
-                    Residencial
-                  </Button>
-                  <Button 
-                    variant={formData.tipo_propiedad === 'comercial' ? 'default' : 'outline'}
-                    className="flex-1"
-                    onClick={() => updateFields({ tipo_propiedad: 'comercial' })}
-                  >
-                    Comercial
-                  </Button>
+            <div className="space-y-3.5 animate-in fade-in slide-in-from-right-4 duration-300">
+              <div className="space-y-1.5">
+                <Label className={fieldLabel}>Tipo de Propiedad</Label>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { value: 'residencial', label: 'Residencial', icon: Home },
+                    { value: 'comercial', label: 'Comercial', icon: Building2 },
+                  ].map((opt) => {
+                    const active = formData.tipo_propiedad === opt.value
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => updateFields({ tipo_propiedad: opt.value })}
+                        className={cn(
+                          "flex items-center gap-2 p-2.5 rounded-xl border transition-all duration-300 active:scale-[0.98] text-left",
+                          active
+                            ? "bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border-[#0097A7]/30 shadow-[0_4px_12px_rgba(0,201,224,0.12)]"
+                            : "bg-white border-slate-200 hover:border-[#00C9E0]/30 hover:bg-slate-50/60"
+                        )}
+                      >
+                        <div
+                          className={cn(
+                            "h-7 w-7 rounded-lg flex items-center justify-center shrink-0 transition-all",
+                            active
+                              ? "bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white shadow-sm shadow-cyan-500/25"
+                              : "bg-slate-50 border border-slate-100 text-slate-400"
+                          )}
+                        >
+                          <opt.icon className="h-3.5 w-3.5" />
+                        </div>
+                        <span
+                          className={cn(
+                            "text-[10.5px] font-black uppercase tracking-wider transition-colors",
+                            active ? "text-[#0097A7]" : "text-slate-500"
+                          )}
+                        >
+                          {opt.label}
+                        </span>
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="m2">Metros Cuadrados (m²)</Label>
-                  <Input 
-                    id="m2" 
-                    type="number" 
-                    value={formData.metros_cuadrados || ''} 
+              <div className="grid grid-cols-2 gap-3.5">
+                <div className="space-y-1.5">
+                  <Label htmlFor="m2" className={fieldLabel}>Metros Cuadrados (m²)</Label>
+                  <Input
+                    id="m2"
+                    type="number"
+                    className={cn(fieldInput, "tabular-nums")}
+                    placeholder="0"
+                    value={formData.metros_cuadrados || ''}
                     onChange={e => {
                       const val = parseFloat(e.target.value) || 0
                       updateFields({ metros_cuadrados: val, sqft: val * 10.764 })
-                    }} 
+                    }}
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="sqft">Square Feet (SQFT)</Label>
-                  <Input 
-                    id="sqft" 
-                    type="number" 
-                    value={formData.sqft || ''} 
+                <div className="space-y-1.5">
+                  <Label htmlFor="sqft" className={fieldLabel}>Square Feet (SQFT)</Label>
+                  <Input
+                    id="sqft"
+                    type="number"
+                    className={cn(fieldInput, "tabular-nums")}
+                    placeholder="0"
+                    value={formData.sqft || ''}
                     onChange={e => {
                       const val = parseFloat(e.target.value) || 0
                       updateFields({ sqft: val, metros_cuadrados: val / 10.764 })
-                    }} 
+                    }}
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="superficie">Tipo de Superficie</Label>
-                <Input 
-                  id="superficie" 
-                  value={formData.tipo_superficie || ''} 
-                  onChange={e => updateFields({ tipo_superficie: e.target.value })} 
+              <div className="space-y-1.5">
+                <Label htmlFor="superficie" className={fieldLabel}>Tipo de Superficie</Label>
+                <Input
+                  id="superficie"
+                  className={fieldInput}
+                  value={formData.tipo_superficie || ''}
+                  onChange={e => updateFields({ tipo_superficie: e.target.value })}
                   placeholder="Ej: Concreto, Cerámica..."
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="obs">Observaciones Generales</Label>
-                <Textarea 
-                  id="obs" 
-                  value={formData.obs_propiedad || ''} 
-                  onChange={e => updateFields({ obs_propiedad: e.target.value })} 
+              <div className="space-y-1.5">
+                <Label htmlFor="obs" className={fieldLabel}>Observaciones Generales</Label>
+                <Textarea
+                  id="obs"
+                  rows={3}
+                  className={fieldArea}
+                  value={formData.obs_propiedad || ''}
+                  onChange={e => updateFields({ obs_propiedad: e.target.value })}
                   placeholder="Detalles sobre la propiedad..."
                 />
               </div>
@@ -257,48 +387,73 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
           )}
 
           {step === 3 && (
-            <div className="space-y-6 py-4 text-center animate-in fade-in zoom-in-95 duration-300">
-               <div className="h-20 w-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-                <Check className="h-10 w-10 text-green-600" />
+            <div className="py-2 text-center animate-in fade-in zoom-in-95 duration-300">
+              <div className="h-16 w-16 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mx-auto shadow-[0_8px_24px_rgba(0,201,224,0.15)]">
+                <Check className="h-7 w-7 stroke-[3] text-[#0097A7]" />
               </div>
-              <h3 className="text-xl font-bold">¡Datos listos!</h3>
-              <p className="text-muted-foreground">
+              <h3 className="text-base font-bold text-slate-800 tracking-tight mt-3.5">¡Datos listos!</h3>
+              <p className="text-[10.5px] text-slate-400 font-medium mt-1 max-w-xs mx-auto">
                 El cliente se guardará automáticamente. ¿Qué deseas hacer ahora?
               </p>
-              <div className="flex flex-col gap-3">
-                <Button 
-                  onClick={() => handleFinish('view')} 
-                  className="w-full h-12 text-lg" 
-                  variant="outline"
+
+              <div className="flex flex-col gap-2.5 mt-5">
+                <button
+                  type="button"
+                  onClick={() => handleFinish('view')}
                   disabled={loading}
+                  className="w-full flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 bg-white hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none text-left group"
                 >
-                  {loading ? <Loader2 className="animate-spin" /> : 'Guardar y ver perfil'}
-                </Button>
-                <Button 
-                  onClick={() => handleFinish('agenda')} 
-                  className="w-full h-12 text-lg"
+                  <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-400 group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 group-hover:text-[#0097A7] transition-all shrink-0">
+                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-black text-slate-700 group-hover:text-[#0097A7] transition-colors">Guardar y ver perfil</p>
+                    <p className="text-[9px] text-slate-400 font-medium">Ir a la ficha completa del cliente</p>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleFinish('agenda')}
                   disabled={loading}
+                  className="w-full flex items-center gap-2.5 p-2.5 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none text-left"
                 >
-                  {loading ? <Loader2 className="animate-spin" /> : 'Guardar y agendar servicio'}
-                </Button>
+                  <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/15 border border-white/20 text-white backdrop-blur-md shrink-0">
+                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarPlus className="h-4 w-4" />}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-black text-white">Guardar y agendar servicio</p>
+                    <p className="text-[9px] text-white/70 font-medium">Crear una cita para este cliente</p>
+                  </div>
+                </button>
               </div>
             </div>
           )}
         </div>
 
-        <div className="p-6 bg-muted/30 border-t flex items-center justify-between">
-          <Button variant="ghost" onClick={onClose} disabled={loading}>
+        <div className="px-5 md:px-6 py-3.5 bg-slate-50/60 border-t border-slate-100 flex items-center justify-between">
+          <Button
+            variant="ghost"
+            onClick={onClose}
+            disabled={loading}
+            className="h-9 px-3 text-[10px] font-bold rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100/80 transition-all active:scale-[0.98]"
+          >
             Cancelar
           </Button>
           <div className="flex gap-2">
             {step > 1 && step < 3 && (
-              <Button variant="outline" onClick={handleBack} disabled={loading}>
-                <ChevronLeft className="mr-2 h-4 w-4" /> Atrás
+              <Button
+                variant="ghost"
+                onClick={handleBack}
+                disabled={loading}
+                className="h-9 px-3.5 text-[10px] font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
+              >
+                <ChevronLeft className="mr-1 h-3.5 w-3.5" /> Atrás
               </Button>
             )}
             {step < 3 && (
-              <Button onClick={handleNext}>
-                Siguiente <ChevronRight className="ml-2 h-4 w-4" />
+              <Button onClick={handleNext} className={btnPrimary}>
+                Siguiente <ChevronRight className="ml-1 h-3.5 w-3.5" />
               </Button>
             )}
           </div>
@@ -341,7 +496,6 @@ import {
   useSortable
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { toast } from 'sonner'
 
 const formatTime12h = (timeStr?: string | null) => {
   if (!timeStr) return ''

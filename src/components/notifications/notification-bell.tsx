@@ -18,10 +18,12 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
+import { useConfirm } from '@/components/ui/confirm-dialog'
 
 export function NotificationBell() {
   const supabase = createClient() as any
   const router = useRouter()
+  const confirmDialog = useConfirm()
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [reminders, setReminders] = useState<any[]>([])
@@ -115,9 +117,12 @@ export function NotificationBell() {
       return
     }
 
-    if (!window.confirm('¿Estás seguro de que deseas eliminar todas las notificaciones?')) {
-      return
-    }
+    const ok = await confirmDialog({
+      description: '¿Estás seguro de que deseas eliminar todas las notificaciones?',
+      variant: 'destructive',
+      confirmLabel: 'Eliminar',
+    })
+    if (!ok) return
 
     try {
       if (isUsingLocalStorage) throw new Error('Local Storage fallback active')

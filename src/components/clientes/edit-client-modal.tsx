@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from '@/components/ui/textarea'
 import { Loader2, Save } from 'lucide-react'
+import { toast } from 'sonner'
 
 type Cliente = Database['public']['Tables']['clientes']['Row']
 
@@ -62,7 +63,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
 
     setLoading(false)
     if (error) {
-      alert('Error al actualizar: ' + error.message)
+      toast.error('Error al actualizar: ' + error.message)
     } else {
       onSuccess()
     }

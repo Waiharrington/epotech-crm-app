@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
+import { toast } from 'sonner'
 import {
   Dialog,
   DialogContent,
@@ -106,7 +107,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
     if (!res.error) {
       onSuccess()
     } else {
-      alert('Error: ' + res.error.message)
+      toast.error('Error: ' + res.error.message)
     }
   }
 

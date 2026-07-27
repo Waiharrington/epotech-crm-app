@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Loader2, StickyNote, Send } from 'lucide-react'
+import { toast } from 'sonner'
 
 interface AddNoteModalProps {
   clientId: string
@@ -36,7 +37,7 @@ export function AddNoteModal({ clientId, onClose, onSuccess }: AddNoteModalProps
       })
 
     if (error) {
-      alert('Error: ' + error.message)
+      toast.error('Error: ' + error.message)
     } else {
       onSuccess()
     }

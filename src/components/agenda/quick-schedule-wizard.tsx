@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Search, Plus, Calendar as CalendarIcon, Clock, Loader2 } from 'lucide-react'
 import { format } from 'date-fns'
+import { toast } from 'sonner'
 
 type Cliente = Database['public']['Tables']['clientes']['Row']
 type Servicio = Database['public']['Tables']['catalogo_servicios']['Row']
@@ -83,7 +84,7 @@ export function QuickScheduleWizard({ onClose, onSuccess }: QuickScheduleWizardP
     if (!error) {
       onSuccess()
     } else {
-      alert('Error al agendar: ' + error.message)
+      toast.error('Error al agendar: ' + error.message)
     }
   }
 

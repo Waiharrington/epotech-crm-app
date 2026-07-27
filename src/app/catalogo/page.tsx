@@ -26,11 +26,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useConfirm } from '@/components/ui/confirm-dialog'
 
 type Servicio = Database['public']['Tables']['catalogo_servicios']['Row']
 
 export default function CatalogoPage() {
   const supabase = createClient()
+  const confirmDialog = useConfirm()
   const [servicios, setServicios] = useState<Servicio[]>([])
   const [stockItems, setStockItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -110,7 +112,12 @@ export default function CatalogoPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('¿Seguro?')) return
+    const ok = await confirmDialog({
+      description: '¿Seguro que deseas eliminar este servicio del catálogo?',
+      variant: 'destructive',
+      confirmLabel: 'Eliminar',
+    })
+    if (!ok) return
     await supabase.from('catalogo_servicios').delete().eq('id', id)
     fetchServicios()
   }

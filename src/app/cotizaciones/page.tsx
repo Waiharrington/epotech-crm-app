@@ -24,6 +24,7 @@ import {
 import { NewQuoteWizard } from '@/components/presupuestos/new-quote-wizard'
 import { QuoteDetailModal } from '@/components/presupuestos/quote-detail-modal'
 import dynamic from 'next/dynamic'
+import { useConfirm } from '@/components/ui/confirm-dialog'
 
 const QuotePDFDownload = dynamic(() => import('@/components/presupuestos/quote-pdf-download'), {
   ssr: false,
@@ -34,6 +35,7 @@ type Presupuesto = any
 
 export default function CotizacionesPage() {
   const supabase = createClient()
+  const confirmDialog = useConfirm()
   const [cotizaciones, setCotizaciones] = useState<Presupuesto[]>([])
   const [loading, setLoading] = useState(true)
   const [showWizard, setShowWizard] = useState(false)
@@ -74,7 +76,12 @@ export default function CotizacionesPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('¿Seguro que deseas eliminar esta cotización?')) return
+    const ok = await confirmDialog({
+      description: '¿Seguro que deseas eliminar esta cotización?',
+      variant: 'destructive',
+      confirmLabel: 'Eliminar',
+    })
+    if (!ok) return
     const { error } = await supabase.from('presupuestos').delete().eq('id', id)
     if (!error) fetchCotizaciones()
   }

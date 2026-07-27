@@ -20,6 +20,7 @@ import {
   ExternalLink,
   DollarSign
 } from 'lucide-react'
+import { useConfirm } from '@/components/ui/confirm-dialog'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { 
@@ -70,6 +71,7 @@ const UNIDADES_MEDIDA = [
 
 export default function StockPage() {
   const supabase = createClient()
+  const confirmDialog = useConfirm()
   const [items, setItems] = useState<StockItem[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -196,7 +198,12 @@ export default function StockPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('¿Estás seguro de que deseas eliminar este item del inventario?')) return
+    const ok = await confirmDialog({
+      description: '¿Estás seguro de que deseas eliminar este item del inventario?',
+      variant: 'destructive',
+      confirmLabel: 'Eliminar',
+    })
+    if (!ok) return
     setLoading(true)
     const { error } = await supabase.from('stock').delete().eq('id', id)
     if (!error) {

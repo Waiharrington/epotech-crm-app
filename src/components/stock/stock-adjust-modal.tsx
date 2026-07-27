@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Check, Loader2, Minus, Plus } from 'lucide-react'
+import { toast } from 'sonner'
 
 interface StockAdjustModalProps {
   item: any
@@ -69,7 +70,7 @@ export function StockAdjustModal({ item, type, onClose, onSuccess }: StockAdjust
          
        onSuccess()
     } else {
-       alert('Error: ' + updateError.message)
+       toast.error('Error: ' + updateError.message)
     }
     setLoading(false)
   }

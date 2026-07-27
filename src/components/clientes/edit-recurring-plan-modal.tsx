@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/select"
 import { Loader2, Save, Trash2, Calendar, Repeat } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useConfirm } from '@/components/ui/confirm-dialog'
+import { toast } from 'sonner'
 
 interface RecurringPlan {
   id: string
@@ -40,6 +42,7 @@ interface EditRecurringPlanModalProps {
 
 export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurringPlanModalProps) {
   const supabase = createClient()
+  const confirmDialog = useConfirm()
   const [loading, setLoading] = useState(false)
   const [frecuencia, setFrecuencia] = useState(plan.frecuencia)
   const [frecuenciaPersonalizada, setFrecuenciaPersonalizada] = useState(plan.frecuencia_dias || 30)
@@ -61,7 +64,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
       .eq('id', plan.id)
 
     if (error) {
-      alert('Error: ' + error.message)
+      toast.error('Error: ' + error.message)
     } else {
       onSuccess()
     }
@@ -69,8 +72,13 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
   }
 
   const handleDelete = async () => {
-    if (!confirm('¿Estás seguro de que quieres eliminar este plan recurrente?')) return
-    
+    const ok = await confirmDialog({
+      description: '¿Estás seguro de que quieres eliminar este plan recurrente?',
+      variant: 'destructive',
+      confirmLabel: 'Eliminar',
+    })
+    if (!ok) return
+
     setLoading(true)
     const { error } = await supabase
       .from('planes_recurrentes')
@@ -78,7 +86,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
       .eq('id', plan.id)
 
     if (error) {
-      alert('Error: ' + error.message)
+      toast.error('Error: ' + error.message)
     } else {
       onSuccess()
     }

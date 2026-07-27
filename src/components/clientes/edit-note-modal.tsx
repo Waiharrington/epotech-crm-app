@@ -12,6 +12,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Loader2, StickyNote, Save, Trash2 } from 'lucide-react'
+import { useConfirm } from '@/components/ui/confirm-dialog'
+import { toast } from 'sonner'
 
 interface EditNoteModalProps {
   note: { id: string; contenido: string }
@@ -21,6 +23,7 @@ interface EditNoteModalProps {
 
 export function EditNoteModal({ note, onClose, onSuccess }: EditNoteModalProps) {
   const supabase = createClient()
+  const confirmDialog = useConfirm()
   const [loading, setLoading] = useState(false)
   const [contenido, setContenido] = useState(note.contenido)
 
@@ -36,7 +39,7 @@ export function EditNoteModal({ note, onClose, onSuccess }: EditNoteModalProps) 
       .eq('id', note.id)
 
     if (error) {
-      alert('Error: ' + error.message)
+      toast.error('Error: ' + error.message)
     } else {
       onSuccess()
     }
@@ -44,8 +47,13 @@ export function EditNoteModal({ note, onClose, onSuccess }: EditNoteModalProps) 
   }
 
   const handleDelete = async () => {
-    if (!confirm('¿Estás seguro de que quieres eliminar esta nota?')) return
-    
+    const ok = await confirmDialog({
+      description: '¿Estás seguro de que quieres eliminar esta nota?',
+      variant: 'destructive',
+      confirmLabel: 'Eliminar',
+    })
+    if (!ok) return
+
     setLoading(true)
     const { error } = await (supabase as any)
       .from('notas_clientes')
@@ -53,7 +61,7 @@ export function EditNoteModal({ note, onClose, onSuccess }: EditNoteModalProps) 
       .eq('id', note.id)
 
     if (error) {
-      alert('Error: ' + error.message)
+      toast.error('Error: ' + error.message)
     } else {
       onSuccess()
     }

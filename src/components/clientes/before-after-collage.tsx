@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Download, RotateCcw, ImageIcon, Plus, Check, Loader2, X, ArrowLeftRight, ArrowUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Label } from '@/components/ui/label'
+import { toast } from 'sonner'
 
 interface Photo {
   id: string
@@ -98,7 +99,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
       link.href = canvas.toDataURL('image/png')
       link.click()
     } catch (err) {
-      alert('Error al generar imagen: ' + err)
+      toast.error('Error al generar imagen: ' + err)
     } finally {
       setGenerating(false)
     }

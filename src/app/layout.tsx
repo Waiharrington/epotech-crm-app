@@ -3,6 +3,7 @@ import { Inter, Caveat } from "next/font/google";
 import "./globals.css";
 import { MainLayout } from "@/components/layout/main-layout";
 import { Toaster } from "@/components/ui/sonner"
+import { ConfirmProvider } from "@/components/ui/confirm-dialog"
 
 const inter = Inter({
   variable: "--font-inter",
@@ -51,8 +52,10 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${caveat.variable} antialiased`}
       >
-        <MainLayout>{children}</MainLayout>
-        <Toaster />
+        <ConfirmProvider>
+          <MainLayout>{children}</MainLayout>
+          <Toaster />
+        </ConfirmProvider>
       </body>
     </html>
   );

@@ -23,9 +23,9 @@ import {
   Repeat,
   FileText,
   DollarSign,
-  ExternalLink as ExternalLinkIcon
+  ExternalLink as ExternalLinkIcon,
+  X
 } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import Link from 'next/link'
 import { PhotoGallery } from '@/components/clientes/photo-gallery'
 import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
@@ -37,12 +37,15 @@ import { EditNoteModal } from '@/components/clientes/edit-note-modal'
 import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
 import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { useConfirm } from '@/components/ui/confirm-dialog'
+import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
 type Cliente = Database['public']['Tables']['clientes']['Row']
 
 export default function ClienteProfilePage() {
   const params = useParams()
+  const confirmDialog = useConfirm()
   const router = useRouter()
   const id = params.id as string
   const supabase = createClient()
@@ -140,58 +143,93 @@ export default function ClienteProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="flex flex-col items-center justify-center h-screen bg-[#F0F5FA] gap-3">
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cargando cliente</p>
       </div>
     )
   }
 
   if (!cliente) {
     return (
-      <div className="p-8 text-center">
-        <h2 className="text-xl font-bold">Cliente no encontrado</h2>
-        <Button variant="link" asChild className="mt-4">
+      <div className="flex flex-col items-center justify-center h-screen bg-[#F0F5FA] p-8 text-center gap-2">
+        <h2 className="text-lg font-bold text-slate-800">Cliente no encontrado</h2>
+        <Button variant="link" asChild className="text-[#0097A7]">
           <Link href="/clientes">Volver al directorio</Link>
         </Button>
       </div>
     )
   }
 
+  const getInitials = (nombre: string, apellido: string) =>
+    `${nombre?.[0] ?? ''}${apellido?.[0] ?? ''}`.toUpperCase()
+
+  const tabTrigger = "!h-auto min-w-0 flex flex-col items-center justify-center text-center gap-1 !whitespace-normal px-1 py-2 text-[8.5px] md:text-[9.5px] leading-tight font-black uppercase tracking-wider rounded-xl transition-all disabled:pointer-events-none disabled:opacity-50 text-slate-400 hover:text-[#0097A7] hover:bg-slate-50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#00C9E0] data-[state=active]:to-[#0097A7] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:shadow-cyan-500/20"
+
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      {/* Profile Header */}
-      <header className="bg-card border-b p-6">
-        <div className="max-w-7xl mx-auto w-full">
-          <Button variant="ghost" className="mb-4 -ml-2" onClick={() => router.back()}>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Volver
-          </Button>
-          
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold tracking-tight">{cliente.nombre} {cliente.apellido}</h1>
-                <Badge variant={cliente.tipo_propiedad === 'comercial' ? 'secondary' : 'outline'} className="text-base py-1 px-3">
-                  {cliente.tipo_propiedad === 'comercial' ? 'Comercial' : 'Residencial'}
-                </Badge>
+    <div className="flex flex-col min-h-screen bg-[#F0F5FA] px-4.5 pb-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-5 xl:p-3.5 2xl:p-6 gap-3.5">
+      {/* Premium Dark Navy Header Banner */}
+      <header
+        className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-4 md:p-5 shrink-0 relative z-30 animate-dashboard-item shadow-xl"
+        style={{ animationDelay: '100ms' }}
+      >
+        <div className="relative z-10 flex flex-col gap-3">
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-1.5 text-[10px] font-bold text-slate-300 hover:text-[#00C9E0] transition-colors w-fit"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" /> Volver
+          </button>
+
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="h-12 w-12 rounded-xl flex items-center justify-center bg-gradient-to-tr from-[#00C9E0]/20 to-[#0097A7]/10 border border-[#00C9E0]/20 shrink-0">
+                <span className="text-sm font-black text-[#00C9E0]">
+                  {getInitials(cliente.nombre, cliente.apellido)}
+                </span>
               </div>
-              <div className="flex flex-wrap gap-4 text-muted-foreground">
-                <div className="flex items-center gap-1.5 focus:outline-none">
-                   <Phone className="h-4 w-4" />
-                   <span>{cliente.telefono}</span>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                    {cliente.nombre} {cliente.apellido}
+                  </h1>
+                  <Badge
+                    className={
+                      cliente.tipo_propiedad === 'comercial'
+                        ? 'h-5 px-2 rounded-lg text-[8.5px] font-black uppercase tracking-wider border bg-[#00C9E0]/15 text-[#00C9E0] border-[#00C9E0]/30 shadow-none'
+                        : 'h-5 px-2 rounded-lg text-[8.5px] font-black uppercase tracking-wider border bg-white/10 text-slate-200 border-white/15 shadow-none'
+                    }
+                  >
+                    {cliente.tipo_propiedad === 'comercial' ? 'Comercial' : 'Residencial'}
+                  </Badge>
                 </div>
-                <div className="flex items-center gap-1.5">
-                   <MapPin className="h-4 w-4" />
-                   <span>{cliente.ciudad}</span>
+                <div className="flex flex-wrap gap-3 mt-1 text-slate-300/80">
+                  <div className="flex items-center gap-1.5 text-[10px] font-medium">
+                    <Phone className="h-3 w-3 text-[#00C9E0]" />
+                    <span>{cliente.telefono}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[10px] font-medium">
+                    <MapPin className="h-3 w-3 text-[#00C9E0]" />
+                    <span>{cliente.ciudad}</span>
+                  </div>
                 </div>
               </div>
             </div>
-            
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => setShowEditModal(true)}>
-                <Edit className="mr-2 h-4 w-4" /> Editar
+
+            <div className="grid grid-cols-2 md:flex gap-2 shrink-0">
+              <Button
+                size="sm"
+                onClick={() => setShowEditModal(true)}
+                className="h-9 px-3 text-[10.5px] font-bold rounded-xl bg-white text-[#0B1E3F] hover:bg-slate-100 border-none shadow-md transition-all active:scale-[0.98]"
+              >
+                <Edit className="mr-1.5 h-3.5 w-3.5" /> Editar
               </Button>
-              <Button size="sm" onClick={() => setShowJobTypeSelector(true)}>
-                <Plus className="mr-2 h-4 w-4" /> Nuevo Servicio
+              <Button
+                size="sm"
+                onClick={() => setShowJobTypeSelector(true)}
+                className="h-9 px-3.5 text-[10.5px] font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98]"
+              >
+                <Plus className="mr-1.5 h-3.5 w-3.5" /> Nuevo Servicio
               </Button>
             </div>
           </div>
@@ -199,228 +237,217 @@ export default function ClienteProfilePage() {
       </header>
 
       {/* Profile Content */}
-      <main className="max-w-7xl mx-auto w-full p-4 md:p-6">
-        <Tabs defaultValue="datos" className="space-y-6">
-          <div className="overflow-x-auto pb-1">
-            <TabsList className="inline-flex h-12 items-center justify-start rounded-none border-b bg-transparent p-0 w-full md:w-auto">
-              <TabsTrigger 
-                value="datos" 
-                className="inline-flex items-center justify-center whitespace-nowrap px-6 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary rounded-none h-12"
-              >
-                <User className="mr-2 h-4 w-4" /> Datos
-              </TabsTrigger>
-              <TabsTrigger 
-                value="servicios" 
-                className="inline-flex items-center justify-center whitespace-nowrap px-6 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary rounded-none h-12"
-              >
-                <ArrowLeft className="mr-2 h-4 w-4 rotate-180" /> Servicios
-              </TabsTrigger>
-              <TabsTrigger 
-                value="fotos" 
-                className="inline-flex items-center justify-center whitespace-nowrap px-6 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary rounded-none h-12"
-              >
-                <Camera className="mr-2 h-4 w-4" /> Antes/Después
-              </TabsTrigger>
-              <TabsTrigger 
-                value="recurrentes" 
-                className="inline-flex items-center justify-center whitespace-nowrap px-6 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary rounded-none h-12"
-              >
-                <RotateCcw className="mr-2 h-4 w-4" /> Recurrentes
-              </TabsTrigger>
-              <TabsTrigger 
-                value="notas" 
-                className="inline-flex items-center justify-center whitespace-nowrap px-6 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary rounded-none h-12"
-              >
-                <StickyNote className="mr-2 h-4 w-4" /> Notas
-              </TabsTrigger>
-              <TabsTrigger 
-                value="cotizaciones" 
-                className="inline-flex items-center justify-center whitespace-nowrap px-6 py-3 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary rounded-none h-12"
-              >
-                <FileText className="mr-2 h-4 w-4" /> Cotizaciones
-              </TabsTrigger>
-            </TabsList>
-          </div>
+      <main className="flex flex-col gap-3.5 relative z-10">
+        <Tabs defaultValue="datos" className="!flex !flex-col gap-3.5">
+          <TabsList className="!h-auto !w-full grid grid-cols-3 md:grid-cols-6 bg-white rounded-2xl border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.02)] p-1.5 gap-1">
+            <TabsTrigger value="datos" className={tabTrigger}>
+              <User className="h-3.5 w-3.5" /> Datos
+            </TabsTrigger>
+            <TabsTrigger value="servicios" className={tabTrigger}>
+              <ArrowLeft className="h-3.5 w-3.5 rotate-180" /> Servicios
+            </TabsTrigger>
+            <TabsTrigger value="fotos" className={tabTrigger}>
+              <Camera className="h-3.5 w-3.5" /> Antes/Después
+            </TabsTrigger>
+            <TabsTrigger value="recurrentes" className={tabTrigger}>
+              <RotateCcw className="h-3.5 w-3.5" /> Recurrentes
+            </TabsTrigger>
+            <TabsTrigger value="notas" className={tabTrigger}>
+              <StickyNote className="h-3.5 w-3.5" /> Notas
+            </TabsTrigger>
+            <TabsTrigger value="cotizaciones" className={tabTrigger}>
+              <FileText className="h-3.5 w-3.5" /> Cotizaciones
+            </TabsTrigger>
+          </TabsList>
 
-          <TabsContent value="datos" className="space-y-6 animate-in fade-in duration-500">
-            <div className="grid gap-6 md:grid-cols-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Datos Personales</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-1 border-b pb-3">
-                    <span className="text-sm text-muted-foreground uppercase tracking-tight">Nombre Completo</span>
-                    <span className="text-sm font-medium text-right">{cliente.nombre} {cliente.apellido}</span>
+          <TabsContent value="datos" className="space-y-3.5 animate-in fade-in duration-500">
+            <div className="grid gap-3.5 md:grid-cols-2">
+              <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden">
+                <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-3.5 py-2.5 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+                  <h2 className="text-[10px] font-black text-white uppercase tracking-[0.15em]">Datos Personales</h2>
+                </div>
+                <div className="p-4 space-y-3">
+                  <div className="grid grid-cols-2 gap-1 border-b border-slate-50 pb-2.5">
+                    <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider">Nombre Completo</span>
+                    <span className="text-[11px] font-bold text-slate-700 text-right">{cliente.nombre} {cliente.apellido}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-1 border-b pb-3">
-                    <span className="text-sm text-muted-foreground uppercase tracking-tight">Teléfono</span>
-                    <span className="text-sm font-medium text-right">{cliente.telefono}</span>
+                  <div className="grid grid-cols-2 gap-1 border-b border-slate-50 pb-2.5">
+                    <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider">Teléfono</span>
+                    <span className="text-[11px] font-bold text-slate-700 text-right">{cliente.telefono}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-1 border-b pb-3">
-                    <span className="text-sm text-muted-foreground uppercase tracking-tight">Ciudad/Zona</span>
-                    <span className="text-sm font-medium text-right">{cliente.ciudad}</span>
+                  <div className="grid grid-cols-2 gap-1 border-b border-slate-50 pb-2.5">
+                    <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider">Ciudad/Zona</span>
+                    <span className="text-[11px] font-bold text-slate-700 text-right">{cliente.ciudad}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-1 border-b pb-3">
-                    <span className="text-sm text-muted-foreground uppercase tracking-tight">Fuente</span>
-                    <span className="text-sm font-medium text-right capitalize">{cliente.fuente_adq}</span>
+                  <div className="grid grid-cols-2 gap-1 border-b border-slate-50 pb-2.5">
+                    <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider">Fuente</span>
+                    <span className="text-[11px] font-bold text-slate-700 text-right capitalize">{cliente.fuente_adq}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-1">
-                    <span className="text-sm text-muted-foreground uppercase tracking-tight">Dirección</span>
-                    <span className="text-sm font-medium text-right">{cliente.direccion}</span>
+                    <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider">Dirección</span>
+                    <span className="text-[11px] font-bold text-slate-700 text-right">{cliente.direccion}</span>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Información de la Propiedad</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-1 border-b pb-3">
-                    <span className="text-sm text-muted-foreground uppercase tracking-tight">Tipo</span>
-                    <span className="text-sm font-medium text-right capitalize">{cliente.tipo_propiedad}</span>
+              <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden">
+                <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-3.5 py-2.5 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+                  <h2 className="text-[10px] font-black text-white uppercase tracking-[0.15em]">Información de la Propiedad</h2>
+                </div>
+                <div className="p-4 space-y-3">
+                  <div className="grid grid-cols-2 gap-1 border-b border-slate-50 pb-2.5">
+                    <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider">Tipo</span>
+                    <span className="text-[11px] font-bold text-slate-700 text-right capitalize">{cliente.tipo_propiedad}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-1 border-b pb-3">
-                    <span className="text-sm text-muted-foreground uppercase tracking-tight">Superficie</span>
-                    <span className="text-sm font-medium text-right">{cliente.metros_cuadrados} m² / {cliente.sqft} SQFT</span>
+                  <div className="grid grid-cols-2 gap-1 border-b border-slate-50 pb-2.5">
+                    <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider">Superficie</span>
+                    <span className="text-[11px] font-bold text-slate-700 text-right">{cliente.metros_cuadrados} m² / {cliente.sqft} SQFT</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-1 border-b pb-3">
-                    <span className="text-sm text-muted-foreground uppercase tracking-tight">Estilo de Piso</span>
-                    <span className="text-sm font-medium text-right">{cliente.estilo_piso || 'No definido'}</span>
+                  <div className="grid grid-cols-2 gap-1 border-b border-slate-50 pb-2.5">
+                    <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider">Estilo de Piso</span>
+                    <span className="text-[11px] font-bold text-slate-700 text-right">{cliente.estilo_piso || 'No definido'}</span>
                   </div>
-                   <div className="grid grid-cols-2 gap-1 border-b pb-3">
-                    <span className="text-sm text-muted-foreground uppercase tracking-tight">Niveles</span>
-                    <span className="text-sm font-medium text-right">{cliente.num_pisos} piso(s)</span>
+                  <div className="grid grid-cols-2 gap-1 border-b border-slate-50 pb-2.5">
+                    <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider">Niveles</span>
+                    <span className="text-[11px] font-bold text-slate-700 text-right">{cliente.num_pisos} piso(s)</span>
                   </div>
-                  <div className="space-y-1">
-                    <span className="text-sm text-muted-foreground uppercase tracking-tight">Observaciones</span>
-                    <p className="text-sm bg-muted/30 p-3 rounded-lg min-h-[60px]">{cliente.obs_propiedad || 'Sin observaciones.'}</p>
+                  <div className="space-y-1.5">
+                    <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider">Observaciones</span>
+                    <p className="text-[11px] font-medium text-slate-600 bg-slate-50/60 p-3 rounded-xl min-h-[60px]">{cliente.obs_propiedad || 'Sin observaciones.'}</p>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Notas Estratégicas</CardTitle>
-                <CardDescription>Oportunidades de servicios futuros identificadas por Sebastián.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm bg-primary/5 p-4 rounded-xl border border-primary/10 min-h-[100px]">
+
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden">
+              <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-3.5 py-2.5 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+                <h2 className="text-[10px] font-black text-white uppercase tracking-[0.15em]">Notas Estratégicas</h2>
+                <p className="text-[9px] text-slate-300/80 font-medium mt-0.5">Oportunidades de servicios futuros identificadas por Sebastián.</p>
+              </div>
+              <div className="p-4">
+                <p className="text-[11px] font-medium text-slate-600 bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 p-4 rounded-xl border border-[#0097A7]/10 min-h-[100px]">
                   {cliente.notas_estrategicas || 'No hay notas estratégicas registradas aún.'}
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="servicios" className="animate-in fade-in duration-500">
             {trabajos.length > 0 ? (
-              <div className="grid gap-4">
+              <div className="grid gap-2.5">
                 {trabajos.map((trabajo) => (
-                  <Card 
-                    key={trabajo.id} 
-                    className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]"
+                  <div
+                    key={trabajo.id}
+                    className="bg-white rounded-2xl border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/40 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer active:scale-[0.98] group"
                     onClick={() => setSelectedJob(trabajo)}
                   >
-                    <div className="flex items-center p-4">
+                    <div className="flex items-center p-3.5">
                       <div className={cn(
-                        "h-10 w-10 rounded-full flex items-center justify-center mr-4 shrink-0",
-                        trabajo.estado === 'completado' ? "bg-green-100 text-green-600" : "bg-blue-100 text-blue-600"
+                        "h-9 w-9 rounded-xl flex items-center justify-center mr-3 shrink-0 border transition-all",
+                        trabajo.estado === 'completado'
+                          ? "bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border-[#0097A7]/20 text-[#0097A7]"
+                          : "bg-slate-50 border-slate-100 text-slate-500 group-hover:bg-[#E6F9FB] group-hover:text-[#0097A7] group-hover:border-[#0097A7]/20"
                       )}>
-                        {trabajo.estado === 'completado' ? <Check className="h-5 w-5" /> : <Calendar className="h-5 w-5" />}
+                        {trabajo.estado === 'completado' ? <Check className="h-4 w-4" /> : <Calendar className="h-4 w-4" />}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
-                          <h4 className="font-semibold text-base truncate">
+                          <h4 className="font-bold text-[12px] text-slate-800 truncate group-hover:text-[#0097A7] transition-colors">
                             {trabajo.catalogo_servicios?.nombre || 'Servicio Personalizado'}
                           </h4>
-                          <Badge variant={trabajo.estado === 'completado' ? 'default' : 'outline'} className={cn(
-                            trabajo.estado === 'completado' ? "bg-green-500 hover:bg-green-600" : ""
+                          <Badge className={cn(
+                            "h-5 px-2 rounded-lg text-[8.5px] font-black uppercase tracking-wider border shadow-none shrink-0",
+                            trabajo.estado === 'completado'
+                              ? "bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 text-[#0097A7] border-[#0097A7]/20"
+                              : "bg-slate-50 text-slate-500 border-slate-200/80"
                           )}>
                             {trabajo.estado === 'completado' ? 'Completado' : 'Pendiente'}
                           </Badge>
                         </div>
-                        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-muted-foreground">
+                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-[10px] text-slate-400 font-medium">
                           <div className="flex items-center">
-                            <Calendar className="mr-1 h-3 w-3" />
+                            <Calendar className="mr-1 h-3 w-3 text-[#00C9E0]" />
                             {new Date(trabajo.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
                           </div>
-                          <div className="font-medium text-foreground">
+                          <div className="font-bold text-slate-700">
                             ${trabajo.precio_acordado?.toLocaleString()}
                           </div>
                         </div>
                       </div>
                     </div>
-                  </Card>
+                  </div>
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/10">
-                <ArrowLeft className="h-10 w-10 text-muted-foreground mb-4 rotate-180" />
-                <h3 className="font-semibold text-lg">Historial de Servicios</h3>
-                <p className="text-muted-foreground max-w-sm mt-1">
+              <div className="flex flex-col items-center justify-center p-10 text-center bg-white rounded-2xl border border-dashed border-slate-200">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mb-3">
+                  <ArrowLeft className="h-6 w-6 text-[#0097A7] rotate-180" />
+                </div>
+                <h3 className="font-bold text-sm text-slate-800">Historial de Servicios</h3>
+                <p className="text-[10.5px] text-slate-400 font-medium max-w-sm mt-1">
                   Aún no hay servicios registrados para este cliente. Comienza agendando uno nuevo.
                 </p>
-                <Button variant="outline" className="mt-4" onClick={() => setShowJobTypeSelector(true)}>
-                  <Plus className="mr-2 h-4 w-4" /> Nuevo Servicio
+                <Button onClick={() => setShowJobTypeSelector(true)} className="mt-4 h-8 px-3.5 text-[10px] font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
+                  <Plus className="mr-1.5 h-3.5 w-3.5" /> Nuevo Servicio
                 </Button>
               </div>
             )}
           </TabsContent>
 
           <TabsContent value="fotos" className="animate-in fade-in duration-500">
-             <div className="space-y-8">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h3 className="text-lg font-bold">Galería de Trabajos</h3>
-                        <p className="text-sm text-muted-foreground">Documenta el progreso y genera comparativas.</p>
-                    </div>
+             <div className="space-y-3.5">
+                <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.02)] px-4 py-3">
+                    <h3 className="text-[12px] font-bold text-slate-800">Galería de Trabajos</h3>
+                    <p className="text-[10.5px] text-slate-400 font-medium">Documenta el progreso y genera comparativas.</p>
                 </div>
-                
+
                 <PhotoGallery clientId={id} />
              </div>
           </TabsContent>
 
           <TabsContent value="recurrentes" className="animate-in fade-in duration-500">
              {planes.length > 0 ? (
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-3.5 sm:grid-cols-2">
                    {planes.map(plan => (
-                      <Card key={plan.id} className="overflow-hidden border-primary/10 shadow-sm hover:shadow-md transition-all">
-                         <div className="bg-primary/5 p-4 border-b border-primary/10 flex justify-between items-start">
-                            <div className="flex items-center gap-3">
-                               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                                  <Repeat className="h-5 w-5 text-primary" />
+                      <div key={plan.id} className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden hover:border-[#0097A7]/30 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] transition-all duration-300">
+                         <div className="bg-gradient-to-tr from-[#E6F9FB]/60 to-[#E6F9FB]/20 p-3.5 border-b border-[#0097A7]/10 flex justify-between items-start">
+                            <div className="flex items-center gap-2.5">
+                               <div className="h-8 w-8 rounded-xl bg-white border border-[#0097A7]/15 flex items-center justify-center shrink-0">
+                                  <Repeat className="h-4 w-4 text-[#0097A7]" />
                                </div>
                                <div>
-                                  <h4 className="font-bold text-primary">{plan.catalogo_servicios?.nombre || 'Servicio'}</h4>
-                                  <Badge variant="outline" className="text-[10px] uppercase bg-white">{plan.frecuencia}</Badge>
+                                  <h4 className="font-bold text-[12px] text-[#0097A7]">{plan.catalogo_servicios?.nombre || 'Servicio'}</h4>
+                                  <Badge className="h-5 px-2 rounded-lg text-[8.5px] font-black uppercase tracking-wider border bg-white text-slate-500 border-slate-200/80 shadow-none">{plan.frecuencia}</Badge>
                                </div>
                             </div>
-                            <Badge className={plan.activo ? "bg-green-100 text-green-700 hover:bg-green-100" : "bg-zinc-100 text-zinc-600 hover:bg-zinc-100"}>
+                            <Badge className={cn(
+                              "h-5 px-2 rounded-lg text-[8.5px] font-black uppercase tracking-wider border shadow-none",
+                              plan.activo
+                                ? "bg-emerald-50 text-emerald-600 border-emerald-200"
+                                : "bg-slate-100 text-slate-500 border-slate-200"
+                            )}>
                                {plan.activo ? 'Activo' : 'Pausado'}
                             </Badge>
                          </div>
-                         <CardContent className="p-4 space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
+                         <div className="p-3.5 space-y-3">
+                            <div className="grid grid-cols-2 gap-3">
                                <div className="space-y-1">
-                                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Próxima Visita</p>
-                                  <p className="font-bold flex items-center gap-2">
-                                     <Calendar className="h-4 w-4 text-primary" />
+                                  <p className="text-[8.5px] font-extrabold text-slate-400 uppercase tracking-wider">Próxima Visita</p>
+                                  <p className="text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+                                     <Calendar className="h-3.5 w-3.5 text-[#00C9E0]" />
                                      {new Date(plan.proxima_visita).toLocaleDateString()}
                                   </p>
                                </div>
                                <div className="space-y-1">
-                                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Monto Estimado</p>
-                                  <p className="font-bold text-green-600">${plan.monto_estimado}</p>
+                                  <p className="text-[8.5px] font-extrabold text-slate-400 uppercase tracking-wider">Monto Estimado</p>
+                                  <p className="text-[11px] font-bold text-emerald-600">${plan.monto_estimado}</p>
                                </div>
                             </div>
-                            
-                            <div className="pt-3 border-t flex gap-2">
-                               <Button 
-                                 variant="outline" 
-                                 size="sm" 
-                                 className="flex-1 h-8 text-xs"
+
+                            <div className="pt-2.5 border-t border-slate-50 flex gap-2">
+                               <Button
+                                 size="sm"
+                                 className="flex-1 h-8 text-[10px] font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
                                  onClick={() => {
                                     setSelectedPlan(plan)
                                     setShowEditPlanModal(true)
@@ -428,10 +455,9 @@ export default function ClienteProfilePage() {
                                >
                                  Editar Plan
                                </Button>
-                               <Button 
-                                 variant="secondary" 
-                                 size="sm" 
-                                 className="flex-1 h-8 text-xs"
+                               <Button
+                                 size="sm"
+                                 className="flex-1 h-8 text-[10px] font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]"
                                  onClick={() => {
                                     setRecurringJobData({
                                        cliente_id: id,
@@ -446,15 +472,17 @@ export default function ClienteProfilePage() {
                                  Agendar Ahora
                                </Button>
                             </div>
-                         </CardContent>
-                      </Card>
+                         </div>
+                      </div>
                    ))}
                 </div>
              ) : (
-                <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/10">
-                  <RotateCcw className="h-10 w-10 text-muted-foreground mb-4" />
-                  <h3 className="font-semibold text-lg">Planes Recurrentes</h3>
-                  <p className="text-muted-foreground max-w-sm mt-1">
+                <div className="flex flex-col items-center justify-center p-10 text-center bg-white rounded-2xl border border-dashed border-slate-200">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mb-3">
+                    <RotateCcw className="h-6 w-6 text-[#0097A7]" />
+                  </div>
+                  <h3 className="font-bold text-sm text-slate-800">Planes Recurrentes</h3>
+                  <p className="text-[10.5px] text-slate-400 font-medium max-w-sm mt-1">
                     Visualiza los servicios que se repiten periódicamente.
                   </p>
                 </div>
@@ -462,53 +490,51 @@ export default function ClienteProfilePage() {
           </TabsContent>
 
           <TabsContent value="notas" className="animate-in fade-in duration-500">
-             <div className="flex items-center justify-between mb-6">
+             <div className="flex items-center justify-between mb-3.5">
                 <div>
-                   <h3 className="text-lg font-bold">Bitácora de Notas</h3>
-                   <p className="text-sm text-muted-foreground">Registros y observaciones internas del cliente.</p>
+                   <h3 className="text-[13px] font-bold text-slate-800">Bitácora de Notas</h3>
+                   <p className="text-[10.5px] text-slate-400 font-medium">Registros y observaciones internas del cliente.</p>
                 </div>
-                <Button onClick={() => setShowAddNoteModal(true)}>
-                   <Plus className="mr-2 h-4 w-4" /> Nueva Nota
+                <Button onClick={() => setShowAddNoteModal(true)} className="h-8 px-3.5 text-[10px] font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
+                   <Plus className="mr-1.5 h-3.5 w-3.5" /> Nueva Nota
                 </Button>
              </div>
 
              {notas.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-2.5">
                    {notas.map(nota => (
-                      <Card key={nota.id} className="bg-amber-50/30 border-amber-200/50 group">
-                         <CardContent className="p-5">
+                      <div key={nota.id} className="bg-gradient-to-tr from-amber-50/60 to-amber-50/20 rounded-2xl border border-amber-200/50 group p-4">
                             <div className="flex justify-between items-start mb-2">
-                               <div className="flex items-center gap-2 text-amber-800/60">
-                                  <StickyNote className="h-4 w-4" />
-                                  <span className="text-[10px] font-bold uppercase tracking-wider">
+                               <div className="flex items-center gap-1.5 text-amber-700/70">
+                                  <StickyNote className="h-3.5 w-3.5" />
+                                  <span className="text-[9px] font-extrabold uppercase tracking-wider">
                                      {new Date(nota.created_at).toLocaleString()}
                                   </span>
                                 </div>
-                                <Button 
-                                  variant="ghost" 
-                                  size="icon" 
-                                  className="h-8 w-8 text-amber-800/40 hover:text-amber-800 hover:bg-amber-100 opacity-0 group-hover:opacity-100 transition-opacity"
+                                <button
+                                  className="h-7 w-7 rounded-lg flex items-center justify-center text-amber-700/40 hover:text-amber-800 hover:bg-amber-100 opacity-0 group-hover:opacity-100 transition-all"
                                   onClick={() => {
                                      setSelectedNote(nota)
                                      setShowEditNoteModal(true)
                                   }}
                                 >
-                                   <Edit className="h-4 w-4" />
-                                </Button>
+                                   <Edit className="h-3.5 w-3.5" />
+                                </button>
                             </div>
-                            <p className="text-sm whitespace-pre-wrap text-zinc-800">{nota.contenido}</p>
-                         </CardContent>
-                      </Card>
+                            <p className="text-[11.5px] whitespace-pre-wrap text-slate-700 font-medium">{nota.contenido}</p>
+                      </div>
                    ))}
                 </div>
              ) : (
-                <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/10">
-                  <StickyNote className="h-10 w-10 text-muted-foreground mb-4" />
-                  <h3 className="font-semibold text-lg">Notas Adicionales</h3>
-                  <p className="text-muted-foreground max-w-sm mt-1">
+                <div className="flex flex-col items-center justify-center p-10 text-center bg-white rounded-2xl border border-dashed border-slate-200">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mb-3">
+                    <StickyNote className="h-6 w-6 text-[#0097A7]" />
+                  </div>
+                  <h3 className="font-bold text-sm text-slate-800">Notas Adicionales</h3>
+                  <p className="text-[10.5px] text-slate-400 font-medium max-w-sm mt-1">
                     Agrega comentarios o recordatorios específicos para este cliente.
                   </p>
-                  <Button variant="outline" className="mt-4" onClick={() => setShowAddNoteModal(true)}>
+                  <Button onClick={() => setShowAddNoteModal(true)} className="mt-4 h-8 px-3.5 text-[10px] font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
                      Comenzar a anotar
                   </Button>
                 </div>
@@ -516,35 +542,34 @@ export default function ClienteProfilePage() {
           </TabsContent>
 
           <TabsContent value="cotizaciones" className="animate-in fade-in duration-500">
-             <div className="flex items-center justify-between mb-6">
+             <div className="flex items-center justify-between mb-3.5">
                 <div>
-                   <h3 className="text-lg font-bold">Cotizaciones del Cliente</h3>
-                   <p className="text-sm text-muted-foreground">Historial de presupuestos y propuestas enviadas.</p>
+                   <h3 className="text-[13px] font-bold text-slate-800">Cotizaciones del Cliente</h3>
+                   <p className="text-[10.5px] text-slate-400 font-medium">Historial de presupuestos y propuestas enviadas.</p>
                 </div>
                 <Link href="/cotizaciones">
-                   <Button variant="outline" size="sm">
-                      <ExternalLinkIcon className="mr-2 h-3 w-3" /> Ir a Cotizaciones
+                   <Button className="h-8 px-3 text-[10px] font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]">
+                      <ExternalLinkIcon className="mr-1.5 h-3 w-3" /> Ir a Cotizaciones
                    </Button>
                 </Link>
              </div>
 
              {cotizaciones.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                    {cotizaciones.map(c => (
-                      <Card key={c.id} className="group hover:shadow-md transition-shadow">
-                         <CardContent className="p-4">
+                      <div key={c.id} className="bg-white rounded-2xl border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/40 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] transition-all duration-300 group p-3.5">
                             <div className="flex items-center justify-between">
-                               <div className="flex items-center gap-4">
-                                  <div className="bg-primary/10 rounded-lg p-2.5">
-                                     <FileText className="h-5 w-5 text-primary" />
+                               <div className="flex items-center gap-3">
+                                  <div className="bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 rounded-xl p-2.5">
+                                     <FileText className="h-4.5 w-4.5 text-[#0097A7]" />
                                   </div>
                                   <div>
-                                     <p className="font-bold text-sm">#{c.id.substring(0, 8).toUpperCase()}</p>
-                                     <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                                     <p className="font-bold text-[11.5px] text-slate-800">#{c.id.substring(0, 8).toUpperCase()}</p>
+                                     <p className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider">
                                         {new Date(c.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
                                      </p>
                                      {c.items_detalle && (
-                                        <p className="text-[10px] text-muted-foreground mt-0.5">
+                                        <p className="text-[9px] text-slate-400 font-medium mt-0.5">
                                            {(c.items_detalle as any[]).length} servicio{(c.items_detalle as any[]).length !== 1 ? 's' : ''}
                                         </p>
                                      )}
@@ -552,32 +577,35 @@ export default function ClienteProfilePage() {
                                </div>
                                <div className="flex items-center gap-3">
                                   <div className="text-right">
-                                     <p className="font-black text-lg text-primary">${c.monto_total?.toLocaleString()}</p>
+                                     <p className="font-black text-base text-[#0097A7]">${c.monto_total?.toLocaleString()}</p>
                                      {c.monto_descuento > 0 && (
-                                        <p className="text-[10px] text-muted-foreground">Desc: -${c.monto_descuento}</p>
+                                        <p className="text-[9px] text-slate-400 font-medium">Desc: -${c.monto_descuento}</p>
                                      )}
                                   </div>
-                                  <Badge variant={c.estado === 'aprobado' ? 'default' : 'secondary'} className={cn(
-                                     'capitalize text-[10px]',
-                                     c.estado === 'aprobado' && 'bg-green-500 hover:bg-green-600'
+                                  <Badge className={cn(
+                                     'h-5 px-2 rounded-lg text-[8.5px] font-black uppercase tracking-wider border shadow-none',
+                                     c.estado === 'aprobado'
+                                        ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
+                                        : 'bg-slate-50 text-slate-500 border-slate-200/80'
                                   )}>
                                      {c.estado}
                                   </Badge>
                                </div>
                             </div>
-                         </CardContent>
-                      </Card>
+                      </div>
                    ))}
                 </div>
              ) : (
-                <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/10">
-                  <FileText className="h-10 w-10 text-muted-foreground mb-4" />
-                  <h3 className="font-semibold text-lg">Sin Cotizaciones</h3>
-                  <p className="text-muted-foreground max-w-sm mt-1">
+                <div className="flex flex-col items-center justify-center p-10 text-center bg-white rounded-2xl border border-dashed border-slate-200">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mb-3">
+                    <FileText className="h-6 w-6 text-[#0097A7]" />
+                  </div>
+                  <h3 className="font-bold text-sm text-slate-800">Sin Cotizaciones</h3>
+                  <p className="text-[10.5px] text-slate-400 font-medium max-w-sm mt-1">
                     Este cliente aún no tiene cotizaciones registradas.
                   </p>
                   <Link href="/cotizaciones">
-                     <Button variant="outline" className="mt-4">
+                     <Button className="mt-4 h-8 px-3.5 text-[10px] font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
                         Crear Cotización
                      </Button>
                   </Link>
@@ -589,44 +617,64 @@ export default function ClienteProfilePage() {
 
       {showJobTypeSelector && (
         <Dialog open onOpenChange={() => setShowJobTypeSelector(false)}>
-          <DialogContent className="sm:max-w-[400px]">
-            <DialogHeader>
-              <DialogTitle>Tipo de Registro</DialogTitle>
-              <DialogDescription>
-                ¿El servicio ya fue realizado o se va a programar a futuro?
-              </DialogDescription>
+          <DialogContent showCloseButton={false} className="sm:max-w-[420px] p-0 gap-0 overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-[0_25px_60px_-12px_rgba(3,11,23,0.35)]">
+            <DialogHeader className="sidebar-premium-bg p-4 md:p-5 space-y-0 text-left relative">
+              <div className="relative z-10 flex items-center gap-2.5">
+                <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
+                  <Calendar className="h-4.5 w-4.5 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
+                </div>
+                <div className="min-w-0">
+                  <DialogTitle className="text-base font-bold tracking-tight text-white">Tipo de Registro</DialogTitle>
+                  <DialogDescription className="text-slate-300/80 text-[10px] mt-0.5 font-medium">
+                    ¿El servicio ya fue realizado o se va a programar a futuro?
+                  </DialogDescription>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowJobTypeSelector(false)}
+                className="absolute top-4 right-4 z-20 h-7 w-7 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
+                aria-label="Cerrar"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
             </DialogHeader>
-            <div className="flex flex-col gap-3 py-4">
-              <Button 
-                className="h-14 justify-start px-4 text-base" 
-                variant="outline"
+
+            <div className="flex flex-col gap-2.5 p-5">
+              <button
+                type="button"
+                className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 bg-white hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 active:scale-[0.98] text-left group"
                 onClick={() => {
                   setJobWizardState('proximo')
                   setShowJobTypeSelector(false)
                   setShowNewJobWizard(true)
                 }}
               >
-                <Calendar className="mr-3 h-5 w-5 text-blue-500" /> 
-                <div className="flex flex-col items-start">
-                  <span>Por Realizar</span>
-                  <span className="text-xs font-normal text-muted-foreground">Agendar para el futuro</span>
+                <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-400 group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 group-hover:text-[#0097A7] transition-all shrink-0">
+                  <Calendar className="h-4.5 w-4.5" />
                 </div>
-              </Button>
-              <Button 
-                className="h-14 justify-start px-4 text-base" 
-                variant="outline"
+                <div className="flex flex-col items-start">
+                  <span className="text-[11.5px] font-black text-slate-700 group-hover:text-[#0097A7] transition-colors">Por Realizar</span>
+                  <span className="text-[9.5px] font-medium text-slate-400">Agendar para el futuro</span>
+                </div>
+              </button>
+              <button
+                type="button"
+                className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98] text-left"
                 onClick={() => {
                   setJobWizardState('completado')
                   setShowJobTypeSelector(false)
                   setShowNewJobWizard(true)
                 }}
               >
-                <Check className="mr-3 h-5 w-5 text-green-500" /> 
-                <div className="flex flex-col items-start">
-                  <span>Ya Realizado</span>
-                  <span className="text-xs font-normal text-muted-foreground">Registrar servicio completado</span>
+                <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/15 border border-white/20 text-white backdrop-blur-md shrink-0">
+                  <Check className="h-4.5 w-4.5" />
                 </div>
-              </Button>
+                <div className="flex flex-col items-start">
+                  <span className="text-[11.5px] font-black text-white">Ya Realizado</span>
+                  <span className="text-[9.5px] font-medium text-white/70">Registrar servicio completado</span>
+                </div>
+              </button>
             </div>
           </DialogContent>
         </Dialog>
@@ -648,7 +696,7 @@ export default function ClienteProfilePage() {
               setCompletedJobToLog(job)
               setShowPostJobWizard(true)
             } else {
-              alert('¡Servicio agendado exitosamente!')
+              toast.success('¡Servicio agendado exitosamente!')
             }
           }} 
         />
@@ -664,7 +712,7 @@ export default function ClienteProfilePage() {
           onSuccess={() => {
             setShowPostJobWizard(false)
             setCompletedJobToLog(null)
-            alert('¡Registro completado guardado exitosamente!')
+            toast.success('¡Registro completado guardado exitosamente!')
           }}
         />
       )}
@@ -723,9 +771,14 @@ export default function ClienteProfilePage() {
             setShowEditJobModal(true)
           }}
           onArchive={async (job) => {
-            if (!confirm('¿Seguro que deseas archivar este trabajo?')) return
+            const ok = await confirmDialog({
+              description: '¿Seguro que deseas archivar este trabajo?',
+              variant: 'destructive',
+              confirmLabel: 'Archivar',
+            })
+            if (!ok) return
             const { error } = await (supabase as any).from('trabajos').update({ archivado: true }).eq('id', job.id)
-            if (error) alert('Error: ' + error.message)
+            if (error) toast.error('Error: ' + error.message)
             else {
               setSelectedJob(null)
               fetchTrabajos()

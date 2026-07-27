@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
+import { toast } from 'sonner'
 import {
   Dialog,
   DialogContent,
@@ -183,7 +184,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
     }
 
     if (jobError) {
-      alert('Error: ' + jobError.message)
+      toast.error('Error: ' + jobError.message)
       setLoading(false)
       return
     }
@@ -318,7 +319,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
       .upload(filePath, file)
 
     if (uploadError) {
-      alert('Error al subir imagen: ' + uploadError.message)
+      toast.error('Error al subir imagen: ' + uploadError.message)
       return
     }
 
@@ -340,7 +341,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
       .select()
 
     if (dbError) {
-      alert('Error al guardar datos: ' + dbError.message)
+      toast.error('Error al guardar datos: ' + dbError.message)
     } else {
       setUploadedPhotos([...uploadedPhotos, photoData[0]])
     }

@@ -14,6 +14,8 @@ import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 import { JobList } from '@/components/trabajos/job-list'
 import { PostJobWizard } from '@/components/trabajos/post-job-wizard'
 import Link from 'next/link'
+import { useConfirm } from '@/components/ui/confirm-dialog'
+import { toast } from 'sonner'
 
 import { useSearchParams } from 'next/navigation'
 
@@ -24,6 +26,7 @@ type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
 
 function TrabajosContent() {
   const supabase = createClient()
+  const confirmDialog = useConfirm()
   const searchParams = useSearchParams()
   const [trabajos, setTrabajos] = useState<TrabajoWithDetails[]>([])
   const [loading, setLoading] = useState(true)
@@ -47,7 +50,7 @@ function TrabajosContent() {
       .eq('id', job.id)
 
     if (error) {
-      alert('Error al actualizar el estado: ' + error.message)
+      toast.error('Error al actualizar el estado: ' + error.message)
     } else {
       fetchTrabajos()
     }
@@ -84,7 +87,12 @@ function TrabajosContent() {
   }
 
   const handleArchive = async (job: TrabajoWithDetails) => {
-    if (!confirm('¿Seguro que deseas archivar este trabajo? Dejará de aparecer en el Centro de Operaciones principal.')) return
+    const ok = await confirmDialog({
+      description: '¿Seguro que deseas archivar este trabajo? Dejará de aparecer en el Centro de Operaciones principal.',
+      variant: 'destructive',
+      confirmLabel: 'Archivar',
+    })
+    if (!ok) return
 
     const { error } = await (supabase as any)
       .from('trabajos')
@@ -92,7 +100,7 @@ function TrabajosContent() {
       .eq('id', job.id)
 
     if (error) {
-      alert('Error al archivar: ' + error.message)
+      toast.error('Error al archivar: ' + error.message)
     } else {
       fetchTrabajos()
     }

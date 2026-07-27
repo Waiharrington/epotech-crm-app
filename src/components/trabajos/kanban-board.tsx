@@ -25,6 +25,7 @@ import { KanbanCard } from './kanban-card'
 import { PostJobWizard } from './post-job-wizard'
 import { Database } from '@/types/supabase'
 import { createClient } from '@/utils/supabase/client'
+import { toast } from 'sonner'
 
 type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
   clientes: { nombre: string; apellido: string; telefono: string }
@@ -111,7 +112,7 @@ export function KanbanBoard({ trabajos, onRefresh, onCardClick, onArchive }: Kan
       if (!error) {
         onRefresh()
       } else {
-        alert('Error al mover el trabajo: ' + error.message)
+        toast.error('Error al mover el trabajo: ' + error.message)
       }
     }
   }

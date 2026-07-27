@@ -15,6 +15,8 @@ import { Label } from '@/components/ui/label'
 import { Plus, Trash2, Edit, Check, X, Loader2, FolderOpen, AlertTriangle, Copy } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
+import { useConfirm } from '@/components/ui/confirm-dialog'
+import { toast } from 'sonner'
 
 interface CategoriasManagerModalProps {
   isOpen: boolean
@@ -24,6 +26,7 @@ interface CategoriasManagerModalProps {
 
 export function CategoriasManagerModal({ isOpen, onClose, onCategoriesChange }: CategoriasManagerModalProps) {
   const supabase = createClient()
+  const confirmDialog = useConfirm()
   const [categorias, setCategorias] = useState<{ id: string; nombre: string }[]>([])
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState(true)
@@ -93,7 +96,7 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
 
     setLoading(false)
     if (error) {
-      alert('Error al agregar categoría: ' + error.message)
+      toast.error('Error al agregar categoría: ' + error.message)
     } else {
       setNewCategory('')
       fetchCategorias()
@@ -116,7 +119,7 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
       .eq('id', id)
 
     if (updateError) {
-      alert('Error al actualizar categoría: ' + updateError.message)
+      toast.error('Error al actualizar categoría: ' + updateError.message)
       setLoading(false)
       return
     }
@@ -146,7 +149,7 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
       .eq('categoria', name)
 
     if (checkError) {
-      alert('Error al verificar uso de categoría: ' + checkError.message)
+      toast.error('Error al verificar uso de categoría: ' + checkError.message)
       return
     }
 
@@ -158,7 +161,12 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
         `\n\nSi la eliminas, estos servicios se reasignarán automáticamente a la categoría "otro". ¿Deseas continuar?`
     }
 
-    if (!confirm(confirmMessage)) return
+    const ok = await confirmDialog({
+      description: confirmMessage,
+      variant: 'destructive',
+      confirmLabel: 'Eliminar',
+    })
+    if (!ok) return
 
     setLoading(true)
 
@@ -170,7 +178,7 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
         .eq('categoria', name)
 
       if (reassignError) {
-        alert('Error al reasignar servicios: ' + reassignError.message)
+        toast.error('Error al reasignar servicios: ' + reassignError.message)
         setLoading(false)
         return
       }
@@ -184,7 +192,7 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
 
     setLoading(false)
     if (deleteError) {
-      alert('Error al eliminar categoría: ' + deleteError.message)
+      toast.error('Error al eliminar categoría: ' + deleteError.message)
     } else {
       fetchCategorias()
       onCategoriesChange()

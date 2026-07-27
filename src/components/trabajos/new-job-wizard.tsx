@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
+import { toast } from 'sonner'
 import {
   Dialog,
   DialogContent,
@@ -99,7 +100,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
     if (!error && data) {
       onSuccess(data[0])
     } else {
-      alert('Error: ' + error?.message)
+      toast.error('Error: ' + error?.message)
     }
   }
 

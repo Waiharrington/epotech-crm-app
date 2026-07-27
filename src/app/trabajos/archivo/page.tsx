@@ -10,6 +10,8 @@ import { Input } from '@/components/ui/input'
 import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
 import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 import Link from 'next/link'
+import { useConfirm } from '@/components/ui/confirm-dialog'
+import { toast } from 'sonner'
 
 type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
   clientes: { id: string; nombre: string; apellido: string; telefono: string; direccion: string | null }
@@ -18,6 +20,7 @@ type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
 
 export default function ArchivoPage() {
   const supabase = createClient()
+  const confirmDialog = useConfirm()
   const [trabajos, setTrabajos] = useState<TrabajoWithDetails[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -46,7 +49,10 @@ export default function ArchivoPage() {
   }
 
   const handleUnarchive = async (job: TrabajoWithDetails) => {
-    if (!confirm('¿Deseas restaurar este trabajo al Centro de Operaciones?')) return
+    const ok = await confirmDialog({
+      description: '¿Deseas restaurar este trabajo al Centro de Operaciones?',
+    })
+    if (!ok) return
 
     const { error } = await (supabase as any)
       .from('trabajos')
@@ -54,7 +60,7 @@ export default function ArchivoPage() {
       .eq('id', job.id)
 
     if (error) {
-      alert('Error: ' + error.message)
+      toast.error('Error: ' + error.message)
     } else {
       fetchArchivados()
     }

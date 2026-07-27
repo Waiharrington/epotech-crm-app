@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from '@/components/ui/textarea'
 import { Check, Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 
 interface FinanceModalProps {
   type: 'ingreso' | 'egreso'
@@ -53,7 +54,7 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
     if (!error) {
       onSuccess()
     } else {
-      alert('Error: ' + error.message)
+      toast.error('Error: ' + error.message)
     }
   }
 

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
+import { toast } from 'sonner'
 import {
   Dialog,
   DialogContent,
@@ -88,7 +89,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
       .eq('id', job.id)
 
     if (error) {
-      alert('Error al actualizar: ' + error.message)
+      toast.error('Error al actualizar: ' + error.message)
       setLoading(false)
       return
     }

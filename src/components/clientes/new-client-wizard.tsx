@@ -293,15 +293,15 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
                 <Label className={fieldLabel}>Tipo de Propiedad</Label>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { value: 'residencial', label: 'Residencial', icon: Home },
-                    { value: 'comercial', label: 'Comercial', icon: Building2 },
+                    { value: 'residencial' as const, label: 'Residencial', icon: Home },
+                    { value: 'comercial' as const, label: 'Comercial', icon: Building2 },
                   ].map((opt) => {
                     const active = formData.tipo_propiedad === opt.value
                     return (
                       <button
                         key={opt.value}
                         type="button"
-                        onClick={() => updateFields({ tipo_propiedad: opt.value })}
+                        onClick={() => updateFields({ tipo_propiedad: opt.value as "residencial" | "comercial" })}
                         className={cn(
                           "flex items-center gap-2 p-2.5 rounded-xl border transition-all duration-300 active:scale-[0.98] text-left",
                           active

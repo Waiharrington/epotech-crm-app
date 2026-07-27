@@ -328,10 +328,15 @@ body {
   scrollbar-color: rgba(0, 201, 224, 0.35) transparent;
 }
 
-/* Force body scroll locking when modal photo preview is open */
+/* Force body and layout scroll locking when modal dialogues/overlays are open */
+body[style*="pointer-events: none"], 
+body[data-scroll-locked],
+html:has(div[data-slot="dialog-content"]),
+body:has(div[data-slot="dialog-content"]),
 body.modal-open,
 body.modal-open html {
   overflow: hidden !important;
+  margin-right: 0 !important;
 }
 
 /* Premium smooth keyframes for modal overlay and content */

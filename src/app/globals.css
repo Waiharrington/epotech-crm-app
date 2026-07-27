@@ -368,17 +368,31 @@ body.modal-open html {
 }
 
 /* Apply CSS keyframe transitions to dialog classes matching Radix states */
+div[data-slot="dialog-overlay"],
+div[data-slot="dialog-content"] {
+  animation-duration: 200ms;
+  animation-fill-mode: forwards;
+}
+
 div[data-slot="dialog-overlay"][data-state="open"] {
-  animation: modal-fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-name: modal-fade-in;
+  animation-duration: 250ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 div[data-slot="dialog-overlay"][data-state="closed"] {
-  animation: modal-fade-out 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-name: modal-fade-out;
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 div[data-slot="dialog-content"][data-state="open"] {
-  animation: modal-zoom-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-name: modal-zoom-in;
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 div[data-slot="dialog-content"][data-state="closed"] {
-  animation: modal-zoom-out 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-name: modal-zoom-out;
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 

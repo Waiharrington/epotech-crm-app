@@ -133,7 +133,8 @@ export default function ClienteProfilePage() {
       .from('trabajos')
       .select(`
         *,
-        catalogo_servicios (nombre)
+        catalogo_servicios (nombre),
+        clientes (id, nombre, apellido, direccion)
       `)
       .eq('cliente_id', id)
       .order('fecha_servicio', { ascending: false })

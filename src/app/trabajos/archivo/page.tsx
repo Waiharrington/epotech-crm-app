@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft, Archive, Search, Filter } from 'lucide-react'
+import { ArrowLeft, Archive, Search, ArchiveRestore } from 'lucide-react'
 import { JobList } from '@/components/trabajos/job-list'
 import { Input } from '@/components/ui/input'
 import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
@@ -77,48 +76,86 @@ export default function ArchivoPage() {
   })
 
   return (
-    <div className="flex flex-col h-full bg-background overflow-hidden">
-      <header className="p-4 md:p-6 border-b bg-card">
-        <div className="flex items-center gap-4 max-w-7xl mx-auto w-full mb-6">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/trabajos">
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
-          </Button>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-              <Archive className="h-6 w-6 text-primary" /> Historial de Archivados
-            </h1>
-            <p className="text-muted-foreground text-sm">Consulta todos los trabajos completados que han sido retirados del tablero activo.</p>
-          </div>
-        </div>
+    <div className="flex flex-col min-h-screen xl:h-screen xl:max-h-screen bg-[#F0F5FA] px-4.5 pb-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-5 xl:p-3.5 2xl:p-6 gap-3.5 xl:gap-2.5 2xl:gap-4 relative xl:overflow-hidden">
 
-        <div className="relative max-w-7xl mx-auto w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar en el archivo..."
-            className="pl-10 h-10 bg-muted/30"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+      {/* Premium Dark Navy Header Banner */}
+      <header
+        className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-4 md:p-5 xl:p-3.5 2xl:p-5 shrink-0 relative z-30 animate-dashboard-item shadow-xl"
+        style={{ animationDelay: '100ms' }}
+      >
+        <div className="relative z-10 flex flex-col gap-3 xl:gap-2.5">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <Link
+                href="/trabajos"
+                className="h-9 w-9 xl:h-8 xl:w-8 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0 hover:bg-white/20 transition-all"
+              >
+                <ArrowLeft className="h-4.5 w-4.5 xl:h-4 xl:w-4 text-[#00C9E0]" />
+              </Link>
+              <div className="h-9 w-9 xl:h-8 xl:w-8 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
+                <Archive className="h-4.5 w-4.5 xl:h-4 xl:w-4 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
+              </div>
+              <div>
+                <h1 className="text-lg sm:text-xl xl:text-lg 2xl:text-2xl font-bold tracking-tight text-white">
+                  Historial de Archivados
+                </h1>
+                <p className="text-slate-300/80 text-[9.5px] xl:text-[9px] 2xl:text-xs mt-0.5 font-medium">
+                  Consulta todos los trabajos completados que han sido retirados del tablero activo.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="relative pt-0.5 border-t border-white/[0.06]">
+            <div className="relative mt-2">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#00C9E0]/70 pointer-events-none z-10" />
+              <Input
+                placeholder="Buscar en el archivo..."
+                className="pl-9 h-9 xl:h-8.5 text-[11px] xl:text-[10.5px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 focus-visible:border-[#00C9E0]/40 transition-all"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
       </header>
 
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-muted/5">
-        <div className="max-w-7xl mx-auto w-full pb-20">
+      <main className="flex flex-col xl:flex-1 xl:min-h-0 gap-3.5 xl:gap-2.5 2xl:gap-4 relative z-10">
+        {/* Archive Content Card */}
+        <div
+          className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col xl:flex-1 xl:min-h-0 animate-dashboard-item"
+          style={{ animationDelay: '200ms' }}
+        >
+          {/* Gradient section header */}
+          <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-3.5 xl:px-3 py-2.5 xl:py-2 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+            <div className="flex items-center gap-2">
+              <ArchiveRestore className="h-3.5 w-3.5 text-[#00C9E0]" />
+              <h2 className="text-[10px] xl:text-[9.5px] font-black text-white uppercase tracking-[0.15em]">
+                Archivados
+              </h2>
+            </div>
+            <span className="text-[9px] xl:text-[8.5px] font-bold text-slate-300/80 tabular-nums">
+              {filteredTrabajos.length} {filteredTrabajos.length === 1 ? 'trabajo' : 'trabajos'}
+            </span>
+          </div>
+
           {loading ? (
-            <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <div className="flex flex-col items-center justify-center flex-1 min-h-64 gap-3">
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cargando archivados...</p>
             </div>
           ) : (
-            <JobList 
-              trabajos={filteredTrabajos} 
-              onCardClick={(job) => setSelectedJob(job as TrabajoWithDetails)}
-              onUnarchive={(job) => handleUnarchive(job as TrabajoWithDetails)}
-            />
+            <div className="flex-1 overflow-y-auto pb-20">
+              <JobList 
+                trabajos={filteredTrabajos} 
+                onCardClick={(job) => setSelectedJob(job as TrabajoWithDetails)}
+                onUnarchive={(job) => handleUnarchive(job as TrabajoWithDetails)}
+              />
+            </div>
           )}
         </div>
-      </div>
+      </main>
 
       {selectedJob && (
         <JobDetailModal 

@@ -7,15 +7,13 @@ import { toast } from 'sonner'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Search, User, Trash2, Plus, Check, Loader2 } from 'lucide-react'
+import { Search, User, Trash2, Plus, Check, Loader2, X, FileText, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useDialogClose } from '@/hooks/use-dialog-close'
 
 type Cliente = Database['public']['Tables']['clientes']['Row']
 type Servicio = Database['public']['Tables']['catalogo_servicios']['Row']
@@ -36,6 +34,7 @@ interface NewQuoteWizardProps {
 
 export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }: NewQuoteWizardProps) {
   const supabase = createClient()
+  const { isOpen, isMounted, handleClose } = useDialogClose(onClose, 200, open)
   const [step, setStep] = useState(quoteToEdit ? 2 : 1)
   const [loading, setLoading] = useState(false)
   const [clients, setClients] = useState<Cliente[]>([])
@@ -111,143 +110,291 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
     }
   }
 
+  const filteredClients = clients.filter(c => 
+    `${c.nombre} ${c.apellido}`.toLowerCase().includes(searchClient.toLowerCase()) ||
+    c.telefono?.includes(searchClient)
+  )
+
+  if (!isMounted) return null
+
   return (
-    <Dialog open={open} onOpenChange={(val) => { if (!val) onClose() }}>
-      <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden bg-background">
-        <DialogHeader className="p-6 pb-0">
-          <DialogTitle>{quoteToEdit ? 'Editar Cotización' : 'Nueva Cotización'}</DialogTitle>
-          <DialogDescription>
-            {quoteToEdit ? 'Modifica los servicios y montos de esta propuesta.' : 'Construye una propuesta personalizada para tu cliente.'}
-          </DialogDescription>
-        </DialogHeader>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent showCloseButton={false} className="sm:max-w-[500px] max-h-[85vh] p-0 gap-0 border-0 shadow-[0_25px_60px_rgba(0,0,0,0.15)] rounded-3xl overflow-hidden flex flex-col sm:my-6">
+        <DialogTitle className="sr-only">{quoteToEdit ? 'Editar Cotización' : 'Nueva Cotización'}</DialogTitle>
+        
+        {/* Header con gradiente */}
+        <div className="relative overflow-hidden rounded-t-3xl shrink-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#00C9E0] via-[#0097A7] to-[#006570]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
+          <div className="relative px-5 py-4">
+            <div className="flex items-start justify-between">
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/60 mb-0.5">
+                  Presupuestos
+                </p>
+                <h3 className="text-base font-black text-white leading-tight flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  {quoteToEdit ? 'Editar Cotización' : 'Nueva Cotización'}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={handleClose}
+                className="h-8 w-8 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95 shrink-0 ml-3"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
 
-        <div className="p-6 max-h-[80vh] overflow-y-auto space-y-6">
+            {/* Step indicators */}
+            <div className="flex items-center gap-1.5 mt-3">
+              {[1, 2].map((s) => (
+                <div key={s} className="flex items-center gap-1.5 flex-1">
+                  <div className={cn(
+                    "h-5 w-5 rounded-full flex items-center justify-center text-[8px] font-black shrink-0 transition-all",
+                    step >= s 
+                      ? "bg-white text-[#0097A7]" 
+                      : "bg-white/20 text-white/60"
+                  )}>
+                    {step > s ? <Check className="h-2.5 w-2.5" /> : s}
+                  </div>
+                  {s < 2 && (
+                    <div className={cn(
+                      "h-0.5 flex-1 rounded-full transition-all",
+                      step > s ? "bg-white" : "bg-white/20"
+                    )} />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Contenido */}
+        <div className="flex-1 overflow-y-auto bg-[#F0F5FA] px-5 py-4">
+          {/* Step 1: Cliente */}
           {step === 1 ? (
-             <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
-                <Label>1. Selecciona el Cliente</Label>
-                <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input 
-                        placeholder="Buscar cliente..." 
-                        className="pl-10"
-                        value={searchClient}
-                        onChange={e => setSearchClient(e.target.value)}
-                    />
-                </div>
-                <div className="grid gap-2 overflow-y-auto max-h-[300px] pr-2">
-                    {clients.filter(c => `${c.nombre} ${c.apellido}`.toLowerCase().includes(searchClient.toLowerCase())).map(c => (
-                        <Button 
-                            key={c.id} 
-                            variant={selectedClient?.id === c.id ? 'default' : 'outline'} 
-                            className="justify-start h-auto py-3"
-                            onClick={() => setSelectedClient(c)}
-                        >
-                            <User className="mr-3 h-5 w-5" /> {c.nombre} {c.apellido}
-                        </Button>
-                    ))}
-                </div>
-                <Button className="w-full mt-4" disabled={!selectedClient} onClick={() => setStep(2)}>
-                    Continuar a Ítems
-                </Button>
-             </div>
+            <div className="space-y-2.5 animate-in fade-in duration-200">
+              <Label className="text-[8px] font-extrabold text-slate-400 uppercase tracking-wider">
+                Selecciona el Cliente
+              </Label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Input 
+                  placeholder="Buscar cliente..." 
+                  className="pl-10 bg-white border-slate-200 rounded-xl h-10 text-[12px] font-medium text-slate-700 placeholder:text-slate-300 hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-[#0097A7]/20 transition-all"
+                  value={searchClient}
+                  onChange={e => setSearchClient(e.target.value)}
+                />
+                {searchClient && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchClient('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 rounded-md flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                )}
+              </div>
+              <div className="space-y-1.5 max-h-[250px] overflow-y-auto">
+                {filteredClients.map(c => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    className={cn(
+                      "w-full flex items-center gap-2.5 p-2.5 rounded-xl border transition-all text-left",
+                      selectedClient?.id === c.id
+                        ? "bg-[#E6F9FB] border-[#0097A7]/40 shadow-sm"
+                        : "bg-white border-slate-200 hover:border-[#0097A7]/30 hover:shadow-sm"
+                    )}
+                    onClick={() => setSelectedClient(c)}
+                  >
+                    <div className={cn(
+                      "h-8 w-8 rounded-lg flex items-center justify-center shrink-0",
+                      selectedClient?.id === c.id
+                        ? "bg-gradient-to-br from-[#00C9E0] to-[#0097A7]"
+                        : "bg-slate-100"
+                    )}>
+                      <User className={cn(
+                        "h-4 w-4",
+                        selectedClient?.id === c.id ? "text-white" : "text-slate-400"
+                      )} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[11px] font-bold text-slate-800 truncate">{c.nombre} {c.apellido}</p>
+                      <p className="text-[9px] text-slate-400 font-medium">{c.telefono}</p>
+                    </div>
+                    {selectedClient?.id === c.id && (
+                      <Check className="h-4 w-4 text-[#0097A7] shrink-0" />
+                    )}
+                  </button>
+                ))}
+                {filteredClients.length === 0 && (
+                  <div className="text-center py-6 bg-white rounded-xl border-2 border-dashed border-slate-200">
+                    <p className="text-[11px] font-bold text-slate-500">No se encontraron clientes</p>
+                  </div>
+                )}
+              </div>
+            </div>
           ) : (
-            <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
-                <div className="flex items-center justify-between">
-                    <Label className="text-sm font-bold">2. Servicios a Cotizar</Label>
-                    <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">{selectedClient?.nombre} {selectedClient?.apellido}</span>
-                </div>
-                
-                {/* Available Services Grid */}
-                <div className="space-y-2">
-                    <span className="text-[10px] uppercase font-bold text-muted-foreground">Servicios Disponibles (Click para agregar)</span>
-                    <div className="grid grid-cols-2 gap-2 max-h-36 overflow-y-auto border rounded-lg p-2 bg-muted/20">
-                        {services.map(s => (
-                            <Button key={s.id} variant="secondary" size="sm" className="justify-start text-xs h-8 hover:bg-primary/10 hover:text-primary transition-colors truncate" onClick={() => addLineItem(s)}>
-                                <Plus className="mr-1.5 h-3.5 w-3.5 shrink-0" /> {s.nombre}
-                            </Button>
-                        ))}
+            /* Step 2: Servicios */
+            <div className="space-y-3 animate-in fade-in duration-200">
+              {/* Cliente seleccionado */}
+              {selectedClient && (
+                <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-[#0097A7]/20 shadow-sm">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-[#00C9E0] to-[#0097A7] flex items-center justify-center shrink-0">
+                      <User className="h-3.5 w-3.5 text-white" />
                     </div>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold text-slate-800 truncate">{selectedClient.nombre} {selectedClient.apellido}</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="px-2 py-1 text-[8px] font-bold uppercase tracking-wider text-[#0097A7] bg-[#E6F9FB] rounded-md hover:bg-[#00C9E0]/20 transition-all shrink-0"
+                  >
+                    Cambiar
+                  </button>
                 </div>
+              )}
 
-                {/* Added Services list */}
-                <div className="space-y-2">
-                    <span className="text-[10px] uppercase font-bold text-muted-foreground">Servicios en esta Cotización</span>
-                    <div className="border rounded-xl overflow-hidden flex flex-col min-h-[160px] max-h-[220px]">
-                        <div className="bg-muted p-2 text-[10px] font-black uppercase grid grid-cols-12 gap-2 text-muted-foreground border-b">
-                            <span className="col-span-6">Servicio</span>
-                            <span className="col-span-3 text-center">Cant</span>
-                            <span className="col-span-3 text-right">Precio</span>
-                        </div>
-                        <div className="flex-1 overflow-y-auto p-2 space-y-2 divide-y bg-card">
-                            {lineItems.map(item => (
-                                <div key={item.id} className="grid grid-cols-12 gap-2 items-center text-xs py-2 first:pt-0 last:pb-0">
-                                    <span className="col-span-6 font-semibold text-foreground truncate">{item.nombre}</span>
-                                    <div className="col-span-3 flex items-center justify-center gap-1.5">
-                                        <button 
-                                            type="button"
-                                            className="w-5 h-5 rounded-full border bg-muted flex items-center justify-center hover:bg-primary/10 hover:text-primary font-bold text-xs"
-                                            onClick={() => {
-                                                if (item.cantidad > 1) {
-                                                    setLineItems(lineItems.map(i => i.id === item.id ? { ...i, cantidad: i.cantidad - 1 } : i))
-                                                } else {
-                                                    setLineItems(lineItems.filter(i => i.id !== item.id))
-                                                }
-                                            }}
-                                        >
-                                            -
-                                        </button>
-                                        <span className="font-bold text-xs min-w-[12px] text-center">{item.cantidad}</span>
-                                        <button 
-                                            type="button"
-                                            className="w-5 h-5 rounded-full border bg-muted flex items-center justify-center hover:bg-primary/10 hover:text-primary font-bold text-xs"
-                                            onClick={() => setLineItems(lineItems.map(i => i.id === item.id ? { ...i, cantidad: i.cantidad + 1 } : i))}
-                                        >
-                                            +
-                                        </button>
-                                    </div>
-                                    <div className="col-span-3 flex items-center justify-end gap-1.5">
-                                        <span className="font-bold text-foreground">${(item.precio * item.cantidad)?.toLocaleString()}</span>
-                                        <button 
-                                            type="button"
-                                            className="text-destructive hover:bg-red-50 p-1 rounded transition-colors" 
-                                            onClick={() => setLineItems(lineItems.filter(i => i.id !== item.id))}
-                                        >
-                                            <Trash2 className="h-3.5 w-3.5" />
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                            {lineItems.length === 0 && <p className="text-center py-10 text-muted-foreground italic text-xs">Agrega servicios arriba</p>}
-                        </div>
-                    </div>
+              {/* Servicios disponibles */}
+              <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm">
+                <p className="text-[8px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">
+                  Servicios Disponibles
+                </p>
+                <div className="grid grid-cols-2 gap-1.5 max-h-[120px] overflow-y-auto">
+                  {services.map(s => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => addLineItem(s)}
+                      className="flex items-center gap-1.5 p-2 bg-[#F0F5FA] rounded-lg hover:bg-[#E6F9FB] hover:text-[#0097A7] transition-all text-left group"
+                    >
+                      <Plus className="h-3 w-3 text-slate-400 group-hover:text-[#0097A7] shrink-0" />
+                      <span className="text-[10px] font-semibold text-slate-600 group-hover:text-[#0097A7] truncate">{s.nombre}</span>
+                    </button>
+                  ))}
                 </div>
+              </div>
 
-                {/* Subtotals and save */}
-                <div className="space-y-3 bg-muted/30 p-4 rounded-xl border border-dashed">
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Subtotal</span>
-                        <span className="font-bold">${subtotal?.toLocaleString()}</span>
+              {/* Servicios agregados */}
+              <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm">
+                <p className="text-[8px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">
+                  Servicios en Cotización ({lineItems.length})
+                </p>
+                <div className="space-y-1.5 max-h-[150px] overflow-y-auto">
+                  {lineItems.map(item => (
+                    <div key={item.id} className="flex items-center gap-2 p-2 bg-[#F0F5FA] rounded-lg">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[10px] font-bold text-slate-700 truncate">{item.nombre}</p>
+                        <p className="text-[9px] text-slate-400">${item.precio.toLocaleString()} c/u</p>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (item.cantidad > 1) {
+                              setLineItems(lineItems.map(i => i.id === item.id ? { ...i, cantidad: i.cantidad - 1 } : i))
+                            } else {
+                              setLineItems(lineItems.filter(i => i.id !== item.id))
+                            }
+                          }}
+                          className="h-5 w-5 rounded-md bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-red-500 hover:border-red-300 transition-all"
+                        >
+                          -
+                        </button>
+                        <span className="text-[10px] font-black text-slate-700 min-w-[16px] text-center">{item.cantidad}</span>
+                        <button
+                          type="button"
+                          onClick={() => setLineItems(lineItems.map(i => i.id === item.id ? { ...i, cantidad: i.cantidad + 1 } : i))}
+                          className="h-5 w-5 rounded-md bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#0097A7] hover:border-[#0097A7]/40 transition-all"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <p className="text-[10px] font-black text-slate-700 w-14 text-right">${(item.precio * item.cantidad).toLocaleString()}</p>
+                      <button
+                        type="button"
+                        onClick={() => setLineItems(lineItems.filter(i => i.id !== item.id))}
+                        className="h-5 w-5 rounded-md flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
                     </div>
-                    <div className="flex justify-between items-center text-xs text-muted-foreground">
-                        <span>Descuento ($)</span>
-                        <Input 
-                            type="number" 
-                            className="w-24 h-8 text-right font-bold text-xs" 
-                            value={descuento || ''} 
-                            onChange={e => setDescuento(parseFloat(e.target.value) || 0)} 
-                        />
+                  ))}
+                  {lineItems.length === 0 && (
+                    <div className="text-center py-5 bg-white rounded-lg border-2 border-dashed border-slate-200">
+                      <p className="text-[10px] font-bold text-slate-400">Agrega servicios arriba</p>
                     </div>
-                    <div className="flex justify-between text-base font-black border-t pt-2 text-primary">
-                        <span>Total de la Propuesta</span>
-                        <span>${total?.toLocaleString()}</span>
-                    </div>
-                    <div className="flex gap-2 pt-2">
-                        <Button variant="outline" className="flex-1 text-xs h-9 font-semibold" onClick={() => setStep(1)}>Atrás</Button>
-                        <Button className="flex-1 text-xs h-9 font-semibold" onClick={handleSave} disabled={loading || lineItems.length === 0}>
-                            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Check className="mr-1.5 h-4 w-4" /> Guardar</>}
-                        </Button>
-                    </div>
+                  )}
                 </div>
+              </div>
+
+              {/* Totales */}
+              <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm space-y-2">
+                <div className="flex justify-between text-[10px] text-slate-500">
+                  <span>Subtotal</span>
+                  <span className="font-bold">${subtotal.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center text-[10px] text-slate-500">
+                  <span>Descuento ($)</span>
+                  <Input 
+                    type="number" 
+                    className="w-20 h-7 text-right font-bold text-[10px] bg-[#F0F5FA] border-slate-200 rounded-lg" 
+                    value={descuento || ''} 
+                    onChange={e => setDescuento(parseFloat(e.target.value) || 0)} 
+                  />
+                </div>
+                <div className="flex justify-between text-[13px] font-black text-[#0097A7] border-t border-slate-200 pt-2">
+                  <span>Total</span>
+                  <span>${total.toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="bg-white px-5 py-3 border-t border-slate-100 shrink-0">
+          {step === 1 ? (
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={handleClose}
+                className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
+              >
+                <X className="h-3 w-3" /> Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep(2)}
+                disabled={!selectedClient}
+                className="flex items-center gap-1.5 h-9 px-5 text-[10px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+              >
+                Continuar <ChevronRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setStep(1)}
+                className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
+              >
+                <ChevronLeft className="h-3 w-3" /> Atrás
+              </button>
+              <button
+                type="button"
+                onClick={handleSave}
+                disabled={loading || lineItems.length === 0}
+                className="flex items-center gap-2 h-9 px-5 text-[10px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+              >
+                {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
+                Guardar
+              </button>
             </div>
           )}
         </div>

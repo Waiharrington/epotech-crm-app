@@ -25,6 +25,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { Check, ChevronRight, ChevronLeft, User, Home, Calendar, Loader2, X, Building2, Eye, CalendarPlus } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useDialogClose } from '@/hooks/use-dialog-close'
 
 type ClienteInsert = Database['public']['Tables']['clientes']['Insert']
 
@@ -41,6 +42,7 @@ interface NewClientWizardProps {
 }
 
 export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWizardProps) {
+  const { isOpen, isMounted, handleClose } = useDialogClose(onClose, 200, open)
   const router = useRouter()
   const supabase = createClient()
   const [step, setStep] = useState(1)
@@ -123,8 +125,10 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
     })
   }
 
+  if (!isMounted) return null
+
   return (
-    <Dialog open={open} onOpenChange={(val) => { if (!val) onClose() }}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent
         showCloseButton={false}
         className="sm:max-w-[500px] p-0 gap-0 overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-[0_25px_60px_-12px_rgba(3,11,23,0.35)]"
@@ -147,7 +151,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
 
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="absolute top-4 right-4 z-20 h-7 w-7 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
             aria-label="Cerrar"
           >
@@ -434,7 +438,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
         <div className="px-5 md:px-6 py-3.5 bg-slate-50/60 border-t border-slate-100 flex items-center justify-between">
           <Button
             variant="ghost"
-            onClick={onClose}
+            onClick={handleClose}
             disabled={loading}
             className="h-9 px-3 text-[10px] font-bold rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100/80 transition-all active:scale-[0.98]"
           >

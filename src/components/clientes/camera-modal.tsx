@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button'
 import { Camera, RefreshCcw, X, Check, Loader2 } from 'lucide-react'
+import { useDialogClose } from '@/hooks/use-dialog-close'
 
 interface CameraModalProps {
   onCapture: (file: File) => void
@@ -16,6 +17,7 @@ interface CameraModalProps {
 }
 
 export function CameraModal({ onCapture, onClose }: CameraModalProps) {
+  const { isOpen, isMounted, handleClose } = useDialogClose(onClose)
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [stream, setStream] = useState<MediaStream | null>(null)
@@ -90,13 +92,15 @@ export function CameraModal({ onCapture, onClose }: CameraModalProps) {
     startCamera()
   }
 
+  if (!isMounted) return null
+
   return (
-    <Dialog open onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden bg-black text-white border-none">
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent showCloseButton={false} className="sm:max-w-[500px] p-0 overflow-hidden bg-black text-white border-none">
         <DialogHeader className="p-4 bg-zinc-900 border-b border-white/10">
           <DialogTitle className="text-white flex items-center justify-between">
             {capturedImage ? 'Confirmar Foto' : 'Cámara en Vivo'}
-            <Button variant="ghost" size="icon" onClick={onClose} className="text-white hover:bg-white/10">
+            <Button variant="ghost" size="icon" onClick={handleClose} className="text-white hover:bg-white/10">
               <X className="h-5 w-5" />
             </Button>
           </DialogTitle>

@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Clock, User, MapPin, ChevronRight, LayoutList, Calendar as CalendarIcon, Loader2, Plus, Send, TrendingUp, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Input } from '@/components/ui/input'
+import { DatePicker } from '@/components/ui/date-picker'
 import { cn } from '@/lib/utils'
 import { QuickScheduleWizard } from '@/components/agenda/quick-schedule-wizard'
 import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
@@ -204,17 +204,15 @@ export default function AgendaPage() {
               
               {period === 'custom' && (
                   <div className="flex items-center gap-2 animate-in slide-in-from-left-2 duration-300">
-                      <Input 
-                        type="date" 
+                      <DatePicker 
                         value={customRange.start} 
-                        onChange={(e) => setCustomRange(prev => ({ ...prev, start: e.target.value }))}
+                        onChange={(date) => setCustomRange(prev => ({ ...prev, start: date }))}
                         className="h-8 text-xs w-32"
                       />
                       <span className="text-xs text-muted-foreground">al</span>
-                      <Input 
-                        type="date" 
+                      <DatePicker 
                         value={customRange.end} 
-                        onChange={(e) => setCustomRange(prev => ({ ...prev, end: e.target.value }))}
+                        onChange={(date) => setCustomRange(prev => ({ ...prev, end: date }))}
                         className="h-8 text-xs w-32"
                       />
                   </div>

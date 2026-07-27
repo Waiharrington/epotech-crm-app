@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { DatePicker } from '@/components/ui/date-picker'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Plus, Check, Camera, Package, DollarSign, Loader2, Trash2, Calendar, Repeat, Search } from 'lucide-react'
@@ -26,6 +27,7 @@ import {
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { AddPhotoModal, PhotoMetadata } from '@/components/clientes/add-photo-modal'
+import { useDialogClose } from '@/hooks/use-dialog-close'
 
 type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
   clientes: { nombre: string; apellido: string }
@@ -40,6 +42,7 @@ interface PostJobWizardProps {
 
 export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
   const supabase = createClient()
+  const { isOpen, isMounted, handleClose } = useDialogClose(onClose)
   const [loading, setLoading] = useState(false)
   const [precioCobrado, setPrecioCobrado] = useState(job.precio_acordado || 0)
   const [notasPost, setNotasPost] = useState('')
@@ -347,8 +350,10 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
     }
   }
 
+  if (!isMounted) return null
+
   return (
-    <Dialog open onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden bg-background">
         <DialogHeader className="p-6 pb-0">
           <DialogTitle>Finalizar Trabajo</DialogTitle>
@@ -786,10 +791,9 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                     ) : (
                        <div className="space-y-2">
                           <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Próxima Visita</Label>
-                          <Input 
-                            type="date" 
+                           <DatePicker 
                             value={fechaProxima} 
-                            onChange={(e) => setFechaProxima(e.target.value)}
+                            onChange={setFechaProxima}
                             className="h-10"
                           />
                        </div>
@@ -802,12 +806,11 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                      <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                         <Calendar className="h-3 w-3" /> Fecha Tentativa Próximo Servicio (Seguimiento)
                      </Label>
-                     <Input 
-                       type="date" 
-                       value={fechaProxima} 
-                       onChange={(e) => setFechaProxima(e.target.value)}
-                       className="h-10"
-                     />
+                      <DatePicker 
+                        value={fechaProxima} 
+                        onChange={setFechaProxima}
+                        className="h-10"
+                      />
                   </div>
                )}
             </div>

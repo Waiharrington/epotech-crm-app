@@ -5,18 +5,15 @@ import { createClient } from '@/utils/supabase/client'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Plus, Trash2, Edit, Check, X, Loader2, FolderOpen, AlertTriangle, Copy } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
 import { useConfirm } from '@/components/ui/confirm-dialog'
 import { toast } from 'sonner'
+import { useDialogClose } from '@/hooks/use-dialog-close'
 
 interface CategoriasManagerModalProps {
   isOpen: boolean
@@ -26,6 +23,7 @@ interface CategoriasManagerModalProps {
 
 export function CategoriasManagerModal({ isOpen, onClose, onCategoriesChange }: CategoriasManagerModalProps) {
   const supabase = createClient()
+  const { isOpen, isMounted, handleClose } = useDialogClose(onClose, 200, isOpen)
   const confirmDialog = useConfirm()
   const [categorias, setCategorias] = useState<{ id: string; nombre: string }[]>([])
   const [loading, setLoading] = useState(false)
@@ -69,7 +67,6 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
     
     if (error) {
       console.error('Error fetching categories:', error)
-      // Check if table does not exist
       if (error.code === 'PGRST116' || error.message.includes('does not exist')) {
         setDbEnabled(false)
       }
@@ -112,7 +109,6 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
     }
 
     setLoading(true)
-    // 1. Update in categorias_servicios
     const { error: updateError } = await (supabase as any)
       .from('categorias_servicios')
       .update({ nombre: name })
@@ -124,7 +120,6 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
       return
     }
 
-    // 2. Update existing services using oldName to name
     const { error: servicesError } = await (supabase as any)
       .from('catalogo_servicios')
       .update({ categoria: name })
@@ -142,7 +137,6 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
   }
 
   const handleDeleteCategory = async (id: string, name: string) => {
-    // Check if services are using this category
     const { data: servicesUsing, error: checkError } = await (supabase as any)
       .from('catalogo_servicios')
       .select('id, nombre')
@@ -170,7 +164,6 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
 
     setLoading(true)
 
-    // 1. Reassign services to 'otro'
     if (count > 0) {
       const { error: reassignError } = await (supabase as any)
         .from('catalogo_servicios')
@@ -184,7 +177,6 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
       }
     }
 
-    // 2. Delete the category
     const { error: deleteError } = await (supabase as any)
       .from('categorias_servicios')
       .delete()
@@ -199,177 +191,213 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
     }
   }
 
+  if (!isMounted) return null
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[450px] max-h-[85vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <FolderOpen className="h-5 w-5 text-primary" />
-            Gestionar Categorías
-          </DialogTitle>
-          <DialogDescription>
-            Agrega, edita o elimina las categorías para tus servicios.
-          </DialogDescription>
-        </DialogHeader>
-
-        {!dbEnabled ? (
-          <div className="space-y-4 pt-2">
-            <div className="flex gap-3 p-3 rounded-lg border border-amber-200 bg-amber-50/50 text-amber-800 text-xs leading-relaxed">
-              <AlertTriangle className="h-5 w-5 shrink-0 text-amber-600" />
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent showCloseButton={false} className="sm:max-w-[450px] max-h-[85vh] p-0 gap-0 border-0 shadow-[0_25px_60px_rgba(0,0,0,0.15)] rounded-3xl overflow-hidden flex flex-col">
+        <DialogTitle className="sr-only">Gestionar Categorías</DialogTitle>
+        
+        {/* Header con gradiente */}
+        <div className="relative overflow-hidden rounded-t-3xl">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#00C9E0] via-[#0097A7] to-[#006570]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
+          <div className="absolute top-3 right-3 flex gap-1 opacity-20">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="w-1 h-1 rounded-full bg-white" />
+            ))}
+          </div>
+          <div className="relative px-6 py-5">
+            <div className="flex items-start justify-between">
               <div>
-                <p className="font-bold mb-1">¡Configuración Requerida!</p>
-                <p className="mb-2">
-                  La tabla de categorías aún no ha sido creada en la base de datos de tu Supabase o falta remover la restricción restrictiva.
+                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                  Catálogo
                 </p>
-                <p>
-                  Por favor, copia el siguiente script SQL y ejecútalo en tu **SQL Editor de Supabase** en el navegador para activar esta funcionalidad.
+                <h3 className="text-lg font-black text-white leading-tight flex items-center gap-2">
+                  <FolderOpen className="h-5 w-5" />
+                  Gestionar Categorías
+                </h3>
+                <p className="text-[11px] text-white/60 font-medium mt-1">
+                  Agrega, edita o elimina categorías de servicios
                 </p>
               </div>
-            </div>
-
-            <div className="relative rounded-lg border bg-zinc-900 p-3 text-[10px] text-zinc-300 font-mono overflow-x-auto max-h-[220px]">
-              <pre>{sqlCode}</pre>
-              <Button
-                variant="outline"
-                size="sm"
-                className="absolute top-2 right-2 h-7 px-2 text-[10px] border-zinc-700 hover:bg-zinc-800 text-zinc-300 hover:text-white"
-                onClick={handleCopySql}
+              <button
+                type="button"
+                onClick={handleClose}
+                className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95"
               >
-                <Copy className="h-3 w-3 mr-1" />
-                {copied ? 'Copiado' : 'Copiar SQL'}
-              </Button>
+                <X className="h-4 w-4" />
+              </button>
             </div>
-            
-            <Button className="w-full mt-2" variant="secondary" onClick={fetchCategorias}>
-              Reintentar Conexión
-            </Button>
           </div>
-        ) : fetching ? (
-          <div className="flex justify-center py-8">
-            <Loader2 className="h-6 w-6 animate-spin text-primary" />
-          </div>
-        ) : (
-          <div className="space-y-4 pt-3">
-            {/* Add Category Form */}
-            <form onSubmit={handleAddCategory} className="flex gap-2">
-              <div className="flex-1">
-                <Label htmlFor="category-name" className="sr-only">Nueva Categoría</Label>
-                <Input
-                  id="category-name"
-                  placeholder="Ej: Aspirado, Pulido..."
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  className="h-9 text-xs"
-                  disabled={loading}
-                />
-              </div>
-              <Button type="submit" size="sm" className="h-9 px-3" disabled={loading || !newCategory.trim()}>
-                {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-4 w-4 mr-1" />}
-                Agregar
-              </Button>
-            </form>
+        </div>
 
-            <div className="border rounded-lg overflow-hidden bg-muted/20">
-              <div className="px-3 py-2 bg-muted/40 border-b flex justify-between items-center text-[10px] uppercase font-bold text-muted-foreground tracking-wider">
-                <span>Nombre de Categoría</span>
-                <span>Acciones</span>
+        {/* Contenido */}
+        <div className="flex-1 overflow-y-auto bg-[#F0F5FA] px-6 py-5">
+          {!dbEnabled ? (
+            <div className="space-y-4">
+              <div className="flex gap-3 p-4 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50 text-amber-800">
+                <AlertTriangle className="h-5 w-5 shrink-0 text-amber-600 mt-0.5" />
+                <div>
+                  <p className="text-[12px] font-bold mb-1">¡Configuración Requerida!</p>
+                  <p className="text-[10px] leading-relaxed text-amber-700">
+                    La tabla de categorías aún no ha sido creada en la base de datos de tu Supabase o falta remover la restricción restrictiva.
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative rounded-xl border border-slate-200 bg-slate-900 p-3 text-[10px] text-slate-300 font-mono overflow-x-auto max-h-[220px]">
+                <pre>{sqlCode}</pre>
+                <button
+                  type="button"
+                  className="absolute top-2 right-2 h-7 px-2.5 text-[10px] font-bold border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg flex items-center gap-1.5 transition-all"
+                  onClick={handleCopySql}
+                >
+                  <Copy className="h-3 w-3" />
+                  {copied ? 'Copiado' : 'Copiar SQL'}
+                </button>
               </div>
               
-              <div className="divide-y max-h-[300px] overflow-y-auto">
-                {categorias.map((cat) => (
-                  <div
-                    key={cat.id}
-                    className={cn(
-                      "flex items-center justify-between px-3 py-2 text-sm transition-colors hover:bg-muted/10 group",
-                      editingId === cat.id && "bg-primary/5 hover:bg-primary/5"
-                    )}
-                  >
-                    {editingId === cat.id ? (
-                      <div className="flex items-center gap-1.5 flex-1 mr-4">
-                        <Input
-                          value={editingName}
-                          onChange={(e) => setEditingName(e.target.value)}
-                          className="h-8 text-xs font-medium py-1 px-2 focus-visible:ring-primary"
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') handleEditCategory(cat.id, cat.nombre)
-                            if (e.key === 'Escape') setEditingId(null)
-                          }}
-                          autoFocus
-                          disabled={loading}
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50 shrink-0"
-                          onClick={() => handleEditCategory(cat.id, cat.nombre)}
-                          disabled={loading || !editingName.trim()}
-                        >
-                          <Check className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-zinc-400 hover:text-zinc-600 hover:bg-muted shrink-0"
-                          onClick={() => setEditingId(null)}
-                          disabled={loading}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ) : (
-                      <>
-                        <span className="capitalize font-medium text-foreground">{cat.nombre}</span>
-                        <div className="flex items-center gap-1 opacity-80 sm:opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-7 w-7 text-muted-foreground hover:text-primary hover:bg-muted"
-                            onClick={() => {
-                              setEditingId(cat.id)
-                              setEditingName(cat.nombre)
+              <button 
+                type="button"
+                className="w-full h-10 text-[11px] font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:border-[#0097A7]/40 hover:bg-[#E6F9FB] transition-all" 
+                onClick={fetchCategorias}
+              >
+                Reintentar Conexión
+              </button>
+            </div>
+          ) : fetching ? (
+            <div className="flex flex-col items-center justify-center py-10">
+              <Loader2 className="h-8 w-8 animate-spin text-[#0097A7]" />
+              <p className="text-[12px] font-semibold text-slate-500 mt-3">Cargando categorías...</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {/* Add Category Form */}
+              <form onSubmit={handleAddCategory} className="flex gap-2">
+                <div className="flex-1">
+                  <Label htmlFor="category-name" className="sr-only">Nueva Categoría</Label>
+                  <Input
+                    id="category-name"
+                    placeholder="Ej: Aspirado, Pulido..."
+                    className="bg-white border-slate-200 rounded-xl h-11 text-[12px] font-medium text-slate-700 placeholder:text-slate-300 hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-[#0097A7]/20 transition-all"
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    disabled={loading}
+                  />
+                </div>
+                <button 
+                  type="submit" 
+                  className="h-11 px-4 flex items-center justify-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                  disabled={loading || !newCategory.trim()}
+                >
+                  {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-4 w-4" />}
+                  Agregar
+                </button>
+              </form>
+
+              {/* Categories List */}
+              <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                  <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Categoría</span>
+                  <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Acciones</span>
+                </div>
+                
+                <div className="divide-y divide-slate-100 max-h-[300px] overflow-y-auto">
+                  {categorias.map((cat) => (
+                    <div
+                      key={cat.id}
+                      className={cn(
+                        "flex items-center justify-between px-4 py-3 transition-colors hover:bg-slate-50 group",
+                        editingId === cat.id && "bg-[#E6F9FB]/50"
+                      )}
+                    >
+                      {editingId === cat.id ? (
+                        <div className="flex items-center gap-2 flex-1 mr-3">
+                          <Input
+                            value={editingName}
+                            onChange={(e) => setEditingName(e.target.value)}
+                            className="h-9 text-[12px] font-semibold bg-white border-[#0097A7] rounded-lg focus:ring-[#0097A7]/20"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleEditCategory(cat.id, cat.nombre)
+                              if (e.key === 'Escape') setEditingId(null)
                             }}
+                            autoFocus
+                            disabled={loading}
+                          />
+                          <button
+                            type="button"
+                            className="h-9 w-9 flex items-center justify-center text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-all shrink-0"
+                            onClick={() => handleEditCategory(cat.id, cat.nombre)}
+                            disabled={loading || !editingName.trim()}
+                          >
+                            <Check className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            className="h-9 w-9 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all shrink-0"
+                            onClick={() => setEditingId(null)}
                             disabled={loading}
                           >
-                            <Edit className="h-3.5 w-3.5" />
-                          </Button>
-                          
-                          {/* We prevent deleting the fallback 'otro' category because we use it as reassign option */}
-                          {cat.nombre !== 'otro' && (
-                            <Button
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <span className="capitalize font-bold text-[12px] text-slate-700">{cat.nombre}</span>
+                          <div className="flex items-center gap-1 opacity-70 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
                               type="button"
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/5"
-                              onClick={() => handleDeleteCategory(cat.id, cat.nombre)}
+                              className="h-8 w-8 flex items-center justify-center text-slate-400 hover:text-[#0097A7] hover:bg-[#E6F9FB] rounded-lg transition-all"
+                              onClick={() => {
+                                setEditingId(cat.id)
+                                setEditingName(cat.nombre)
+                              }}
                               disabled={loading}
                             >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
-                          )}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ))}
+                              <Edit className="h-3.5 w-3.5" />
+                            </button>
+                            
+                            {cat.nombre !== 'otro' && (
+                              <button
+                                type="button"
+                                className="h-8 w-8 flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                onClick={() => handleDeleteCategory(cat.id, cat.nombre)}
+                                disabled={loading}
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  ))}
 
-                {categorias.length === 0 && (
-                  <div className="p-6 text-center text-xs text-muted-foreground italic">
-                    No hay categorías creadas.
-                  </div>
-                )}
+                  {categorias.length === 0 && (
+                    <div className="p-8 text-center">
+                      <div className="h-10 w-10 rounded-xl bg-slate-100 flex items-center justify-center mx-auto mb-2">
+                        <FolderOpen className="h-5 w-5 text-slate-400" />
+                      </div>
+                      <p className="text-[11px] font-semibold text-slate-500">No hay categorías creadas</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-            
-            <div className="flex justify-end pt-2 border-t">
-              <Button type="button" variant="outline" size="sm" onClick={onClose}>
-                Cerrar
-              </Button>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="bg-white px-6 py-3 border-t border-slate-100 flex justify-center">
+          <button
+            type="button"
+            onClick={handleClose}
+            className="flex items-center gap-2 text-[10px] font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
+          >
+            <X className="h-3.5 w-3.5" /> Cerrar
+          </button>
+        </div>
       </DialogContent>
     </Dialog>
   )

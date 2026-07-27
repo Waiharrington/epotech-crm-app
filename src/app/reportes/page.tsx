@@ -5,7 +5,7 @@ import { createClient } from '@/utils/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { DatePicker } from '@/components/ui/date-picker'
 import {
   Select,
   SelectContent,
@@ -407,17 +407,15 @@ export default function ReportesPage() {
 
               {dateRange === 'personalizado' && (
                 <div className="flex items-center gap-1.5 animate-in slide-in-from-right-2 duration-200">
-                  <Input 
-                    type="date" 
+                  <DatePicker 
                     value={customStartDate} 
-                    onChange={e => setCustomStartDate(e.target.value)} 
+                    onChange={setCustomStartDate} 
                     className="h-9 w-[130px] text-xs py-1 px-2"
                   />
                   <span className="text-xs text-muted-foreground">a</span>
-                  <Input 
-                    type="date" 
+                  <DatePicker 
                     value={customEndDate} 
-                    onChange={e => setCustomEndDate(e.target.value)} 
+                    onChange={setCustomEndDate} 
                     className="h-9 w-[130px] text-xs py-1 px-2"
                   />
                 </div>

@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { DatePicker } from '@/components/ui/date-picker'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { 
@@ -456,11 +457,9 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                     <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1">
                       <CalendarIcon className="h-3.5 w-3.5 text-muted-foreground" /> Fecha de Aviso
                     </label>
-                    <Input 
-                      type="date" 
+                    <DatePicker 
                       value={newReminder.fecha}
-                      onChange={e => setNewReminder({...newReminder, fecha: e.target.value})}
-                      required
+                      onChange={(date) => setNewReminder({...newReminder, fecha: date})}
                     />
                   </div>
                   <div className="space-y-1.5">

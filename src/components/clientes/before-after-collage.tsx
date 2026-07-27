@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Download, RotateCcw, ImageIcon, Plus, Check, Loader2, X, ArrowLeftRight, ArrowUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Label } from '@/components/ui/label'
@@ -32,6 +32,19 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
   
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (showPicker) {
+      const originalBodyOverflow = document.body.style.overflow
+      const originalHtmlOverflow = document.documentElement.style.overflow
+      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = originalBodyOverflow
+        document.documentElement.style.overflow = originalHtmlOverflow
+      }
+    }
+  }, [showPicker])
 
   const handleSliderMove = (e: React.MouseEvent | React.TouchEvent) => {
     if (!isDragging || !containerRef.current) return
@@ -254,45 +267,78 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
       )}
 
       {/* Picker Modal */}
-      {showPicker && (
-        <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setShowPicker(null)}>
-           <Card className="w-full max-w-2xl bg-background max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle>Selecciona una foto</CardTitle>
-                  <CardDescription>Elige de las fotos que has subido para este cliente.</CardDescription>
+      {showPicker && typeof window !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] bg-[#030b17]/90 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-200" 
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+          onClick={() => setShowPicker(null)}
+        >
+           <div className="w-full max-w-2xl bg-[#F0F5FA] rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.25)] border border-slate-200/50 max-h-[85vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+              {/* Header */}
+              <div className="relative overflow-hidden rounded-t-3xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#00C9E0] via-[#0097A7] to-[#006570]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
+                <div className="relative px-6 py-5 flex items-center justify-between">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                      {showPicker === 'before' ? 'Foto Antes' : 'Foto Después'}
+                    </p>
+                    <h3 className="text-lg font-black text-white leading-tight">Selecciona una foto</h3>
+                    <p className="text-[11px] text-white/60 font-medium mt-1">Elige de las fotos que has subido para este cliente.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPicker(null)}
+                    className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => setShowPicker(null)}>
-                  <X className="h-4 w-4" />
-                </Button>
-              </CardHeader>
-              <CardContent className="overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-3 pb-6">
-                 {existingPhotos.length > 0 ? existingPhotos.map(photo => (
-                   <div 
-                    key={photo.id} 
-                    className="aspect-square rounded-xl overflow-hidden border-2 cursor-pointer hover:border-primary transition-all relative group"
-                    onClick={() => {
-                      if (showPicker === 'before') setBeforePhoto(photo)
-                      else setAfterPhoto(photo)
-                      setShowPicker(null)
-                    }}
-                   >
-                     <img src={photo.url_foto} className="w-full h-full object-cover" />
-                     <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <Check className="text-white h-8 w-8" />
-                     </div>
-                     <div className="absolute bottom-2 left-2 px-2 py-0.5 bg-black/60 rounded text-[8px] text-white uppercase font-bold">
-                        {photo.etiqueta}
-                     </div>
-                   </div>
-                 )) : (
-                   <div className="col-span-3 py-10 text-center text-muted-foreground italic">
-                     No hay fotos en la galería para seleccionar.
-                   </div>
-                 )}
-              </CardContent>
-           </Card>
-        </div>
+              </div>
+
+              {/* Photo Grid */}
+              <div className="flex-1 overflow-y-auto p-5">
+                {existingPhotos.length > 0 ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {existingPhotos.map(photo => (
+                      <button
+                        key={photo.id}
+                        type="button"
+                        className="aspect-square rounded-2xl overflow-hidden border-2 border-slate-200/60 cursor-pointer hover:border-[#0097A7] hover:shadow-[0_8px_20px_rgba(0,151,167,0.15)] hover:-translate-y-0.5 transition-all duration-300 relative group bg-white"
+                        onClick={() => {
+                          if (showPicker === 'before') setBeforePhoto(photo)
+                          else setAfterPhoto(photo)
+                          setShowPicker(null)
+                        }}
+                      >
+                        <img src={photo.url_foto} className="w-full h-full object-cover" alt={photo.etiqueta} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#030b17]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="h-10 w-10 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center shadow-lg">
+                            <Check className="text-[#0097A7] h-5 w-5" />
+                          </div>
+                        </div>
+                        <div className="absolute bottom-2 left-2 px-2.5 py-1 bg-[#030b17]/70 backdrop-blur-md rounded-lg text-[9px] text-white font-black uppercase tracking-wider shadow-md">
+                          {photo.etiqueta}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
+                    <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mb-3 shadow-[0_4px_16px_rgba(0,201,224,0.08)]">
+                      <ImageIcon className="h-6 w-6 text-[#0097A7]" />
+                    </div>
+                    <h3 className="text-sm font-bold text-slate-800 tracking-tight">Sin fotos disponibles</h3>
+                    <p className="text-[10.5px] text-slate-400 font-medium max-w-xs mt-1">
+                      No hay fotos en la galería para seleccionar. Sube imágenes primero.
+                    </p>
+                  </div>
+                )}
+              </div>
+           </div>
+        </div>,
+        document.body
       )}
 
       <canvas ref={canvasRef} className="hidden" />

@@ -12,7 +12,6 @@ import {
   MapPin,
   Trash2,
   Eye,
-  Download,
   Users,
   Building2,
   Home,
@@ -82,25 +81,6 @@ export default function ClientesPage() {
     }
   }
 
-  const exportToCSV = () => {
-    const headers = ['Nombre', 'Apellido', 'Teléfono', 'Ciudad', 'Dirección', 'Tipo']
-    const data = clientes.map(c => [
-      c.nombre,
-      c.apellido,
-      c.telefono,
-      c.ciudad || '',
-      c.direccion || '',
-      c.tipo_propiedad || ''
-    ])
-
-    const csvContent = [headers, ...data].map(e => e.join(',')).join('\n')
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-    const link = document.createElement('a')
-    link.href = URL.createObjectURL(blob)
-    link.download = `clientes_epotech_${new Date().toISOString().split('T')[0]}.csv`
-    link.click()
-  }
-
   const getInitials = (nombre: string, apellido: string) =>
     `${nombre?.[0] ?? ''}${apellido?.[0] ?? ''}`.toUpperCase()
 
@@ -129,15 +109,6 @@ export default function ClientesPage() {
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={exportToCSV}
-                className="hidden sm:flex h-8 xl:h-7.5 px-3 text-[10px] xl:text-[9.5px] font-bold rounded-xl bg-white/10 border border-white/15 text-slate-100 hover:bg-white/15 hover:text-white hover:border-[#00C9E0]/40 backdrop-blur-md transition-all active:scale-[0.98]"
-              >
-                <Download className="mr-1.5 h-3.5 w-3.5" />
-                Exportar
-              </Button>
               <Button
                 onClick={() => setShowWizard(true)}
                 size="sm"

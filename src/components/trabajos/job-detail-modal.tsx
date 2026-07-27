@@ -13,6 +13,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Calendar, DollarSign, PenTool, Droplets, FlaskConical, StickyNote, CheckCircle2, Clock, Edit, Package, Archive, User, MapPin, ExternalLink, TrendingUp, AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useDialogClose } from '@/hooks/use-dialog-close'
 
 type Trabajo = Database['public']['Tables']['trabajos']['Row'] & {
   catalogo_servicios: { nombre: string } | null
@@ -27,11 +28,14 @@ interface JobDetailModalProps {
 }
 
 export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailModalProps) {
+  const { isOpen, isMounted, handleClose } = useDialogClose(onClose)
   const isCompleted = job.estado === 'completado'
   const ganancia = (job.precio_cobrado || 0) - ((job as any).costo_variable || 0)
 
+  if (!isMounted) return null
+
   return (
-    <Dialog open onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[520px] max-h-[95vh] overflow-y-auto md:overflow-y-hidden p-0 gap-0 border-0 shadow-[0_25px_60px_rgba(0,0,0,0.15)] rounded-3xl bg-[#F0F5FA]">
         {/* ── Header con gradiente ── */}
         <div className="relative overflow-hidden rounded-t-3xl">

@@ -30,14 +30,14 @@ export function KanbanColumn({ id, title, jobs, onCardClick, onArchive }: Kanban
 
   return (
     <div className="flex flex-col h-full min-w-[280px] md:min-w-0">
-      <div className="flex items-center justify-between mb-4 px-2">
-        <h2 className="font-bold text-sm uppercase tracking-wider text-muted-foreground">{title}</h2>
-        <Badge variant="secondary" className="rounded-full px-2">{jobs.length}</Badge>
+      <div className="flex items-center justify-between mb-3 px-2">
+        <h2 className="font-black text-[10px] uppercase tracking-[0.15em] text-slate-400">{title}</h2>
+        <span className="text-[9px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full tabular-nums">{jobs.length}</span>
       </div>
       
       <div 
         ref={setNodeRef}
-        className="flex-1 rounded-xl bg-card/40 border border-dashed border-muted p-2 space-y-3 overflow-y-auto max-h-screen"
+        className="flex-1 min-h-0 rounded-xl bg-slate-50/80 border border-slate-100 p-2 space-y-2.5 overflow-y-auto"
       >
         <SortableContext id={id} items={jobs.map(j => j.id)} strategy={verticalListSortingStrategy}>
           {jobs.map((job) => (
@@ -46,8 +46,8 @@ export function KanbanColumn({ id, title, jobs, onCardClick, onArchive }: Kanban
         </SortableContext>
         
         {jobs.length === 0 && (
-           <div className="flex items-center justify-center h-24 text-xs text-muted-foreground italic text-center px-4">
-              Suelta un trabajo aquí para cambiar su estado.
+           <div className="flex items-center justify-center h-20 text-[10px] text-slate-300 font-medium text-center px-4 rounded-xl border border-dashed border-slate-200">
+              Suelta un trabajo aquí
            </div>
         )}
       </div>

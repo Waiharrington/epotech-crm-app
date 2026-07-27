@@ -58,8 +58,18 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
   // Lock body scroll when photo detail is open
   useEffect(() => {
     if (selectedPhoto) {
+      const originalBodyOverflow = document.body.style.overflow
+      const originalHtmlOverflow = document.documentElement.style.overflow
+      
       document.body.style.overflow = 'hidden'
-      return () => { document.body.style.overflow = '' }
+      document.documentElement.style.overflow = 'hidden'
+      document.body.classList.add('modal-open')
+      
+      return () => { 
+        document.body.style.overflow = originalBodyOverflow
+        document.documentElement.style.overflow = originalHtmlOverflow
+        document.body.classList.remove('modal-open')
+      }
     }
   }, [selectedPhoto])
 

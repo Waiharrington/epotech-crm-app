@@ -332,8 +332,12 @@ body {
 body[style*="pointer-events: none"], 
 body[data-scroll-locked],
 html:has(div[data-slot="dialog-content"]),
-body:has(div[data-slot="dialog-content"]) {
+body:has(div[data-slot="dialog-content"]),
+body.modal-open,
+body.modal-open html,
+body.modal-open main {
   overflow: hidden !important;
-  position: relative;
-  height: 100vh;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
 }

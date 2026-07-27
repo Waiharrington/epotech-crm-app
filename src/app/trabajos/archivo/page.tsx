@@ -124,7 +124,7 @@ export default function ArchivoPage() {
       <main className="flex flex-col xl:flex-1 xl:min-h-0 gap-3.5 xl:gap-2.5 2xl:gap-4 relative z-10">
         {/* Archive Content Card */}
         <div
-          className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col xl:flex-1 xl:min-h-0 animate-dashboard-item"
+          className="rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col xl:flex-1 xl:min-h-0 animate-dashboard-item bg-[#F0F5FA]"
           style={{ animationDelay: '200ms' }}
         >
           {/* Gradient section header */}

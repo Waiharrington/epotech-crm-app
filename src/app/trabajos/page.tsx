@@ -241,7 +241,7 @@ function TrabajosContent() {
 
         {/* Kanban/List Content Card */}
         <div
-          className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col xl:flex-1 xl:min-h-0 animate-dashboard-item"
+          className="rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col xl:flex-1 xl:min-h-0 animate-dashboard-item bg-[#F0F5FA]"
           style={{ animationDelay: '350ms' }}
         >
           {/* Gradient section header */}

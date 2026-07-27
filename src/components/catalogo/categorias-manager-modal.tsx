@@ -23,7 +23,7 @@ interface CategoriasManagerModalProps {
 
 export function CategoriasManagerModal({ isOpen, onClose, onCategoriesChange }: CategoriasManagerModalProps) {
   const supabase = createClient()
-  const { isOpen, isMounted, handleClose } = useDialogClose(onClose, 200, isOpen)
+  const { isOpen: dialogOpen, isMounted, handleClose } = useDialogClose(onClose, 200, isOpen)
   const confirmDialog = useConfirm()
   const [categorias, setCategorias] = useState<{ id: string; nombre: string }[]>([])
   const [loading, setLoading] = useState(false)
@@ -194,7 +194,7 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
   if (!isMounted) return null
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+    <Dialog open={dialogOpen} onOpenChange={handleClose}>
       <DialogContent showCloseButton={false} className="sm:max-w-[450px] max-h-[85vh] p-0 gap-0 border-0 shadow-[0_25px_60px_rgba(0,0,0,0.15)] rounded-3xl overflow-hidden flex flex-col">
         <DialogTitle className="sr-only">Gestionar Categorías</DialogTitle>
         

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { createClient } from '@/utils/supabase/client'
 import {
   Trash2,
@@ -53,6 +54,14 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
   useEffect(() => {
     fetchPhotos()
   }, [clientId])
+
+  // Lock body scroll when photo detail is open
+  useEffect(() => {
+    if (selectedPhoto) {
+      document.body.style.overflow = 'hidden'
+      return () => { document.body.style.overflow = '' }
+    }
+  }, [selectedPhoto])
 
   const fetchPhotos = async () => {
     setLoading(true)
@@ -217,11 +226,14 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
       )}
 
       {/* Image Modal Preview with Metadata */}
-      {selectedPhoto && (
-        <div className="fixed inset-0 z-50 bg-[#030b17]/95 backdrop-blur-xl flex flex-col md:flex-row items-stretch animate-in fade-in duration-300">
+      {selectedPhoto && typeof window !== 'undefined' && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] bg-[#030b17]/95 backdrop-blur-xl flex flex-col md:flex-row items-stretch animate-in fade-in duration-300 overflow-hidden"
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+        >
            <button
               type="button"
-              className="absolute top-4 right-4 z-50 h-8 w-8 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
+              className="absolute top-4 right-4 z-[10000] h-8 w-8 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
               onClick={() => setSelectedPhoto(null)}
               aria-label="Cerrar"
            >
@@ -229,7 +241,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
            </button>
 
            {/* Image Container */}
-           <div className="flex-1 flex items-center justify-center p-4 min-h-0" onClick={() => setSelectedPhoto(null)}>
+           <div className="flex-1 flex items-center justify-center p-4 min-h-0 overflow-hidden" onClick={() => setSelectedPhoto(null)}>
               <img
                 src={selectedPhoto.url_foto}
                 alt="Preview"
@@ -259,7 +271,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
                     <StickyNote className="h-3 w-3 text-[#00C9E0]" /> Observaciones
                  </p>
                  <div className="bg-white/[0.06] border border-white/10 p-3 rounded-xl backdrop-blur-md italic text-[11px] text-slate-300 leading-relaxed min-h-[90px]">
-                    "{selectedPhoto.observaciones || 'Sin observaciones registradas para esta foto.'}"
+                    &quot;{selectedPhoto.observaciones || 'Sin observaciones registradas para esta foto.'}&quot;
                  </div>
               </div>
 
@@ -298,7 +310,8 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
                  </button>
               </div>
            </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {showAddModal && (

@@ -62,61 +62,61 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
 
   return (
     <div className={cn("relative", className)}>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5">
         {/* Input display */}
         <div className={cn(
-          "flex-1 flex items-center h-[42px] px-3 rounded-xl border bg-white transition-all",
+          "flex-1 flex items-center h-[42px] px-2.5 rounded-xl border bg-white transition-all min-w-0 overflow-hidden",
           value 
             ? "border-[#0097A7]/40 ring-2 ring-[#0097A7]/20" 
             : "border-slate-200 hover:border-[#0097A7]/40"
         )}>
-          <Clock className="h-4 w-4 text-slate-400 shrink-0 mr-2" />
+          <Clock className="h-4 w-4 text-slate-400 shrink-0 mr-1.5" />
           
           {value ? (
             <>
               {/* Hours */}
-              <div className="flex items-center gap-0.5">
-                <button type="button" onClick={() => setHour(hours - 1)} className="h-6 w-6 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#0097A7] hover:bg-[#E6F9FB] transition-all">
-                  <ChevronUp className="h-3.5 w-3.5" />
+              <div className="flex items-center gap-0.5 shrink-0">
+                <button type="button" onClick={() => setHour(hours - 1)} className="h-5 w-5 rounded flex items-center justify-center text-slate-400 hover:text-[#0097A7] transition-all">
+                  <ChevronUp className="h-3 w-3" />
                 </button>
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#00C9E0] to-[#0097A7] flex items-center justify-center">
-                  <span className="text-[13px] font-black text-white">{String(hours).padStart(2, '0')}</span>
+                <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-[#00C9E0] to-[#0097A7] flex items-center justify-center">
+                  <span className="text-[12px] font-black text-white">{String(hours).padStart(2, '0')}</span>
                 </div>
-                <button type="button" onClick={() => setHour(hours + 1)} className="h-6 w-6 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#0097A7] hover:bg-[#E6F9FB] transition-all">
-                  <ChevronDown className="h-3.5 w-3.5" />
+                <button type="button" onClick={() => setHour(hours + 1)} className="h-5 w-5 rounded flex items-center justify-center text-slate-400 hover:text-[#0097A7] transition-all">
+                  <ChevronDown className="h-3 w-3" />
                 </button>
               </div>
 
-              <span className="text-[13px] font-black text-slate-300 mx-0.5">:</span>
+              <span className="text-[12px] font-black text-slate-300 mx-0.5 shrink-0">:</span>
 
               {/* Minutes */}
-              <div className="flex items-center gap-0.5">
-                <button type="button" onClick={() => setMinute(minutes - 5)} className="h-6 w-6 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#0097A7] hover:bg-[#E6F9FB] transition-all">
-                  <ChevronUp className="h-3.5 w-3.5" />
+              <div className="flex items-center gap-0.5 shrink-0">
+                <button type="button" onClick={() => setMinute(minutes - 5)} className="h-5 w-5 rounded flex items-center justify-center text-slate-400 hover:text-[#0097A7] transition-all">
+                  <ChevronUp className="h-3 w-3" />
                 </button>
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#00C9E0] to-[#0097A7] flex items-center justify-center">
-                  <span className="text-[13px] font-black text-white">{String(minutes).padStart(2, '0')}</span>
+                <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-[#00C9E0] to-[#0097A7] flex items-center justify-center">
+                  <span className="text-[12px] font-black text-white">{String(minutes).padStart(2, '0')}</span>
                 </div>
-                <button type="button" onClick={() => setMinute(minutes + 5)} className="h-6 w-6 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#0097A7] hover:bg-[#E6F9FB] transition-all">
-                  <ChevronDown className="h-3.5 w-3.5" />
+                <button type="button" onClick={() => setMinute(minutes + 5)} className="h-5 w-5 rounded flex items-center justify-center text-slate-400 hover:text-[#0097A7] transition-all">
+                  <ChevronDown className="h-3 w-3" />
                 </button>
               </div>
 
-              <span className="text-[13px] font-black text-slate-300 mx-0.5">:</span>
+              <span className="text-[12px] font-black text-slate-300 mx-0.5 shrink-0">:</span>
 
               {/* AM/PM */}
               <button
                 type="button"
                 onClick={togglePeriod}
-                className="h-8 px-2.5 rounded-lg border border-slate-200 flex items-center justify-center hover:border-[#0097A7] transition-all"
+                className="h-7 px-1.5 rounded-lg border border-slate-200 flex items-center justify-center hover:border-[#0097A7] transition-all shrink-0"
               >
                 <span className={cn(
-                  "text-[10px] font-black transition-colors",
+                  "text-[9px] font-black transition-colors",
                   period === 'am' ? "text-[#0097A7]" : "text-slate-400"
                 )}>AM</span>
                 <span className="text-slate-300 mx-0.5">/</span>
                 <span className={cn(
-                  "text-[10px] font-black transition-colors",
+                  "text-[9px] font-black transition-colors",
                   period === 'pm' ? "text-[#0097A7]" : "text-slate-400"
                 )}>PM</span>
               </button>
@@ -131,9 +131,9 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
           <button
             type="button"
             onClick={clearTime}
-            className="h-[42px] w-[42px] rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-400 hover:text-red-500 hover:border-red-300 hover:bg-red-50 transition-all shrink-0"
+            className="h-[42px] w-[34px] rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-400 hover:text-red-500 hover:border-red-300 hover:bg-red-50 transition-all shrink-0"
           >
-            <X className="h-4 w-4" />
+            <X className="h-3.5 w-3.5" />
           </button>
         )}
       </div>

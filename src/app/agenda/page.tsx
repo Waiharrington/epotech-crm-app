@@ -6,7 +6,7 @@ import { Database } from '@/types/supabase'
 import { Calendar } from '@/components/ui/calendar'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Clock, User, MapPin, ChevronRight, LayoutList, Calendar as CalendarIcon, Loader2, Plus, Send, TrendingUp, Search, Briefcase, CalendarDays } from 'lucide-react'
+import { Clock, User, MapPin, ChevronRight, LayoutList, Calendar as CalendarIcon, Loader2, Plus, TrendingUp, Search, Briefcase, CalendarDays } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { DatePicker } from '@/components/ui/date-picker'
@@ -38,11 +38,8 @@ export default function AgendaPage() {
   const [jobToEdit, setJobToEdit] = useState<Trabajo | null>(null)
   const [showEditModal, setShowEditModal] = useState(false)
 
-  const [inactiveClients, setInactiveClients] = useState<any[]>([])
-
   useEffect(() => {
     fetchTrabajos()
-    fetchInactiveClients()
   }, [])
 
   const fetchTrabajos = async () => {
@@ -58,28 +55,6 @@ export default function AgendaPage() {
     
     if (data) setTrabajos(data as Trabajo[])
     setLoading(false)
-  }
-
-  const fetchInactiveClients = async () => {
-    // Logic: Find clients who haven't had a job in the last 90 days
-    const ninetyDaysAgo = new Date()
-    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90)
-    
-    const { data } = await supabase
-      .from('clientes')
-      .select(`
-        id, nombre, apellido, telefono,
-        trabajos (fecha_servicio)
-      `)
-    
-    if (data) {
-       const inactive = data.filter((c: any) => {
-         if (c.trabajos.length === 0) return true
-         const lastJob = new Date(c.trabajos.sort((a: any, b: any) => new Date(b.fecha_servicio).getTime() - new Date(a.fecha_servicio).getTime())[0].fecha_servicio)
-         return lastJob < ninetyDaysAgo
-       })
-       setInactiveClients(inactive.slice(0, 5)) // Show top 5
-    }
   }
 
   const selectedDateStr = date?.toISOString().split('T')[0]
@@ -309,30 +284,6 @@ export default function AgendaPage() {
                     <span className="text-[11px] font-black text-[#0097A7] bg-white px-2 py-0.5 rounded-full">{jobsForToday.length}</span>
                   </div>
                   
-                  <div className="pt-3 border-t border-slate-100">
-                    <h3 className="text-[9px] font-black uppercase tracking-[0.15em] text-slate-400 mb-2.5 flex items-center gap-1.5">
-                      <TrendingUp className="h-3 w-3 text-[#0097A7]" /> Reactivación (90 días+)
-                    </h3>
-                    <div className="space-y-2">
-                      {inactiveClients.length > 0 ? inactiveClients.map(c => (
-                        <div key={c.id} className="p-2.5 bg-slate-50 rounded-xl border border-slate-100 flex flex-col gap-1.5">
-                          <span className="text-[10px] font-bold text-slate-700">{c.nombre} {c.apellido}</span>
-                          <button
-                            type="button"
-                            className="flex items-center gap-1 text-[9px] font-bold text-[#0097A7] hover:text-[#006570] transition-colors"
-                            onClick={() => {
-                              const msg = `Hola ${c.nombre}, hace tiempo que no pasamos por tu propiedad...`
-                              window.open(`https://wa.me/${c.telefono.replace(/\s+/g, '')}?text=${encodeURIComponent(msg)}`, '_blank')
-                            }}
-                          >
-                            <Send className="h-3 w-3" /> Recordar servicio
-                          </button>
-                        </div>
-                      )) : (
-                        <p className="text-[9px] text-slate-300 italic text-center py-2">Todos tus clientes están al día</p>
-                      )}
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

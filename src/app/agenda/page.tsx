@@ -6,7 +6,7 @@ import { Database } from '@/types/supabase'
 import { Calendar } from '@/components/ui/calendar'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Clock, User, MapPin, ChevronRight, LayoutList, Calendar as CalendarIcon, Loader2, Plus, Send, TrendingUp, Search, Briefcase, CalendarDays } from 'lucide-react'
+import { Clock, User, MapPin, ChevronRight, LayoutList, Calendar as CalendarIcon, Loader2, Plus, TrendingUp, Search, Briefcase, CalendarDays } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { DatePicker } from '@/components/ui/date-picker'
@@ -80,23 +80,6 @@ export default function AgendaPage() {
        })
        setInactiveClients(inactive.slice(0, 5)) // Show top 5
     }
-  }
-
-  const shareDailyRoute = () => {
-    if (jobsToDisplay.length === 0) return
-    const fechaLabel = date ? date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Hoy'
-    let message = `*Ruta Epotech - ${fechaLabel}*\n\n`
-    jobsToDisplay.forEach((j, i) => {
-      message += `${i+1}. *${j.clientes.nombre} ${j.clientes.apellido}*\n`
-      message += `   ⏰ ${j.hora_servicio || 'Sin hora'}\n`
-      message += `   🛠️ ${j.catalogo_servicios?.nombre || 'Servicio'}\n`
-      message += `   📍 ${j.clientes.direccion || 'Sin dirección'}\n`
-      if (j.clientes.direccion) {
-        message += `   🗺️ https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(j.clientes.direccion)}\n`
-      }
-      message += `\n`
-    })
-    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank')
   }
 
   const selectedDateStr = date?.toISOString().split('T')[0]
@@ -325,15 +308,6 @@ export default function AgendaPage() {
                     <span className="text-[11px] font-bold text-slate-700">Trabajos hoy</span>
                     <span className="text-[11px] font-black text-[#0097A7] bg-white px-2 py-0.5 rounded-full">{jobsForToday.length}</span>
                   </div>
-                  
-                  <button
-                    type="button"
-                    onClick={shareDailyRoute}
-                    disabled={jobsToDisplay.length === 0}
-                    className="w-full flex items-center justify-center gap-1.5 h-9 text-[10px] font-bold text-white bg-emerald-500 hover:bg-emerald-600 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
-                  >
-                    <Send className="h-3.5 w-3.5" /> Compartir Ruta WhatsApp
-                  </button>
                   
                   <div className="pt-3 border-t border-slate-100">
                     <h3 className="text-[9px] font-black uppercase tracking-[0.15em] text-slate-400 mb-2.5 flex items-center gap-1.5">

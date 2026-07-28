@@ -13,6 +13,13 @@ import { DatePicker } from '@/components/ui/date-picker'
 import { TimePicker } from '@/components/ui/time-picker'
 import { Label } from '@/components/ui/label'
 import { Search, Plus, Calendar as CalendarIcon, Clock, Loader2, X, User, ChevronRight } from 'lucide-react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { format } from 'date-fns'
 import { toast } from 'sonner'
 import { useDialogClose } from '@/hooks/use-dialog-close'
@@ -216,16 +223,21 @@ export function QuickScheduleWizard({ onClose, onSuccess }: QuickScheduleWizardP
                 <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
                   Servicio a realizar
                 </Label>
-                <select 
-                  className="flex h-11 w-full rounded-xl border border-slate-200 bg-white px-3 sm:px-4 text-[11px] sm:text-[12px] font-semibold text-slate-700 hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-2 focus:ring-[#0097A7]/20 focus:outline-none transition-all cursor-pointer"
-                  value={selectedService}
-                  onChange={e => setSelectedService(e.target.value)}
+                <Select 
+                  value={selectedService} 
+                  onValueChange={setSelectedService}
                 >
-                  <option value="">Seleccionar servicio...</option>
-                  {services.map(s => (
-                    <option key={s.id} value={s.id}>{s.nombre} - ${s.precio_venta}</option>
-                  ))}
-                </select>
+                  <SelectTrigger className="h-11 rounded-xl border-slate-200 text-[12px] font-semibold text-slate-700 hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-[#0097A7]/20">
+                    <SelectValue placeholder="Seleccionar servicio..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {services.map(s => (
+                      <SelectItem key={s.id} value={s.id} className="text-[12px] font-semibold">
+                        {s.nombre} - ${s.precio_venta}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Fecha y Hora */}

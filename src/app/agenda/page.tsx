@@ -83,9 +83,10 @@ export default function AgendaPage() {
   }
 
   const shareDailyRoute = () => {
-    if (jobsForToday.length === 0) return
-    let message = `*Ruta Epotech - ${date?.toLocaleDateString()}*\n\n`
-    jobsForToday.forEach((j, i) => {
+    if (jobsToDisplay.length === 0) return
+    const fechaLabel = date ? date.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Hoy'
+    let message = `*Ruta Epotech - ${fechaLabel}*\n\n`
+    jobsToDisplay.forEach((j, i) => {
       message += `${i+1}. *${j.clientes.nombre} ${j.clientes.apellido}*\n`
       message += `   ⏰ ${j.hora_servicio || 'Sin hora'}\n`
       message += `   🛠️ ${j.catalogo_servicios?.nombre || 'Servicio'}\n`
@@ -328,7 +329,7 @@ export default function AgendaPage() {
                   <button
                     type="button"
                     onClick={shareDailyRoute}
-                    disabled={jobsForToday.length === 0}
+                    disabled={jobsToDisplay.length === 0}
                     className="w-full flex items-center justify-center gap-1.5 h-9 text-[10px] font-bold text-white bg-emerald-500 hover:bg-emerald-600 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
                   >
                     <Send className="h-3.5 w-3.5" /> Compartir Ruta WhatsApp

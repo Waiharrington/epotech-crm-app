@@ -258,16 +258,6 @@ export function QuickScheduleWizard({ onClose, onSuccess }: QuickScheduleWizardP
           )}
         </div>
 
-        {/* Footer */}
-        <div className="bg-white px-5 py-3 sm:px-6 border-t border-slate-100 flex justify-center shrink-0">
-          <button
-            type="button"
-            onClick={handleClose}
-            className="flex items-center gap-2 text-[9px] sm:text-[10px] font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
-          >
-            <X className="h-3.5 w-3.5" /> Cerrar
-          </button>
-        </div>
       </DialogContent>
     </Dialog>
   )

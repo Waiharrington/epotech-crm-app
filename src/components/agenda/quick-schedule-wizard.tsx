@@ -92,12 +92,12 @@ export function QuickScheduleWizard({ onClose, onSuccess }: QuickScheduleWizardP
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent showCloseButton={false} className="w-full max-w-[480px] max-h-[90vh] p-0 gap-0 border-0 shadow-[0_25px_60px_rgba(0,0,0,0.15)] rounded-3xl overflow-hidden flex flex-col m-4">
+      <DialogContent showCloseButton={false} className="w-[calc(100%-2rem)] max-w-[480px] max-h-[85vh] p-0 gap-0 border border-slate-200/60 shadow-2xl rounded-2xl overflow-hidden flex flex-col">
         <DialogTitle className="sr-only">Agendar Nuevo Trabajo</DialogTitle>
         
         {/* Header con gradiente */}
-        <div className="relative overflow-hidden rounded-t-3xl shrink-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#00C9E0] via-[#0097A7] to-[#006570]" />
+        <div className="relative overflow-hidden shrink-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#00C9E0] via-[#0097A7] to-[#006570]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
           <div className="absolute top-3 right-3 flex gap-1 opacity-20">
             {Array.from({ length: 8 }).map((_, i) => (

@@ -316,7 +316,7 @@ export default function AgendaPage() {
                   mode="single"
                   selected={date}
                   onSelect={setDate}
-                  className="rounded-xl border border-slate-100 shadow-xs mx-auto"
+                  className="rounded-xl border border-slate-100 shadow-xs mx-auto w-full"
                 />
                 
                 <div className="mt-4 space-y-3">

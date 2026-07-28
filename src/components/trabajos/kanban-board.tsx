@@ -118,7 +118,7 @@ export function KanbanBoard({ trabajos, onRefresh, onCardClick, onArchive }: Kan
   }
 
   return (
-    <div className="h-full overflow-x-auto overflow-y-hidden p-4 md:p-5">
+    <div className="h-full overflow-hidden p-4 md:p-5">
       <div className="flex gap-3 h-full min-w-max md:min-w-0 md:grid md:grid-cols-3 max-w-7xl mx-auto items-stretch">
         <DndContext
           sensors={sensors}

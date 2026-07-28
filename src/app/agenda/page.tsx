@@ -221,7 +221,7 @@ export default function AgendaPage() {
 
           {/* Period Tabs */}
           <div className="relative pt-0.5 border-t border-white/[0.06]">
-            <div className="flex items-center gap-1.5 mt-2 overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-1.5 mt-2 flex-wrap">
               {[
                 { value: 'day', label: 'Día' },
                 { value: 'week', label: 'Semanal' },

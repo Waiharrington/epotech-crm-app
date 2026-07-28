@@ -6,7 +6,7 @@ import { Database } from '@/types/supabase'
 import { Calendar } from '@/components/ui/calendar'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Clock, User, MapPin, ChevronRight, LayoutList, Calendar as CalendarIcon, Loader2, Plus, TrendingUp, Search, Briefcase, CalendarDays } from 'lucide-react'
+import { Clock, User, MapPin, ChevronRight, LayoutList, Calendar as CalendarIcon, Loader2, Plus, Search, Briefcase, CalendarDays } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { DatePicker } from '@/components/ui/date-picker'
@@ -113,9 +113,7 @@ export default function AgendaPage() {
   const jobsForToday = trabajos.filter(t => t.fecha_servicio === new Date().toISOString().split('T')[0])
 
   // Stats
-  const totalTrabajos = trabajos.length
   const trabajosHoy = trabajos.filter(t => t.fecha_servicio === new Date().toISOString().split('T')[0]).length
-  const trabajosSemana = getFilteredJobs().length
 
   return (
     <div className="flex flex-col min-h-screen xl:h-screen xl:max-h-screen bg-[#F0F5FA] px-4.5 pb-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-5 xl:p-3.5 2xl:p-6 gap-3.5 xl:gap-2.5 2xl:gap-4 relative xl:overflow-hidden">
@@ -223,13 +221,12 @@ export default function AgendaPage() {
       </header>
 
       <main className="flex flex-col xl:flex-1 xl:min-h-0 gap-3.5 xl:gap-2.5 2xl:gap-4 relative z-10">
-        {/* Stats Grid */}
+        {/* Stats Grid - 2 columns */}
         <div className="p-0.5 -m-0.5 overflow-visible shrink-0">
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 xl:gap-2.5 2xl:gap-4.5">
+          <div className="grid grid-cols-2 gap-3 xl:gap-2.5 2xl:gap-4.5">
             {[
               { label: 'Total Trabajos', value: totalTrabajos, hint: 'En el sistema', icon: Briefcase, delay: '150ms' },
               { label: 'Hoy', value: trabajosHoy, hint: 'Servicios programados', icon: CalendarDays, delay: '200ms' },
-              { label: 'En Período', value: trabajosSemana, hint: 'Según filtro activo', icon: TrendingUp, delay: '250ms' },
             ].map((stat) => (
               <div
                 key={stat.label}

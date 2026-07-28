@@ -113,6 +113,7 @@ export default function AgendaPage() {
   const jobsForToday = trabajos.filter(t => t.fecha_servicio === new Date().toISOString().split('T')[0])
 
   // Stats
+  const totalTrabajos = trabajos.length
   const trabajosHoy = trabajos.filter(t => t.fecha_servicio === new Date().toISOString().split('T')[0]).length
 
   return (

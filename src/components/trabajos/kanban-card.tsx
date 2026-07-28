@@ -4,8 +4,7 @@ import React from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Calendar, Clock, MapPin, User, ChevronRight, Archive } from 'lucide-react'
+import { Calendar, Clock, User, ChevronRight, Archive } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Database } from '@/types/supabase'
 
@@ -36,12 +35,6 @@ export function KanbanCard({ job, isOverlay, onClick, onArchive }: KanbanCardPro
     transition,
   }
 
-  const priorityColor = {
-    urgente: 'bg-red-500 text-white',
-    estandar: 'bg-blue-500 text-white',
-    baja: 'bg-gray-400 text-white',
-  }
-
   return (
     <div
       ref={setNodeRef}
@@ -54,67 +47,73 @@ export function KanbanCard({ job, isOverlay, onClick, onArchive }: KanbanCardPro
     >
       <Card 
         className={cn(
-          "cursor-grab active:cursor-grabbing border shadow-sm hover:shadow-md transition-all active:scale-[0.98]",
-          job.estado === 'completado' && "bg-muted/30"
+          "cursor-grab active:cursor-grabbing border-slate-200 shadow-sm hover:shadow-md hover:border-[#0097A7]/30 transition-all active:scale-[0.98] bg-white rounded-xl",
+          job.estado === 'completado' && "bg-slate-50 opacity-80"
         )}
         {...attributes}
         {...listeners}
         onClick={(e) => {
-          // If we are dragging, don't trigger click
           if (isDragging) return
           onClick?.(job)
         }}
       >
-        <CardContent className="p-4 space-y-3">
+        <CardContent className="p-3.5 space-y-2.5">
           <div className="flex items-start justify-between gap-2">
-            <div>
-              <h4 className="font-bold text-sm leading-tight">
+            <div className="min-w-0 flex-1">
+              <h4 className="font-bold text-[12px] text-slate-800 leading-tight truncate">
                 {job.catalogo_servicios?.nombre || 'Servicio no definido'}
               </h4>
-              <p className="text-xs text-muted-foreground flex items-center mt-1">
-                <User className="mr-1 h-3 w-3" />
-                {job.clientes.nombre} {job.clientes.apellido}
+              <p className="text-[10px] text-slate-400 font-medium flex items-center gap-1 mt-1">
+                <User className="h-3 w-3 shrink-0" />
+                <span className="truncate">{job.clientes.nombre} {job.clientes.apellido}</span>
               </p>
             </div>
             {job.prioridad && (
-               <Badge className={cn("text-[10px] px-1.5 h-4 uppercase font-bold", priorityColor[job.prioridad])}>
-                 {job.prioridad}
-               </Badge>
+               <span className={cn(
+                 "text-[8px] font-black uppercase px-1.5 py-0.5 rounded-md shrink-0",
+                 job.prioridad === 'urgente' ? "bg-red-50 text-red-600" :
+                 job.prioridad === 'estandar' ? "bg-[#0097A7]/10 text-[#0097A7]" :
+                 "bg-slate-100 text-slate-500"
+               )}>
+                 {job.prioridad === 'urgente' ? 'Urgente' : job.prioridad === 'estandar' ? 'Estándar' : 'Baja'}
+               </span>
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-2 text-[10px] md:text-xs">
-            <div className="flex items-center text-muted-foreground">
-              <Calendar className="mr-1 h-3 w-3" />
-              {new Date(job.fecha_servicio).toLocaleDateString()}
-            </div>
+          <div className="flex items-center gap-3 text-[9px] text-slate-400 font-medium">
+            {job.fecha_servicio && (
+              <span className="flex items-center gap-1">
+                <Calendar className="h-3 w-3" />
+                {new Date(job.fecha_servicio + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+              </span>
+            )}
             {job.hora_servicio && (
-              <div className="flex items-center text-muted-foreground">
-                <Clock className="mr-1 h-3 w-3" />
-                {job.hora_servicio}
-              </div>
+              <span className="flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                {job.hora_servicio.slice(0, 5)}
+              </span>
             )}
           </div>
 
-          <div className="pt-2 border-t flex items-center justify-between">
-            <span className="font-bold text-sm text-primary">
-              ${job.precio_acordado || 0}
+          <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+            <span className="text-[13px] font-black text-slate-800">
+              ${job.precio_acordado?.toLocaleString() || '0'}
             </span>
             <div className="flex items-center gap-1">
-              {job.estado === 'completado' && onArchive && (
+              {onArchive && job.estado !== 'completado' && (
                 <button
+                  type="button"
                   onClick={(e) => {
                     e.stopPropagation()
                     onArchive(job)
                   }}
-                  className="h-6 w-6 rounded-full flex items-center justify-center text-zinc-400 hover:text-amber-600 hover:bg-amber-50 transition-colors"
-                  title="Archivar"
+                  className="opacity-0 group-hover:opacity-100 h-6 w-6 rounded-lg flex items-center justify-center text-slate-300 hover:text-amber-500 hover:bg-amber-50 transition-all"
                 >
                   <Archive className="h-3.5 w-3.5" />
                 </button>
               )}
-              <div className="h-6 w-6 rounded-full bg-accent flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                <ChevronRight className="h-4 w-4" />
+              <div className="h-6 w-6 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-[#E6F9FB] group-hover:text-[#0097A7] transition-all text-slate-300">
+                <ChevronRight className="h-3.5 w-3.5" />
               </div>
             </div>
           </div>

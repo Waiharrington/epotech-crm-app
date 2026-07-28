@@ -283,13 +283,15 @@ function TrabajosContent() {
                     onArchive={(job) => handleArchive(job as TrabajoWithDetails)}
                   />
                 ) : (
-                  <div className="overflow-y-auto h-full pb-20">
-                    <JobList 
-                      trabajos={filteredTrabajos} 
-                      onCardClick={(job) => setSelectedJob(job as TrabajoWithDetails)}
-                      onArchive={(job) => handleArchive(job as TrabajoWithDetails)}
-                      onStatusChange={handleStatusChange}
-                    />
+                  <div className="overflow-y-auto h-full pb-20 px-2">
+                    <div className="max-w-4xl mx-auto">
+                      <JobList 
+                        trabajos={filteredTrabajos} 
+                        onCardClick={(job) => setSelectedJob(job as TrabajoWithDetails)}
+                        onArchive={(job) => handleArchive(job as TrabajoWithDetails)}
+                        onStatusChange={handleStatusChange}
+                      />
+                    </div>
                   </div>
                 )}
               </div>

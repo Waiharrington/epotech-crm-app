@@ -25,8 +25,8 @@ interface JobListProps {
   onArchive?: (job: Trabajo) => void
   onUnarchive?: (job: Trabajo) => void
   onStatusChange?: (job: Trabajo, newStatus: 'proximo' | 'en_progreso' | 'completado') => void
-  onEditClick: (job: Trabajo) => void
-  onRescheduleClick: (job: Trabajo) => void
+  onEditClick?: (job: Trabajo) => void
+  onRescheduleClick?: (job: Trabajo) => void
 }
 
 const statusConfig = {
@@ -41,7 +41,7 @@ const priorityConfig = {
   baja: { label: 'Baja', color: 'bg-slate-400 text-white' },
 }
 
-export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatusChange }: JobListProps) {
+export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatusChange, onEditClick, onRescheduleClick }: JobListProps) {
   if (trabajos.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-12 text-center">
@@ -142,11 +142,11 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                           </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48 rounded-xl border border-slate-200/80 shadow-lg bg-white p-1" onClick={(e) => e.stopPropagation()}>
-                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onEditClick(job) }} className="cursor-pointer gap-2 font-semibold text-slate-700 hover:bg-slate-100/70 focus:bg-slate-100/70 focus:text-slate-800 py-2 rounded-lg">
+                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onEditClick?.(job) }} className="cursor-pointer gap-2 font-semibold text-slate-700 hover:bg-slate-100/70 focus:bg-slate-100/70 focus:text-slate-800 py-2 rounded-lg">
                             <Pencil className="h-3.5 w-3.5 text-slate-500 shrink-0" />
                             <span className="text-xs">Editar detalles</span>
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onRescheduleClick(job) }} className="cursor-pointer gap-2 font-semibold text-slate-700 hover:bg-slate-100/70 focus:bg-slate-100/70 focus:text-slate-800 py-2 rounded-lg">
+                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onRescheduleClick?.(job) }} className="cursor-pointer gap-2 font-semibold text-slate-700 hover:bg-slate-100/70 focus:bg-slate-100/70 focus:text-slate-800 py-2 rounded-lg">
                             <Calendar className="h-3.5 w-3.5 text-slate-500 shrink-0" />
                             <span className="text-xs">Reagendar</span>
                           </DropdownMenuItem>

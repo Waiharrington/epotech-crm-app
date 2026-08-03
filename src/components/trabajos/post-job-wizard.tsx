@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Plus, Check, Camera, Package, DollarSign, Loader2, Trash2, Calendar, Repeat, Search } from 'lucide-react'
+import { Plus, Check, Camera, Package, DollarSign, Loader2, Trash2, Calendar, Repeat, Search, X } from 'lucide-react'
 import {
   Select,
   SelectContent,
@@ -352,30 +352,55 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
 
   if (!isMounted) return null
 
-  return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden bg-background">
-        <DialogHeader className="p-6 pb-0">
-          <DialogTitle>Finalizar Trabajo</DialogTitle>
-          <DialogDescription>
-            Registra los detalles finales del servicio para {job.clientes.nombre}.
-          </DialogDescription>
-        </DialogHeader>
+  return (    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent showCloseButton={false} className="sm:max-w-[500px] max-h-[90vh] p-0 gap-0 border-0 shadow-[0_25px_60px_rgba(0,0,0,0.15)] rounded-3xl overflow-hidden flex flex-col sm:my-6 bg-[#F8FAFC]">
+        <DialogTitle className="sr-only">Finalizar Trabajo</DialogTitle>
+        
+        {/* Header con gradiente */}
+        <div className="relative overflow-hidden rounded-t-3xl shrink-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#00C9E0] via-[#0097A7] to-[#006570]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
+          <div className="relative px-5 py-4">
+            <div className="flex items-start justify-between">
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/60 mb-0.5">
+                  Check-out
+                </p>
+                <h3 className="text-base font-black text-white leading-tight">
+                  Finalizar Trabajo
+                </h3>
+                <p className="text-xs text-white/80 mt-1 truncate">
+                  Para <span className="font-semibold text-white">{job.clientes?.nombre || 'el cliente'}</span>
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleClose}
+                className="h-8 w-8 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95 shrink-0 ml-3"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
 
-        <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
+        <div className="p-5 md:p-6 space-y-6 flex-1 overflow-y-auto">
           <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="cobrado" className="flex items-center">
-                <DollarSign className="mr-2 h-4 w-4 text-green-600" />
-                Monto Cobrado Final ($)
+            <div className="space-y-2 pb-2">
+              <Label htmlFor="cobrado" className="flex items-center text-sm font-bold text-slate-700">
+                <DollarSign className="mr-1.5 h-4 w-4 text-emerald-500" />
+                Monto Cobrado Final
               </Label>
-              <Input 
-                id="cobrado" 
-                type="number" 
-                className="text-2xl h-14 font-bold text-green-600 border-green-200 bg-green-50/30"
-                value={precioCobrado} 
-                onChange={e => setPrecioCobrado(parseFloat(e.target.value) || 0)}
-              />
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium text-lg">$</span>
+                <Input 
+                  id="cobrado" 
+                  type="number" 
+                  className="pl-8 text-xl h-14 font-bold text-slate-800 bg-white border-slate-200 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-500 rounded-xl transition-all shadow-sm"
+                  value={precioCobrado} 
+                  onChange={e => setPrecioCobrado(parseFloat(e.target.value) || 0)}
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -478,8 +503,8 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
             </div>
 
             <div className="space-y-2">
-              <Label className="flex items-center">
-                <Package className="mr-2 h-4 w-4 text-primary" />
+              <Label className="flex items-center text-slate-700 font-bold">
+                <Package className="mr-1.5 h-4 w-4 text-[#0097A7]" />
                 Materiales Utilizados (Stock)
               </Label>
               
@@ -491,32 +516,32 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                     const precioCosto = stockItem?.precio_costo || 0
                     const costoUso = precioCosto * m.cantidad
                     return (
-                    <div key={m.id} className="flex flex-col gap-1 bg-muted/50 p-3 rounded-lg border">
-                      <div className="flex items-center justify-between">
+                    <div key={m.id} className="flex flex-col gap-3 bg-white p-3.5 rounded-xl border border-slate-200/60 shadow-sm">
+                      <div className="flex items-start justify-between">
                         <div>
-                          <span className="text-sm font-medium">{m.nombre}</span>
-                          <p className="text-[10px] text-muted-foreground">
-                            Costo: ${precioCosto}/{unit} &middot; Subtotal: <span className="font-bold text-foreground">${costoUso.toFixed(2)}</span>
+                          <span className="text-sm font-bold text-slate-800">{m.nombre}</span>
+                          <p className="text-[10px] text-slate-500 mt-0.5">
+                            Costo: ${precioCosto}/{unit} &middot; Subtotal: <span className="font-bold text-slate-700">${costoUso.toFixed(2)}</span>
                           </p>
                         </div>
-                        <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive shrink-0" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
-                          <Trash2 className="h-4 w-4" />
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-red-500 hover:bg-red-50 hover:text-red-600 rounded-lg shrink-0" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
+                          <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Label className="text-[10px] text-muted-foreground shrink-0">¿Cuánto usaste?</Label>
+                      <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                        <Label className="text-[10px] text-slate-500 font-semibold shrink-0 uppercase tracking-wider">Cantidad usada</Label>
                         <div className="relative flex-1">
                           <Input 
                             type="number" 
                             step="0.01"
                             min="0"
-                            className="h-8 text-xs font-bold pr-12"
+                            className="h-9 text-sm font-bold pr-12 bg-white"
                             value={m.cantidad}
                             onChange={(e) => {
                               setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: parseFloat(e.target.value) || 0 } : x))
                             }}
                           />
-                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-bold text-muted-foreground uppercase">{unit}</span>
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400 uppercase tracking-wider">{unit}</span>
                         </div>
                       </div>
                       {m.cantidad > (stockItem?.cantidad_actual || 0) && (

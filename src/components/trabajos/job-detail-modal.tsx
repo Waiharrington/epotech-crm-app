@@ -270,6 +270,23 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
             </div>
           )}
 
+          {/* Team / Ayudantes */}
+          {job.ayudantes && (
+            <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="h-6 w-6 rounded-lg bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center justify-center">
+                  <User className="h-3 w-3 text-white" />
+                </div>
+                <h4 className="text-[9px] font-black uppercase tracking-[0.12em] text-indigo-500">Equipo de Apoyo</h4>
+              </div>
+              <div className="flex items-start gap-2 text-slate-600 font-medium text-sm">
+                <p className="leading-relaxed">
+                  {job.ayudantes}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Notes */}
           {(job.notas_pre || job.notas_post) && (
             <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">

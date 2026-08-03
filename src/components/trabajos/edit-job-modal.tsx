@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Loader2, Save, Search, Trash2, Package, Plus, X, Pen } from 'lucide-react'
+import { Loader2, Save, Search, Trash2, Package, Plus, X, Pen, User } from 'lucide-react'
 import {
   Select,
   SelectContent,
@@ -363,6 +363,18 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                   onChange={e => updateFields({ precio_cobrado: parseFloat(e.target.value) || 0 })} 
                 />
               </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="flex items-center gap-1.5 text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
+                <User className="h-3 w-3" /> Equipo de Apoyo (Opcional)
+              </Label>
+              <Input 
+                className="h-[38px] text-[12px] rounded-xl border-slate-200"
+                placeholder="Ej. Juan y Carlos"
+                value={formData.ayudantes || ''} 
+                onChange={e => updateFields({ ayudantes: e.target.value })} 
+              />
             </div>
 
             <div className="space-y-1.5">

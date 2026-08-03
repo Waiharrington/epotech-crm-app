@@ -101,26 +101,37 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
   }
 
   const fillDemoData = () => {
-    const demoNames = ['Juan', 'María', 'Carlos', 'Ana', 'Pedro', 'Sofia', 'Miguel', 'Laura']
-    const demoLastnames = ['García', 'Rodríguez', 'Martínez', 'López', 'Pérez', 'González', 'Hernández']
-    const demoCities = ['Caracas', 'Maracaibo', 'Valencia', 'Barquisimeto', 'Ciudad Bolívar', 'Mérida']
-    const demoSurfaces = ['Concreto', 'Cerámica', 'Baldosa', 'Mármol', 'Vinilo']
+    const demoNames = ['James', 'Michael', 'Tyler', 'Brandon', 'Ashley', 'Jessica', 'Emily', 'Nathan', 'Cody', 'Brittany']
+    const demoLastnames = ['Smith', 'Johnson', 'Williams', 'Jensen', 'Hansen', 'Christensen', 'Anderson', 'Taylor', 'Nielsen', 'Davis']
+    const demoCities = ['Salt Lake City', 'Provo', 'Orem', 'Sandy', 'Draper', 'Lehi', 'St. George', 'Ogden', 'Murray', 'West Jordan']
+    const demoSurfaces = ['Concrete', 'Tile', 'Hardwood', 'Vinyl', 'Epoxy', 'Pavers', 'Asphalt']
+
+    const demoAddresses = [
+      `${Math.floor(Math.random() * 9000) + 1000} W ${Math.floor(Math.random() * 9000) + 100} S`,
+      `${Math.floor(Math.random() * 9000) + 1000} N State St, Apt ${Math.floor(Math.random() * 200) + 1}`,
+      `${Math.floor(Math.random() * 9000) + 1000} S Main St`,
+      `${Math.floor(Math.random() * 9000) + 1000} E ${Math.floor(Math.random() * 9000) + 100} N`,
+      `${Math.floor(Math.random() * 9000) + 1000} Redwood Rd, Unit ${Math.floor(Math.random() * 50) + 1}`,
+      `${Math.floor(Math.random() * 9000) + 1000} Foothill Dr`,
+      `${Math.floor(Math.random() * 9000) + 1000} W Pioneer Rd`,
+    ]
 
     const randomName = demoNames[Math.floor(Math.random() * demoNames.length)]
     const randomLastname = demoLastnames[Math.floor(Math.random() * demoLastnames.length)]
     const randomCity = demoCities[Math.floor(Math.random() * demoCities.length)]
     const randomSurface = demoSurfaces[Math.floor(Math.random() * demoSurfaces.length)]
+    const randomAddress = demoAddresses[Math.floor(Math.random() * demoAddresses.length)]
 
     updateFields({
       nombre: randomName,
       apellido: randomLastname,
-      telefono: `+58 ${Math.floor(Math.random() * 9000) + 1000}-${Math.floor(Math.random() * 9000) + 1000}`,
+      telefono: `+1 (${Math.floor(Math.random() * 900) + 100}) ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
       ciudad: randomCity,
-      direccion: `Avenida Principal, Edif. Demo ${Math.floor(Math.random() * 100) + 1}, Apto ${Math.floor(Math.random() * 50) + 1}`,
+      direccion: `${randomAddress}, ${randomCity}, UT`,
       tipo_propiedad: Math.random() > 0.5 ? 'comercial' : 'residencial',
       metros_cuadrados: Math.floor(Math.random() * 500) + 50,
       tipo_superficie: randomSurface,
-      obs_propiedad: 'Propiedad en excelente estado, lista para servicio de limpieza profesional.',
+      obs_propiedad: 'Property in great condition, ready for professional cleaning service.',
       fuente_adq: ['referido', 'publicidad', 'redes', 'app_leads'][Math.floor(Math.random() * 4)]
     })
   }

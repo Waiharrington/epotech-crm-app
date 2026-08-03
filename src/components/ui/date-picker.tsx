@@ -54,38 +54,42 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
         </button>
       </PopoverTrigger>
       <PopoverContent 
-        className="w-auto p-0 bg-white border-slate-200 shadow-[0_25px_60px_rgba(0,0,0,0.15)] rounded-2xl overflow-hidden" 
+        className="w-auto p-0 bg-white border border-slate-200/60 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] rounded-2xl" 
         align="start"
-        sideOffset={4}
+        side="top"
+        sideOffset={8}
       >
-        <div className="p-3">
+        <div className="p-3 pb-0">
           <Calendar
             mode="single"
             selected={date}
             onSelect={handleSelect}
             initialFocus
+            showOutsideDays={true}
+            fixedWeeks={true}
+            className="p-0 shadow-none border-0 bg-transparent"
             classNames={{
               root: "w-full",
-              months: "flex flex-col gap-4",
-              month: "flex w-full flex-col gap-4",
-              nav: "flex w-full items-center justify-between gap-1",
-              button_previous: "h-8 w-8 rounded-lg bg-transparent p-0 hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors",
-              button_next: "h-8 w-8 rounded-lg bg-transparent p-0 hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors",
-              month_caption: "flex h-8 w-full items-center justify-center",
+              months: "relative flex flex-col",
+              month: "flex w-full flex-col gap-2",
+              nav: "absolute inset-x-0 top-0 flex w-full items-center justify-between px-1",
+              button_previous: "h-7 w-7 rounded-lg bg-transparent p-0 hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors z-10",
+              button_next: "h-7 w-7 rounded-lg bg-transparent p-0 hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors z-10",
+              month_caption: "flex h-7 w-full items-center justify-center",
               caption_label: "text-[13px] font-bold text-slate-800 select-none",
               table: "w-full border-collapse",
-              weekdays: "flex",
-              weekday: "flex-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none",
-              week: "mt-1 flex w-full",
-              day: "group/day relative aspect-square h-9 w-full rounded-lg p-0 text-center select-none",
+              weekdays: "flex mb-1",
+              weekday: "flex-1 text-[9px] font-bold text-slate-400 uppercase tracking-wider select-none",
+              week: "mt-1 flex w-full gap-1",
+              day: "group/day relative aspect-square h-8 w-full rounded-lg p-0 text-center select-none text-[12px] font-medium transition-colors hover:bg-slate-50",
               today: "bg-[#E6F9FB] text-[#0097A7] font-bold",
               selected: "bg-gradient-to-br from-[#00C9E0] to-[#0097A7] text-white font-bold shadow-md shadow-cyan-500/25 hover:from-[#00b4ca] hover:to-[#035bb3]",
-              outside: "text-slate-300",
-              disabled: "text-slate-200 opacity-50",
+              outside: "text-slate-300 hover:bg-transparent",
+              disabled: "text-slate-200 opacity-50 hover:bg-transparent",
             }}
           />
         </div>
-        <div className="flex items-center justify-between border-t border-slate-100 px-3 py-2 bg-slate-50/50">
+        <div className="flex items-center justify-between border-t border-slate-100 px-3 py-2 bg-slate-50/50 mt-auto shrink-0 rounded-b-2xl">
           <button
             type="button"
             onClick={() => {

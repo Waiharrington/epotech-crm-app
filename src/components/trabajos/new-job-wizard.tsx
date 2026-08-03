@@ -49,6 +49,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
   const [clients, setClients] = useState<Cliente[]>([])
   const [services, setServices] = useState<Servicio[]>([])
   const [searchClient, setSearchClient] = useState('')
+  const [searchService, setSearchService] = useState('')
   
   const [formData, setFormData] = useState<Partial<TrabajoInsert>>({
     cliente_id: initialClientId || initialData?.cliente_id || '',
@@ -82,6 +83,11 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
 
   const selectedClient = clients.find(c => c.id === formData.cliente_id)
   const selectedService = services.find(s => s.id === formData.servicio_id)
+
+  const filteredServices = services.filter(s => 
+    s.nombre.toLowerCase().includes(searchService.toLowerCase()) ||
+    (s.descripcion && s.descripcion.toLowerCase().includes(searchService.toLowerCase()))
+  )
 
   const handleServiceSelect = (serviceId: string) => {
     const service = services.find(s => s.id === serviceId)
@@ -233,8 +239,27 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
               <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
                 ¿Qué servicio vamos a realizar?
               </Label>
-              <div className="space-y-2 max-h-[300px] overflow-y-auto">
-                {services.map(service => (
+              <div className="relative mb-2">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Input 
+                  placeholder="Buscar servicio por nombre..." 
+                  className="pl-10 bg-white border-slate-200 rounded-xl h-11 text-[12px] font-medium text-slate-700 placeholder:text-slate-300 hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-[#0097A7]/20 transition-all"
+                  value={searchService}
+                  onChange={e => setSearchService(e.target.value)}
+                  autoFocus
+                />
+                {searchService && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchService('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 h-6 w-6 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+              <div className="space-y-2 max-h-[300px] overflow-y-auto styled-scrollbar px-1">
+                {filteredServices.map(service => (
                   <button 
                     key={service.id} 
                     type="button"
@@ -264,8 +289,17 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
                       </div>
                     </div>
                     <div className="font-black text-[14px] text-[#0097A7] shrink-0 ml-3">${service.precio_venta}</div>
-                  </button>
+                    </button>
                 ))}
+                {filteredServices.length === 0 && (
+                  <div className="text-center py-8 px-4 bg-white rounded-xl border-2 border-dashed border-slate-200">
+                    <div className="h-12 w-12 rounded-xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
+                      <Search className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <p className="text-[12px] font-bold text-slate-600">Servicio no encontrado</p>
+                    <p className="text-[10px] text-slate-400 mt-1">Prueba con otro término de búsqueda</p>
+                  </div>
+                )}
               </div>
               <button 
                 type="button" 
@@ -378,6 +412,24 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
                       </SelectContent>
                     </Select>
                   </div>
+                </div>
+              </div>
+
+              {/* Ayudantes */}
+              <div className="bg-white rounded-xl p-3.5 border border-slate-200 shadow-sm">
+                <p className="text-[8px] font-extrabold text-[#0097A7] uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                  <User className="h-3 w-3" /> Equipo de Apoyo
+                </p>
+                <div className="space-y-1">
+                  <Label className="text-[8px] font-extrabold text-slate-400 uppercase tracking-wider">Ayudantes (Opcional)</Label>
+                  <Input 
+                    type="text" 
+                    placeholder="Ej. Juan y Carlos"
+                    className="bg-[#F0F5FA] border-slate-200 rounded-xl h-[38px] text-[12px] font-medium text-slate-700 hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-[#0097A7]/20 transition-all placeholder:text-slate-400"
+                    value={formData.ayudantes || ''} 
+                    onChange={e => setFormData(prev => ({ ...prev, ayudantes: e.target.value }))}
+                  />
+                  <p className="text-[9px] text-slate-400 mt-1">Si vas solo, déjalo en blanco.</p>
                 </div>
               </div>
             </div>

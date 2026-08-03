@@ -1691,7 +1691,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
         </div>
       )}
 
-      <style>{`
+      <style suppressHydrationWarning>{`
         @keyframes nozzle-recoil {
           0%   { transform: translate(0px, 0px) rotate(0deg); }
           100% { transform: translate(-1.2px, 0.8px) rotate(-0.15deg); }

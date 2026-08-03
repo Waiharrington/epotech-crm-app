@@ -213,286 +213,96 @@ export default function AjustesPage() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-background overflow-hidden">
-      <header className="p-6 border-b bg-card">
+    <div className="flex flex-col h-full bg-slate-50/50 overflow-hidden relative">
+      {/* Background Decorators */}
+      <div className="absolute top-0 left-0 right-0 h-[300px] bg-gradient-to-b from-[#00C9E0]/5 to-transparent pointer-events-none" />
+      <div className="absolute -top-[200px] -right-[200px] w-[500px] h-[500px] bg-[#00C9E0]/5 rounded-full blur-[100px] pointer-events-none" />
+      
+      <header className="px-6 py-8 md:py-10 border-b border-white/40 bg-white/40 backdrop-blur-xl relative z-10">
         <div className="max-w-4xl mx-auto w-full">
-            <h1 className="text-3xl font-bold tracking-tight">Configuración</h1>
-            <p className="text-muted-foreground mt-1">Personaliza tu experiencia y parámetros operativos.</p>
+            <h1 className="text-3xl md:text-4xl font-black text-slate-800 tracking-tight">Configuración</h1>
+            <p className="text-sm font-medium text-slate-500 mt-1.5">Personaliza tu experiencia y parámetros operativos del sistema.</p>
         </div>
       </header>
 
-      <main className="p-6 max-w-4xl mx-auto w-full flex-1 overflow-y-auto space-y-6 pb-20">
+      <main className="p-6 max-w-4xl mx-auto w-full flex-1 overflow-y-auto space-y-6 pb-20 relative z-10 scroll-smooth">
         
-        {/* Business Context Settings */}
-        <Card>
-            <CardHeader>
-                <div className="flex items-center gap-2">
-                    <DollarSign className="h-5 w-5 text-primary" />
-                    <CardTitle className="text-lg">Parámetros Financieros</CardTitle>
-                </div>
-                <CardDescription>Configura los costos base para el cálculo de rentabilidad automática.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="grid gap-2">
-                    <Label htmlFor="leadCost">Costo promedio por Lead (Publicidad)</Label>
-                    <div className="flex items-center gap-3">
-                        <Input 
-                            id="leadCost" 
-                            type="number" 
-                            className="max-w-[200px]"
-                            value={settings.leadCost}
-                            onChange={e => setSettings({...settings, leadCost: parseFloat(e.target.value) || 0})}
-                        />
-                        <span className="text-sm text-muted-foreground">USD por cada cliente nuevo adquirido vía Marketing.</span>
-                    </div>
-                </div>
-            </CardContent>
-        </Card>
+
 
         {/* Notifications Settings */}
-        <Card>
-            <CardHeader>
-                <div className="flex items-center gap-2">
-                    <Bell className="h-5 w-5 text-primary" />
-                    <CardTitle className="text-lg">Notificaciones PWA</CardTitle>
+        <div className="bg-white rounded-3xl p-6 md:p-8 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300">
+            <div className="flex items-center gap-3 mb-6">
+                <div className="h-10 w-10 bg-gradient-to-br from-[#00C9E0] to-[#0097A7] rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                    <Bell className="h-5 w-5 text-white" />
                 </div>
-                <CardDescription>Controla cómo y cuándo recibes alertas en tu dispositivo.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-                <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                        <Label>Sincronización con el Dispositivo</Label>
-                        <p className="text-xs text-muted-foreground">Activa el permiso en el navegador para recibir los avisos.</p>
+                <div>
+                    <h2 className="text-lg font-black text-slate-800">Notificaciones PWA</h2>
+                    <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Control de alertas</p>
+                </div>
+            </div>
+            
+            <div className="space-y-4">
+                <div className="flex items-center justify-between p-5 bg-slate-50/50 rounded-2xl border border-slate-100/50">
+                    <div className="space-y-1">
+                        <Label className="text-sm font-bold text-slate-700">Sincronización con el Dispositivo</Label>
+                        <p className="text-xs font-medium text-slate-500">Activa el permiso en el navegador para recibir los avisos.</p>
                     </div>
                     <NotificationManager />
                 </div>
-                <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                        <Label>Alertas de Stock</Label>
-                        <p className="text-xs text-muted-foreground">Notificación instantánea cuando un insumo llegue al nivel crítico.</p>
+                <div className="flex items-center justify-between p-5 bg-slate-50/50 rounded-2xl border border-slate-100/50">
+                    <div className="space-y-1">
+                        <Label className="text-sm font-bold text-slate-700">Alertas de Stock</Label>
+                        <p className="text-xs font-medium text-slate-500">Notificación instantánea cuando un insumo llegue al nivel crítico.</p>
                     </div>
                     <Switch 
                         checked={settings.instantAlerts}
                         onCheckedChange={v => setSettings({...settings, instantAlerts: v})}
+                        className="data-[state=checked]:bg-[#0097A7]"
                     />
                 </div>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
 
-        {/* Profile Settings */}
-        <Card>
-            <CardHeader>
-                <div className="flex items-center gap-2">
-                    <User className="h-5 w-5 text-primary" />
-                    <CardTitle className="text-lg">Perfil de Usuario</CardTitle>
+
+
+        {/* Security / Logout */}
+        <div className="bg-red-50/50 rounded-3xl p-6 md:p-8 border border-red-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+            <div className="flex items-center gap-3 mb-6">
+                <div className="h-10 w-10 bg-red-100 rounded-xl flex items-center justify-center">
+                    <Lock className="h-5 w-5 text-red-600" />
                 </div>
-            </CardHeader>
-            <CardContent className="flex flex-col md:flex-row gap-6 items-center md:items-start">
-                  {/* Left Column: Avatar Interaction */}
-                  <div className="flex flex-col items-center gap-3 shrink-0">
-                      <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-slate-200 group shadow-md hover:border-[#0097A7] transition-all duration-300">
-                          <img 
-                              src={profilePic} 
-                              alt="Foto de perfil" 
-                              className="w-full h-full object-cover"
-                              style={{ objectPosition: '20% 0%' }}
-                          />
-                          <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white cursor-pointer transition-opacity duration-300 gap-1.5 text-xs font-bold">
-                              <Camera className="h-5 w-5 text-[#00C9E0]" />
-                              <span>Cambiar Foto</span>
-                              <input 
-                                  type="file" 
-                                  accept="image/*" 
-                                  className="hidden" 
-                                  onChange={handleFileChange} 
-                              />
-                          </label>
-                      </div>
-                      
-                      <div className="flex flex-col sm:flex-row gap-2 mt-1 w-full justify-center">
-                          <label className="flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 hover:text-slate-900 border border-slate-200 rounded-lg cursor-pointer transition-all duration-200 select-none">
-                              <Upload className="h-3.5 w-3.5 text-[#0097A7]" />
-                              <span>Subir Imagen</span>
-                              <input 
-                                  type="file" 
-                                  accept="image/*" 
-                                  className="hidden" 
-                                  onChange={handleFileChange} 
-                              />
-                          </label>
-                          {profilePic !== '/assets/profile.jpg' && (
-                              <button 
-                                  type="button"
-                                  onClick={resetToDefault}
-                                  className="flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-100 hover:border-red-200 rounded-lg transition-all duration-200"
-                              >
-                                  <Trash2 className="h-3.5 w-3.5" />
-                                  <span>Restablecer</span>
-                              </button>
-                          )}
-                      </div>
-                  </div>
-
-                  {/* Right Column: Name Fields */}
-                  <div className="flex-1 w-full space-y-4">
-                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                              <Label>Nombre</Label>
-                              <Input defaultValue="Sebastián" />
-                          </div>
-                          <div className="space-y-2">
-                              <Label>Apellido</Label>
-                              <Input defaultValue="Epotec" />
-                          </div>
-                       </div>
-                       <div className="space-y-2">
-                          <Label>Correo Electrónico</Label>
-                          <Input defaultValue="sebastian@epotech.com" disabled />
-                       </div>
-                  </div>
-            </CardContent>
-        </Card>
-
-        <Card className="border-red-100 bg-red-50/10">
-            <CardHeader>
-                <div className="flex items-center gap-2 text-red-600">
-                    <Lock className="h-5 w-5" />
-                    <CardTitle className="text-lg">Seguridad</CardTitle>
+                <div>
+                    <h2 className="text-lg font-black text-red-700">Seguridad</h2>
+                    <p className="text-[11px] font-bold text-red-400/80 uppercase tracking-wider mt-0.5">Acceso a la plataforma</p>
                 </div>
-            </CardHeader>
-            <CardContent className="flex flex-col sm:flex-row gap-4">
-                <Button variant="outline" className="text-red-600 border-red-200 hover:bg-red-50">Cambiar Contraseña</Button>
-                <Button variant="destructive" onClick={handleLogout} disabled={loading}>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+                <Button variant="outline" className="h-11 rounded-xl text-red-600 border-red-200 bg-white hover:bg-red-50 font-bold px-6 shadow-sm">
+                    Cambiar Contraseña
+                </Button>
+                <Button variant="destructive" onClick={handleLogout} disabled={loading} className="h-11 rounded-xl bg-red-600 hover:bg-red-700 font-bold px-6 shadow-md shadow-red-500/20 text-white">
                      {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Cerrar Sesión'}
                 </Button>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
 
-        <div className="flex items-center justify-end gap-3 pt-4">
+        {/* Floating Save Action */}
+        <div className="sticky bottom-6 flex items-center justify-end gap-4 mt-8 pointer-events-none">
             {saved && (
-                <div className="flex items-center text-green-600 text-sm animate-in fade-in slide-in-from-right-4">
+                <div className="flex items-center bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-lg shadow-emerald-500/10 px-4 py-2.5 rounded-2xl text-sm font-bold animate-in fade-in slide-in-from-right-4 pointer-events-auto">
                     <CheckCircle2 className="mr-2 h-4 w-4" /> Configuración guardada
                 </div>
             )}
-            <Button className="w-40 h-11" onClick={handleSave} disabled={loading}>
-                {loading ? <Loader2 className="animate-spin" /> : <><Save className="mr-2 h-4 w-4" /> Guardar Cambios</>}
+            <Button 
+                className="h-14 px-8 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-black shadow-xl shadow-slate-900/20 transition-all active:scale-[0.98] pointer-events-auto text-base" 
+                onClick={handleSave} 
+                disabled={loading}
+            >
+                {loading ? <Loader2 className="animate-spin h-5 w-5" /> : <><Save className="mr-2.5 h-5 w-5" /> Guardar Cambios</>}
             </Button>
         </div>
       </main>
 
-      {/* Editor de Foto de Perfil Modal */}
-      {editMode && selectedImg && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-300">
-          <div className="bg-card w-full max-w-md rounded-3xl border border-slate-800 shadow-2xl shadow-cyan-950/20 overflow-hidden animate-in zoom-in-95 duration-200">
-            {/* Modal Header */}
-            <div className="flex justify-between items-center px-6 py-4 border-b border-slate-800 bg-[#0B1E3F]/40">
-              <div>
-                <h3 className="font-extrabold text-lg text-foreground">Editar foto de perfil</h3>
-                <p className="text-xs text-muted-foreground mt-0.5">Arrastra, escala y rota para centrar tu rostro.</p>
-              </div>
-              <button 
-                onClick={() => { setEditMode(false); setSelectedImg(null); }}
-                className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl transition-all duration-200"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            {/* Crop Workspace Container */}
-            <div className="relative bg-[#090D16] flex items-center justify-center py-10 overflow-hidden select-none">
-              {/* Crop mask guides: transparent circle in a black/60 mask */}
-              <div 
-                className="relative overflow-hidden rounded-full border-2 border-dashed border-[#00C9E0]/45 shadow-[0_0_40px_rgba(0,201,224,0.15)] bg-slate-950/20 cursor-grab active:cursor-grabbing"
-                style={{ width: containerSize, height: containerSize }}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUpOrLeave}
-                onMouseLeave={handleMouseUpOrLeave}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleMouseUpOrLeave}
-              >
-                {/* The Image inside the crop area */}
-                {imgSize && (
-                  <img 
-                    src={selectedImg}
-                    alt="Crop target"
-                    className="absolute max-w-none origin-center select-none pointer-events-none will-change-transform duration-75 ease-out"
-                    style={{
-                      width: imgSize.width * imgSize.baseScale,
-                      height: imgSize.height * imgSize.baseScale,
-                      top: '50%',
-                      left: '50%',
-                      transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) rotate(${rotation}deg) scale(${zoom})`
-                    }}
-                  />
-                )}
-                
-                {/* Subtle inner ring visual guide */}
-                <div className="absolute inset-2 border border-white/5 rounded-full pointer-events-none" />
-              </div>
-            </div>
-
-            {/* Controls bar */}
-            <div className="p-6 space-y-5 bg-card border-t border-slate-800/60">
-              {/* Zoom range controller */}
-              <div className="space-y-2">
-                <div className="flex justify-between items-center text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                  <span className="flex items-center gap-1.5"><ZoomOut className="h-3.5 w-3.5" /> Zoom</span>
-                  <span className="text-[#0097A7]">{Math.round(zoom * 100)}%</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <ZoomOut className="h-4 w-4 text-slate-450" />
-                  <input 
-                    type="range"
-                    min="1"
-                    max="3"
-                    step="0.02"
-                    value={zoom}
-                    onChange={(e) => setZoom(parseFloat(e.target.value))}
-                    className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#0097A7]"
-                  />
-                  <ZoomIn className="h-4 w-4 text-slate-450" />
-                </div>
-              </div>
-
-              {/* Auxiliary tools like Rotation */}
-              <div className="flex items-center justify-between gap-4 pt-1">
-                <button
-                  type="button"
-                  onClick={() => setRotation((prev) => (prev + 90) % 360)}
-                  className="flex items-center gap-2 px-4 py-2 border border-slate-800 hover:border-slate-700 bg-slate-900/60 text-slate-300 hover:text-white rounded-xl text-xs font-bold transition-all duration-200 active:scale-95"
-                >
-                  <RotateCw className="h-4 w-4 text-[#00C9E0]" />
-                  <span>Rotar 90°</span>
-                </button>
-
-                <div className="flex items-center gap-2 text-xs font-medium text-slate-450">
-                  <span>Arrastra la foto para encuadrar</span>
-                </div>
-              </div>
-
-              {/* Footer action buttons */}
-              <div className="flex justify-end gap-3 pt-3 border-t border-slate-800/40">
-                <button
-                  type="button"
-                  onClick={() => { setEditMode(false); setSelectedImg(null); }}
-                  className="px-4 py-2 text-slate-400 hover:text-white text-sm font-bold transition-all duration-200"
-                >
-                  Cancelar
-                </button>
-                <Button 
-                  onClick={saveCroppedImage}
-                  disabled={loading}
-                  className="px-5 bg-[#0097A7] hover:bg-[#00838F] text-white font-bold h-10 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-900/10"
-                >
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Aplicar'}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

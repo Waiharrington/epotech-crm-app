@@ -179,6 +179,7 @@ export interface Database {
           fecha_proximo_serv: string | null
           completado_at: string | null
           materiales_utilizados: Json | null
+          ayudantes: string | null
           archivado: boolean | null
           created_at: string
           updated_at: string
@@ -205,6 +206,7 @@ export interface Database {
           fecha_proximo_serv?: string | null
           completado_at?: string | null
           materiales_utilizados?: Json | null
+          ayudantes?: string | null
           archivado?: boolean | null
           created_at?: string
           updated_at?: string
@@ -231,6 +233,7 @@ export interface Database {
           fecha_proximo_serv?: string | null
           completado_at?: string | null
           materiales_utilizados?: Json | null
+          ayudantes?: string | null
           archivado?: boolean | null
           created_at?: string
           updated_at?: string

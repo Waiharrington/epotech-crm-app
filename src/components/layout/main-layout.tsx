@@ -37,8 +37,7 @@ import { ReminderPoller } from '@/components/recordatorios/reminder-poller'
 const mainNavItems = [
   { name: 'Dashboard', mobileName: 'Inicio', href: '/dashboard', icon: LayoutDashboard, iconClass: 'icon-tilt' },
   { name: 'Clientes', mobileName: 'Clientes', href: '/clientes', icon: Users, iconClass: 'icon-pulse-glow' },
-  { name: 'Trabajos', mobileName: 'Trabajos', href: '/trabajos', icon: Wrench, iconClass: 'icon-wrench' },
-  { name: 'Agenda', mobileName: 'Agenda', href: '/agenda', icon: Calendar, iconClass: 'icon-bounce' },
+  { name: 'Agenda', mobileName: 'Agenda', href: '/trabajos', icon: Calendar, iconClass: 'icon-bounce' },
   { name: 'Cotizaciones', mobileName: 'Cotizar', href: '/cotizaciones', icon: FileText, iconClass: 'icon-bounce' },
 ]
 

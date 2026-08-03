@@ -458,8 +458,8 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                           </SelectContent>
                         </Select>
                       )}
-                      <Button type="button" onClick={addEquipo} className="bg-primary hover:bg-primary/95 text-primary-foreground">
-                        <Plus className="h-4 w-4" />
+                      <Button type="button" onClick={addEquipo} className="bg-[#0097A7] hover:bg-[#007f8c] text-white border-none rounded-lg">
+                        <Plus className="h-4 w-4 text-white" />
                       </Button>
                     </div>
                 </div>
@@ -842,13 +842,13 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
           </div>
           
           <Button 
-            className="w-full h-14 text-lg bg-green-600 hover:bg-green-700" 
+            className="w-full h-12 text-sm font-bold text-white bg-[#00A859] hover:bg-[#00924d] rounded-xl transition-all border-none" 
             onClick={handleComplete}
             disabled={loading}
           >
-            {loading ? <Loader2 className="animate-spin" /> : (
+            {loading ? <Loader2 className="animate-spin text-white" /> : (
               <>
-                <Check className="mr-2 h-5 w-5" /> Completar y Registrar en Caja
+                <Check className="mr-2 h-4 w-4" /> Completar y Registrar en Caja
               </>
             )}
           </Button>

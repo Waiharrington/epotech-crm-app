@@ -29,6 +29,8 @@ import { MapIcon } from 'lucide-react'
 
 import { useSearchParams } from 'next/navigation'
 
+import { TimePicker } from '@/components/ui/time-picker'
+
 type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
   clientes: { id: string; nombre: string; apellido: string; telefono: string; direccion: string | null }
   catalogo_servicios: { nombre: string } | null
@@ -57,6 +59,8 @@ function TrabajosContent() {
   const [routeDate, setRouteDate] = useState<Date>(new Date())
   const [jobToReschedule, setJobToReschedule] = useState<TrabajoWithDetails | null>(null)
   const [showRescheduleModal, setShowRescheduleModal] = useState(false)
+  const [rescheduleDate, setRescheduleDate] = useState<string>('')
+  const [rescheduleTime, setRescheduleTime] = useState<string>('')
 
   const handleStatusChange = async (job: TrabajoWithDetails, newStatus: 'proximo' | 'en_progreso' | 'completado') => {
     if (newStatus === 'completado') {
@@ -76,13 +80,22 @@ function TrabajosContent() {
     }
   }
 
-  const handleJobReschedule = async (jobId: string, newDateStr: string) => {
+  const handleJobReschedule = async (jobId: string, newDateStr: string, newTimeStr?: string) => {
     // Actualización optimista local
-    setTrabajos(prev => prev.map(t => t.id === jobId ? { ...t, fecha_servicio: newDateStr } : t))
+    setTrabajos(prev => prev.map(t => t.id === jobId ? { 
+      ...t, 
+      fecha_servicio: newDateStr,
+      hora_servicio: newTimeStr !== undefined ? newTimeStr : t.hora_servicio 
+    } : t))
     
+    const updatePayload: Record<string, any> = { fecha_servicio: newDateStr }
+    if (newTimeStr !== undefined) {
+      updatePayload.hora_servicio = newTimeStr
+    }
+
     const { error } = await (supabase as any)
       .from('trabajos')
-      .update({ fecha_servicio: newDateStr })
+      .update(updatePayload)
       .eq('id', jobId)
 
     if (error) {
@@ -439,6 +452,8 @@ function TrabajosContent() {
                     }}
                     onJobRescheduleClick={(job) => {
                       setJobToReschedule(job as TrabajoWithDetails)
+                      setRescheduleDate(job.fecha_servicio)
+                      setRescheduleTime(job.hora_servicio || '')
                       setShowRescheduleModal(true)
                     }}
                     viewMode={calendarViewMode}
@@ -458,6 +473,8 @@ function TrabajosContent() {
                         }}
                         onRescheduleClick={(job) => {
                           setJobToReschedule(job as TrabajoWithDetails)
+                          setRescheduleDate(job.fecha_servicio)
+                          setRescheduleTime(job.hora_servicio || '')
                           setShowRescheduleModal(true)
                         }}
                       />
@@ -471,6 +488,8 @@ function TrabajosContent() {
                        onStatusChange={handleStatusChange}
                        onRescheduleClick={(job) => {
                          setJobToReschedule(job as TrabajoWithDetails)
+                         setRescheduleDate(job.fecha_servicio)
+                         setRescheduleTime(job.hora_servicio || '')
                          setShowRescheduleModal(true)
                        }}
                        onEditClick={(job) => {
@@ -551,74 +570,115 @@ function TrabajosContent() {
           }
         }}
       >
-        <DialogContent className="max-w-sm rounded-3xl p-5 border-none shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-white/98 backdrop-blur-xl duration-200">
-          <DialogHeader className="mb-4">
-            <DialogTitle className="text-base font-black text-slate-800 leading-none">Reagendar Servicio</DialogTitle>
-            <DialogDescription className="text-[11px] text-slate-500 font-medium mt-1">
-              Selecciona el nuevo día para {jobToReschedule ? `${jobToReschedule.clientes.nombre} ${jobToReschedule.clientes.apellido}` : ''}
+        <DialogContent className="max-w-md rounded-3xl p-0 border-none overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-white duration-200">
+          {/* Accessibility requirements: DialogTitle & DialogDescription */}
+          <DialogHeader className="sr-only">
+            <DialogTitle>Reagendar Servicio</DialogTitle>
+            <DialogDescription>
+              Formulario para cambiar la fecha y hora de la cita programada
             </DialogDescription>
           </DialogHeader>
-          <div className="py-2 mb-4">
-            {jobToReschedule && (
-              <div className="grid grid-cols-5 gap-2">
-                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((offset) => {
-                  const targetDate = addDays(new Date(), offset)
-                  const year = targetDate.getFullYear()
-                  const month = String(targetDate.getMonth() + 1).padStart(2, '0')
-                  const day = String(targetDate.getDate()).padStart(2, '0')
-                  const dateStr = `${year}-${month}-${day}`
-                  const isSelected = jobToReschedule.fecha_servicio === dateStr
-                  
-                  const isToday = offset === 0
-                  const isTomorrow = offset === 1
-                  
-                  let dayLabel = format(targetDate, 'eee', { locale: es })
-                  if (isToday) dayLabel = 'Hoy'
-                  else if (isTomorrow) dayLabel = 'Mañ.'
 
-                  return (
-                    <button
-                      key={offset}
-                      type="button"
-                      onClick={async () => {
-                        await handleJobReschedule(jobToReschedule.id, dateStr)
-                        setShowRescheduleModal(false)
-                        setJobToReschedule(null)
-                        fetchTrabajos()
-                      }}
-                      className={cn(
-                        "flex flex-col items-center justify-center p-2.5 rounded-2xl transition-all cursor-pointer border text-center",
-                        isSelected 
-                          ? "bg-gradient-to-br from-[#0097A7] to-[#00acc1] border-[#0097A7] text-white shadow-md shadow-cyan-500/10 scale-105" 
-                          : "bg-slate-50 border-slate-100 hover:bg-slate-100 hover:border-slate-200 text-slate-700"
-                      )}
-                    >
-                      <span className="text-[9px] font-black uppercase tracking-wider opacity-80 leading-none">
-                        {dayLabel}
-                      </span>
-                      <span className="text-sm font-black mt-1 leading-none">
-                        {format(targetDate, 'd')}
-                      </span>
-                      <span className="text-[8px] font-bold opacity-60 mt-0.5 leading-none">
-                        {format(targetDate, 'MMM', { locale: es })}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            )}
+          {/* Header element styled identically to Finalizar Trabajo (check-out modal) */}
+          <div className="bg-[#0097A7] p-5 text-white relative">
+            <span className="text-[10px] font-bold uppercase tracking-wider opacity-85">Reagendar</span>
+            <h2 className="text-lg font-bold mt-0.5">Reagendar Servicio</h2>
+            <p className="text-xs font-semibold opacity-90 mt-1">
+              Para {jobToReschedule ? `${jobToReschedule.clientes.nombre} ${jobToReschedule.clientes.apellido}` : ''}
+            </p>
           </div>
-          <div className="flex justify-end gap-2">
-            <Button 
-              variant="outline" 
-              className="rounded-xl h-9 text-xs font-black text-slate-600 bg-slate-100 hover:bg-slate-200 border-none px-4 transition-all"
-              onClick={() => {
-                setShowRescheduleModal(false)
-                setJobToReschedule(null)
-              }}
-            >
-              Cerrar
-            </Button>
+
+          <div className="p-5 flex flex-col gap-4">
+            {jobToReschedule && (
+              <>
+                {/* 1. Date selection section */}
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    Selecciona el nuevo día
+                  </span>
+                  <div className="grid grid-cols-5 gap-2 max-h-36 overflow-y-auto no-scrollbar pr-0.5">
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((offset) => {
+                      const targetDate = addDays(new Date(), offset)
+                      const year = targetDate.getFullYear()
+                      const month = String(targetDate.getMonth() + 1).padStart(2, '0')
+                      const day = String(targetDate.getDate()).padStart(2, '0')
+                      const dateStr = `${year}-${month}-${day}`
+                      const isSelected = rescheduleDate === dateStr
+                      
+                      const isToday = offset === 0
+                      const isTomorrow = offset === 1
+                      
+                      let dayLabel = format(targetDate, 'eee', { locale: es })
+                      if (isToday) dayLabel = 'Hoy'
+                      else if (isTomorrow) dayLabel = 'Mañ.'
+
+                      return (
+                        <button
+                          key={offset}
+                          type="button"
+                          onClick={() => setRescheduleDate(dateStr)}
+                          className={cn(
+                            "flex flex-col items-center justify-center p-2 rounded-xl transition-all cursor-pointer border text-center active:scale-95",
+                            isSelected 
+                              ? "bg-[#0097A7] border-[#0097A7] text-white font-bold" 
+                              : "bg-slate-50/80 border-slate-200 hover:bg-slate-100/80 text-slate-700 font-semibold"
+                          )}
+                        >
+                          <span className="text-[9px] font-bold uppercase tracking-wider opacity-85 leading-none">
+                            {dayLabel}
+                          </span>
+                          <span className="text-xs font-bold mt-1 leading-none">
+                            {format(targetDate, 'd')}
+                          </span>
+                          <span className="text-[8px] font-medium opacity-65 mt-0.5 leading-none">
+                            {format(targetDate, 'MMM', { locale: es })}
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* 2. Time selection section using the imported TimePicker */}
+                <div className="flex flex-col gap-1.5 mt-1">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    Selecciona la hora del servicio
+                  </span>
+                  <TimePicker
+                    value={rescheduleTime}
+                    onChange={(newTime) => setRescheduleTime(newTime)}
+                    className="w-full font-semibold"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Actions Footer */}
+            <div className="flex justify-end gap-2 mt-4 border-t border-slate-100 pt-4">
+              <Button 
+                variant="outline" 
+                className="rounded-xl h-10 text-xs font-bold text-slate-500 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 px-4 transition-all"
+                onClick={() => {
+                  setShowRescheduleModal(false)
+                  setJobToReschedule(null)
+                }}
+              >
+                Cerrar
+              </Button>
+              <Button 
+                className="rounded-xl h-10 text-xs font-bold text-white bg-[#0097A7] hover:bg-[#008394] border-none px-5 transition-all"
+                onClick={async () => {
+                  if (jobToReschedule) {
+                    await handleJobReschedule(jobToReschedule.id, rescheduleDate, rescheduleTime || undefined)
+                    setShowRescheduleModal(false)
+                    setJobToReschedule(null)
+                    fetchTrabajos()
+                  }
+                }}
+              >
+                Confirmar
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

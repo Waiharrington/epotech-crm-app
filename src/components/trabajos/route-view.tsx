@@ -17,9 +17,9 @@ type TrabajoWithDetails = {
 interface RouteViewProps {
   jobs: TrabajoWithDetails[]
   selectedDate: Date
-  onStatusChange?: (job: TrabajoWithDetails, newStatus: 'proximo' | 'en_progreso' | 'completado') => void
-  onRescheduleClick?: (job: TrabajoWithDetails) => void
-  onEditClick?: (job: TrabajoWithDetails) => void
+  onStatusChange?: (job: any, newStatus: 'proximo' | 'en_progreso' | 'completado') => void
+  onRescheduleClick?: (job: any) => void
+  onEditClick?: (job: any) => void
 }
 
 function formatTime(time: string | null): string {

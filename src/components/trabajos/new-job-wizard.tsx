@@ -86,7 +86,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
 
   const filteredServices = services.filter(s => 
     s.nombre.toLowerCase().includes(searchService.toLowerCase()) ||
-    (s.descripcion && s.descripcion.toLowerCase().includes(searchService.toLowerCase()))
+    ((s as any).descripcion && (s as any).descripcion.toLowerCase().includes(searchService.toLowerCase()))
   )
 
   const handleServiceSelect = (serviceId: string) => {

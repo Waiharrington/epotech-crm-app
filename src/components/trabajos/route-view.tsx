@@ -324,10 +324,37 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
           </svg>
         </div>
 
+        {/* Animated Truck - Mobile */}
+        <div 
+          className="absolute left-[8px] z-20 transition-all duration-1000 ease-in-out"
+          style={{ 
+            top: `${16 + (nextJobIndex >= 0 ? nextJobIndex * 280 + 90 : sortedJobs.length * 280 + 20)}px`,
+            transform: 'translateY(-50%)'
+          }}
+        >
+          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-[3px] border-white shadow-lg shadow-amber-300/50 flex items-center justify-center truck-animate">
+            <Truck className="h-5 w-5 text-white" />
+          </div>
+          {nextJobIndex >= 0 && nextJobIndex < sortedJobs.length && (
+            <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap">
+              <span className="text-[7px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 shadow-sm">
+                En ruta
+              </span>
+            </div>
+          )}
+        </div>
+
         {/* Start Point */}
         <div className="w-full flex items-center gap-3 mb-6 pl-[14px] relative z-10">
-          <div className="h-10 w-10 shrink-0 rounded-full border-[3px] border-white shadow-md flex items-center justify-center bg-gradient-to-br from-[#0097A7] to-[#00acc1]">
-            <Truck className="h-4 w-4 text-white" />
+          <div className={cn(
+            "h-10 w-10 shrink-0 rounded-full border-[3px] shadow-md flex items-center justify-center",
+            nextJobIndex > 0 ? "border-emerald-300 bg-emerald-100" : "border-white bg-gradient-to-br from-[#0097A7] to-[#00acc1]"
+          )}>
+            {nextJobIndex > 0 ? (
+              <Check className="h-4 w-4 text-emerald-600" />
+            ) : (
+              <Truck className="h-4 w-4 text-white" />
+            )}
           </div>
           <div className="bg-white border border-slate-200/80 text-slate-700 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider shadow-sm">
             Inicio de Ruta
@@ -448,12 +475,39 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
               className="shrink-0 w-16 relative z-10 flex flex-col items-center justify-center gap-1.5"
               style={{ width: '64px', height: `${TOTAL_H}px` }}
             >
-              <div className="h-10 w-10 rounded-full border-[3px] border-white shadow-lg flex items-center justify-center bg-gradient-to-br from-[#0097A7] to-[#00acc1]">
-                <Truck className="h-4 w-4 text-white" />
+              <div className={cn(
+                "h-10 w-10 rounded-full border-[3px] shadow-lg flex items-center justify-center",
+                nextJobIndex > 0 ? "border-emerald-300 bg-emerald-100" : "border-white bg-gradient-to-br from-[#0097A7] to-[#00acc1]"
+              )}>
+                {nextJobIndex > 0 ? (
+                  <Check className="h-4 w-4 text-emerald-600" />
+                ) : (
+                  <Truck className="h-4 w-4 text-white" />
+                )}
               </div>
               <div className="bg-white border border-slate-200 text-slate-700 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
                 <span className="text-[8px] font-black uppercase tracking-widest">Inicio</span>
               </div>
+            </div>
+
+            {/* Animated Truck - Desktop */}
+            <div 
+              className="absolute z-30 transition-all duration-1000 ease-in-out pointer-events-none"
+              style={{ 
+                left: `${48 + 64 + (nextJobIndex >= 0 ? nextJobIndex : sortedJobs.length) * 240 + 120 - 16}px`,
+                top: `${CARD_H + ROAD_H / 2 + 16 - 20}px`
+              }}
+            >
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-[3px] border-white shadow-lg shadow-amber-300/50 flex items-center justify-center truck-animate">
+                <Truck className="h-5 w-5 text-white" />
+              </div>
+              {nextJobIndex >= 0 && nextJobIndex < sortedJobs.length && (
+                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                  <span className="text-[7px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 shadow-sm">
+                    Próxima parada
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* STOPS */}

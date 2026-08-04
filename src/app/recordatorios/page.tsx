@@ -352,7 +352,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
             {/* Filters Row */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shrink-0">
               {/* Tab Pills */}
-              <div className="flex gap-1.5 overflow-x-auto scrollbar-none">
+              <div className="flex gap-1.5 flex-wrap">
                 {[
                   { key: 'pending', label: 'Pendientes', count: pendingCount },
                   { key: 'completed', label: 'Completados', count: completedCount },

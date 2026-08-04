@@ -266,7 +266,7 @@ export default function CatalogoPage() {
         </div>
 
         {/* Category Filter Buttons */}
-        <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 shrink-0 scrollbar-none">
+        <div className="flex gap-1.5 flex-wrap shrink-0 pb-1">
           {['todos', ...categoryOptions].map((cat) => (
             <button
               key={cat}

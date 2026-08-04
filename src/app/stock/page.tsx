@@ -350,7 +350,7 @@ export default function StockPage() {
           </div>
 
           {activeTab === 'inventario' && (
-            <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+            <div className="flex gap-1.5 flex-wrap pb-1">
               {['todos', 'consumible', 'herramienta', 'maquinaria'].map((t) => (
                 <button
                   key={t}

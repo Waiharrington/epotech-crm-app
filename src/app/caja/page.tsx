@@ -163,7 +163,7 @@ export default function CajaPage() {
         </div>
 
         {/* Filter Pills */}
-        <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 shrink-0 scrollbar-none">
+        <div className="flex gap-1.5 flex-wrap shrink-0 pb-1">
           {[
             { key: 'todos', label: 'Todos', count: entries.length },
             { key: 'ingreso', label: 'Ingresos', count: ingresosCount },

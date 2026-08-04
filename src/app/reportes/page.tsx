@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -28,7 +28,12 @@ import {
   Users,
   Briefcase,
   RefreshCw,
-  DollarSign
+  DollarSign,
+  ChevronDown,
+  ChevronRight,
+  Lightbulb,
+  Target,
+  Zap
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
@@ -56,6 +61,7 @@ export default function ReportesPage() {
   const pastStr = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().substring(0, 10)
   const [customStartDate, setCustomStartDate] = useState(pastStr)
   const [customEndDate, setCustomEndDate] = useState(todayStr)
+  const [showSecondary, setShowSecondary] = useState(false)
 
   useEffect(() => {
     fetchReportesData()
@@ -305,71 +311,133 @@ export default function ReportesPage() {
         ) : (
           <div className="flex-1 overflow-y-auto min-h-0 pb-20 space-y-3">
             
-            {/* Top Financial KPIs */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 shrink-0">
+            {/* Top 3 Financial KPIs - Hero Stats */}
+            <div className="grid grid-cols-3 gap-3 shrink-0">
               {[
-                { label: 'Ventas Totales', value: `$${totalRevenue.toLocaleString()}`, sub: `${completedJobs.length} servicios completados`, icon: Wallet, color: 'cyan', borderColor: '#0097A7' },
-                { label: 'Ganancia Neta', value: `$${netProfit.toLocaleString()}`, sub: `${marginPercentage.toFixed(0)}% Margen`, icon: TrendingUp, color: 'emerald', borderColor: '#10b981' },
-                { label: 'Gastos Estimados', value: `$${totalExpenses.toLocaleString()}`, sub: 'Materiales y costos variables', icon: TrendingDown, color: 'rose', borderColor: '#f43f5e' },
-                { label: 'Ticket Promedio', value: `$${averageTicket.toLocaleString()}`, sub: 'Valor medio por servicio', icon: ShoppingBag, color: 'violet', borderColor: '#8b5cf6' },
+                { label: 'Ventas Totales', value: `$${totalRevenue.toLocaleString()}`, sub: `${completedJobs.length} servicios completados`, icon: Wallet, color: 'cyan', borderColor: '#0097A7', bgClass: 'from-[#0097A7] via-[#00b4ca] to-[#00C9E0]' },
+                { label: 'Ganancia Neta', value: `$${netProfit.toLocaleString()}`, sub: `${marginPercentage.toFixed(0)}% Margen`, icon: TrendingUp, color: 'emerald', borderColor: '#10b981', bgClass: 'from-emerald-500 to-emerald-600' },
+                { label: 'Ticket Promedio', value: `$${averageTicket.toLocaleString()}`, sub: 'Valor medio por servicio', icon: ShoppingBag, color: 'violet', borderColor: '#8b5cf6', bgClass: 'from-violet-500 to-violet-600' },
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="bg-white border border-slate-200/60 rounded-2xl p-3.5 shadow-sm hover:shadow-md transition-all"
-                  style={{ borderLeftWidth: '4px', borderLeftColor: stat.borderColor }}
+                  className={cn(
+                    "rounded-2xl p-4 shadow-lg relative overflow-hidden transition-all hover:shadow-xl",
+                    stat.color === 'cyan' ? 'bg-gradient-to-br from-[#0097A7] via-[#00b4ca] to-[#00C9E0] shadow-cyan-500/20' :
+                    stat.color === 'emerald' ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-emerald-500/20' :
+                    'bg-gradient-to-br from-violet-500 to-violet-600 shadow-violet-500/20'
+                  )}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{stat.label}</p>
-                    <div className={cn(
-                      "h-7 w-7 rounded-lg flex items-center justify-center border",
-                      stat.color === 'cyan' ? 'bg-cyan-50 border-cyan-200/60 text-cyan-600' :
-                      stat.color === 'emerald' ? 'bg-emerald-50 border-emerald-200/60 text-emerald-600' :
-                      stat.color === 'rose' ? 'bg-rose-50 border-rose-200/60 text-rose-600' :
-                      'bg-violet-50 border-violet-200/60 text-violet-600'
-                    )}>
-                      <stat.icon className="h-3.5 w-3.5" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/60">{stat.label}</p>
+                      <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-white/15 border border-white/20">
+                        <stat.icon className="h-3.5 w-3.5 text-white" />
+                      </div>
                     </div>
+                    <p className="text-2xl font-black text-white">{stat.value}</p>
+                    <p className="text-[9px] text-white/50 font-medium mt-1">{stat.sub}</p>
                   </div>
-                  <p className={cn(
-                    "text-xl font-black",
-                    stat.color === 'cyan' ? 'text-[#0097A7]' :
-                    stat.color === 'emerald' ? 'text-emerald-600' :
-                    stat.color === 'rose' ? 'text-rose-600' :
-                    'text-violet-600'
-                  )}>{stat.value}</p>
-                  <p className="text-[9px] text-slate-400 font-medium mt-1">{stat.sub}</p>
                 </div>
               ))}
             </div>
 
-            {/* Secondary CRM Metrics */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0">
-              {[
-                { label: 'Cuentas por Cobrar', value: `$${totalPendingReceivables.toLocaleString()}`, icon: Clock, badge: totalPendingReceivables === 0 ? 'Cobros al Día' : 'Cobro Pendiente', badgeColor: totalPendingReceivables === 0 ? 'bg-emerald-50 text-emerald-600 border-emerald-200/60' : 'bg-amber-50 text-amber-600 border-amber-200/60', borderColor: '#f59e0b' },
-                { label: 'Tasa de Fidelidad', value: `${repeatRatio.toFixed(0)}%`, icon: Heart, sub: 'Servicios hechos a clientes recurrentes', borderColor: '#f43f5e' },
-                { label: 'Costo Lead Promedio', value: `$${averageLeadCost.toLocaleString(undefined, {maximumFractionDigits: 1})}`, icon: Users, sub: 'Inversión media en leads por trabajo', borderColor: '#71717a' },
-              ].map((stat) => (
-                <div
-                  key={stat.label}
-                  className="bg-white border border-slate-200/60 rounded-2xl p-3.5 shadow-sm hover:shadow-md transition-all"
-                  style={{ borderLeftWidth: '4px', borderLeftColor: stat.borderColor }}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{stat.label}</p>
-                    <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-200/60 text-slate-400">
-                      <stat.icon className="h-3.5 w-3.5" />
-                    </div>
+            {/* Secondary Metrics - Collapsible */}
+            <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden shadow-sm">
+              <button
+                onClick={() => setShowSecondary(!showSecondary)}
+                className="w-full px-4 py-3 flex items-center justify-between hover:bg-slate-50/50 transition-colors cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-slate-100 border border-slate-200/60">
+                    <Target className="h-3.5 w-3.5 text-slate-500" />
                   </div>
-                  <p className="text-xl font-black text-slate-800">{stat.value}</p>
-                  {stat.badge && (
-                    <Badge className={cn("text-[9px] font-bold px-2 py-0.5 rounded-full mt-1.5 border", stat.badgeColor)}>
-                      {stat.badge}
-                    </Badge>
-                  )}
-                  {stat.sub && <p className="text-[9px] text-slate-400 font-medium mt-1">{stat.sub}</p>}
+                  <span className="text-xs font-black uppercase tracking-wider text-slate-600">Métricas Secundarias</span>
+                  <span className="text-[9px] text-slate-400 font-medium">Gastos, cobros, fidelidad, leads</span>
                 </div>
-              ))}
+                <div className="flex items-center gap-1.5">
+                  <Badge className="bg-slate-100 text-slate-500 text-[8px] font-bold px-1.5 py-0 rounded-full border border-slate-200/60">4 métricas</Badge>
+                  {showSecondary ? (
+                    <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-200" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4 text-slate-400 transition-transform duration-200" />
+                  )}
+                </div>
+              </button>
+              
+              {showSecondary && (
+                <div className="px-4 pb-4 grid grid-cols-2 lg:grid-cols-4 gap-3 animate-in slide-in-from-top-2 duration-200">
+                  {[
+                    { label: 'Gastos Estimados', value: `$${totalExpenses.toLocaleString()}`, sub: 'Materiales y costos variables', icon: TrendingDown, color: 'rose', borderColor: '#f43f5e' },
+                    { label: 'Cuentas por Cobrar', value: `$${totalPendingReceivables.toLocaleString()}`, icon: Clock, badge: totalPendingReceivables === 0 ? 'Cobros al Día' : 'Cobro Pendiente', badgeColor: totalPendingReceivables === 0 ? 'bg-emerald-50 text-emerald-600 border-emerald-200/60' : 'bg-amber-50 text-amber-600 border-amber-200/60', borderColor: '#f59e0b' },
+                    { label: 'Tasa de Fidelidad', value: `${repeatRatio.toFixed(0)}%`, icon: Heart, sub: 'Clientes recurrentes', borderColor: '#f43f5e' },
+                    { label: 'Costo Lead Promedio', value: `$${averageLeadCost.toLocaleString(undefined, {maximumFractionDigits: 1})}`, icon: Users, sub: 'Inversión por trabajo', borderColor: '#71717a' },
+                  ].map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="bg-white border border-slate-200/60 rounded-xl p-3 shadow-sm hover:shadow-md transition-all"
+                      style={{ borderLeftWidth: '3px', borderLeftColor: stat.borderColor }}
+                    >
+                      <div className="flex items-center justify-between mb-1.5">
+                        <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{stat.label}</p>
+                        <div className="h-6 w-6 rounded-md flex items-center justify-center bg-slate-50 border border-slate-200/60 text-slate-400">
+                          <stat.icon className="h-3 w-3" />
+                        </div>
+                      </div>
+                      <p className="text-lg font-black text-slate-800">{stat.value}</p>
+                      {stat.badge && (
+                        <Badge className={cn("text-[8px] font-bold px-1.5 py-0 rounded-full mt-1 border", stat.badgeColor)}>
+                          {stat.badge}
+                        </Badge>
+                      )}
+                      {stat.sub && <p className="text-[9px] text-slate-400 font-medium mt-0.5">{stat.sub}</p>}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
+
+            {/* Auto-Insights */}
+            {completedJobs.length > 0 && (
+              <div className="bg-gradient-to-r from-[#0097A7]/5 to-transparent border border-[#0097A7]/10 rounded-2xl p-4 shrink-0">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
+                    <Lightbulb className="h-3.5 w-3.5 text-[#0097A7]" />
+                  </div>
+                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">Insights Automáticos</h3>
+                  <Zap className="h-3.5 w-3.5 text-[#0097A7]" />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  {bestSellingService && (
+                    <div className="flex items-start gap-2 bg-white/60 rounded-xl p-2.5 border border-slate-200/40">
+                      <span className="text-base">🏆</span>
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-700">Más Vendido</p>
+                        <p className="text-[9px] text-slate-500">{bestSellingService.nombre} — {bestSellingService.ventasCount} servicios</p>
+                      </div>
+                    </div>
+                  )}
+                  {busiestDay && busiestDay.trabajosCount > 0 && (
+                    <div className="flex items-start gap-2 bg-white/60 rounded-xl p-2.5 border border-slate-200/40">
+                      <span className="text-base">🔥</span>
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-700">Día Más Activo</p>
+                        <p className="text-[9px] text-slate-500">{busiestDay.name} — {busiestDay.trabajosCount} servicios</p>
+                      </div>
+                    </div>
+                  )}
+                  {bestClient && (
+                    <div className="flex items-start gap-2 bg-white/60 rounded-xl p-2.5 border border-slate-200/40">
+                      <span className="text-base">👑</span>
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-700">Mejor Cliente</p>
+                        <p className="text-[9px] text-slate-500">{bestClient.nombre} {bestClient.apellido} — ${bestClient.gastado.toLocaleString()}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {completedJobs.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 bg-white/50 border border-slate-200/50 rounded-3xl border-dashed">

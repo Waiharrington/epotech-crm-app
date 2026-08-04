@@ -8,6 +8,13 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import Link from 'next/link'
 import { ArrowUpRight, ArrowDownRight, Clock, Loader2, ExternalLink, X, History } from 'lucide-react'
 import { useDialogClose } from '@/hooks/use-dialog-close'
@@ -22,6 +29,9 @@ export function StockHistoryModal({ item, onClose }: StockHistoryModalProps) {
   const { isOpen, isMounted, handleClose } = useDialogClose(onClose)
   const [loading, setLoading] = useState(true)
   const [movements, setMovements] = useState<any[]>([])
+  
+  const [typeFilter, setTypeFilter] = useState<'todos' | 'entrada' | 'salida'>('todos')
+  const [dateFilter, setDateFilter] = useState<'todos' | 'hoy' | 'semana' | 'mes'>('todos')
 
   useEffect(() => {
     fetchHistory()
@@ -38,6 +48,26 @@ export function StockHistoryModal({ item, onClose }: StockHistoryModalProps) {
     if (data) setMovements(data)
     setLoading(false)
   }
+
+  const filteredMovements = movements.filter(m => {
+    const matchesType = typeFilter === 'todos' || m.tipo === typeFilter
+    let matchesDate = true
+    if (dateFilter !== 'todos') {
+      const moveDate = new Date(m.created_at)
+      const now = new Date()
+      const diffTime = Math.abs(now.getTime() - moveDate.getTime())
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+      if (dateFilter === 'hoy') {
+        matchesDate = diffDays <= 1 && moveDate.getDate() === now.getDate()
+      } else if (dateFilter === 'semana') {
+        matchesDate = diffDays <= 7
+      } else if (dateFilter === 'mes') {
+        matchesDate = moveDate.getMonth() === now.getMonth() && moveDate.getFullYear() === now.getFullYear()
+      }
+    }
+    return matchesType && matchesDate
+  })
 
   if (!isMounted) return null
 
@@ -61,14 +91,39 @@ export function StockHistoryModal({ item, onClose }: StockHistoryModalProps) {
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto bg-[#F0F5FA] px-5 py-4">
+          <div className="flex gap-2 mb-4">
+            <Select value={typeFilter} onValueChange={(v: any) => setTypeFilter(v)}>
+              <SelectTrigger className="flex-1 h-9 text-[12px] rounded-xl bg-white border-slate-200/60 font-medium">
+                <SelectValue placeholder="Tipo" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl border-slate-200/60">
+                <SelectItem value="todos" className="text-[12px]">Todos los movs.</SelectItem>
+                <SelectItem value="entrada" className="text-[12px]">Solo Entradas (+)</SelectItem>
+                <SelectItem value="salida" className="text-[12px]">Solo Salidas (-)</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Select value={dateFilter} onValueChange={(v: any) => setDateFilter(v)}>
+              <SelectTrigger className="flex-1 h-9 text-[12px] rounded-xl bg-white border-slate-200/60 font-medium">
+                <SelectValue placeholder="Fecha" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl border-slate-200/60">
+                <SelectItem value="todos" className="text-[12px]">Cualquier fecha</SelectItem>
+                <SelectItem value="hoy" className="text-[12px]">Hoy</SelectItem>
+                <SelectItem value="semana" className="text-[12px]">Últimos 7 días</SelectItem>
+                <SelectItem value="mes" className="text-[12px]">Este Mes</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           {loading ? (
             <div className="flex flex-col items-center justify-center py-10">
               <Loader2 className="h-6 w-6 animate-spin text-[#0097A7]" />
               <p className="text-[13px] font-semibold text-slate-400 mt-2">Cargando historial...</p>
             </div>
-          ) : movements.length > 0 ? (
+          ) : filteredMovements.length > 0 ? (
             <div className="space-y-3">
-              {movements.map((move) => (
+              {filteredMovements.map((move) => (
                 <div key={move.id} className="relative pl-8 pb-4 border-l-2 border-slate-200 last:border-0 last:pb-0">
                   <div className={cn("absolute -left-[11px] top-1 h-5 w-5 rounded-full flex items-center justify-center border-2 border-white ring-2",
                     move.tipo === 'entrada' ? 'bg-emerald-500 ring-emerald-100' : 'bg-rose-500 ring-rose-100'

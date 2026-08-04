@@ -20,7 +20,8 @@ import {
   Boxes,
   Wrench,
   Cog,
-  Filter
+  Filter,
+  Download
 } from 'lucide-react'
 import { normalizeSearch } from '@/lib/utils'
 import { useConfirm } from '@/components/ui/confirm-dialog'
@@ -82,6 +83,8 @@ export default function StockPage() {
   const [globalMovements, setGlobalMovements] = useState<any[]>([])
   const [loadingHistory, setLoadingHistory] = useState(false)
   const [historySearch, setHistorySearch] = useState('')
+  const [historyTypeFilter, setHistoryTypeFilter] = useState<'todos' | 'entrada' | 'salida'>('todos')
+  const [historyDateFilter, setHistoryDateFilter] = useState<'todos' | 'hoy' | 'semana' | 'mes'>('todos')
   const [activeTab, setActiveTab] = useState<'inventario' | 'historial'>('inventario')
   const [typeFilter, setTypeFilter] = useState<string>('todos')
   
@@ -204,10 +207,43 @@ export default function StockPage() {
   }
 
   const filteredHistory = globalMovements.filter(m => {
+    // Texto
     const searchNorm = normalizeSearch(historySearch)
-    return normalizeSearch(m.stock?.nombre).includes(searchNorm) ||
+    const matchesSearch = normalizeSearch(m.stock?.nombre).includes(searchNorm) ||
       normalizeSearch(m.motivo).includes(searchNorm)
+
+    // Tipo de Movimiento
+    const matchesType = historyTypeFilter === 'todos' || m.tipo === historyTypeFilter
+
+    // Fecha
+    let matchesDate = true
+    if (historyDateFilter !== 'todos') {
+      const moveDate = new Date(m.created_at)
+      const now = new Date()
+      const diffTime = Math.abs(now.getTime() - moveDate.getTime())
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+      if (historyDateFilter === 'hoy') {
+        matchesDate = diffDays <= 1 && moveDate.getDate() === now.getDate()
+      } else if (historyDateFilter === 'semana') {
+        matchesDate = diffDays <= 7
+      } else if (historyDateFilter === 'mes') {
+        matchesDate = moveDate.getMonth() === now.getMonth() && moveDate.getFullYear() === now.getFullYear()
+      }
+    }
+
+    return matchesSearch && matchesType && matchesDate
   })
+
+  // Calcular resumen del historial filtrado
+  const historySummary = filteredHistory.reduce((acc, curr) => {
+    if (curr.tipo === 'entrada') {
+      acc.entradas += Math.abs(curr.cantidad)
+    } else {
+      acc.salidas += Math.abs(curr.cantidad)
+    }
+    return acc
+  }, { entradas: 0, salidas: 0 })
 
   const filteredItems = items.filter(i => {
     const matchesSearch = normalizeSearch(i.nombre).includes(normalizeSearch(search))
@@ -219,6 +255,33 @@ export default function StockPage() {
   const lowStock = items.filter(i => (i.cantidad_actual || 0) <= (i.cantidad_minima || 0)).length
   const consumibles = items.filter(i => i.tipo === 'consumible').length
   const herramientas = items.filter(i => i.tipo === 'herramienta' || i.tipo === 'maquinaria').length
+
+  const exportToCSV = () => {
+    if (filteredHistory.length === 0) return
+
+    const headers = ['Fecha', 'Hora', 'Producto', 'Tipo Movimiento', 'Motivo', 'Cantidad', 'Balance']
+    const rows = filteredHistory.map(move => {
+      const date = new Date(move.created_at)
+      return [
+        date.toLocaleDateString('es-ES'),
+        date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }),
+        `"${(move.stock?.nombre || 'Item eliminado').replace(/"/g, '""')}"`,
+        move.tipo,
+        `"${move.motivo.replace(/"/g, '""')}"`,
+        move.tipo === 'entrada' ? Math.abs(move.cantidad) : -Math.abs(move.cantidad),
+        move.cantidad_resultante
+      ].join(',')
+    })
+
+    const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows].join('\n')
+    const encodedUri = encodeURI(csvContent)
+    const link = document.createElement("a")
+    link.setAttribute("href", encodedUri)
+    link.setAttribute("download", `historial_stock_${new Date().toISOString().split('T')[0]}.csv`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
 
   const getTypeIcon = (tipo: string) => {
     switch (tipo) {
@@ -557,14 +620,69 @@ export default function StockPage() {
           ) : (
             /* History Tab */
             <>
-              <div className="relative mb-3">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none z-10" />
-                <Input
-                  placeholder="Buscar por producto o motivo..."
-                  className="pl-9 h-10 text-[13px] rounded-xl bg-white border-slate-200/60 text-slate-700 placeholder:text-slate-400 focus-visible:ring-[#00C9E0]/40 transition-all"
-                  value={historySearch}
-                  onChange={(e) => setHistorySearch(e.target.value)}
-                />
+              {/* Stats Summary */}
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex flex-col justify-center shadow-sm">
+                  <span className="text-emerald-600/70 text-[11px] font-bold uppercase tracking-wider mb-1">Total Entradas</span>
+                  <span className="text-emerald-600 text-2xl font-black leading-none">+{historySummary.entradas}</span>
+                </div>
+                <div className="bg-rose-50 border border-rose-100 rounded-2xl p-4 flex flex-col justify-center shadow-sm">
+                  <span className="text-rose-600/70 text-[11px] font-bold uppercase tracking-wider mb-1">Total Salidas</span>
+                  <span className="text-rose-600 text-2xl font-black leading-none">-{historySummary.salidas}</span>
+                </div>
+              </div>
+
+              {/* Filters */}
+              <div className="flex flex-col md:flex-row gap-2 mb-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none z-10" />
+                  <Input
+                    placeholder="Buscar por producto o motivo..."
+                    className="pl-9 h-10 text-[13px] rounded-xl bg-white border-slate-200/60 text-slate-700 placeholder:text-slate-400 focus-visible:ring-[#00C9E0]/40 transition-all w-full"
+                    value={historySearch}
+                    onChange={(e) => setHistorySearch(e.target.value)}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Select value={historyTypeFilter} onValueChange={(v: any) => setHistoryTypeFilter(v)}>
+                    <SelectTrigger className="w-[140px] md:w-[160px] h-10 text-[13px] rounded-xl bg-white border-slate-200/60 font-medium">
+                      <SelectValue placeholder="Tipo" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl border-slate-200/60">
+                      <SelectItem value="todos" className="text-[13px]">Todos los movs.</SelectItem>
+                      <SelectItem value="entrada" className="text-[13px]">Solo Entradas (+)</SelectItem>
+                      <SelectItem value="salida" className="text-[13px]">Solo Salidas (-)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  
+                  <Select value={historyDateFilter} onValueChange={(v: any) => setHistoryDateFilter(v)}>
+                    <SelectTrigger className="w-[140px] md:w-[160px] h-10 text-[13px] rounded-xl bg-white border-slate-200/60 font-medium">
+                      <SelectValue placeholder="Fecha" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl border-slate-200/60">
+                      <SelectItem value="todos" className="text-[13px]">Cualquier fecha</SelectItem>
+                      <SelectItem value="hoy" className="text-[13px]">Hoy</SelectItem>
+                      <SelectItem value="semana" className="text-[13px]">Últimos 7 días</SelectItem>
+                      <SelectItem value="mes" className="text-[13px]">Este Mes</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button 
+                          variant="outline"
+                          onClick={exportToCSV}
+                          disabled={filteredHistory.length === 0}
+                          className="h-10 px-3 rounded-xl border-slate-200/60 bg-white hover:bg-slate-50 text-slate-600 disabled:opacity-50"
+                        >
+                          <Download className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Exportar a Excel (CSV)</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
               </div>
 
               <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden">

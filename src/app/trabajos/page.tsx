@@ -453,7 +453,6 @@ function TrabajosContent() {
                           })
                         }
                       }}
-                      numberOfMonths={2}
                     />
                   </PopoverContent>
                 </Popover>

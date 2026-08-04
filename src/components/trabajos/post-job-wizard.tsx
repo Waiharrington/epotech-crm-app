@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Plus, Check, Camera, Package, DollarSign, Loader2, Trash2, Calendar, Repeat, Search, Clock } from 'lucide-react'
+import { Plus, Check, Camera, Package, DollarSign, Loader2, Trash2, Calendar, Repeat, Search, Clock, X } from 'lucide-react'
 import { normalizeSearch } from '@/lib/utils'
 import {
   Select,

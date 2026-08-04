@@ -36,18 +36,13 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
   const updatePosition = () => {
     if (ref.current) {
       const rect = ref.current.getBoundingClientRect()
-      const dropdownHeight = 420
-      const spaceBelow = window.innerHeight - rect.bottom - 8
-      const spaceAbove = rect.top - 8
-      let top: number
-      if (spaceBelow >= dropdownHeight || spaceBelow > spaceAbove) {
-        top = rect.bottom + 4
-      } else {
-        top = rect.top - dropdownHeight - 4
-      }
+      let top = rect.bottom + 4
       let left = rect.left
       if (left + 260 > window.innerWidth) left = window.innerWidth - 276
       if (left < 16) left = 16
+      if (top + 420 > window.innerHeight) {
+        top = rect.top - 420 - 4
+      }
       setPos({ top, left })
     }
   }

@@ -202,7 +202,8 @@ export default function CajaPage() {
             </div>
           ) : filteredEntries.length > 0 ? (
             <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden">
-              <div className="overflow-auto">
+              {/* Desktop Table */}
+              <div className="hidden md:block overflow-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-100">
@@ -217,14 +218,14 @@ export default function CajaPage() {
                       <tr key={entry.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors group">
                         <td className="px-4 py-3 whitespace-nowrap">
                           <div className="flex flex-col">
-                            <span className="text-base font-bold text-slate-700">{new Date(entry.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>
-                            <span className="text-base text-slate-400 font-medium">{new Date(entry.fecha).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
+                            <span className="text-sm font-bold text-slate-700">{new Date(entry.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>
+                            <span className="text-[11px] text-slate-400 font-medium">{new Date(entry.fecha).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
                           </div>
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2.5">
                             <div className={cn(
-                              "h-11 w-11 rounded-lg flex items-center justify-center shrink-0",
+                              "h-9 w-9 rounded-lg flex items-center justify-center shrink-0",
                               entry.tipo === 'ingreso' ? 'bg-emerald-50 border border-emerald-200/60' : 'bg-rose-50 border border-rose-200/60'
                             )}>
                               {entry.tipo === 'ingreso' ? (
@@ -234,7 +235,7 @@ export default function CajaPage() {
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-base font-bold text-slate-700 truncate group-hover:text-[#0097A7] transition-colors">
+                              <p className="text-sm font-bold text-slate-700 truncate group-hover:text-[#0097A7] transition-colors">
                                 {entry.notas || 'Sin descripción'}
                               </p>
                             </div>
@@ -257,7 +258,7 @@ export default function CajaPage() {
                         </td>
                         <td className="px-4 py-3 text-right">
                           <span className={cn(
-                            "text-base font-black",
+                            "text-sm font-black",
                             entry.tipo === 'ingreso' ? 'text-emerald-600' : 'text-rose-600'
                           )}>
                             {entry.tipo === 'ingreso' ? '+' : '-'} ${entry.monto.toLocaleString()}
@@ -267,6 +268,60 @@ export default function CajaPage() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Mobile Cards */}
+              <div className="md:hidden flex flex-col gap-3 p-3 bg-slate-50/50">
+                {filteredEntries.map(entry => (
+                  <div key={entry.id} className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2.5">
+                        <div className={cn(
+                          "h-8 w-8 rounded-lg flex items-center justify-center shrink-0 border-2 border-white ring-2",
+                          entry.tipo === 'ingreso' ? 'bg-emerald-500 ring-emerald-100' : 'bg-rose-500 ring-rose-100'
+                        )}>
+                          {entry.tipo === 'ingreso' ? (
+                            <ArrowUpRight className="h-3.5 w-3.5 text-white" />
+                          ) : (
+                            <ArrowDownRight className="h-3.5 w-3.5 text-white" />
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[13px] font-bold text-slate-700 leading-tight line-clamp-2">
+                            {entry.notas || 'Sin descripción'}
+                          </p>
+                        </div>
+                      </div>
+                      <span className={cn(
+                        "text-[15px] font-black shrink-0 ml-2",
+                        entry.tipo === 'ingreso' ? 'text-emerald-600' : 'text-rose-600'
+                      )}>
+                        {entry.tipo === 'ingreso' ? '+' : '-'}${entry.monto.toLocaleString()}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
+                      <div className="flex items-center gap-2">
+                        <Badge className={cn(
+                          "text-[10px] font-bold px-2 py-0.5 rounded-full capitalize",
+                          entry.tipo === 'ingreso' 
+                            ? "bg-emerald-50 text-emerald-600 border-emerald-200/60" 
+                            : "bg-rose-50 text-rose-600 border-rose-200/60"
+                        )}>
+                          {entry.categoria.replace('_', ' ')}
+                        </Badge>
+                        {entry.es_automatico && (
+                          <Badge className="text-[9px] font-black px-1.5 py-0 rounded-full bg-[#0097A7]/10 text-[#0097A7] border-[#0097A7]/20">
+                            AUTO
+                          </Badge>
+                        )}
+                      </div>
+                      <span className="text-[10px] font-bold text-slate-400 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-lg">
+                        {new Date(entry.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           ) : (

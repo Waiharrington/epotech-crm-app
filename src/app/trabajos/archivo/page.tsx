@@ -146,7 +146,7 @@ export default function ArchivoPage() {
               <p className="text-sm font-bold text-slate-400 uppercase tracking-wider">Cargando archivados...</p>
             </div>
           ) : (
-            <div className="flex-1 overflow-y-auto pb-4 md:pb-20">
+            <div className="flex-1 overflow-y-auto pt-4 pb-4 md:pb-20 px-4">
               <JobList 
                 trabajos={filteredTrabajos} 
                 onCardClick={(job) => setSelectedJob(job as TrabajoWithDetails)}

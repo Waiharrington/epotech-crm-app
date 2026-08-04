@@ -99,7 +99,7 @@ export default function ArchivoPage() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
                   Historial de Archivados
                 </h1>
-                <p className="text-sm sm:text-base text-slate-300/80 mt-1 font-medium leading-tight">
+                <p className="text-sm sm:text-base text-slate-300/80 mt-1 font-medium leading-tight hidden sm:block">
                   Consulta todos los trabajos completados que han sido retirados del tablero activo.
                 </p>
               </div>

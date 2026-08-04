@@ -85,7 +85,7 @@ export default function CajaPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowModal({ open: true, type: 'egreso' })}
-                className="h-10 px-4 text-sm font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-rose-500/20 hover:border-rose-400/40 backdrop-blur-md transition-all active:scale-[0.98]"
+                className="h-10 px-4 text-sm font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-rose-500/20 hover:border-rose-400/40 hover:text-white backdrop-blur-md transition-all active:scale-[0.98]"
               >
                 <Minus className="mr-1.5 h-3.5 w-3.5" />
                 Registrar Gasto

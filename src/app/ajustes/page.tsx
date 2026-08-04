@@ -40,6 +40,9 @@ export default function AjustesPage() {
   const [saved, setSaved] = useState(false)
   
   const [settings, setSettings] = useState({
+    businessName: 'Epotech Solutions',
+    website: 'www.epotechsolutions.com',
+    email: 'info@epotechsolutions.com',
     leadCost: 12,
     currency: 'USD',
     taxRate: 0,
@@ -122,11 +125,12 @@ export default function AjustesPage() {
           if (!ctx) { resolve(''); return }
           ctx.clearRect(0, 0, cropSize, cropSize)
           ctx.save()
-          ctx.translate(cropSize / 2, cropSize / 2)
           const outputScale = cropSize / containerSize
-          ctx.translate(pan.x * outputScale, pan.y * outputScale)
+          const coverScale = Math.max(containerSize / img.width, containerSize / img.height)
+          const canvasScale = coverScale * outputScale * zoom
+          ctx.translate(cropSize / 2, cropSize / 2)
           ctx.rotate((rotation * Math.PI) / 180)
-          const canvasScale = imgSize.baseScale * outputScale * zoom
+          ctx.translate(pan.x * outputScale, pan.y * outputScale)
           ctx.scale(canvasScale, canvasScale)
           ctx.drawImage(img, -img.width / 2, -img.height / 2)
           ctx.restore()
@@ -277,7 +281,7 @@ export default function AjustesPage() {
                 {/* Preview */}
                 <div className="relative shrink-0">
                   <div 
-                    className="w-[200px] h-[200px] rounded-2xl overflow-hidden border-2 border-[#0097A7]/30 cursor-grab active:cursor-grabbing bg-slate-100"
+                    className="w-[200px] h-[200px] relative flex items-center justify-center rounded-2xl overflow-hidden border-2 border-[#0097A7]/30 cursor-grab active:cursor-grabbing bg-slate-100"
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUpOrLeave}
@@ -289,13 +293,11 @@ export default function AjustesPage() {
                     <img 
                       src={selectedImg} 
                       alt="Preview" 
-                      className="absolute top-1/2 left-1/2 pointer-events-none select-none"
+                      className="absolute max-w-none pointer-events-none select-none"
                       style={{
-                        width: imgSize?.width || 200,
-                        height: imgSize?.height || 200,
-                        marginLeft: imgSize ? -(imgSize.width / 2) : -100,
-                        marginTop: imgSize ? -(imgSize.height / 2) : -100,
-                        transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom * (imgSize?.baseScale || 1)}) rotate(${rotation}deg)`,
+                        width: imgSize ? `${imgSize.width * imgSize.baseScale}px` : 'auto',
+                        height: imgSize ? `${imgSize.height * imgSize.baseScale}px` : 'auto',
+                        transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom}) rotate(${rotation}deg)`,
                         transformOrigin: 'center center'
                       }}
                       draggable={false}
@@ -404,9 +406,9 @@ export default function AjustesPage() {
                   <Building2 className="h-3 w-3" /> Nombre del Negocio
                 </label>
                 <Input 
-                  value="Epotech Solutions"
-                  readOnly
-                  className="h-9 text-xs rounded-xl border-slate-200/60 bg-slate-50/50 text-slate-600 cursor-not-allowed"
+                  value={settings.businessName}
+                  onChange={(e) => setSettings({ ...settings, businessName: e.target.value })}
+                  className="h-9 text-xs rounded-xl border-slate-200/60 bg-white focus:bg-white text-slate-800"
                 />
               </div>
               <div className="space-y-1.5">
@@ -414,9 +416,9 @@ export default function AjustesPage() {
                   <Globe className="h-3 w-3" /> Sitio Web
                 </label>
                 <Input 
-                  value="www.epotechsolutions.com"
-                  readOnly
-                  className="h-9 text-xs rounded-xl border-slate-200/60 bg-slate-50/50 text-slate-600 cursor-not-allowed"
+                  value={settings.website}
+                  onChange={(e) => setSettings({ ...settings, website: e.target.value })}
+                  className="h-9 text-xs rounded-xl border-slate-200/60 bg-white focus:bg-white text-slate-800"
                 />
               </div>
               <div className="space-y-1.5">
@@ -424,9 +426,10 @@ export default function AjustesPage() {
                   <Mail className="h-3 w-3" /> Email
                 </label>
                 <Input 
-                  value="info@epotechsolutions.com"
-                  readOnly
-                  className="h-9 text-xs rounded-xl border-slate-200/60 bg-slate-50/50 text-slate-600 cursor-not-allowed"
+                  value={settings.email}
+                  onChange={(e) => setSettings({ ...settings, email: e.target.value })}
+                  type="email"
+                  className="h-9 text-xs rounded-xl border-slate-200/60 bg-white focus:bg-white text-slate-800"
                 />
               </div>
               <div className="space-y-1.5">
@@ -434,9 +437,9 @@ export default function AjustesPage() {
                   <DollarSign className="h-3 w-3" /> Moneda
                 </label>
                 <Input 
-                  value="USD ($)"
-                  readOnly
-                  className="h-9 text-xs rounded-xl border-slate-200/60 bg-slate-50/50 text-slate-600 cursor-not-allowed"
+                  value={settings.currency}
+                  onChange={(e) => setSettings({ ...settings, currency: e.target.value })}
+                  className="h-9 text-xs rounded-xl border-slate-200/60 bg-white focus:bg-white text-slate-800"
                 />
               </div>
             </div>

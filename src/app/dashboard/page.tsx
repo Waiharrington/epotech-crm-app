@@ -783,7 +783,7 @@ export default function DashboardPage() {
                           </span>
                         </button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 border border-slate-100 shadow-xl rounded-2xl bg-white z-[100]" align="center">
+                      <PopoverContent className="w-auto p-0 border border-slate-100 shadow-xl rounded-2xl bg-white z-[100]" align="start" sideOffset={8}>
                         <CalendarUI
                           mode="single"
                           selected={new Date(quickDate + 'T00:00:00')}
@@ -811,7 +811,7 @@ export default function DashboardPage() {
                           <span>{formatTime12h(`${quickTime}:00`)}</span>
                         </button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-64 p-3 border border-slate-100 shadow-xl rounded-2xl bg-white z-[100] space-y-3" align="center">
+                      <PopoverContent className="w-64 p-3 border border-slate-100 shadow-xl rounded-2xl bg-white z-[100] space-y-3" align="end" sideOffset={8}>
                         <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                           <span className="text-[13px] font-black text-[#0B1E3F] flex items-center gap-1">
                             <Clock className="h-3.5 w-3.5 text-[#0097A7]" /> Selección de Hora

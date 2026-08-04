@@ -33,7 +33,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
     }
   }
 
-  const updatePosition = () => {
+  const openPicker = () => {
     if (ref.current) {
       const rect = ref.current.getBoundingClientRect()
       let top = rect.bottom + 4
@@ -45,6 +45,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
       }
       setPos({ top, left })
     }
+    setIsOpen(true)
   }
 
   useEffect(() => {
@@ -55,7 +56,6 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
     }
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside)
-      updatePosition()
     }
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isOpen])
@@ -221,7 +221,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
   return (
     <div className={cn("relative", className)} ref={ref}>
       <div 
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={openPicker}
         className={cn(
           "flex items-center h-9 px-3 rounded-xl border bg-white transition-all cursor-pointer",
           isOpen ? "border-[#0097A7] ring-2 ring-[#0097A7]/20" : "border-slate-200/60 hover:border-[#0097A7]/40"

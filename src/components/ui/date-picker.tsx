@@ -23,7 +23,7 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
 
   const date = value ? new Date(value + 'T00:00:00') : undefined
 
-  const updatePosition = () => {
+  const openPicker = () => {
     if (ref.current) {
       const rect = ref.current.getBoundingClientRect()
       const dropdownHeight = 340
@@ -40,6 +40,7 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
       if (left < 16) left = 16
       setPos({ top, left })
     }
+    setOpen(true)
   }
 
   React.useEffect(() => {
@@ -50,7 +51,6 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
     }
     if (open) {
       document.addEventListener('mousedown', handleClickOutside)
-      updatePosition()
     }
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [open])
@@ -139,7 +139,7 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
       <button
         type="button"
         disabled={disabled}
-        onClick={() => setOpen(!open)}
+        onClick={openPicker}
         className={cn(
           "flex h-9 w-full items-center justify-between rounded-xl border border-slate-200/60 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-all hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-2 focus:ring-[#0097A7]/20 focus:outline-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
         )}

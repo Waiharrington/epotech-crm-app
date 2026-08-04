@@ -137,16 +137,16 @@ function JobCard({
             )}
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
-                <p className="font-extrabold text-slate-800 text-[11px] leading-none tracking-tight truncate">
+                <p className="font-extrabold text-slate-800 text-[13px] leading-none tracking-tight truncate">
                   {job.clientes.nombre} {job.clientes.apellido}
                 </p>
                 {job.precio_acordado ? (
-                  <span className="text-[9px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 shrink-0">
+                  <span className="text-[11px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 shrink-0">
                     ${job.precio_acordado}
                   </span>
                 ) : null}
               </div>
-              <p className="text-[8px] text-slate-400 font-bold uppercase tracking-wider truncate mt-0.5">
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider truncate mt-0.5">
                 {job.catalogo_servicios?.nombre || 'Personalizado'}
               </p>
             </div>
@@ -156,7 +156,7 @@ function JobCard({
               {st.label}
             </span>
             <span
-              className="text-[8px] font-black text-white px-1.5 py-0.5 rounded shadow-sm"
+              className="text-[10px] font-black text-white px-1.5 py-0.5 rounded shadow-sm"
               style={{ background: 'linear-gradient(135deg, #0097A7, #00acc1)' }}
             >
               {formatTime(job.hora_servicio)}
@@ -166,7 +166,7 @@ function JobCard({
 
         {/* Row 2: Address + ETA */}
         <div className="flex items-center gap-2">
-          <p className="text-[8.5px] text-slate-500 font-medium flex items-center gap-1 leading-tight flex-1 min-w-0">
+          <p className="text-[10px] text-slate-500 font-medium flex items-center gap-1 leading-tight flex-1 min-w-0">
             <MapPin className="h-2.5 w-2.5 shrink-0 text-[#0097A7]" />
             <span className="truncate">{job.clientes.direccion}</span>
           </p>
@@ -182,12 +182,12 @@ function JobCard({
           {job.estado !== 'completado' ? (
               <button
                 onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'completado') }}
-                className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[8px] font-black text-white bg-emerald-600 hover:bg-emerald-700 py-1.5 rounded-lg active:scale-95 transition-all cursor-pointer whitespace-nowrap px-2"
+                className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[10px] font-black text-white bg-emerald-600 hover:bg-emerald-700 py-1.5 rounded-lg active:scale-95 transition-all cursor-pointer whitespace-nowrap px-2"
               >
                 <Check className="h-2.5 w-2.5 shrink-0" /> Listo
               </button>
           ) : (
-            <div className="flex-1 min-w-0 flex items-center justify-center text-[8px] font-black text-emerald-700 bg-emerald-50 rounded-lg py-1.5 border border-emerald-100 whitespace-nowrap">
+            <div className="flex-1 min-w-0 flex items-center justify-center text-[10px] font-black text-emerald-700 bg-emerald-50 rounded-lg py-1.5 border border-emerald-100 whitespace-nowrap">
               ✓ Servicio Finalizado
             </div>
           )}
@@ -434,7 +434,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
               <Check className="h-5 w-5 text-emerald-600" />
             )}
           </div>
-          <div className="bg-white border border-slate-200/80 text-slate-700 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider shadow-sm">
+          <div className="bg-white border border-slate-200/80 text-slate-700 px-2.5 py-1 rounded-lg text-[11px] font-black uppercase tracking-wider shadow-sm">
             Inicio de Ruta
           </div>
         </div>
@@ -480,7 +480,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                     )}
                     {!isTruckHere && (
                       <div className={cn(
-                        "absolute -top-1 -right-1 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border border-white shadow",
+                        "absolute -top-1 -right-1 text-white text-[10px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border border-white shadow",
                         isCompleted ? "bg-emerald-500" : isNext ? "bg-amber-500" : "bg-red-500"
                       )}>
                         {index + 1}
@@ -510,7 +510,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
           <div className="h-10 w-10 shrink-0 rounded-full bg-white border-[3px] border-slate-300 shadow-md flex items-center justify-center">
             <Flag className="h-4 w-4 text-[#0097A7]" />
           </div>
-          <div className="bg-white border border-slate-200/80 text-slate-700 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider shadow-sm">
+          <div className="bg-white border border-slate-200/80 text-slate-700 px-2.5 py-1 rounded-lg text-[11px] font-black uppercase tracking-wider shadow-sm">
             Fin de Ruta
           </div>
         </div>
@@ -542,7 +542,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
               {truckPosition === -1 ? null : <Check className="h-4 w-4 text-emerald-600" />}
             </div>
             <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-white border border-slate-200 text-slate-700 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
-              <span className="text-[8px] font-black uppercase tracking-widest">Inicio</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">Inicio</span>
             </div>
           </div>
 
@@ -606,7 +606,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                   )}
                   {!isTruckHere && (
                     <div className={cn(
-                      "absolute -top-1 -right-1 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border-2 border-white shadow",
+                      "absolute -top-1 -right-1 text-white text-[10px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border-2 border-white shadow",
                       isCompleted ? "bg-emerald-500" : isNext ? "bg-amber-500" : "bg-red-500"
                     )}>
                       {index + 1}
@@ -623,7 +623,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
               <Flag className="h-4 w-4 text-[#0097A7]" />
             </div>
             <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-white border border-slate-200 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
-              <span className="text-[8px] font-black uppercase tracking-widest">Fin</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">Fin</span>
             </div>
           </div>
 
@@ -644,7 +644,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
           >
             <div className="bg-slate-800/80 backdrop-blur rounded-full px-2.5 py-1.5 shadow-lg flex items-center gap-1.5 border border-slate-600/30">
               <ChevronRight className="h-3.5 w-3.5" style={{ color: '#00C9E0' }} />
-              <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Scroll</span>
+              <span className="text-[11px] font-bold text-slate-300 uppercase tracking-widest">Scroll</span>
             </div>
           </div>
         )}
@@ -714,7 +714,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                 )}
               </div>
               <div className="bg-white border border-slate-200 text-slate-700 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
-                <span className="text-[8px] font-black uppercase tracking-widest">Inicio</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">Inicio</span>
               </div>
             </div>
 
@@ -785,7 +785,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                       )}
                       {!isTruckHere && (
                         <div className={cn(
-                          "absolute -top-1 -right-1 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border-2 border-white shadow",
+                          "absolute -top-1 -right-1 text-white text-[10px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border-2 border-white shadow",
                           isCompleted ? "bg-emerald-500" : isNext ? "bg-amber-500" : "bg-red-500"
                         )}>
                           {index + 1}
@@ -826,7 +826,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                 <Flag className="h-4 w-4" />
               </div>
               <div className="bg-white border border-slate-200 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
-                <span className="text-[8px] font-black uppercase tracking-widest">Fin</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">Fin</span>
               </div>
             </div>
 

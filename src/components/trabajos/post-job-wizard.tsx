@@ -373,7 +373,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
           <div className="relative px-5 py-4">
             <div className="flex items-start justify-between">
               <div className="flex-1 min-w-0">
-                <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/60 mb-0.5">
+                <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white/60 mb-0.5">
                   Check-out
                 </p>
                 <h3 className="text-base font-black text-white leading-tight">
@@ -558,7 +558,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                           <div className="flex items-start justify-between">
                             <div>
                               <span className="text-sm font-bold text-slate-800">{m.nombre}</span>
-                              <p className="text-[10px] text-slate-500 mt-0.5">
+                              <p className="text-xs text-slate-500 mt-0.5">
                                 Costo: ${precioCosto}/{unit} &middot; Subtotal: <span className="font-bold text-slate-700">${costoUso.toFixed(2)}</span>
                               </p>
                             </div>
@@ -567,7 +567,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                             </Button>
                           </div>
                           <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
-                            <Label className="text-[10px] text-slate-500 font-semibold shrink-0 uppercase tracking-wider">Cantidad</Label>
+                            <Label className="text-xs text-slate-500 font-semibold shrink-0 uppercase tracking-wider">Cantidad</Label>
                             <div className="relative flex-1">
                               <Input 
                                 type="number" 
@@ -579,7 +579,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                                   setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: parseFloat(e.target.value) || 0 } : x))
                                 }}
                               />
-                              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400 uppercase tracking-wider">{unit}</span>
+                              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 uppercase tracking-wider">{unit}</span>
                             </div>
                           </div>
                         </div>
@@ -622,14 +622,14 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                               }}
                             >
                               <span className="font-medium">{s.nombre}</span>
-                              <span className="text-[10px] opacity-60 bg-muted px-1.5 rounded">{s.cantidad_actual} {s.unidad_medida}</span>
+                              <span className="text-xs opacity-60 bg-muted px-1.5 rounded">{s.cantidad_actual} {s.unidad_medida}</span>
                             </button>
                           ))}
                         {availableStock.filter(s => 
                             !materials.find(m => m.id === s.id) && 
                             s.nombre.toLowerCase().includes(searchMaterial.toLowerCase())
                           ).length === 0 && (
-                            <p className="text-[10px] text-center py-2 text-muted-foreground italic">No se encontraron materiales</p>
+                            <p className="text-xs text-center py-2 text-muted-foreground italic">No se encontraron materiales</p>
                           )}
                       </div>
                     )}
@@ -653,7 +653,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                       onClick={() => setShowPhotoModal(true)}
                     >
                       <Plus className="h-6 w-6 text-muted-foreground" />
-                      <span className="text-[10px] text-muted-foreground mt-1">Añadir</span>
+                      <span className="text-xs text-muted-foreground mt-1">Añadir</span>
                     </div>
                   </div>
                 </div>
@@ -676,7 +676,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                             <p className={cn("text-xl font-black", net >= 0 ? "text-green-600" : "text-destructive")}>
                               ${net.toFixed(2)}
                             </p>
-                            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Ganancia Neta</p>
+                            <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Ganancia Neta</p>
                          </div>
                        )
                     })()}
@@ -689,7 +689,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                           <div key={idx} className="flex items-center justify-between bg-destructive/5 p-2 rounded-lg border border-destructive/10">
                             <div className="flex flex-col">
                               <span className="text-xs font-bold text-destructive">${g.monto.toFixed(2)}</span>
-                              <span className="text-[10px] text-muted-foreground">{g.motivo}</span>
+                              <span className="text-xs text-muted-foreground">{g.motivo}</span>
                             </div>
                             <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => setGastosAdicionales(gastosAdicionales.filter((_, i) => i !== idx))}>
                               <Trash2 className="h-3 w-3" />
@@ -700,7 +700,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                     )}
                     <div className="flex items-end gap-2">
                       <div className="flex-1 space-y-1">
-                        <Label className="text-[10px] uppercase text-muted-foreground">Gasto ($)</Label>
+                        <Label className="text-xs uppercase text-muted-foreground">Gasto ($)</Label>
                         <div className="relative">
                           <DollarSign className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
                           <Input 
@@ -713,7 +713,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                         </div>
                       </div>
                       <div className="flex-[2] space-y-1">
-                        <Label className="text-[10px] uppercase text-muted-foreground">Motivo</Label>
+                        <Label className="text-xs uppercase text-muted-foreground">Motivo</Label>
                         <Input 
                           className="h-9 text-xs"
                           value={motivoVariable}

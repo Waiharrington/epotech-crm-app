@@ -210,14 +210,14 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
           <div className="relative px-6 py-5">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                <p className="text-xs font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                   Catálogo
                 </p>
                 <h3 className="text-lg font-black text-white leading-tight flex items-center gap-2">
                   <FolderOpen className="h-5 w-5" />
                   Gestionar Categorías
                 </h3>
-                <p className="text-[11px] text-white/60 font-medium mt-1">
+                <p className="text-[13px] text-white/60 font-medium mt-1">
                   Agrega, edita o elimina categorías de servicios
                 </p>
               </div>
@@ -240,17 +240,17 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
                 <AlertTriangle className="h-5 w-5 shrink-0 text-amber-600 mt-0.5" />
                 <div>
                   <p className="text-[12px] font-bold mb-1">¡Configuración Requerida!</p>
-                  <p className="text-[10px] leading-relaxed text-amber-700">
+                  <p className="text-xs leading-relaxed text-amber-700">
                     La tabla de categorías aún no ha sido creada en la base de datos de tu Supabase o falta remover la restricción restrictiva.
                   </p>
                 </div>
               </div>
 
-              <div className="relative rounded-xl border border-slate-200 bg-slate-900 p-3 text-[10px] text-slate-300 font-mono overflow-x-auto max-h-[220px]">
+              <div className="relative rounded-xl border border-slate-200 bg-slate-900 p-3 text-xs text-slate-300 font-mono overflow-x-auto max-h-[220px]">
                 <pre>{sqlCode}</pre>
                 <button
                   type="button"
-                  className="absolute top-2 right-2 h-7 px-2.5 text-[10px] font-bold border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg flex items-center gap-1.5 transition-all"
+                  className="absolute top-2 right-2 h-7 px-2.5 text-xs font-bold border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg flex items-center gap-1.5 transition-all"
                   onClick={handleCopySql}
                 >
                   <Copy className="h-3 w-3" />
@@ -260,7 +260,7 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
               
               <button 
                 type="button"
-                className="w-full h-10 text-[11px] font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:border-[#0097A7]/40 hover:bg-[#E6F9FB] transition-all" 
+                className="w-full h-10 text-[13px] font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:border-[#0097A7]/40 hover:bg-[#E6F9FB] transition-all" 
                 onClick={fetchCategorias}
               >
                 Reintentar Conexión
@@ -288,7 +288,7 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
                 </div>
                 <button 
                   type="submit" 
-                  className="h-11 px-4 flex items-center justify-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                  className="h-11 px-4 flex items-center justify-center gap-1.5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
                   disabled={loading || !newCategory.trim()}
                 >
                   {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-4 w-4" />}
@@ -299,8 +299,8 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
               {/* Categories List */}
               <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
                 <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-                  <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Categoría</span>
-                  <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Acciones</span>
+                  <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">Categoría</span>
+                  <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">Acciones</span>
                 </div>
                 
                 <div className="divide-y divide-slate-100 max-h-[300px] overflow-y-auto">
@@ -379,7 +379,7 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
                       <div className="h-10 w-10 rounded-xl bg-slate-100 flex items-center justify-center mx-auto mb-2">
                         <FolderOpen className="h-5 w-5 text-slate-400" />
                       </div>
-                      <p className="text-[11px] font-semibold text-slate-500">No hay categorías creadas</p>
+                      <p className="text-[13px] font-semibold text-slate-500">No hay categorías creadas</p>
                     </div>
                   )}
                 </div>
@@ -393,7 +393,7 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
           <button
             type="button"
             onClick={handleClose}
-            className="flex items-center gap-2 text-[10px] font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
+            className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
           >
             <X className="h-3.5 w-3.5" /> Cerrar
           </button>

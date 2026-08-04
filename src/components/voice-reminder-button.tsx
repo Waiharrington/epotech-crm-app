@@ -177,7 +177,7 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
         onClick={isRecording ? stopRecording : startRecording}
         disabled={isProcessing}
         className={cn(
-          "flex items-center gap-1.5 h-8 px-3.5 rounded-xl text-[10px] font-black shadow-md transition-all active:scale-[0.98]",
+          "flex items-center gap-1.5 h-8 px-3.5 rounded-xl text-xs font-black shadow-md transition-all active:scale-[0.98]",
           isRecording
             ? "bg-rose-500 text-white shadow-rose-500/30 animate-pulse"
             : isProcessing
@@ -214,7 +214,7 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
                 <DialogTitle className="text-white text-sm font-bold leading-none">
                   Recordatorio por Voz
                 </DialogTitle>
-                <DialogDescription className="text-slate-300/70 text-[10px] mt-1">
+                <DialogDescription className="text-slate-300/70 text-xs mt-1">
                   La IA analizó tu nota de voz
                 </DialogDescription>
               </div>
@@ -224,7 +224,7 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
           <div className="p-5 space-y-4">
             {/* Transcription */}
             <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
-              <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1">
                 <Mic className="h-3 w-3" /> Transcripción
               </p>
               <p className="text-xs text-slate-600 italic leading-relaxed">"{transcription}"</p>
@@ -236,20 +236,20 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
                   /* Preview Mode */
                   <div className="space-y-3">
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Título</label>
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Título</label>
                       <p className="text-sm font-bold text-slate-800">{extracted.titulo}</p>
                     </div>
 
                     {extracted.descripcion && (
                       <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Descripción</label>
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Descripción</label>
                         <p className="text-xs text-slate-600 leading-relaxed">{extracted.descripcion}</p>
                       </div>
                     )}
 
                     <div className="flex gap-3">
                       <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
                           <CalendarIcon className="h-3 w-3" /> Fecha
                         </label>
                         <p className="text-xs font-bold text-slate-700">
@@ -257,7 +257,7 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
                         </p>
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
                           <Clock className="h-3 w-3" /> Hora
                         </label>
                         <p className="text-xs font-bold text-slate-700">
@@ -267,7 +267,7 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
                         <AlertTriangle className="h-3 w-3" /> Prioridad
                       </label>
                       <div className="flex items-center gap-1.5">
@@ -280,7 +280,7 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
                   /* Edit Mode */
                   <div className="space-y-3">
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Título</label>
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Título</label>
                       <Input
                         value={extracted.titulo}
                         onChange={e => setExtracted({ ...extracted, titulo: e.target.value })}
@@ -288,7 +288,7 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Descripción</label>
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Descripción</label>
                       <Textarea
                         value={extracted.descripcion}
                         onChange={e => setExtracted({ ...extracted, descripcion: e.target.value })}
@@ -298,14 +298,14 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Fecha</label>
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Fecha</label>
                         <DatePicker
                           value={extracted.fecha}
                           onChange={(date) => setExtracted({ ...extracted, fecha: date })}
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Hora</label>
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Hora</label>
                         <TimePicker
                           value={extracted.hora}
                           onChange={(time) => setExtracted({ ...extracted, hora: time })}
@@ -313,7 +313,7 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Prioridad</label>
+                      <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Prioridad</label>
                       <div className="flex gap-1.5">
                         {[
                           { value: 'baja', label: 'Baja', color: 'bg-emerald-500' },
@@ -326,7 +326,7 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
                             type="button"
                             onClick={() => setExtracted({ ...extracted, prioridad: p.value })}
                             className={cn(
-                              "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer active:scale-[0.97]",
+                              "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer active:scale-[0.97]",
                               extracted.prioridad === p.value
                                 ? "border-[#0097A7] bg-[#0097A7]/5 text-[#0097A7]"
                                 : "border-slate-200/60 bg-white text-slate-500 hover:border-slate-300"
@@ -348,7 +348,7 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
               <button
                 type="button"
                 onClick={() => setEditMode(!editMode)}
-                className="px-3 py-2 text-[10px] font-bold text-slate-500 hover:text-[#0097A7] transition-colors rounded-xl hover:bg-slate-50 cursor-pointer"
+                className="px-3 py-2 text-xs font-bold text-slate-500 hover:text-[#0097A7] transition-colors rounded-xl hover:bg-slate-50 cursor-pointer"
               >
                 {editMode ? 'Volver a vista previa' : 'Editar datos'}
               </button>
@@ -356,14 +356,14 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="px-4 py-2 text-[10px] font-bold text-slate-500 hover:text-[#0097A7] transition-colors rounded-xl hover:bg-slate-50 cursor-pointer"
+                  className="px-4 py-2 text-xs font-bold text-slate-500 hover:text-[#0097A7] transition-colors rounded-xl hover:bg-slate-50 cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="button"
                   onClick={handleConfirm}
-                  className="flex items-center gap-1.5 h-9 px-5 text-[10px] font-black uppercase tracking-wider text-white rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
+                  className="flex items-center gap-1.5 h-9 px-5 text-xs font-black uppercase tracking-wider text-white rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
                 >
                   <Check className="h-3.5 w-3.5" /> Guardar
                 </button>

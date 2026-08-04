@@ -126,7 +126,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
               {/* Accent line + tagline */}
               <div className="mt-0.5 flex items-center gap-1.5 relative z-10">
                 <div className="h-[1px] w-3 bg-[#00C9E0] rounded-full" />
-                <span className="text-[9px] font-black tracking-[0.2em] text-[#00C9E0] uppercase">Portal CRM</span>
+                <span className="text-[11px] font-black tracking-[0.2em] text-[#00C9E0] uppercase">Portal CRM</span>
                 <div className="h-[1px] w-3 bg-[#00C9E0] rounded-full" />
               </div>
             </>
@@ -139,7 +139,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         )}>
           <div>
             {!isCollapsed && (
-              <p className="px-3 mb-1 text-[9.5px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
+              <p className="px-3 mb-1 text-[11px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
                 Principal
               </p>
             )}
@@ -182,7 +182,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     {/* Custom Brand Tooltip for Link - Shown ONLY when sidebar is collapsed */}
                     {isCollapsed && (
                       <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/navitem:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
-                        <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-[#00C9E0]/40 text-[#00C9E0] text-[11px] font-extrabold shadow-[0_4px_20px_rgba(0,201,224,0.3)] tracking-wide flex items-center gap-1.5">
+                        <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-[#00C9E0]/40 text-[#00C9E0] text-[13px] font-extrabold shadow-[0_4px_20px_rgba(0,201,224,0.3)] tracking-wide flex items-center gap-1.5">
                           <item.icon className="h-3.5 w-3.5 text-[#00C9E0]" />
                           <span>{item.name}</span>
                         </div>
@@ -196,7 +196,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           
           <div>
             {!isCollapsed && (
-              <p className="px-3 mb-1 text-[9.5px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
+              <p className="px-3 mb-1 text-[11px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
                 Gestión
               </p>
             )}
@@ -240,7 +240,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     {/* Custom Brand Tooltip for Link - Shown ONLY when sidebar is collapsed */}
                     {isCollapsed && (
                       <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/navitem:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
-                        <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-[#00C9E0]/40 text-[#00C9E0] text-[11px] font-extrabold shadow-[0_4px_20px_rgba(0,201,224,0.3)] tracking-wide flex items-center gap-1.5">
+                        <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-[#00C9E0]/40 text-[#00C9E0] text-[13px] font-extrabold shadow-[0_4px_20px_rgba(0,201,224,0.3)] tracking-wide flex items-center gap-1.5">
                           <item.icon className="h-3.5 w-3.5 text-[#00C9E0]" />
                           <span>{item.name}</span>
                         </div>
@@ -268,7 +268,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           {/* Custom Brand Tooltip for Logout - Shown ONLY when sidebar is collapsed */}
           {isCollapsed && (
             <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/logout:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
-              <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-red-500/40 text-red-400 text-[11px] font-extrabold shadow-[0_4px_20px_rgba(239,68,68,0.3)] tracking-wide flex items-center gap-1.5">
+              <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-red-500/40 text-red-400 text-[13px] font-extrabold shadow-[0_4px_20px_rgba(239,68,68,0.3)] tracking-wide flex items-center gap-1.5">
                 <LogOut className="h-3.5 w-3.5 text-red-400" />
                 <span>Cerrar Sesión</span>
               </div>
@@ -312,7 +312,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                       : "group-hover:scale-105 group-hover:text-sidebar-foreground"
                   )} />
                   <span className={cn(
-                    "text-[9px] font-medium tracking-tight relative z-10 transition-colors duration-300 truncate w-full text-center px-0.5",
+                    "text-[11px] font-medium tracking-tight relative z-10 transition-colors duration-300 truncate w-full text-center px-0.5",
                     isActive ? "text-white font-semibold" : "text-sidebar-foreground/50"
                   )}>
                     {item.mobileName || item.name}
@@ -328,7 +328,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
               <SheetTrigger asChild>
                 <button className="flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 rounded-xl text-sidebar-foreground/50 active:scale-95 transition-all duration-300 group relative min-w-0 flex-1 h-[85%]">
                   <MoreHorizontal className="h-5 w-5 transition-transform duration-300 group-hover:scale-105" />
-                  <span className="text-[9px] font-medium tracking-tight text-sidebar-foreground/50">Más</span>
+                  <span className="text-[11px] font-medium tracking-tight text-sidebar-foreground/50">Más</span>
                 </button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[85%] p-0 rounded-l-3xl border-l border-sidebar-border sidebar-premium-bg overflow-hidden" showCloseButton={false}>

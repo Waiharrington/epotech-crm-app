@@ -73,7 +73,7 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
               <DialogTitle className="text-white text-sm font-bold leading-none">
                 Registrar {type === 'ingreso' ? 'Ingreso' : 'Egreso'}
               </DialogTitle>
-              <DialogDescription className="text-slate-300/70 text-[10px] mt-1">
+              <DialogDescription className="text-slate-300/70 text-xs mt-1">
                 Añade un movimiento manual a la caja
               </DialogDescription>
             </div>
@@ -83,7 +83,7 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
         {/* Content */}
         <div className="bg-white px-6 py-5 space-y-4">
           <div className="space-y-2">
-            <Label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <Label className="text-[13px] font-bold uppercase tracking-wider text-slate-500">
               Monto ($)
             </Label>
             <div className="relative">
@@ -99,7 +99,7 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <Label className="text-[13px] font-bold uppercase tracking-wider text-slate-500">
               Categoría
             </Label>
             <Select 
@@ -131,7 +131,7 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <Label className="text-[13px] font-bold uppercase tracking-wider text-slate-500">
               Descripción / Notas
             </Label>
             <Textarea 
@@ -150,7 +150,7 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
             type="button"
             onClick={handleSave}
             disabled={loading || formData.monto <= 0}
-            className={`flex items-center justify-center gap-2 h-9 px-5 text-[11px] font-black uppercase tracking-wider text-white rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none ${
+            className={`flex items-center justify-center gap-2 h-9 px-5 text-[13px] font-black uppercase tracking-wider text-white rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none ${
               type === 'ingreso' 
                 ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 shadow-emerald-500/25 hover:shadow-emerald-500/40' 
                 : 'bg-gradient-to-r from-rose-500 to-rose-600 shadow-rose-500/25 hover:shadow-rose-500/40'

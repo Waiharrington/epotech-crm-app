@@ -89,7 +89,7 @@ export function StockAdjustModal({ item, type, onClose, onSuccess }: StockAdjust
               <h3 className="text-sm font-bold text-white leading-none">
                 {type === 'in' ? 'Cargar Inventario' : 'Descargar Inventario'}
               </h3>
-              <p className="text-[10px] text-slate-300/70 mt-1">
+              <p className="text-xs text-slate-300/70 mt-1">
                 {item.nombre} — {item.cantidad_actual} {item.unidad_medida}
               </p>
             </div>
@@ -110,7 +110,7 @@ export function StockAdjustModal({ item, type, onClose, onSuccess }: StockAdjust
               </button>
               <div className="text-center">
                 <span className="text-4xl font-black text-slate-800">{adjustment}</span>
-                <p className="text-[9px] text-slate-400 font-bold uppercase mt-1 tracking-wider">{item.unidad_medida}</p>
+                <p className="text-[11px] text-slate-400 font-bold uppercase mt-1 tracking-wider">{item.unidad_medida}</p>
               </div>
               <button 
                 type="button"
@@ -130,7 +130,7 @@ export function StockAdjustModal({ item, type, onClose, onSuccess }: StockAdjust
 
           {/* Reason */}
           <div className="space-y-2">
-            <Label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+            <Label className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Motivo (Opcional)
             </Label>
             <Input 
@@ -148,7 +148,7 @@ export function StockAdjustModal({ item, type, onClose, onSuccess }: StockAdjust
             type="button"
             onClick={handleAdjust}
             disabled={loading || adjustment <= 0}
-            className={`flex items-center justify-center gap-2 h-9 px-5 text-[10px] font-black uppercase tracking-wider text-white rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none ${
+            className={`flex items-center justify-center gap-2 h-9 px-5 text-xs font-black uppercase tracking-wider text-white rounded-xl shadow-md transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none ${
               type === 'in' 
                 ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 shadow-emerald-500/25 hover:shadow-emerald-500/40' 
                 : 'bg-gradient-to-r from-rose-500 to-rose-600 shadow-rose-500/25 hover:shadow-rose-500/40'

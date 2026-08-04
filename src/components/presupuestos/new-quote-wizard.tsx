@@ -129,7 +129,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
           <div className="relative px-5 py-4">
             <div className="flex items-start justify-between">
               <div className="flex-1 min-w-0">
-                <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/60 mb-0.5">
+                <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white/60 mb-0.5">
                   Presupuestos
                 </p>
                 <h3 className="text-base font-black text-white leading-tight flex items-center gap-2">
@@ -151,7 +151,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
               {[1, 2].map((s) => (
                 <div key={s} className="flex items-center gap-1.5 flex-1">
                   <div className={cn(
-                    "h-5 w-5 rounded-full flex items-center justify-center text-[8px] font-black shrink-0 transition-all",
+                    "h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all",
                     step >= s 
                       ? "bg-white text-[#0097A7]" 
                       : "bg-white/20 text-white/60"
@@ -175,7 +175,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
           {/* Step 1: Cliente */}
           {step === 1 ? (
             <div className="space-y-2.5 animate-in fade-in duration-200">
-              <Label className="text-[8px] font-extrabold text-slate-400 uppercase tracking-wider">
+              <Label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
                 Selecciona el Cliente
               </Label>
               <div className="relative">
@@ -221,8 +221,8 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                       )} />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-[11px] font-bold text-slate-800 truncate">{c.nombre} {c.apellido}</p>
-                      <p className="text-[9px] text-slate-400 font-medium">{c.telefono}</p>
+                      <p className="text-[13px] font-bold text-slate-800 truncate">{c.nombre} {c.apellido}</p>
+                      <p className="text-[11px] text-slate-400 font-medium">{c.telefono}</p>
                     </div>
                     {selectedClient?.id === c.id && (
                       <Check className="h-4 w-4 text-[#0097A7] shrink-0" />
@@ -231,7 +231,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                 ))}
                 {filteredClients.length === 0 && (
                   <div className="text-center py-6 bg-white rounded-xl border-2 border-dashed border-slate-200">
-                    <p className="text-[11px] font-bold text-slate-500">No se encontraron clientes</p>
+                    <p className="text-[13px] font-bold text-slate-500">No se encontraron clientes</p>
                   </div>
                 )}
               </div>
@@ -247,13 +247,13 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                       <User className="h-3.5 w-3.5 text-white" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[10px] font-bold text-slate-800 truncate">{selectedClient.nombre} {selectedClient.apellido}</p>
+                      <p className="text-xs font-bold text-slate-800 truncate">{selectedClient.nombre} {selectedClient.apellido}</p>
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="px-2 py-1 text-[8px] font-bold uppercase tracking-wider text-[#0097A7] bg-[#E6F9FB] rounded-md hover:bg-[#00C9E0]/20 transition-all shrink-0"
+                    className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#0097A7] bg-[#E6F9FB] rounded-md hover:bg-[#00C9E0]/20 transition-all shrink-0"
                   >
                     Cambiar
                   </button>
@@ -262,7 +262,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
 
               {/* Servicios disponibles */}
               <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm">
-                <p className="text-[8px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">
+                <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">
                   Servicios Disponibles
                 </p>
                 <div className="grid grid-cols-2 gap-1.5 max-h-[120px] overflow-y-auto">
@@ -274,7 +274,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                       className="flex items-center gap-1.5 p-2 bg-[#F0F5FA] rounded-lg hover:bg-[#E6F9FB] hover:text-[#0097A7] transition-all text-left group"
                     >
                       <Plus className="h-3 w-3 text-slate-400 group-hover:text-[#0097A7] shrink-0" />
-                      <span className="text-[10px] font-semibold text-slate-600 group-hover:text-[#0097A7] truncate">{s.nombre}</span>
+                      <span className="text-xs font-semibold text-slate-600 group-hover:text-[#0097A7] truncate">{s.nombre}</span>
                     </button>
                   ))}
                 </div>
@@ -282,15 +282,15 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
 
               {/* Servicios agregados */}
               <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm">
-                <p className="text-[8px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">
+                <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">
                   Servicios en Cotización ({lineItems.length})
                 </p>
                 <div className="space-y-1.5 max-h-[150px] overflow-y-auto">
                   {lineItems.map((item, idx) => (
                     <div key={item.id || idx} className="flex items-center gap-2 p-2 bg-[#F0F5FA] rounded-lg">
                       <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-bold text-slate-700 truncate">{item.nombre}</p>
-                        <p className="text-[9px] text-slate-400">${item.precio.toLocaleString()} c/u</p>
+                        <p className="text-xs font-bold text-slate-700 truncate">{item.nombre}</p>
+                        <p className="text-[11px] text-slate-400">${item.precio.toLocaleString()} c/u</p>
                       </div>
                       <div className="flex items-center gap-1">
                         <button
@@ -306,7 +306,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                         >
                           -
                         </button>
-                        <span className="text-[10px] font-black text-slate-700 min-w-[16px] text-center">{item.cantidad}</span>
+                        <span className="text-xs font-black text-slate-700 min-w-[16px] text-center">{item.cantidad}</span>
                         <button
                           type="button"
                           onClick={() => setLineItems(lineItems.map(i => i.id === item.id ? { ...i, cantidad: i.cantidad + 1 } : i))}
@@ -315,7 +315,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                           +
                         </button>
                       </div>
-                      <p className="text-[10px] font-black text-slate-700 w-14 text-right">${(item.precio * item.cantidad).toLocaleString()}</p>
+                      <p className="text-xs font-black text-slate-700 w-14 text-right">${(item.precio * item.cantidad).toLocaleString()}</p>
                       <button
                         type="button"
                         onClick={() => setLineItems(lineItems.filter(i => i.id !== item.id))}
@@ -327,7 +327,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                   ))}
                   {lineItems.length === 0 && (
                     <div className="text-center py-5 bg-white rounded-lg border-2 border-dashed border-slate-200">
-                      <p className="text-[10px] font-bold text-slate-400">Agrega servicios arriba</p>
+                      <p className="text-xs font-bold text-slate-400">Agrega servicios arriba</p>
                     </div>
                   )}
                 </div>
@@ -335,15 +335,15 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
 
               {/* Totales */}
               <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm space-y-2">
-                <div className="flex justify-between text-[10px] text-slate-500">
+                <div className="flex justify-between text-xs text-slate-500">
                   <span>Subtotal</span>
                   <span className="font-bold">${subtotal.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between items-center text-[10px] text-slate-500">
+                <div className="flex justify-between items-center text-xs text-slate-500">
                   <span>Descuento ($)</span>
                   <Input 
                     type="number" 
-                    className="w-20 h-7 text-right font-bold text-[10px] bg-[#F0F5FA] border-slate-200 rounded-lg" 
+                    className="w-20 h-7 text-right font-bold text-xs bg-[#F0F5FA] border-slate-200 rounded-lg" 
                     value={descuento || ''} 
                     onChange={e => setDescuento(parseFloat(e.target.value) || 0)} 
                   />
@@ -364,7 +364,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
               <button
                 type="button"
                 onClick={handleClose}
-                className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
+                className="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
               >
                 <X className="h-3 w-3" /> Cancelar
               </button>
@@ -372,7 +372,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                 type="button"
                 onClick={() => setStep(2)}
                 disabled={!selectedClient}
-                className="flex items-center gap-1.5 h-9 px-5 text-[10px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                className="flex items-center gap-1.5 h-9 px-5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
               >
                 Continuar <ChevronRight className="h-3.5 w-3.5" />
               </button>
@@ -382,7 +382,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
+                className="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
               >
                 <ChevronLeft className="h-3 w-3" /> Atrás
               </button>
@@ -390,7 +390,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                 type="button"
                 onClick={handleSave}
                 disabled={loading || lineItems.length === 0}
-                className="flex items-center gap-2 h-9 px-5 text-[10px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                className="flex items-center gap-2 h-9 px-5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
               >
                 {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
                 Guardar

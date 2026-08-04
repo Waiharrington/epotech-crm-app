@@ -62,14 +62,14 @@ export function AddNoteModal({ clientId, onClose, onSuccess }: AddNoteModalProps
           <div className="relative px-6 py-5">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                <p className="text-xs font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                   Clientes
                 </p>
                 <h3 className="text-lg font-black text-white leading-tight flex items-center gap-2">
                   <StickyNote className="h-5 w-5" />
                   Nueva Nota
                 </h3>
-                <p className="text-[11px] text-white/60 font-medium mt-1">
+                <p className="text-[13px] text-white/60 font-medium mt-1">
                   Anota detalles importantes para este cliente
                 </p>
               </div>
@@ -102,7 +102,7 @@ export function AddNoteModal({ clientId, onClose, onSuccess }: AddNoteModalProps
           <button
             type="button"
             onClick={handleClose}
-            className="flex items-center gap-2 text-[10px] font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
+            className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
           >
             <X className="h-3.5 w-3.5" /> Cancelar
           </button>
@@ -110,7 +110,7 @@ export function AddNoteModal({ clientId, onClose, onSuccess }: AddNoteModalProps
             type="button"
             onClick={handleSave}
             disabled={loading || !contenido.trim()}
-            className="flex items-center justify-center gap-2 h-10 px-6 text-[11px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+            className="flex items-center justify-center gap-2 h-10 px-6 text-[13px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             Guardar Nota

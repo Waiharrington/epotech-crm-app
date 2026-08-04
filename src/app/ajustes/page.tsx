@@ -193,7 +193,7 @@ export default function AjustesPage() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Configuración
                 </h1>
-                <p className="hidden sm:block text-slate-300/80 text-[10px] mt-1 font-medium">
+                <p className="hidden sm:block text-slate-300/80 text-xs mt-1 font-medium">
                   Personaliza tu experiencia y parámetros del sistema.
                 </p>
               </div>
@@ -201,7 +201,7 @@ export default function AjustesPage() {
             <button 
               onClick={handleSave}
               disabled={loading}
-              className="flex items-center justify-center gap-1.5 h-8 px-3 sm:px-4 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] hover:from-[#00b4ca] hover:to-[#00d4f0] text-white text-[10px] font-black shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98] shrink-0 cursor-pointer disabled:opacity-50"
+              className="flex items-center justify-center gap-1.5 h-8 px-3 sm:px-4 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] hover:from-[#00b4ca] hover:to-[#00d4f0] text-white text-xs font-black shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98] shrink-0 cursor-pointer disabled:opacity-50"
             >
               {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
               <span className="hidden sm:inline">Guardar Cambios</span>
@@ -245,19 +245,19 @@ export default function AjustesPage() {
 
               {/* Photo Actions */}
               <div className="flex-1 space-y-3">
-                <p className="text-[11px] text-slate-500 leading-relaxed">
+                <p className="text-[13px] text-slate-500 leading-relaxed">
                   Haz clic en la foto para cambiarla. Se recortará automáticamente a formato cuadrado.
                 </p>
                 <div className="flex gap-2">
                   <button 
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center gap-1.5 h-8 px-3 rounded-xl bg-[#0097A7]/10 border border-[#0097A7]/20 text-[#0097A7] text-[10px] font-bold hover:bg-[#0097A7]/20 transition-all cursor-pointer"
+                    className="flex items-center gap-1.5 h-8 px-3 rounded-xl bg-[#0097A7]/10 border border-[#0097A7]/20 text-[#0097A7] text-xs font-bold hover:bg-[#0097A7]/20 transition-all cursor-pointer"
                   >
                     <Upload className="h-3 w-3" /> Subir Foto
                   </button>
                   <button 
                     onClick={resetToDefault}
-                    className="flex items-center gap-1.5 h-8 px-3 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-500 text-[10px] font-bold hover:bg-slate-200 transition-all cursor-pointer"
+                    className="flex items-center gap-1.5 h-8 px-3 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-500 text-xs font-bold hover:bg-slate-200 transition-all cursor-pointer"
                   >
                     <RotateCw className="h-3 w-3" /> Restablecer
                   </button>
@@ -314,10 +314,10 @@ export default function AjustesPage() {
                   {/* Zoom */}
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                         <ZoomIn className="h-3 w-3" /> Zoom
                       </label>
-                      <span className="text-[10px] font-black text-[#0097A7]">{Math.round(zoom * 100)}%</span>
+                      <span className="text-xs font-black text-[#0097A7]">{Math.round(zoom * 100)}%</span>
                     </div>
                     <input 
                       type="range" min="0.5" max="3" step="0.05" value={zoom}
@@ -329,10 +329,10 @@ export default function AjustesPage() {
                   {/* Rotation */}
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                         <RotateCw className="h-3 w-3" /> Rotación
                       </label>
-                      <span className="text-[10px] font-black text-[#0097A7]">{rotation}°</span>
+                      <span className="text-xs font-black text-[#0097A7]">{rotation}°</span>
                     </div>
                     <input 
                       type="range" min="-180" max="180" step="5" value={rotation}
@@ -341,21 +341,21 @@ export default function AjustesPage() {
                     />
                   </div>
 
-                  <p className="text-[9px] text-slate-400">Arrastra la imagen para ajustar la posición</p>
+                  <p className="text-[11px] text-slate-400">Arrastra la imagen para ajustar la posición</p>
 
                   {/* Action Buttons */}
                   <div className="flex gap-2 pt-2">
                     <button 
                       onClick={saveCroppedImage}
                       disabled={loading}
-                      className="flex items-center gap-1.5 h-9 px-5 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] text-white text-[10px] font-black shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                      className="flex items-center gap-1.5 h-9 px-5 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] text-white text-xs font-black shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98] cursor-pointer disabled:opacity-50"
                     >
                       {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
                       Guardar Foto
                     </button>
                     <button 
                       onClick={() => { setEditMode(false); setSelectedImg(null) }}
-                      className="h-9 px-4 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-500 text-[10px] font-bold hover:bg-slate-200 transition-all cursor-pointer"
+                      className="h-9 px-4 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-500 text-xs font-bold hover:bg-slate-200 transition-all cursor-pointer"
                     >
                       Cancelar
                     </button>
@@ -378,14 +378,14 @@ export default function AjustesPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-slate-50/50 rounded-xl border border-slate-100/60">
                 <div className="space-y-0.5">
                   <Label className="text-xs font-bold text-slate-700">Sincronización con el Dispositivo</Label>
-                  <p className="text-[10px] text-slate-400">Activa el permiso en el navegador para recibir avisos.</p>
+                  <p className="text-xs text-slate-400">Activa el permiso en el navegador para recibir avisos.</p>
                 </div>
                 <NotificationManager />
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-slate-50/50 rounded-xl border border-slate-100/60">
                 <div className="space-y-0.5">
                   <Label className="text-xs font-bold text-slate-700">Alertas de Stock</Label>
-                  <p className="text-[10px] text-slate-400">Notificación cuando un insumo llegue al nivel crítico.</p>
+                  <p className="text-xs text-slate-400">Notificación cuando un insumo llegue al nivel crítico.</p>
                 </div>
                 <Switch 
                   checked={settings.instantAlerts}
@@ -406,7 +406,7 @@ export default function AjustesPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                   <Building2 className="h-3 w-3" /> Nombre del Negocio
                 </label>
                 <Input 
@@ -416,7 +416,7 @@ export default function AjustesPage() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                   <Globe className="h-3 w-3" /> Sitio Web
                 </label>
                 <Input 
@@ -426,7 +426,7 @@ export default function AjustesPage() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                   <Mail className="h-3 w-3" /> Email
                 </label>
                 <Input 
@@ -437,7 +437,7 @@ export default function AjustesPage() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                   <DollarSign className="h-3 w-3" /> Moneda
                 </label>
                 <Input 
@@ -460,14 +460,14 @@ export default function AjustesPage() {
             <div className="flex flex-col sm:flex-row gap-2">
               <button 
                 onClick={() => setShowPasswordModal(true)}
-                className="flex items-center justify-center gap-1.5 h-9 px-5 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-600 text-[10px] font-bold hover:bg-slate-200 transition-all cursor-pointer"
+                className="flex items-center justify-center gap-1.5 h-9 px-5 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-600 text-xs font-bold hover:bg-slate-200 transition-all cursor-pointer"
               >
                 <Lock className="h-3 w-3" /> Cambiar Contraseña
               </button>
               <button 
                 onClick={handleLogout}
                 disabled={loading}
-                className="flex items-center justify-center gap-1.5 h-9 px-5 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 text-white text-[10px] font-black shadow-md shadow-rose-500/20 hover:shadow-rose-500/30 transition-all active:scale-[0.98] cursor-pointer disabled:opacity-50"
+                className="flex items-center justify-center gap-1.5 h-9 px-5 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 text-white text-xs font-black shadow-md shadow-rose-500/20 hover:shadow-rose-500/30 transition-all active:scale-[0.98] cursor-pointer disabled:opacity-50"
               >
                 {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Trash2 className="h-3 w-3" />}
                 Cerrar Sesión
@@ -477,7 +477,7 @@ export default function AjustesPage() {
 
           {/* Success Toast */}
           {saved && (
-            <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200/60 rounded-xl p-3 text-emerald-600 text-[10px] font-bold animate-in fade-in slide-in-from-bottom-2">
+            <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200/60 rounded-xl p-3 text-emerald-600 text-xs font-bold animate-in fade-in slide-in-from-bottom-2">
               <CheckCircle2 className="h-4 w-4" /> Configuración guardada correctamente
             </div>
           )}

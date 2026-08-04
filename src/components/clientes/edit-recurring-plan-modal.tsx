@@ -111,13 +111,13 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
           <div className="relative px-6 py-5">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                <p className="text-xs font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                   Plan Recurrente
                 </p>
                 <h3 className="text-lg font-black text-white leading-tight">
                   Editar Plan
                 </h3>
-                <p className="text-[11px] text-white/60 font-medium mt-1">
+                <p className="text-[13px] text-white/60 font-medium mt-1">
                   {plan.catalogo_servicios?.nombre || 'Servicio personalizado'}
                 </p>
               </div>
@@ -148,7 +148,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
                 </div>
                 <div>
                   <p className="text-[12px] font-black text-slate-800">Estado del Plan</p>
-                  <p className="text-[10px] text-slate-400 font-medium">
+                  <p className="text-xs text-slate-400 font-medium">
                     {activo ? 'Recibiendo recordatorios' : 'Pausado temporalmente'}
                   </p>
                 </div>
@@ -156,7 +156,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
               <div className="flex bg-slate-100 rounded-xl p-1">
                 <button 
                   className={cn(
-                    "px-4 py-2 text-[10px] font-black rounded-lg transition-all duration-300 uppercase tracking-wider",
+                    "px-4 py-2 text-xs font-black rounded-lg transition-all duration-300 uppercase tracking-wider",
                     activo 
                       ? "bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white shadow-md shadow-cyan-500/25" 
                       : "text-slate-400 hover:text-slate-600"
@@ -167,7 +167,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
                 </button>
                 <button 
                   className={cn(
-                    "px-4 py-2 text-[10px] font-black rounded-lg transition-all duration-300 uppercase tracking-wider",
+                    "px-4 py-2 text-xs font-black rounded-lg transition-all duration-300 uppercase tracking-wider",
                     !activo 
                       ? "bg-gradient-to-r from-slate-600 to-slate-700 text-white shadow-md shadow-slate-500/25" 
                       : "text-slate-400 hover:text-slate-600"
@@ -183,7 +183,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
           {/* Formulario */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
+              <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">
                 Frecuencia
               </Label>
               <Select value={frecuencia} onValueChange={setFrecuencia}>
@@ -201,7 +201,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
 
             {frecuencia === 'personalizado' ? (
               <div className="space-y-2">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">
                   Cada cuántos días
                 </Label>
                 <Input 
@@ -213,7 +213,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
               </div>
             ) : (
               <div className="space-y-2">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">
                   Monto Estimado ($)
                 </Label>
                 <div className="relative">
@@ -230,7 +230,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
           </div>
 
           <div className="space-y-2">
-            <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
               <Calendar className="h-3 w-3 text-[#0097A7]" /> Próxima Visita Programada
             </Label>
             <DatePicker 
@@ -246,7 +246,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
             type="button"
             onClick={handleDelete}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2.5 text-[10px] font-black uppercase tracking-wider text-red-500 bg-red-50 border border-red-200 rounded-xl hover:bg-red-100 hover:border-red-300 transition-all active:scale-[0.98] disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-red-500 bg-red-50 border border-red-200 rounded-xl hover:bg-red-100 hover:border-red-300 transition-all active:scale-[0.98] disabled:opacity-50"
           >
             <Trash2 className="h-3.5 w-3.5" /> Eliminar
           </button>
@@ -256,7 +256,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
               type="button"
               onClick={handleClose}
               disabled={loading}
-              className="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-[0.98]"
+              className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-[0.98]"
             >
               Cancelar
             </button>
@@ -264,7 +264,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
               type="button"
               onClick={handleUpdate}
               disabled={loading}
-              className="flex items-center gap-2 px-5 py-2.5 text-[10px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50"
+              className="flex items-center gap-2 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50"
             >
               {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
               Guardar

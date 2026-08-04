@@ -146,7 +146,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                 ) : (
                   <div className="text-center p-2">
                     <Plus className="mx-auto h-5 w-5 text-muted-foreground mb-1" />
-                    <p className="text-[10px] font-bold uppercase">Antes</p>
+                    <p className="text-xs font-bold uppercase">Antes</p>
                   </div>
                 )}
                 {beforePhoto && <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />}
@@ -165,7 +165,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                 ) : (
                   <div className="text-center p-2">
                     <Plus className="mx-auto h-5 w-5 text-muted-foreground mb-1" />
-                    <p className="text-[10px] font-bold uppercase">Después</p>
+                    <p className="text-xs font-bold uppercase">Después</p>
                   </div>
                 )}
                 {afterPhoto && <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />}
@@ -256,10 +256,10 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
               </div>
 
               {/* Labels */}
-              <div className="absolute bottom-4 left-4 z-20 px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-bold text-white uppercase tracking-wider">
+              <div className="absolute bottom-4 left-4 z-20 px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-full text-xs font-bold text-white uppercase tracking-wider">
                 Antes - {new Date(beforePhoto.fecha_foto || beforePhoto.created_at).toLocaleDateString()}
               </div>
-              <div className="absolute bottom-4 right-4 z-20 px-3 py-1.5 bg-primary/80 backdrop-blur-md rounded-full text-[10px] font-bold text-white uppercase tracking-wider">
+              <div className="absolute bottom-4 right-4 z-20 px-3 py-1.5 bg-primary/80 backdrop-blur-md rounded-full text-xs font-bold text-white uppercase tracking-wider">
                 Después - {new Date(afterPhoto.fecha_foto || afterPhoto.created_at).toLocaleDateString()}
               </div>
            </div>
@@ -280,11 +280,11 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
                 <div className="relative px-6 py-5 flex items-center justify-between">
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                    <p className="text-xs font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                       {showPicker === 'before' ? 'Foto Antes' : 'Foto Después'}
                     </p>
                     <h3 className="text-lg font-black text-white leading-tight">Selecciona una foto</h3>
-                    <p className="text-[11px] text-white/60 font-medium mt-1">Elige de las fotos que has subido para este cliente.</p>
+                    <p className="text-[13px] text-white/60 font-medium mt-1">Elige de las fotos que has subido para este cliente.</p>
                   </div>
                   <button
                     type="button"
@@ -318,7 +318,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                             <Check className="text-[#0097A7] h-5 w-5" />
                           </div>
                         </div>
-                        <div className="absolute bottom-2 left-2 px-2.5 py-1 bg-[#030b17]/70 backdrop-blur-md rounded-lg text-[9px] text-white font-black uppercase tracking-wider shadow-md">
+                        <div className="absolute bottom-2 left-2 px-2.5 py-1 bg-[#030b17]/70 backdrop-blur-md rounded-lg text-[11px] text-white font-black uppercase tracking-wider shadow-md">
                           {photo.etiqueta}
                         </div>
                       </button>

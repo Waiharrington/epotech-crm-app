@@ -67,7 +67,7 @@ export function ChangePasswordModal({ onClose }: ChangePasswordModalProps) {
               <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight">
                 Cambiar Contraseña
               </h2>
-              <p className="text-[11px] font-medium text-slate-500">
+              <p className="text-[13px] font-medium text-slate-500">
                 Ingresa tu nueva contraseña para acceder al sistema
               </p>
             </div>
@@ -75,7 +75,7 @@ export function ChangePasswordModal({ onClose }: ChangePasswordModalProps) {
 
           <div className="p-5 space-y-4">
             <div className="space-y-1.5">
-              <Label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Nueva Contraseña</Label>
+              <Label className="text-xs font-bold uppercase tracking-wider text-slate-500">Nueva Contraseña</Label>
               <Input
                 type="password"
                 required
@@ -87,7 +87,7 @@ export function ChangePasswordModal({ onClose }: ChangePasswordModalProps) {
             </div>
             
             <div className="space-y-1.5">
-              <Label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Confirmar Contraseña</Label>
+              <Label className="text-xs font-bold uppercase tracking-wider text-slate-500">Confirmar Contraseña</Label>
               <Input
                 type="password"
                 required

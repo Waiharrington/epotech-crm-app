@@ -116,7 +116,7 @@ export function RouteModal({ isOpen, onClose, jobs }: RouteModalProps) {
                           <p className="font-semibold text-slate-800 text-sm">
                             {job.clientes.nombre} {job.clientes.apellido}
                           </p>
-                          <span className="text-[11px] font-medium text-slate-500 bg-white px-2 py-0.5 rounded-md border border-slate-200 shrink-0">
+                          <span className="text-[13px] font-medium text-slate-500 bg-white px-2 py-0.5 rounded-md border border-slate-200 shrink-0">
                             {formatTime12(job.hora_servicio)}
                           </span>
                         </div>
@@ -129,12 +129,12 @@ export function RouteModal({ isOpen, onClose, jobs }: RouteModalProps) {
                         </p>
                         
                         <div className="flex items-center gap-2 pt-2 border-t border-slate-200/60">
-                          <span className="text-[9px] font-bold text-slate-400 uppercase">Navegar:</span>
+                          <span className="text-[11px] font-bold text-slate-400 uppercase">Navegar:</span>
                           <a 
                             href={`http://maps.apple.com/?daddr=${encodeURIComponent(job.clientes.direccion || '')}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[10px] font-bold text-white bg-black hover:bg-slate-800 px-2 py-1 rounded-md transition-colors"
+                            className="text-xs font-bold text-white bg-black hover:bg-slate-800 px-2 py-1 rounded-md transition-colors"
                           >
                             Apple
                           </a>
@@ -142,7 +142,7 @@ export function RouteModal({ isOpen, onClose, jobs }: RouteModalProps) {
                             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(job.clientes.direccion || '')}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[10px] font-bold text-white bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded-md transition-colors"
+                            className="text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded-md transition-colors"
                           >
                             Google
                           </a>
@@ -150,7 +150,7 @@ export function RouteModal({ isOpen, onClose, jobs }: RouteModalProps) {
                             href={`https://waze.com/ul?q=${encodeURIComponent(job.clientes.direccion || '')}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[10px] font-bold text-white bg-[#33ccff] hover:bg-[#2eb8e6] px-2 py-1 rounded-md transition-colors"
+                            className="text-xs font-bold text-white bg-[#33ccff] hover:bg-[#2eb8e6] px-2 py-1 rounded-md transition-colors"
                           >
                             Waze
                           </a>

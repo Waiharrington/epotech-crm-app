@@ -154,11 +154,11 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
           <button
             type="button"
             onClick={() => setShowCollageMode(false)}
-            className="flex items-center gap-1.5 h-8 px-3 text-[10px] font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
+            className="flex items-center gap-1.5 h-8 px-3 text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
           >
             <X className="h-3.5 w-3.5" /> Cancelar Comparativa
           </button>
-          <Badge className="h-5 px-2 rounded-lg text-[8.5px] font-black uppercase tracking-wider border bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 text-[#0097A7] border-[#0097A7]/20 shadow-none">
+          <Badge className="h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 text-[#0097A7] border-[#0097A7]/20 shadow-none">
             Modo Creador de Collage
           </Badge>
         </div>
@@ -175,7 +175,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
           type="button"
           onClick={() => setShowAddModal(true)}
           disabled={uploading}
-          className="flex items-center justify-center gap-2 h-10 px-4 text-[11px] font-black uppercase tracking-wider rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+          className="flex items-center justify-center gap-2 h-10 px-4 text-[13px] font-black uppercase tracking-wider rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
         >
           {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
           Agregar Imagen
@@ -185,7 +185,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
           type="button"
           onClick={() => setShowCollageMode(true)}
           disabled={photos.length < 2}
-          className="flex items-center justify-center gap-2 h-10 px-4 text-[11px] font-black uppercase tracking-wider rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none"
+          className="flex items-center justify-center gap-2 h-10 px-4 text-[13px] font-black uppercase tracking-wider rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none"
         >
           <ImageIcon className="h-4 w-4" /> Generar Comparativa
         </button>
@@ -194,7 +194,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-12 gap-3">
           <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cargando galería</p>
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Cargando galería</p>
         </div>
       ) : photos.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
@@ -216,7 +216,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
                 </button>
               </div>
               <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                 <Badge className="h-5 px-2 rounded-lg text-[8.5px] font-black uppercase tracking-wider border-none bg-[#030b17]/75 backdrop-blur-md text-white shadow-none">
+                 <Badge className="h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border-none bg-[#030b17]/75 backdrop-blur-md text-white shadow-none">
                     {new Date(photo.created_at).toLocaleDateString()}
                  </Badge>
               </div>
@@ -263,31 +263,31 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
            {/* Metadata Sidebar */}
            <div className="sidebar-premium-bg w-full md:w-80 border-t md:border-t-0 md:border-l border-white/10 p-5 flex flex-col gap-4 text-white overflow-y-auto shrink-0">
               <div className="space-y-1.5 relative z-10">
-                 <p className="text-[9px] font-extrabold text-[#00C9E0] uppercase tracking-wider">Estado / Categoría</p>
-                 <Badge className="h-5 px-2 rounded-lg text-[8.5px] font-black uppercase tracking-wider border bg-[#00C9E0]/15 text-[#00C9E0] border-[#00C9E0]/30 shadow-none capitalize">
+                 <p className="text-[11px] font-extrabold text-[#00C9E0] uppercase tracking-wider">Estado / Categoría</p>
+                 <Badge className="h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-[#00C9E0]/15 text-[#00C9E0] border-[#00C9E0]/30 shadow-none capitalize">
                     {selectedPhoto.etiqueta}
                  </Badge>
               </div>
 
               <div className="space-y-1 relative z-10">
-                 <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Fecha del Registro</p>
+                 <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Fecha del Registro</p>
                  <p className="text-[12px] font-bold text-white">
                     {selectedPhoto.fecha_foto ? new Date(selectedPhoto.fecha_foto).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : new Date(selectedPhoto.created_at).toLocaleDateString()}
                  </p>
               </div>
 
               <div className="space-y-1.5 pt-3 border-t border-white/[0.06] relative z-10">
-                 <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                 <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                     <StickyNote className="h-3 w-3 text-[#00C9E0]" /> Observaciones
                  </p>
-                 <div className="bg-white/[0.06] border border-white/10 p-3 rounded-xl backdrop-blur-md italic text-[11px] text-slate-300 leading-relaxed min-h-[90px]">
+                 <div className="bg-white/[0.06] border border-white/10 p-3 rounded-xl backdrop-blur-md italic text-[13px] text-slate-300 leading-relaxed min-h-[90px]">
                     &quot;{selectedPhoto.observaciones || 'Sin observaciones registradas para esta foto.'}&quot;
                  </div>
               </div>
 
               {selectedPhoto.trabajos && (
                  <div className="space-y-1.5 pt-3 border-t border-white/[0.06] relative z-10">
-                    <p className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <p className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                        <Briefcase className="h-3 w-3 text-[#00C9E0]" /> Servicio Asociado
                     </p>
                     <button
@@ -296,10 +296,10 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
                       onClick={() => setJobToView(selectedPhoto.trabajos)}
                     >
                        <div className="flex-1 min-w-0">
-                          <p className="text-[11px] font-black text-[#00C9E0] truncate">
+                          <p className="text-[13px] font-black text-[#00C9E0] truncate">
                              {selectedPhoto.trabajos.catalogo_servicios?.nombre || 'Servicio General'}
                           </p>
-                          <p className="text-[9px] text-[#00C9E0]/60 font-medium">Ver ficha técnica completa</p>
+                          <p className="text-[11px] text-[#00C9E0]/60 font-medium">Ver ficha técnica completa</p>
                        </div>
                        <ExternalLink className="h-3.5 w-3.5 text-[#00C9E0] opacity-40 group-hover/srv:opacity-100 transition-opacity shrink-0" />
                     </button>
@@ -309,7 +309,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
               <div className="mt-auto pt-4 relative z-10">
                  <button
                     type="button"
-                    className="w-full flex items-center justify-center gap-2 h-9 px-4 text-[10px] font-black uppercase tracking-wider rounded-xl bg-red-500/15 border border-red-400/30 text-red-300 hover:bg-red-500/25 hover:border-red-400/50 hover:text-red-200 backdrop-blur-md transition-all active:scale-[0.98]"
+                    className="w-full flex items-center justify-center gap-2 h-9 px-4 text-xs font-black uppercase tracking-wider rounded-xl bg-red-500/15 border border-red-400/30 text-red-300 hover:bg-red-500/25 hover:border-red-400/50 hover:text-red-200 backdrop-blur-md transition-all active:scale-[0.98]"
                     onClick={(e) => {
                        e.stopPropagation();
                        handleDelete(selectedPhoto);

@@ -61,7 +61,7 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
           <Briefcase className="h-6 w-6 text-slate-400" />
         </div>
         <p className="text-[12px] font-bold text-slate-500">No se encontraron trabajos</p>
-        <p className="text-[10px] text-slate-400 mt-1">Crea uno nuevo para comenzar</p>
+        <p className="text-xs text-slate-400 mt-1">Crea uno nuevo para comenzar</p>
       </div>
     )
   }
@@ -112,10 +112,10 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
           
           {Object.entries(groupedJobs[weekKey].services).map(([serviceName, jobs]) => (
             <div key={serviceName} className="space-y-2">
-              <h4 className="text-[10px] md:text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 px-2">
+              <h4 className="text-xs md:text-[13px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 px-2">
                 <Briefcase className="h-3 w-3 text-[#0097A7]" />
                 {serviceName}
-                <span className="text-[9px] text-slate-400 font-normal">({jobs.length})</span>
+                <span className="text-[11px] text-slate-400 font-normal">({jobs.length})</span>
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3">
                 {jobs.map((job) => {
@@ -156,11 +156,11 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                             </span>
                           )}
                         </div>
-                        <p className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
+                        <p className="text-xs text-slate-500 font-medium flex items-center gap-1">
                           <User className="h-3 w-3 shrink-0" />
                           <span className="truncate">{job.clientes.nombre} {job.clientes.apellido}</span>
                           {job.ayudantes && (
-                            <span className="flex items-center gap-1 text-[9px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded-md ml-1" title={`Equipo: ${job.ayudantes}`}>
+                            <span className="flex items-center gap-1 text-[11px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded-md ml-1" title={`Equipo: ${job.ayudantes}`}>
                               <Users className="h-2.5 w-2.5" /> {job.ayudantes}
                             </span>
                           )}
@@ -178,8 +178,8 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                   {/* Status Section */}
                   <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
                     <div className="flex flex-col gap-0.5">
-                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Estado del servicio</p>
-                      <p className="text-[10px] font-semibold text-slate-600">
+                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Estado del servicio</p>
+                      <p className="text-xs font-semibold text-slate-600">
                         {job.estado === 'completado' && 'Trabajo finalizado exitosamente'}
                         {job.estado === 'en_progreso' && 'El equipo está trabajando en el servicio'}
                         {job.estado === 'proximo' && 'Servicio programado, pendiente de inicio'}
@@ -191,7 +191,7 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                         <button 
                           onClick={(e) => e.stopPropagation()}
                           className={cn(
-                            "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider cursor-pointer whitespace-nowrap",
+                            "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-black uppercase tracking-wider cursor-pointer whitespace-nowrap",
                             "border-2 border-dashed transition-all duration-200",
                             "hover:scale-[1.03] hover:shadow-md active:scale-[0.97]",
                             job.estado === 'completado' && "bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100 hover:border-emerald-400",
@@ -204,7 +204,7 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                           {job.estado === 'en_progreso' && <RotateCw className="h-3 w-3" />}
                           {job.estado === 'proximo' && <Calendar className="h-3 w-3" />}
                           <span>{status.label}</span>
-                          <span className="text-[10px] leading-none ml-0.5">▾</span>
+                          <span className="text-xs leading-none ml-0.5">▾</span>
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-48 rounded-xl border border-slate-200/80 shadow-lg bg-white p-1" onClick={(e) => e.stopPropagation()}>
@@ -250,12 +250,12 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                   {/* Date & Time Footer */}
                   <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
                     <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-1 text-[9px] font-semibold text-slate-400">
+                      <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-400">
                         <Calendar className="h-3 w-3" />
                         {new Date(job.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
                       </div>
                       {job.hora_servicio && (
-                        <div className="flex items-center gap-1 text-[9px] font-semibold text-slate-400">
+                        <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-400">
                           <Clock className="h-3 w-3" />
                           {formatTime12h(job.hora_servicio)}
                         </div>

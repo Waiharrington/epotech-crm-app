@@ -301,7 +301,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
               </div>
               <div>
                 <h2 className="text-sm font-black text-white tracking-tight">Editar Servicio</h2>
-                <p className="text-[10px] text-white/70 font-medium mt-0.5">Modifica los detalles del trabajo registrado.</p>
+                <p className="text-xs text-white/70 font-medium mt-0.5">Modifica los detalles del trabajo registrado.</p>
               </div>
             </div>
             <button
@@ -319,14 +319,14 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
           <div className="grid gap-4 p-5">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Fecha del Servicio</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Fecha del Servicio</Label>
                 <DatePicker 
                   value={formData.fecha_servicio || ''} 
                   onChange={(date) => updateFields({ fecha_servicio: date })} 
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Estado</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Estado</Label>
                 <Select 
                   value={formData.estado || 'proximo'} 
                   onValueChange={v => updateFields({ estado: v as any })}
@@ -346,7 +346,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Precio Acordado ($)</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Precio Acordado ($)</Label>
                 <Input 
                   type="number"
                   className="h-[38px] text-[12px] font-semibold rounded-xl border-slate-200"
@@ -355,7 +355,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Precio Cobrado ($)</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Precio Cobrado ($)</Label>
                 <Input 
                   type="number"
                   className="h-[38px] text-[12px] font-semibold rounded-xl border-slate-200"
@@ -366,7 +366,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
             </div>
 
             <div className="space-y-1.5">
-              <Label className="flex items-center gap-1.5 text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
+              <Label className="flex items-center gap-1.5 text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">
                 <User className="h-3 w-3" /> Equipo de Apoyo (Opcional)
               </Label>
               <Input 
@@ -378,7 +378,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Notas Previas (Instrucciones)</Label>
+              <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Notas Previas (Instrucciones)</Label>
               <Textarea 
                 className="text-[12px] rounded-xl border-slate-200 min-h-[72px]"
                 value={formData.notas_pre || ''} 
@@ -390,7 +390,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
               <>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
-                    <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Máquina Usada</Label>
+                    <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Máquina Usada</Label>
                     <Input 
                       className="h-[38px] text-[12px] font-semibold rounded-xl border-slate-200"
                       value={formData.maquina_usada || ''} 
@@ -398,7 +398,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Presión de Agua</Label>
+                    <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Presión de Agua</Label>
                     <Input 
                       className="h-[38px] text-[12px] font-semibold rounded-xl border-slate-200"
                       value={formData.presion_agua || ''} 
@@ -407,7 +407,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Químicos Aplicados</Label>
+                  <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Químicos Aplicados</Label>
                   <Textarea 
                     className="text-[12px] rounded-xl border-slate-200 min-h-[72px]"
                     value={formData.quimicos_aplicados || ''} 
@@ -415,7 +415,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Notas Posteriores (Log Técnico)</Label>
+                  <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Notas Posteriores (Log Técnico)</Label>
                   <Textarea 
                     className="text-[12px] rounded-xl border-slate-200 min-h-[72px]"
                     value={formData.notas_post || ''} 
@@ -424,7 +424,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                 </div>
 
                 <div className="space-y-3 border-t border-slate-100 pt-4">
-                  <Label className="flex items-center gap-2 text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
+                  <Label className="flex items-center gap-2 text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">
                     <Package className="h-3.5 w-3.5 text-[#0097A7]" />
                     Materiales Utilizados
                   </Label>
@@ -440,8 +440,8 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                           <div key={m.id} className="flex flex-col gap-1.5 bg-slate-50 p-3 rounded-xl border border-slate-100">
                             <div className="flex items-center justify-between">
                               <div>
-                                <span className="font-bold text-[11px] text-slate-800">{m.nombre}</span>
-                                <p className="text-[9px] text-slate-400 font-medium">
+                                <span className="font-bold text-[13px] text-slate-800">{m.nombre}</span>
+                                <p className="text-[11px] text-slate-400 font-medium">
                                   Costo: ${precioCosto}/{unit}
                                 </p>
                               </div>
@@ -450,7 +450,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                                     <button type="button" className="h-6 w-6 flex items-center justify-center text-slate-500 hover:text-[#0097A7] transition-colors text-xs font-bold" onClick={() => {
                                        setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: Math.max(1, x.cantidad - 1) } : x))
                                     }}>-</button>
-                                    <span className="text-[11px] font-black text-slate-800 px-1.5">{m.cantidad}</span>
+                                    <span className="text-[13px] font-black text-slate-800 px-1.5">{m.cantidad}</span>
                                     <button type="button" className="h-6 w-6 flex items-center justify-center text-slate-500 hover:text-[#0097A7] transition-colors text-xs font-bold" onClick={() => {
                                        setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: x.cantidad + 1 } : x))
                                     }}>+</button>
@@ -463,19 +463,19 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                             {m.cantidad > (stockItem?.cantidad_actual || 0) && (
                               <div className="flex flex-col gap-2 mt-1 p-2.5 bg-amber-50 border border-amber-100 rounded-xl">
                                  <div className="flex items-center justify-between">
-                                   <p className="text-[10px] text-amber-700 font-bold">
+                                   <p className="text-xs text-amber-700 font-bold">
                                      ⚠️ Superas el stock ({stockItem?.cantidad_actual || 0} {unit} disponibles)
                                    </p>
-                                   <span className="text-[8px] bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded-md font-black uppercase">Auto-compra</span>
+                                   <span className="text-[10px] bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded-md font-black uppercase">Auto-compra</span>
                                  </div>
                                  <div className="grid grid-cols-2 gap-2 pt-1.5 border-t border-amber-100/60">
                                    <div className="space-y-1">
-                                     <Label className="text-[8px] text-amber-800 font-black uppercase">Costo Unitario ($)</Label>
+                                     <Label className="text-[10px] text-amber-800 font-black uppercase">Costo Unitario ($)</Label>
                                      <Input 
                                        type="number"
                                        step="0.01"
                                        min="0"
-                                       className="h-7 text-[10px] bg-white border-amber-200 text-amber-950 font-bold rounded-lg"
+                                       className="h-7 text-xs bg-white border-amber-200 text-amber-950 font-bold rounded-lg"
                                        value={m.precio_costo !== undefined ? m.precio_costo : precioCosto}
                                        onChange={(e) => {
                                          setMaterials(materials.map(x => x.id === m.id ? { ...x, precio_costo: parseFloat(e.target.value) || 0 } : x))
@@ -483,12 +483,12 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                                      />
                                    </div>
                                    <div className="space-y-1">
-                                     <Label className="text-[8px] text-amber-800 font-black uppercase">Precio Venta ($)</Label>
+                                     <Label className="text-[10px] text-amber-800 font-black uppercase">Precio Venta ($)</Label>
                                      <Input 
                                        type="number"
                                        step="0.01"
                                        min="0"
-                                       className="h-7 text-[10px] bg-white border-amber-200 text-amber-950 font-bold rounded-lg"
+                                       className="h-7 text-xs bg-white border-amber-200 text-amber-950 font-bold rounded-lg"
                                        value={m.precio_cliente !== undefined ? m.precio_cliente : precioCliente}
                                        onChange={(e) => {
                                          setMaterials(materials.map(x => x.id === m.id ? { ...x, precio_cliente: parseFloat(e.target.value) || 0 } : x))
@@ -511,7 +511,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                         placeholder="Buscar e integrar material..." 
                         value={searchMaterial}
                         onChange={(e) => setSearchMaterial(e.target.value)}
-                        className="pl-9 h-9 text-[11px] rounded-xl border-slate-200"
+                        className="pl-9 h-9 text-[13px] rounded-xl border-slate-200"
                       />
                     </div>
                     
@@ -525,7 +525,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                           .map(s => (
                             <button
                               key={s.id}
-                              className="w-full text-left px-3 py-2 text-[11px] hover:bg-[#E6F9FB] rounded-lg flex items-center justify-between transition-colors group"
+                              className="w-full text-left px-3 py-2 text-[13px] hover:bg-[#E6F9FB] rounded-lg flex items-center justify-between transition-colors group"
                               onClick={() => {
                                 setMaterials([...materials, { 
                                   id: s.id, 
@@ -538,7 +538,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                               }}
                             >
                               <span className="font-bold text-slate-800 group-hover:text-[#0097A7]">{s.nombre}</span>
-                              <span className="text-[9px] text-slate-400 font-medium">{s.cantidad_actual} {s.unidad_medida}</span>
+                              <span className="text-[11px] text-slate-400 font-medium">{s.cantidad_actual} {s.unidad_medida}</span>
                             </button>
                           ))}
                       </div>
@@ -555,7 +555,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
               type="button"
               onClick={handleClose}
               disabled={loading}
-              className="h-9 px-4 text-[11px] font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all"
+              className="h-9 px-4 text-[13px] font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all"
             >
               Cancelar
             </button>
@@ -563,7 +563,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
               type="button"
               onClick={handleSave}
               disabled={loading}
-              className="h-9 px-4 text-[11px] font-black text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] rounded-xl shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98] flex items-center gap-1.5"
+              className="h-9 px-4 text-[13px] font-black text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] rounded-xl shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98] flex items-center gap-1.5"
             >
               {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
               Guardar Cambios

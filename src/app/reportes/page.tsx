@@ -258,7 +258,7 @@ export default function ReportesPage() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Reportes de Rendimiento
                 </h1>
-                <p className="text-slate-300/80 text-[10px] hidden sm:block xl:text-[9px] 2xl:text-xs mt-1 font-medium">
+                <p className="text-slate-300/80 text-xs hidden sm:block xl:text-[11px] 2xl:text-xs mt-1 font-medium">
                   Visualiza la rentabilidad, ventas, mejores clientes y jornadas operativas.
                 </p>
               </div>
@@ -266,7 +266,7 @@ export default function ReportesPage() {
 
             <div className="flex items-center gap-2 shrink-0">
               <Select value={dateRange} onValueChange={setDateRange}>
-                <SelectTrigger className="w-[180px] h-8 text-[10px] font-bold rounded-xl bg-white/10 border-white/15 text-white backdrop-blur-md">
+                <SelectTrigger className="w-[180px] h-8 text-xs font-bold rounded-xl bg-white/10 border-white/15 text-white backdrop-blur-md">
                   <Calendar className="mr-1.5 h-3.5 w-3.5 text-[#00C9E0]" />
                   <SelectValue />
                 </SelectTrigger>
@@ -283,9 +283,9 @@ export default function ReportesPage() {
 
               {dateRange === 'personalizado' && (
                 <div className="flex items-center gap-1.5 animate-in slide-in-from-right-2 duration-200">
-                  <DatePicker value={customStartDate} onChange={setCustomStartDate} className="h-8 w-[120px] text-[10px] rounded-xl" />
-                  <span className="text-[10px] text-slate-400 font-medium">a</span>
-                  <DatePicker value={customEndDate} onChange={setCustomEndDate} className="h-8 w-[120px] text-[10px] rounded-xl" />
+                  <DatePicker value={customStartDate} onChange={setCustomStartDate} className="h-8 w-[120px] text-xs rounded-xl" />
+                  <span className="text-xs text-slate-400 font-medium">a</span>
+                  <DatePicker value={customEndDate} onChange={setCustomEndDate} className="h-8 w-[120px] text-xs rounded-xl" />
                 </div>
               )}
 
@@ -293,7 +293,7 @@ export default function ReportesPage() {
                 variant="outline"
                 size="sm"
                 onClick={fetchReportesData}
-                className="h-8 px-3 text-[10px] font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-white/20 backdrop-blur-md transition-all active:scale-[0.98]"
+                className="h-8 px-3 text-xs font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-white/20 backdrop-blur-md transition-all active:scale-[0.98]"
               >
                 <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
                 Recargar
@@ -330,13 +330,13 @@ export default function ReportesPage() {
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
                   <div className="relative z-10">
                     <div className="flex items-center justify-between mb-3">
-                      <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/60">{stat.label}</p>
+                      <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white/60">{stat.label}</p>
                       <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-white/15 border border-white/20">
                         <stat.icon className="h-3.5 w-3.5 text-white" />
                       </div>
                     </div>
                     <p className="text-2xl font-black text-white">{stat.value}</p>
-                    <p className="text-[9px] text-white/50 font-medium mt-1">{stat.sub}</p>
+                    <p className="text-[11px] text-white/50 font-medium mt-1">{stat.sub}</p>
                   </div>
                 </div>
               ))}
@@ -353,10 +353,10 @@ export default function ReportesPage() {
                     <Target className="h-3.5 w-3.5 text-slate-500" />
                   </div>
                   <span className="text-xs font-black uppercase tracking-wider text-slate-600">Métricas Secundarias</span>
-                  <span className="text-[9px] text-slate-400 font-medium">Gastos, cobros, fidelidad, leads</span>
+                  <span className="text-[11px] text-slate-400 font-medium">Gastos, cobros, fidelidad, leads</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Badge className="bg-slate-100 text-slate-500 text-[8px] font-bold px-1.5 py-0 rounded-full border border-slate-200/60">4 métricas</Badge>
+                  <Badge className="bg-slate-100 text-slate-500 text-[10px] font-bold px-1.5 py-0 rounded-full border border-slate-200/60">4 métricas</Badge>
                   {showSecondary ? (
                     <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-200" />
                   ) : (
@@ -379,18 +379,18 @@ export default function ReportesPage() {
                       style={{ borderLeftWidth: '3px', borderLeftColor: stat.borderColor }}
                     >
                       <div className="flex items-center justify-between mb-1.5">
-                        <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{stat.label}</p>
+                        <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">{stat.label}</p>
                         <div className="h-6 w-6 rounded-md flex items-center justify-center bg-slate-50 border border-slate-200/60 text-slate-400">
                           <stat.icon className="h-3 w-3" />
                         </div>
                       </div>
                       <p className="text-lg font-black text-slate-800">{stat.value}</p>
                       {stat.badge && (
-                        <Badge className={cn("text-[8px] font-bold px-1.5 py-0 rounded-full mt-1 border", stat.badgeColor)}>
+                        <Badge className={cn("text-[10px] font-bold px-1.5 py-0 rounded-full mt-1 border", stat.badgeColor)}>
                           {stat.badge}
                         </Badge>
                       )}
-                      {stat.sub && <p className="text-[9px] text-slate-400 font-medium mt-0.5">{stat.sub}</p>}
+                      {stat.sub && <p className="text-[11px] text-slate-400 font-medium mt-0.5">{stat.sub}</p>}
                     </div>
                   ))}
                 </div>
@@ -413,9 +413,9 @@ export default function ReportesPage() {
                         <Star className="h-4 w-4 text-[#0097A7]" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Más Vendido</p>
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Más Vendido</p>
                         <p className="text-xs font-bold text-slate-700 truncate">{bestSellingService.nombre}</p>
-                        <p className="text-[10px] text-[#0097A7] font-bold">{bestSellingService.ventasCount} servicios</p>
+                        <p className="text-xs text-[#0097A7] font-bold">{bestSellingService.ventasCount} servicios</p>
                       </div>
                     </div>
                   )}
@@ -425,9 +425,9 @@ export default function ReportesPage() {
                         <Clock className="h-4 w-4 text-amber-500" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Día Más Activo</p>
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Día Más Activo</p>
                         <p className="text-xs font-bold text-slate-700">{busiestDay.name}</p>
-                        <p className="text-[10px] text-amber-600 font-bold">{busiestDay.trabajosCount} servicios</p>
+                        <p className="text-xs text-amber-600 font-bold">{busiestDay.trabajosCount} servicios</p>
                       </div>
                     </div>
                   )}
@@ -437,9 +437,9 @@ export default function ReportesPage() {
                         <Users className="h-4 w-4 text-[#0097A7]" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mejor Cliente</p>
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Mejor Cliente</p>
                         <p className="text-xs font-bold text-slate-700 truncate">{bestClient.nombre} {bestClient.apellido}</p>
-                        <p className="text-[10px] text-[#0097A7] font-bold">${bestClient.gastado.toLocaleString()}</p>
+                        <p className="text-xs text-[#0097A7] font-bold">${bestClient.gastado.toLocaleString()}</p>
                       </div>
                     </div>
                   )}
@@ -466,11 +466,11 @@ export default function ReportesPage() {
                       </div>
                       <div>
                         <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">Mapa de Calor Operativo</h3>
-                        <p className="text-[10px] text-slate-400">Jornadas más activas de la semana</p>
+                        <p className="text-xs text-slate-400">Jornadas más activas de la semana</p>
                       </div>
                     </div>
                     {busiestDay && busiestDay.trabajosCount > 0 && (
-                      <Badge className="bg-[#0097A7]/10 text-[#0097A7] border-[#0097A7]/20 text-[9px] font-bold uppercase">
+                      <Badge className="bg-[#0097A7]/10 text-[#0097A7] border-[#0097A7]/20 text-[11px] font-bold uppercase">
                         🔥 Día Pico: {busiestDay.name} ({busiestDay.trabajosCount})
                       </Badge>
                     )}
@@ -493,14 +493,14 @@ export default function ReportesPage() {
                                 : "bg-slate-50 border-slate-200/60"
                             )}
                           >
-                            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{day.name.substring(0, 3)}</p>
+                            <p className="text-xs font-bold uppercase tracking-wider text-slate-400">{day.name.substring(0, 3)}</p>
                             <p className={cn(
                               "text-lg font-black mt-1",
                               day.trabajosCount > 0 ? 'text-slate-800' : 'text-slate-300'
                             )}>{day.trabajosCount}</p>
-                            <p className="text-[8px] text-slate-400 font-medium">{day.trabajosCount === 1 ? 'trabajo' : 'trabajos'}</p>
+                            <p className="text-[10px] text-slate-400 font-medium">{day.trabajosCount === 1 ? 'trabajo' : 'trabajos'}</p>
                             <div className="mt-2 pt-1.5 border-t border-dashed border-slate-200/60">
-                              <span className="text-[9px] font-black text-[#0097A7]">${day.ingresos.toLocaleString()}</span>
+                              <span className="text-[11px] font-black text-[#0097A7]">${day.ingresos.toLocaleString()}</span>
                             </div>
                           </div>
                         )
@@ -510,7 +510,7 @@ export default function ReportesPage() {
                     {busiestDay && busiestDay.trabajosCount > 0 && (
                       <div className="mt-3 p-3 rounded-xl bg-[#0097A7]/5 border border-[#0097A7]/10 flex items-start gap-2.5">
                         <Info className="h-4 w-4 text-[#0097A7] shrink-0 mt-0.5" />
-                        <p className="text-[10px] text-slate-600 leading-relaxed">
+                        <p className="text-xs text-slate-600 leading-relaxed">
                           Tus <strong>{busiestDay.name.toLowerCase()}s</strong> son el día más fuerte, con <strong>{busiestDay.trabajosCount}</strong> servicios y <strong>${busiestDay.ingresos.toLocaleString()}</strong> facturados.
                         </p>
                       </div>
@@ -529,7 +529,7 @@ export default function ReportesPage() {
                         </div>
                         <div>
                           <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">Rentabilidad por Servicio</h3>
-                          <p className="text-[10px] text-slate-400">Márgenes de ganancia reales</p>
+                          <p className="text-xs text-slate-400">Márgenes de ganancia reales</p>
                         </div>
                       </div>
                       <Sparkles className="h-4 w-4 text-[#0097A7]" />
@@ -542,7 +542,7 @@ export default function ReportesPage() {
                           <div key={svc.id} className="px-4 py-3 hover:bg-slate-50/50 transition-colors">
                             <div className="flex items-center justify-between mb-1.5">
                               <div className="flex items-center gap-2">
-                                <span className="text-[9px] text-slate-400 font-mono font-bold">#{idx+1}</span>
+                                <span className="text-[11px] text-slate-400 font-mono font-bold">#{idx+1}</span>
                                 <h4 className="font-bold text-xs text-slate-700 capitalize">{svc.nombre}</h4>
                               </div>
                               <span className="font-black text-xs text-[#0097A7]">${svc.profit.toLocaleString()}</span>
@@ -554,10 +554,10 @@ export default function ReportesPage() {
                                   style={{ width: `${Math.max(Math.min(svc.marginPct, 100), 5)}%` }}
                                 />
                               </div>
-                              <span className="text-[9px] text-slate-400 font-bold">{svc.marginPct.toFixed(0)}%</span>
+                              <span className="text-[11px] text-slate-400 font-bold">{svc.marginPct.toFixed(0)}%</span>
                             </div>
                             <div className="flex items-center gap-1">
-                              <span className="text-[9px] text-slate-400">{svc.ventasCount} serv.</span>
+                              <span className="text-[11px] text-slate-400">{svc.ventasCount} serv.</span>
                               {isBestSeller && <Badge className="bg-cyan-50 text-cyan-600 border-cyan-200/60 text-[7px] font-bold px-1.5 py-0 rounded-full">MÁS VENDIDO</Badge>}
                               {isMostProfitable && <Badge className="bg-violet-50 text-violet-600 border-violet-200/60 text-[7px] font-bold px-1.5 py-0 rounded-full">MAYOR MARGEN</Badge>}
                             </div>
@@ -579,7 +579,7 @@ export default function ReportesPage() {
                         </div>
                         <div>
                           <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">Mejores Clientes</h3>
-                          <p className="text-[10px] text-slate-400">Mayor facturación acumulada</p>
+                          <p className="text-xs text-slate-400">Mayor facturación acumulada</p>
                         </div>
                       </div>
                       <Heart className="h-4 w-4 text-rose-400" />
@@ -591,19 +591,19 @@ export default function ReportesPage() {
                           <div key={client.id} className="px-4 py-3 hover:bg-slate-50/50 transition-colors flex items-center justify-between">
                             <div className="flex items-center gap-2.5">
                               <div className={cn(
-                                "h-8 w-8 rounded-full flex items-center justify-center font-bold text-[10px] shrink-0",
+                                "h-8 w-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0",
                                 isStar ? "bg-gradient-to-br from-amber-400 to-amber-500 text-white shadow-sm" : "bg-slate-100 text-slate-500"
                               )}>
                                 {isStar ? '👑' : idx + 1}
                               </div>
                               <div>
                                 <h4 className="font-bold text-xs text-slate-700">{client.nombre} {client.apellido}</h4>
-                                <p className="text-[9px] text-slate-400">{client.ciudad} • {client.telefono}</p>
+                                <p className="text-[11px] text-slate-400">{client.ciudad} • {client.telefono}</p>
                               </div>
                             </div>
                             <div className="text-right">
                               <span className="font-black text-xs text-emerald-600">${client.gastado.toLocaleString()}</span>
-                              <p className="text-[9px] text-slate-400">{client.trabajosCount} servicios</p>
+                              <p className="text-[11px] text-slate-400">{client.trabajosCount} servicios</p>
                             </div>
                           </div>
                         )
@@ -624,7 +624,7 @@ export default function ReportesPage() {
                       </div>
                       <div>
                         <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">Tendencia de Facturación Diaria</h3>
-                        <p className="text-[10px] text-slate-400">Ingresos por fecha de servicio</p>
+                        <p className="text-xs text-slate-400">Ingresos por fecha de servicio</p>
                       </div>
                     </div>
                     <div className="p-4 h-56">

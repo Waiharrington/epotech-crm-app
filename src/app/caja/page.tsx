@@ -71,7 +71,7 @@ export default function CajaPage() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Caja y Finanzas
                 </h1>
-                <p className="text-slate-300/80 text-[10px] hidden sm:block xl:text-[9px] 2xl:text-xs mt-1 font-medium">
+                <p className="text-slate-300/80 text-xs hidden sm:block xl:text-[11px] 2xl:text-xs mt-1 font-medium">
                   Control de flujo de caja, ingresos por servicios y gastos.
                 </p>
               </div>
@@ -82,7 +82,7 @@ export default function CajaPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowModal({ open: true, type: 'egreso' })}
-                className="h-8 px-3 text-[10px] font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-rose-500/20 hover:border-rose-400/40 backdrop-blur-md transition-all active:scale-[0.98]"
+                className="h-8 px-3 text-xs font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-rose-500/20 hover:border-rose-400/40 backdrop-blur-md transition-all active:scale-[0.98]"
               >
                 <Minus className="mr-1.5 h-3.5 w-3.5" />
                 Registrar Gasto
@@ -90,7 +90,7 @@ export default function CajaPage() {
               <Button
                 onClick={() => setShowModal({ open: true, type: 'ingreso' })}
                 size="sm"
-                className="h-8 px-3.5 text-[10px] font-black rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-none shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all active:scale-[0.98]"
+                className="h-8 px-3.5 text-xs font-black rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-none shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all active:scale-[0.98]"
               >
                 <Plus className="mr-1.5 h-3.5 w-3.5" />
                 Registrar Ingreso
@@ -105,7 +105,7 @@ export default function CajaPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#00C9E0]/70 pointer-events-none z-10" />
                 <Input
                   placeholder="Buscar por descripción o categoría..."
-                  className="pl-9 h-8 text-[11px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
+                  className="pl-9 h-8 text-[13px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -124,7 +124,7 @@ export default function CajaPage() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-3">
-                <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/60">Balance General</p>
+                <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white/60">Balance General</p>
                 <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-white/15 border border-white/20">
                   <Wallet className="h-3.5 w-3.5 text-white" />
                 </div>
@@ -132,7 +132,7 @@ export default function CajaPage() {
               <p className="text-2xl font-black text-white">${balance.toLocaleString()}</p>
               <div className="mt-1.5 flex items-center gap-1.5">
                 <TrendingUp className="h-3 w-3 text-white/50" />
-                <p className="text-[9px] text-white/50 font-medium">Neto acumulado</p>
+                <p className="text-[11px] text-white/50 font-medium">Neto acumulado</p>
               </div>
             </div>
           </div>
@@ -140,25 +140,25 @@ export default function CajaPage() {
           {/* Ingresos */}
           <div className="rounded-2xl bg-white border border-slate-200/60 p-4 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Ingresos Totales</p>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Ingresos Totales</p>
               <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-emerald-50 border border-emerald-200/60">
                 <TrendingUp className="h-3.5 w-3.5 text-emerald-500" />
               </div>
             </div>
             <p className="text-2xl font-black text-emerald-600">${income.toLocaleString()}</p>
-            <p className="text-[9px] text-slate-400 font-medium mt-1.5">{ingresosCount} transacciones</p>
+            <p className="text-[11px] text-slate-400 font-medium mt-1.5">{ingresosCount} transacciones</p>
           </div>
 
           {/* Gastos */}
           <div className="rounded-2xl bg-white border border-slate-200/60 p-4 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Gastos Totales</p>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Gastos Totales</p>
               <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-rose-50 border border-rose-200/60">
                 <TrendingDown className="h-3.5 w-3.5 text-rose-500" />
               </div>
             </div>
             <p className="text-2xl font-black text-rose-600">${expenses.toLocaleString()}</p>
-            <p className="text-[9px] text-slate-400 font-medium mt-1.5">{egresosCount} transacciones</p>
+            <p className="text-[11px] text-slate-400 font-medium mt-1.5">{egresosCount} transacciones</p>
           </div>
         </div>
 
@@ -173,7 +173,7 @@ export default function CajaPage() {
               key={f.key}
               onClick={() => setTypeFilter(f.key)}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97] flex items-center gap-1.5",
+                "px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97] flex items-center gap-1.5",
                 typeFilter === f.key
                   ? f.key === 'ingreso' ? "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/20"
                     : f.key === 'egreso' ? "bg-rose-500 text-white border-rose-500 shadow-md shadow-rose-500/20"
@@ -183,7 +183,7 @@ export default function CajaPage() {
             >
               {f.label}
               <span className={cn(
-                "text-[8px] px-1.5 py-0.5 rounded-full font-black",
+                "text-[10px] px-1.5 py-0.5 rounded-full font-black",
                 typeFilter === f.key ? "bg-white/20" : "bg-slate-100 text-slate-400"
               )}>{f.count}</span>
             </button>
@@ -203,10 +203,10 @@ export default function CajaPage() {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-100">
-                      <th className="text-left text-[9px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Fecha</th>
-                      <th className="text-left text-[9px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Descripción</th>
-                      <th className="text-left text-[9px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Categoría</th>
-                      <th className="text-right text-[9px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Monto</th>
+                      <th className="text-left text-[11px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Fecha</th>
+                      <th className="text-left text-[11px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Descripción</th>
+                      <th className="text-left text-[11px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Categoría</th>
+                      <th className="text-right text-[11px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Monto</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -215,7 +215,7 @@ export default function CajaPage() {
                         <td className="px-4 py-3 whitespace-nowrap">
                           <div className="flex flex-col">
                             <span className="text-xs font-bold text-slate-700">{new Date(entry.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>
-                            <span className="text-[10px] text-slate-400 font-medium">{new Date(entry.fecha).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
+                            <span className="text-xs text-slate-400 font-medium">{new Date(entry.fecha).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
                           </div>
                         </td>
                         <td className="px-4 py-3">
@@ -236,7 +236,7 @@ export default function CajaPage() {
                               </p>
                             </div>
                             {entry.es_automatico && (
-                              <Badge className="text-[8px] font-black px-1.5 py-0 rounded-full bg-[#0097A7]/10 text-[#0097A7] border-[#0097A7]/20 shrink-0">
+                              <Badge className="text-[10px] font-black px-1.5 py-0 rounded-full bg-[#0097A7]/10 text-[#0097A7] border-[#0097A7]/20 shrink-0">
                                 AUTO
                               </Badge>
                             )}
@@ -244,7 +244,7 @@ export default function CajaPage() {
                         </td>
                         <td className="px-4 py-3">
                           <Badge className={cn(
-                            "text-[9px] font-bold px-2 py-0.5 rounded-full capitalize",
+                            "text-[11px] font-bold px-2 py-0.5 rounded-full capitalize",
                             entry.tipo === 'ingreso' 
                               ? "bg-emerald-50 text-emerald-600 border-emerald-200/60" 
                               : "bg-rose-50 text-rose-600 border-rose-200/60"

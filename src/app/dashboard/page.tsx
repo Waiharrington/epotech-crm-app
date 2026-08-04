@@ -470,7 +470,7 @@ export default function DashboardPage() {
                 alt="Epotech Solutions" 
                 className="h-9 w-auto object-contain logo-premium" 
               />
-              <span className="text-[9.5px] font-black tracking-[0.25em] text-[#00C9E0] uppercase border-l border-slate-700/80 pl-2">Portal CRM</span>
+              <span className="text-[11px] font-black tracking-[0.25em] text-[#00C9E0] uppercase border-l border-slate-700/80 pl-2">Portal CRM</span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -511,7 +511,7 @@ export default function DashboardPage() {
                   )}
                 </div>
               </div>
-              <p className="text-slate-300/80 text-[9.5px] xl:text-[9px] 2xl:text-xs mt-0.5 font-medium">{greetingState.sub}</p>
+              <p className="text-slate-300/80 text-[11px] xl:text-[11px] 2xl:text-xs mt-0.5 font-medium">{greetingState.sub}</p>
             </div>
 
             {/* Right side: Desktop Icons */}
@@ -536,7 +536,7 @@ export default function DashboardPage() {
           <div className="flex items-center gap-2 flex-wrap pt-0.5 border-t border-white/[0.04]">
             <div className="flex items-center gap-1.5 text-white/95">
               <Calendar className="h-3 w-3 text-[#00C9E0]" />
-              <span className="text-[9.5px] xl:text-[9px] 2xl:text-[11px] font-bold text-slate-200">
+              <span className="text-[11px] xl:text-[11px] 2xl:text-[13px] font-bold text-slate-200">
                 {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).toLowerCase()}
               </span>
             </div>
@@ -545,7 +545,7 @@ export default function DashboardPage() {
 
             <div className="flex items-center gap-1.5 text-white/95">
               <Clock className="h-3 w-3 text-[#00C9E0]" />
-              <span className="text-[9.5px] xl:text-[9px] 2xl:text-[11px] font-bold text-slate-200">
+              <span className="text-[11px] xl:text-[11px] 2xl:text-[13px] font-bold text-slate-200">
                 {utahTime}
               </span>
             </div>
@@ -562,9 +562,9 @@ export default function DashboardPage() {
             <Link href="/clientes" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/40 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '150ms' }}>
               <div className="p-3 xl:p-2.5 2xl:p-4 flex items-center justify-between">
                 <div className="flex-1 min-w-0">
-                  <p className="text-[8.5px] xl:text-[8px] 2xl:text-[9.5px] font-extrabold text-slate-400 uppercase tracking-wider truncate">Clientes Totales</p>
+                  <p className="text-[10px] xl:text-[10px] 2xl:text-[11px] font-extrabold text-slate-400 uppercase tracking-wider truncate">Clientes Totales</p>
                   <p className="text-lg xl:text-base 2xl:text-2xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.totalClients}</p>
-                  <p className="text-[8px] xl:text-[7.5px] 2xl:text-[9.5px] text-slate-400 mt-0.5 font-medium flex items-center gap-1 truncate">
+                  <p className="text-[10px] xl:text-[7.5px] 2xl:text-[11px] text-slate-400 mt-0.5 font-medium flex items-center gap-1 truncate">
                     {stats.newClientsThisWeek > 0 ? `+${stats.newClientsThisWeek} esta semana` : 'Sin registros'}
                   </p>
                 </div>
@@ -578,9 +578,9 @@ export default function DashboardPage() {
             <Link href="/trabajos" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/40 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '200ms' }}>
               <div className="p-3 xl:p-2.5 2xl:p-4 flex items-center justify-between">
                 <div className="flex-1 min-w-0">
-                  <p className="text-[8.5px] xl:text-[8px] 2xl:text-[9.5px] font-extrabold text-slate-400 uppercase tracking-wider truncate">Trabajos Activos</p>
+                  <p className="text-[10px] xl:text-[10px] 2xl:text-[11px] font-extrabold text-slate-400 uppercase tracking-wider truncate">Trabajos Activos</p>
                   <p className="text-lg xl:text-base 2xl:text-2xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.activeJobs}</p>
-                  <p className="text-[8px] xl:text-[7.5px] 2xl:text-[9.5px] text-slate-400 mt-0.5 font-medium flex items-center gap-1 truncate">
+                  <p className="text-[10px] xl:text-[7.5px] 2xl:text-[11px] text-slate-400 mt-0.5 font-medium flex items-center gap-1 truncate">
                     En tablero Kanban
                   </p>
                 </div>
@@ -594,9 +594,9 @@ export default function DashboardPage() {
             <Link href="/caja" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/40 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '250ms' }}>
               <div className="p-3 xl:p-2.5 2xl:p-4 flex items-center justify-between">
                 <div className="flex-1 min-w-0">
-                  <p className="text-[8.5px] xl:text-[8px] 2xl:text-[9.5px] font-extrabold text-slate-400 uppercase tracking-wider truncate">Ingresos Totales</p>
+                  <p className="text-[10px] xl:text-[10px] 2xl:text-[11px] font-extrabold text-slate-400 uppercase tracking-wider truncate">Ingresos Totales</p>
                   <p className="text-lg xl:text-base 2xl:text-2xl font-bold text-slate-900 mt-0.5 tracking-tight">${stats.monthlyIncome.toLocaleString()}</p>
-                  <p className="text-[8px] xl:text-[7.5px] 2xl:text-[9.5px] text-slate-400 mt-0.5 font-medium flex items-center gap-1 truncate">
+                  <p className="text-[10px] xl:text-[7.5px] 2xl:text-[11px] text-slate-400 mt-0.5 font-medium flex items-center gap-1 truncate">
                     Neto: ${stats.netIncome.toLocaleString()}
                   </p>
                 </div>
@@ -610,9 +610,9 @@ export default function DashboardPage() {
             <Link href="/stock" className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-[#0097A7]/40 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] hover:-translate-y-0.5 transition-all duration-300 group animate-dashboard-item block cursor-pointer" style={{ animationDelay: '300ms' }}>
               <div className="p-3 xl:p-2.5 2xl:p-4 flex items-center justify-between">
                 <div className="flex-1 min-w-0">
-                  <p className="text-[8.5px] xl:text-[8px] 2xl:text-[9.5px] font-extrabold text-slate-400 uppercase tracking-wider truncate">Alertas Stock</p>
+                  <p className="text-[10px] xl:text-[10px] 2xl:text-[11px] font-extrabold text-slate-400 uppercase tracking-wider truncate">Alertas Stock</p>
                   <p className="text-lg xl:text-base 2xl:text-2xl font-bold text-slate-900 mt-0.5 tracking-tight">{stats.lowStock}</p>
-                  <p className="text-[8px] xl:text-[7.5px] 2xl:text-[9.5px] text-slate-400 mt-0.5 font-medium flex items-center gap-1 truncate">
+                  <p className="text-[10px] xl:text-[7.5px] 2xl:text-[11px] text-slate-400 mt-0.5 font-medium flex items-center gap-1 truncate">
                     {stats.lowStock > 0 ? `${stats.lowStock} reponer` : 'Stock sano'}
                   </p>
                 </div>
@@ -631,10 +631,10 @@ export default function DashboardPage() {
             {/* Header */}
             <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-3.5 xl:px-3 py-2.5 xl:py-2 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
               <div>
-                <h3 className="text-[11px] xl:text-[10px] 2xl:text-xs font-black text-white tracking-wide uppercase">Próximos Servicios</h3>
-                <p className="text-[8.5px] xl:text-[8px] 2xl:text-[9px] text-[#00C9E0]/80 font-medium">Compromisos más cercanos.</p>
+                <h3 className="text-[13px] xl:text-xs 2xl:text-xs font-black text-white tracking-wide uppercase">Próximos Servicios</h3>
+                <p className="text-[10px] xl:text-[10px] 2xl:text-[11px] text-[#00C9E0]/80 font-medium">Compromisos más cercanos.</p>
               </div>
-              <Link href="/trabajos" className="text-[9.5px] xl:text-[9px] 2xl:text-[10px] font-black text-[#00C9E0] hover:text-white hover:underline flex items-center gap-0.5 transition-colors">
+              <Link href="/trabajos" className="text-[11px] xl:text-[11px] 2xl:text-xs font-black text-[#00C9E0] hover:text-white hover:underline flex items-center gap-0.5 transition-colors">
                 Ver todos <ChevronRight className="h-2.5 w-2.5" />
               </Link>
             </div>
@@ -651,20 +651,20 @@ export default function DashboardPage() {
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-extrabold text-[10.5px] xl:text-[10px] text-slate-800 group-hover:text-[#0097A7] transition-colors truncate">{job.catalogo_servicios?.nombre}</span>
+                          <span className="font-extrabold text-[10.5px] xl:text-xs text-slate-800 group-hover:text-[#0097A7] transition-colors truncate">{job.catalogo_servicios?.nombre}</span>
                           <span className="px-1.5 py-0.2 text-[6.5px] xl:text-[6px] font-black uppercase rounded-full bg-[#E6F9FB] text-[#0097A7] tracking-wider border border-[#0097A7]/10">
                             {job.estado === 'en_progreso' ? 'En Progreso' : job.estado === 'pendiente' ? 'Pendiente' : job.estado?.replace('_', ' ')}
                           </span>
                         </div>
-                        <p className="text-[9px] xl:text-[8.5px] text-slate-400 mt-0.2 font-medium">{job.clientes?.nombre} {job.clientes?.apellido}</p>
+                        <p className="text-[11px] xl:text-[10px] text-slate-400 mt-0.2 font-medium">{job.clientes?.nombre} {job.clientes?.apellido}</p>
                       </div>
                     </div>
                     
                     {/* Price */}
                     <div className="text-right shrink-0">
-                      <span className="font-black text-[11px] xl:text-[10.5px] text-slate-900">${job.precio_acordado}</span>
+                      <span className="font-black text-[13px] xl:text-[10.5px] text-slate-900">${job.precio_acordado}</span>
                       {job.hora_servicio && (
-                        <div className="flex items-center text-[8px] xl:text-[7.5px] text-slate-400 mt-0.2 font-medium justify-end">
+                        <div className="flex items-center text-[10px] xl:text-[7.5px] text-slate-400 mt-0.2 font-medium justify-end">
                           <Clock className="mr-0.5 h-2 w-2 text-[#00C9E0]" /> {formatTime12h(job.hora_servicio)}
                         </div>
                       )}
@@ -672,7 +672,7 @@ export default function DashboardPage() {
                   </div>
                 ))
               ) : (
-                <div className="text-center py-4 xl:py-3 text-[9px] xl:text-[8.5px] text-slate-400 italic bg-white/60 rounded-xl border border-dashed border-slate-200">
+                <div className="text-center py-4 xl:py-3 text-[11px] xl:text-[10px] text-slate-400 italic bg-white/60 rounded-xl border border-dashed border-slate-200">
                   No hay servicios próximos agendados.
                 </div>
               )}
@@ -683,8 +683,8 @@ export default function DashboardPage() {
           <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3.5 xl:p-2.5 2xl:p-4 flex flex-col gap-2 xl:gap-1.5 animate-dashboard-item xl:min-h-0 xl:h-full" style={{ animationDelay: '400ms' }}>
             <div className="flex flex-col gap-2 xl:gap-1.5">
               <div>
-                <h3 className="text-[11px] xl:text-[10px] 2xl:text-xs font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
-                <p className="text-[8.5px] xl:text-[8px] text-slate-400 font-medium">Accesos directos operacionales.</p>
+                <h3 className="text-[13px] xl:text-xs 2xl:text-xs font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
+                <p className="text-[10px] xl:text-[10px] text-slate-400 font-medium">Accesos directos operacionales.</p>
               </div>
               
               <div className="flex flex-col gap-1.5 xl:gap-1">
@@ -696,7 +696,7 @@ export default function DashboardPage() {
                     <div className="h-5.5 w-5.5 xl:h-4.5 xl:w-4.5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
                       <Users className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[10px] xl:text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
+                    <span className="text-xs xl:text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
                   </div>
                   <ChevronRight className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
                 </button>
@@ -709,7 +709,7 @@ export default function DashboardPage() {
                     <div className="h-5.5 w-5.5 xl:h-4.5 xl:w-4.5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
                       <Calendar className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[10px] xl:text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
+                    <span className="text-xs xl:text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
                   </div>
                   <ChevronRight className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
                 </button>
@@ -722,7 +722,7 @@ export default function DashboardPage() {
                     <div className="h-5.5 w-5.5 xl:h-4.5 xl:w-4.5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
                       <FileText className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-[10px] xl:text-[9.5px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
+                    <span className="text-xs xl:text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
                   </div>
                   <ChevronRight className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
                 </button>
@@ -738,16 +738,16 @@ export default function DashboardPage() {
             <div className="min-h-0 flex flex-col flex-1 h-auto">
               <div className="flex items-center justify-between pb-1.5 border-b border-slate-50 shrink-0">
                 <div>
-                  <h3 className="text-[11px] xl:text-[10px] 2xl:text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
+                  <h3 className="text-[13px] xl:text-xs 2xl:text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
                     <Bell className="h-3.5 w-3.5 xl:h-3 xl:w-3 text-[#0097A7]" />
                     Recordatorios y Pendientes
                   </h3>
-                  <p className="text-[8.5px] xl:text-[8px] text-slate-400 font-medium">Alertas y avisos rápidos.</p>
+                  <p className="text-[10px] xl:text-[10px] text-slate-400 font-medium">Alertas y avisos rápidos.</p>
                 </div>
                 <button 
                   type="button"
                   onClick={() => setShowGestionar(true)} 
-                  className="text-[9.5px] xl:text-[9px] font-black text-[#0097A7] hover:text-[#00C9E0] hover:underline flex items-center gap-0.5 transition-colors cursor-pointer"
+                  className="text-[11px] xl:text-[11px] font-black text-[#0097A7] hover:text-[#00C9E0] hover:underline flex items-center gap-0.5 transition-colors cursor-pointer"
                 >
                   Gestionar <ChevronRight className="h-2.5 w-2.5" />
                 </button>
@@ -759,7 +759,7 @@ export default function DashboardPage() {
                   placeholder="Pendiente rápido..."
                   value={quickTitle}
                   onChange={e => setQuickTitle(e.target.value)}
-                  className="text-[10px] xl:text-[9.5px] h-7.5 xl:h-7 px-2.5 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex-1 min-w-[110px]"
+                  className="text-xs xl:text-[11px] h-7.5 xl:h-7 px-2.5 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex-1 min-w-[110px]"
                 />
 
                 {/* Styled Popover Date Picker */}
@@ -767,7 +767,7 @@ export default function DashboardPage() {
                   <PopoverTrigger asChild>
                     <button
                       type="button"
-                      className="h-7.5 xl:h-7 px-2 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[9.5px] xl:text-[9px] font-bold text-slate-700 flex items-center gap-1 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                      className="h-7.5 xl:h-7 px-2 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[11px] xl:text-[11px] font-bold text-slate-700 flex items-center gap-1 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
                     >
                       <CalendarIcon className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7]" />
                       <span>
@@ -797,7 +797,7 @@ export default function DashboardPage() {
                   <PopoverTrigger asChild>
                     <button
                       type="button"
-                      className="h-7.5 xl:h-7 px-2 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[9.5px] xl:text-[9px] font-bold text-slate-700 flex items-center gap-1 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                      className="h-7.5 xl:h-7 px-2 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[11px] xl:text-[11px] font-bold text-slate-700 flex items-center gap-1 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
                     >
                       <Clock className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7]" />
                       <span>{formatTime12h(`${quickTime}:00`)}</span>
@@ -805,17 +805,17 @@ export default function DashboardPage() {
                   </PopoverTrigger>
                   <PopoverContent className="w-64 p-3 border border-slate-100 shadow-xl rounded-2xl bg-white z-[100] space-y-3" align="start">
                     <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                      <span className="text-[11px] font-black text-[#0B1E3F] flex items-center gap-1">
+                      <span className="text-[13px] font-black text-[#0B1E3F] flex items-center gap-1">
                         <Clock className="h-3.5 w-3.5 text-[#0097A7]" /> Selección de Hora
                       </span>
-                      <span className="text-[10px] font-black text-[#0097A7] bg-[#E6F9FB] px-2 py-0.5 rounded-lg border border-[#0097A7]/20">
+                      <span className="text-xs font-black text-[#0097A7] bg-[#E6F9FB] px-2 py-0.5 rounded-lg border border-[#0097A7]/20">
                         {formatTime12h(`${quickTime}:00`)}
                       </span>
                     </div>
 
                     {/* Selector de Hora 12h */}
                     <div className="space-y-1">
-                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Hora:</span>
+                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Hora:</span>
                       <div className="grid grid-cols-6 gap-1">
                         {Array.from({ length: 12 }, (_, i) => i + 1).map((h) => {
                           const str = String(h).padStart(2, '0')
@@ -844,7 +844,7 @@ export default function DashboardPage() {
 
                     {/* Selector de Minutos */}
                     <div className="space-y-1">
-                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Minutos:</span>
+                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Minutos:</span>
                       <div className="grid grid-cols-6 gap-1">
                         {['00', '10', '15', '30', '45', '50'].map((m) => {
                           const isSelected = quickTime.split(':')[1] === m
@@ -876,7 +876,7 @@ export default function DashboardPage() {
                           const h = parseInt(quickTime.split(':')[0] || '9', 10)
                           if (h >= 12) setQuickTime(`${String(h - 12).padStart(2, '0')}:${quickTime.split(':')[1] || '00'}`)
                         }}
-                        className={`flex-1 py-1.5 rounded-lg text-[10px] font-black transition-all cursor-pointer text-center ${
+                        className={`flex-1 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer text-center ${
                           parseInt(quickTime.split(':')[0] || '9', 10) < 12 ? 'bg-[#0097A7] text-white shadow-sm' : 'text-slate-500'
                         }`}
                       >AM</button>
@@ -886,7 +886,7 @@ export default function DashboardPage() {
                           const h = parseInt(quickTime.split(':')[0] || '9', 10)
                           if (h < 12) setQuickTime(`${String(h + 12).padStart(2, '0')}:${quickTime.split(':')[1] || '00'}`)
                         }}
-                        className={`flex-1 py-1.5 rounded-lg text-[10px] font-black transition-all cursor-pointer text-center ${
+                        className={`flex-1 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer text-center ${
                           parseInt(quickTime.split(':')[0] || '9', 10) >= 12 ? 'bg-[#0097A7] text-white shadow-sm' : 'text-slate-500'
                         }`}
                       >PM</button>
@@ -894,7 +894,7 @@ export default function DashboardPage() {
                   </PopoverContent>
                 </Popover>
 
-                <Button type="submit" size="sm" className="h-7.5 xl:h-7 text-[10px] xl:text-[9.5px] font-black gap-1 px-3 bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
+                <Button type="submit" size="sm" className="h-7.5 xl:h-7 text-xs xl:text-[11px] font-black gap-1 px-3 bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
                   <Plus className="h-3 w-3 stroke-[3]" /> Agregar
                 </Button>
               </form>
@@ -910,8 +910,8 @@ export default function DashboardPage() {
                             <Check className="h-2.5 w-2.5 stroke-[3] text-slate-300 hover:text-[#0097A7]" />
                           </button>
                           <div className="min-w-0">
-                            <p className="font-bold text-[10.5px] xl:text-[10px] text-slate-800 truncate">{reminder.titulo}</p>
-                            <div className="flex items-center gap-1.5 mt-0.2 text-[8px] xl:text-[7.5px] text-slate-400 font-medium">
+                            <p className="font-bold text-[10.5px] xl:text-xs text-slate-800 truncate">{reminder.titulo}</p>
+                            <div className="flex items-center gap-1.5 mt-0.2 text-[10px] xl:text-[7.5px] text-slate-400 font-medium">
                               <span>{new Date(reminder.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>
                               {reminder.hora && <span>{formatTime12h(reminder.hora)}</span>}
                             </div>
@@ -924,7 +924,7 @@ export default function DashboardPage() {
                     )
                   })
                 ) : (
-                  <div className="text-center py-3 xl:py-2 text-[8.5px] xl:text-[8px] text-slate-400 italic border border-dashed rounded-xl bg-slate-50/30">
+                  <div className="text-center py-3 xl:py-2 text-[10px] xl:text-[10px] text-slate-400 italic border border-dashed rounded-xl bg-slate-50/30">
                     No hay recordatorios pendientes.
                   </div>
                 )}
@@ -936,11 +936,11 @@ export default function DashboardPage() {
           <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3.5 xl:p-2.5 2xl:p-4 flex flex-col justify-between xl:min-h-0 xl:h-full animate-dashboard-item" style={{ animationDelay: '500ms' }}>
             <div className="min-h-0 flex flex-col flex-1 h-auto">
               <div className="pb-1.5 xl:pb-1 border-b border-slate-50 shrink-0">
-                <h3 className="text-[11px] xl:text-[10px] 2xl:text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
+                <h3 className="text-[13px] xl:text-xs 2xl:text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
                   <AlertTriangle className="h-3.5 w-3.5 xl:h-3 xl:w-3 text-[#0097A7]" />
                   Alertas y Operaciones
                 </h3>
-                <p className="text-[8.5px] xl:text-[8px] text-slate-400 font-medium">Alertas de inventario y caja.</p>
+                <p className="text-[10px] xl:text-[10px] text-slate-400 font-medium">Alertas de inventario y caja.</p>
               </div>
               
               <div className="space-y-2 xl:space-y-1.5 pt-2 xl:pt-1.5 overflow-y-auto no-scrollbar flex-1 min-h-0 h-auto">
@@ -948,8 +948,8 @@ export default function DashboardPage() {
                   <div className="p-2 xl:p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/15 flex items-start gap-2 shadow-2xs hover:border-[#0097A7]/30 transition-all">
                     <AlertTriangle className="h-3.5 w-3.5 text-[#0097A7] shrink-0 mt-0.5 animate-pulse" />
                     <div>
-                      <p className="font-extrabold text-[10.5px] xl:text-[10px] text-[#0B1E3F]">{stats.lowStock} productos en bajo stock</p>
-                      <p className="text-[8.5px] xl:text-[8px] text-[#0097A7] mt-0.2 font-medium leading-tight">Insumos bajo el nivel mínimo.</p>
+                      <p className="font-extrabold text-[10.5px] xl:text-xs text-[#0B1E3F]">{stats.lowStock} productos en bajo stock</p>
+                      <p className="text-[10px] xl:text-[10px] text-[#0097A7] mt-0.2 font-medium leading-tight">Insumos bajo el nivel mínimo.</p>
                     </div>
                   </div>
                 ) : (
@@ -958,8 +958,8 @@ export default function DashboardPage() {
                       <Check className="h-2.5 w-2.5 stroke-[3]" />
                     </div>
                     <div>
-                      <p className="font-extrabold text-[10.5px] xl:text-[10px] text-[#0B1E3F]">Inventario al día</p>
-                      <p className="text-[8.5px] xl:text-[8px] text-slate-500 mt-0.2 font-medium leading-tight">Niveles de stock adecuados.</p>
+                      <p className="font-extrabold text-[10.5px] xl:text-xs text-[#0B1E3F]">Inventario al día</p>
+                      <p className="text-[10px] xl:text-[10px] text-slate-500 mt-0.2 font-medium leading-tight">Niveles de stock adecuados.</p>
                     </div>
                   </div>
                 )}
@@ -969,8 +969,8 @@ export default function DashboardPage() {
                     <Wallet className="h-2.5 w-2.5" />
                   </div>
                   <div>
-                    <p className="font-extrabold text-[10.5px] xl:text-[10px] text-[#0B1E3F]">Balance de Caja</p>
-                    <p className="text-[8.5px] xl:text-[8px] text-slate-500 mt-0.2 font-medium leading-tight">
+                    <p className="font-extrabold text-[10.5px] xl:text-xs text-[#0B1E3F]">Balance de Caja</p>
+                    <p className="text-[10px] xl:text-[10px] text-slate-500 mt-0.2 font-medium leading-tight">
                       Ganancia Neta: <strong className="text-slate-900 font-extrabold">${stats.netIncome.toLocaleString()}</strong> <span className="text-slate-400">(${stats.monthlyIncome.toLocaleString()} ing. / ${stats.totalExpenses.toLocaleString()} eg.)</span>
                     </p>
                   </div>
@@ -979,10 +979,10 @@ export default function DashboardPage() {
             </div>
 
             <div className="pt-2 xl:pt-1.5 border-t border-slate-100 mt-2 xl:mt-1.5 flex gap-2 shrink-0">
-              <Button variant="outline" size="sm" className="flex-1 h-7.5 xl:h-7 text-[9px] xl:text-[8.5px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#0097A7] hover:border-[#0097A7]/30 shadow-xs transition-all duration-300" asChild>
+              <Button variant="outline" size="sm" className="flex-1 h-7.5 xl:h-7 text-[11px] xl:text-[10px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#0097A7] hover:border-[#0097A7]/30 shadow-xs transition-all duration-300" asChild>
                 <Link href="/stock">Ver Inventario</Link>
               </Button>
-              <Button variant="outline" size="sm" className="flex-1 h-7.5 xl:h-7 text-[9px] xl:text-[8.5px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#00C9E0] hover:border-[#00C9E0]/30 shadow-xs transition-all duration-300" asChild>
+              <Button variant="outline" size="sm" className="flex-1 h-7.5 xl:h-7 text-[11px] xl:text-[10px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#00C9E0] hover:border-[#00C9E0]/30 shadow-xs transition-all duration-300" asChild>
                 <Link href="/caja">Ver Caja</Link>
               </Button>
             </div>
@@ -1581,7 +1581,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
       {showTuner && (
         <div className="fixed top-14 right-4 left-4 sm:left-auto sm:w-80 p-4 rounded-2xl bg-slate-950/95 border border-cyan-500/30 text-white z-[9999999] shadow-2xl backdrop-blur-xl pointer-events-auto text-xs space-y-3 touch-manipulation">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-            <span className="font-black text-[#00C9E0] uppercase tracking-wider text-[11px]">
+            <span className="font-black text-[#00C9E0] uppercase tracking-wider text-[13px]">
               🎯 Calibrador de Chorro ({deviceMode.toUpperCase()})
             </span>
             <button
@@ -1599,7 +1599,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
 
           <div className="space-y-2">
             <div>
-              <div className="flex justify-between text-[10px] text-slate-300">
+              <div className="flex justify-between text-xs text-slate-300">
                 <span>Orificio Nozzle X (px):</span>
                 <span className="font-mono text-[#00C9E0]">{nozzleX}px</span>
               </div>
@@ -1615,7 +1615,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             </div>
 
             <div>
-              <div className="flex justify-between text-[10px] text-slate-300">
+              <div className="flex justify-between text-xs text-slate-300">
                 <span>Orificio Nozzle Y (px):</span>
                 <span className="font-mono text-[#00C9E0]">{nozzleY}px</span>
               </div>
@@ -1631,7 +1631,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             </div>
 
             <div>
-              <div className="flex justify-between text-[10px] text-slate-300">
+              <div className="flex justify-between text-xs text-slate-300">
                 <span>Dirección X (Target %):</span>
                 <span className="font-mono text-[#00C9E0]">{(targetXPct * 100).toFixed(0)}%</span>
               </div>
@@ -1647,7 +1647,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             </div>
 
             <div>
-              <div className="flex justify-between text-[10px] text-slate-300">
+              <div className="flex justify-between text-xs text-slate-300">
                 <span>Dirección Y (Target %):</span>
                 <span className="font-mono text-[#00C9E0]">{(targetYPct * 100).toFixed(0)}%</span>
               </div>
@@ -1671,7 +1671,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
                 e.stopPropagation()
                 handleSaveTuner()
               }}
-              className="flex-1 py-2 bg-[#0097A7] hover:bg-[#00C9E0] active:scale-95 text-white font-bold rounded-xl text-[11px] transition-all cursor-pointer text-center touch-none select-none"
+              className="flex-1 py-2 bg-[#0097A7] hover:bg-[#00C9E0] active:scale-95 text-white font-bold rounded-xl text-[13px] transition-all cursor-pointer text-center touch-none select-none"
             >
               💾 Guardar Ajuste
             </button>
@@ -1683,7 +1683,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
                 e.stopPropagation()
                 handleResetTuner()
               }}
-              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 font-bold rounded-xl text-[11px] transition-all cursor-pointer touch-none select-none"
+              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 font-bold rounded-xl text-[13px] transition-all cursor-pointer touch-none select-none"
             >
               🔄 Reset
             </button>

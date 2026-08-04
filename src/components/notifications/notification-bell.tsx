@@ -171,7 +171,7 @@ export function NotificationBell() {
         
         {/* Unread count badge */}
         {hasUnread && (
-          <span className="absolute -top-1.5 -right-1.5 min-w-4 h-4 rounded-full bg-[#00C9E0] text-[9px] font-black text-[#02070f] flex items-center justify-center px-1 border border-[#02070f] animate-bounce shadow-md">
+          <span className="absolute -top-1.5 -right-1.5 min-w-4 h-4 rounded-full bg-[#00C9E0] text-[11px] font-black text-[#02070f] flex items-center justify-center px-1 border border-[#02070f] animate-bounce shadow-md">
             {unreadReminders.length}
           </span>
         )}
@@ -190,7 +190,7 @@ export function NotificationBell() {
               </span>
             </div>
             {hasUnread && (
-              <span className="text-[10px] font-bold bg-[#00C9E0]/15 text-[#00C9E0] px-2 py-0.5 rounded-full">
+              <span className="text-xs font-bold bg-[#00C9E0]/15 text-[#00C9E0] px-2 py-0.5 rounded-full">
                 {unreadReminders.length} activas
               </span>
             )}
@@ -198,7 +198,7 @@ export function NotificationBell() {
 
           {/* Quick Actions Panel */}
           {reminders.length > 0 && (
-            <div className="px-4 py-2 border-b border-black/5 dark:border-white/5 bg-zinc-50/20 dark:bg-white/[0.01] flex items-center justify-between gap-2 text-[10px]">
+            <div className="px-4 py-2 border-b border-black/5 dark:border-white/5 bg-zinc-50/20 dark:bg-white/[0.01] flex items-center justify-between gap-2 text-xs">
               <button 
                 onClick={handleMarkAllRead}
                 disabled={!hasUnread}
@@ -220,13 +220,13 @@ export function NotificationBell() {
             {loading ? (
               <div className="flex flex-col items-center justify-center py-10 gap-2">
                 <Clock className="h-6 w-6 text-[#00C9E0] animate-spin" />
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Cargando alertas...</span>
+                <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Cargando alertas...</span>
               </div>
             ) : reminders.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
                 <BellOff className="h-8 w-8 text-slate-300 dark:text-slate-700 mb-2.5 animate-pulse" />
                 <span className="text-xs font-bold text-slate-800 dark:text-white">Bandeja impecable</span>
-                <span className="text-[10px] text-slate-400 mt-1 max-w-[200px]">No tienes alertas ni notificaciones registradas en la plataforma.</span>
+                <span className="text-xs text-slate-400 mt-1 max-w-[200px]">No tienes alertas ni notificaciones registradas en la plataforma.</span>
               </div>
             ) : (
               reminders.map((reminder) => {
@@ -258,12 +258,12 @@ export function NotificationBell() {
                       </div>
                       
                       {reminder.descripcion && (
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed line-clamp-2">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed line-clamp-2">
                           {reminder.descripcion}
                         </p>
                       )}
 
-                      <div className="flex flex-wrap items-center gap-2.5 mt-2.5 text-[9px] text-slate-400">
+                      <div className="flex flex-wrap items-center gap-2.5 mt-2.5 text-[11px] text-slate-400">
                         <span className={cn(
                           "flex items-center gap-0.5 font-bold",
                           isOverdue && !reminder.completado && "text-red-500"
@@ -278,12 +278,12 @@ export function NotificationBell() {
                           </span>
                         )}
                         {reminder.completado ? (
-                          <span className="text-[8px] bg-green-500/10 text-green-500 border border-green-500/10 px-1 py-0.2 rounded font-extrabold uppercase shrink-0">
+                          <span className="text-[10px] bg-green-500/10 text-green-500 border border-green-500/10 px-1 py-0.2 rounded font-extrabold uppercase shrink-0">
                             Leído
                           </span>
                         ) : (
                           isOverdue && (
-                            <span className="text-[8px] bg-red-500/10 text-red-500 border border-red-500/10 px-1 py-0.2 rounded font-extrabold uppercase shrink-0 animate-pulse">
+                            <span className="text-[10px] bg-red-500/10 text-red-500 border border-red-500/10 px-1 py-0.2 rounded font-extrabold uppercase shrink-0 animate-pulse">
                               Atrasado
                             </span>
                           )
@@ -303,7 +303,7 @@ export function NotificationBell() {
                 setIsOpen(false)
                 router.push('/recordatorios')
               }}
-              className="w-full py-2 rounded-xl text-[10px] font-black uppercase tracking-wider text-white bg-[#00C9E0] hover:bg-[#00B4C8] flex items-center justify-center gap-1.5 transition-all shadow-[0_4px_12px_rgba(0,201,224,0.2)] hover:shadow-[0_6px_16px_rgba(0,201,224,0.3)] active:scale-98"
+              className="w-full py-2 rounded-xl text-xs font-black uppercase tracking-wider text-white bg-[#00C9E0] hover:bg-[#00B4C8] flex items-center justify-center gap-1.5 transition-all shadow-[0_4px_12px_rgba(0,201,224,0.2)] hover:shadow-[0_6px_16px_rgba(0,201,224,0.3)] active:scale-98"
             >
               <ExternalLink className="h-3.5 w-3.5 stroke-[2.5]" /> Ver todas las notificaciones
             </button>

@@ -119,28 +119,28 @@ function DraggableJobPill({ job, onClick }: { job: Trabajo; onClick: () => void 
       </button>
 
       <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-        <p className="text-[11px] font-bold leading-tight break-words">
+        <p className="text-[13px] font-bold leading-tight break-words">
           {job.clientes?.nombre ? `${job.clientes.nombre} ${job.clientes.apellido || ''}` : 'Sin cliente'}
         </p>
         
         <div className="flex items-start justify-between gap-1">
-          <p className="text-[9px] font-medium opacity-85 break-words line-clamp-2">
+          <p className="text-[11px] font-medium opacity-85 break-words line-clamp-2">
             {job.catalogo_servicios?.nombre || 'Personalizado'}
           </p>
           {job.precio_acordado && (
-            <span className="text-[10px] font-black tabular-nums shrink-0 opacity-90">
+            <span className="text-xs font-black tabular-nums shrink-0 opacity-90">
               ${job.precio_acordado}
             </span>
           )}
         </div>
 
         <div className="flex items-center gap-1 mt-0.5">
-          <div className="flex items-center gap-1 text-[9px] font-bold opacity-75 bg-white/40 px-1.5 py-0.5 rounded-sm">
+          <div className="flex items-center gap-1 text-[11px] font-bold opacity-75 bg-white/40 px-1.5 py-0.5 rounded-sm">
             <Clock className="h-2.5 w-2.5" />
             {job.hora_servicio ? formatTime12h(job.hora_servicio) : 'Sin hora'}
           </div>
           {job.ayudantes && (
-            <div className="flex items-center gap-1 text-[9px] font-bold opacity-90 bg-black/10 px-1.5 py-0.5 rounded-sm" title={`Equipo: ${job.ayudantes}`}>
+            <div className="flex items-center gap-1 text-[11px] font-bold opacity-90 bg-black/10 px-1.5 py-0.5 rounded-sm" title={`Equipo: ${job.ayudantes}`}>
               <Users className="h-2.5 w-2.5" />
             </div>
           )}
@@ -186,7 +186,7 @@ function DailyTimelineView({
       >
         <CalendarIcon className="h-12 w-12 opacity-20" />
         <p className="font-medium text-sm">No hay trabajos agendados para este día.</p>
-        <p className="text-[10px] uppercase font-bold tracking-wider opacity-70">Clic para añadir trabajo</p>
+        <p className="text-xs uppercase font-bold tracking-wider opacity-70">Clic para añadir trabajo</p>
       </div>
     )
   }
@@ -212,7 +212,7 @@ function DailyTimelineView({
               <span className="text-xs sm:text-sm font-semibold text-slate-700 leading-none">
                 {timeVal}
               </span>
-              <span className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">
+              <span className="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider mt-0.5">
                 {timePeriod}
               </span>
               
@@ -234,7 +234,7 @@ function DailyTimelineView({
                     <h3 className="text-sm font-bold text-inherit truncate flex items-center gap-2">
                       {job.clientes.nombre} {job.clientes.apellido}
                       {job.ayudantes && (
-                        <span className="flex items-center gap-1 text-[10px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded-md" title={`Equipo: ${job.ayudantes}`}>
+                        <span className="flex items-center gap-1 text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded-md" title={`Equipo: ${job.ayudantes}`}>
                           <Users className="h-3 w-3" />
                         </span>
                       )}
@@ -243,9 +243,9 @@ function DailyTimelineView({
                       <DropdownMenuTrigger asChild>
                         <button 
                           onClick={(e) => e.stopPropagation()}
-                          className={cn("flex items-center gap-0.5 text-[8px] uppercase font-black px-1.5 py-0.5 rounded-md border bg-white/50 tracking-wider shrink-0 cursor-pointer hover:bg-white/80 transition-colors text-inherit")}
+                          className={cn("flex items-center gap-0.5 text-[10px] uppercase font-black px-1.5 py-0.5 rounded-md border bg-white/50 tracking-wider shrink-0 cursor-pointer hover:bg-white/80 transition-colors text-inherit")}
                         >
-                          {job.estado.replace('_', ' ')} <span className="text-[10px] leading-none">▾</span>
+                          {job.estado.replace('_', ' ')} <span className="text-xs leading-none">▾</span>
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start" className="w-48 rounded-xl" onClick={(e) => e.stopPropagation()}>
@@ -294,7 +294,7 @@ function DailyTimelineView({
                 {job.precio_acordado && (
                   <div className="shrink-0 flex items-center justify-start sm:justify-end mt-1 sm:mt-0">
                     <div className="bg-white/60 border border-white/50 rounded-xl px-3 py-1.5 flex flex-col items-end shadow-sm">
-                      <span className="text-[8px] font-black uppercase tracking-wider opacity-60">Total</span>
+                      <span className="text-[10px] font-black uppercase tracking-wider opacity-60">Total</span>
                       <span className="text-sm font-black">${job.precio_acordado}</span>
                     </div>
                   </div>
@@ -375,26 +375,26 @@ function DroppableDayCell({
               {format(date, 'd')}
             </span>
             {date.getDate() === 1 && (
-              <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">
+              <span className="text-xs sm:text-xs font-bold text-slate-400 uppercase tracking-wider">
                 {format(date, 'MMM', { locale: es })}
               </span>
             )}
             {jobs.length === 0 && (
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity ml-1 bg-[#00C9E0]/10 text-[#0097A7] rounded-md px-1.5 py-0.5 text-[9px] font-bold flex items-center gap-1 whitespace-nowrap shrink-0">
+              <span className="opacity-0 group-hover:opacity-100 transition-opacity ml-1 bg-[#00C9E0]/10 text-[#0097A7] rounded-md px-1.5 py-0.5 text-[11px] font-bold flex items-center gap-1 whitespace-nowrap shrink-0">
                 <Plus className="h-3 w-3 shrink-0" /> <span className="hidden xl:inline">Crear cita</span>
               </span>
             )}
           </div>
           
           {isOverbooked && (
-            <span className="text-[8px] font-extrabold uppercase text-red-500 tracking-wider mt-0.5">
+            <span className="text-[10px] font-extrabold uppercase text-red-500 tracking-wider mt-0.5">
               Día lleno
             </span>
           )}
         </div>
 
         {jobs.length > 0 && (
-          <span className="text-[9px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-sm">
+          <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-sm">
             {jobs.length}
           </span>
         )}
@@ -406,7 +406,7 @@ function DroppableDayCell({
       )}>
         {jobs.length === 0 ? (
           <div className="opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center gap-1">
-            <span className="text-[8px] font-bold uppercase tracking-wider text-slate-400">Libre</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Libre</span>
           </div>
         ) : (
           <>
@@ -423,7 +423,7 @@ function DroppableDayCell({
               )}
             </div>
             {dayRevenue > 0 && (
-              <div className="text-[8px] font-extrabold text-[#0097A7] text-right pr-1 pt-0.5 border-t border-slate-100/60 mt-1">
+              <div className="text-[10px] font-extrabold text-[#0097A7] text-right pr-1 pt-0.5 border-t border-slate-100/60 mt-1">
                 ${dayRevenue.toLocaleString()}
               </div>
             )}
@@ -598,7 +598,7 @@ export function CalendarView({
                   key={f.key}
                   onClick={() => setStatusFilter(f.key)}
                   className={cn(
-                    "px-2.5 py-1.5 text-[10px] font-bold rounded-lg transition-all whitespace-nowrap",
+                    "px-2.5 py-1.5 text-xs font-bold rounded-lg transition-all whitespace-nowrap",
                     statusFilter === f.key 
                       ? "bg-[#0B1E3F] text-white shadow-sm" 
                       : `${f.color} hover:bg-slate-50`
@@ -677,7 +677,7 @@ export function CalendarView({
                   const dayName = format(day, 'EEEE', { locale: es })
                   
                   return (
-                    <div key={day.toISOString()} className="py-2.5 text-center text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate px-1" title={dayName}>
+                    <div key={day.toISOString()} className="py-2.5 text-center text-xs font-bold text-slate-400 uppercase tracking-wider truncate px-1" title={dayName}>
                       {dayName}
                     </div>
                   )

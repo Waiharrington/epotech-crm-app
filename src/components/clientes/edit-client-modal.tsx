@@ -91,13 +91,13 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
                   <User className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                  <p className="text-xs font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                     Cliente
                   </p>
                   <h3 className="text-lg font-black text-white leading-tight">
                     Editar Cliente
                   </h3>
-                  <p className="text-[11px] text-white/60 font-medium mt-0.5">
+                  <p className="text-[13px] text-white/60 font-medium mt-0.5">
                     {cliente.nombre} {cliente.apellido}
                   </p>
                 </div>
@@ -117,10 +117,10 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
         <div className="flex-1 overflow-y-auto bg-[#F0F5FA] px-6 py-5 space-y-4">
           {/* Datos Personales */}
           <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
-            <p className="text-[9px] font-extrabold text-[#0097A7] uppercase tracking-wider mb-3">Datos Personales</p>
+            <p className="text-[11px] font-extrabold text-[#0097A7] uppercase tracking-wider mb-3">Datos Personales</p>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Nombre</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Nombre</Label>
                 <Input 
                   value={formData.nombre || ''} 
                   onChange={e => updateFields({ nombre: e.target.value })}
@@ -128,7 +128,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Apellido</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Apellido</Label>
                 <Input 
                   value={formData.apellido || ''} 
                   onChange={e => updateFields({ apellido: e.target.value })}
@@ -138,7 +138,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
             </div>
             <div className="grid grid-cols-2 gap-3 mt-3">
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Teléfono</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Teléfono</Label>
                 <Input 
                   value={formData.telefono || ''} 
                   onChange={e => updateFields({ telefono: e.target.value })}
@@ -146,7 +146,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Ciudad / Zona</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Ciudad / Zona</Label>
                 <Input 
                   value={formData.ciudad || ''} 
                   onChange={e => updateFields({ ciudad: e.target.value })}
@@ -155,7 +155,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
               </div>
             </div>
             <div className="mt-3 space-y-1.5">
-              <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Dirección</Label>
+              <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Dirección</Label>
               <Textarea 
                 value={formData.direccion || ''} 
                 onChange={e => updateFields({ direccion: e.target.value })}
@@ -167,10 +167,10 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
 
           {/* Propiedad */}
           <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
-            <p className="text-[9px] font-extrabold text-[#0097A7] uppercase tracking-wider mb-3">Propiedad</p>
+            <p className="text-[11px] font-extrabold text-[#0097A7] uppercase tracking-wider mb-3">Propiedad</p>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Tipo de Propiedad</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Tipo de Propiedad</Label>
                 <Select 
                   value={formData.tipo_propiedad || 'residencial'} 
                   onValueChange={v => updateFields({ tipo_propiedad: v as any })}
@@ -185,7 +185,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Fuente</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Fuente</Label>
                 <Select 
                   value={formData.fuente_adq || 'referido'} 
                   onValueChange={v => updateFields({ fuente_adq: v })}
@@ -205,7 +205,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
             </div>
             <div className="grid grid-cols-2 gap-3 mt-3">
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Metros Cuadrados (m²)</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Metros Cuadrados (m²)</Label>
                 <Input 
                   type="number"
                   value={formData.metros_cuadrados || ''} 
@@ -217,7 +217,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Tipo de Superficie</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Tipo de Superficie</Label>
                 <Input 
                   value={formData.tipo_superficie || ''} 
                   onChange={e => updateFields({ tipo_superficie: e.target.value })}
@@ -229,10 +229,10 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
 
           {/* Notas */}
           <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
-            <p className="text-[9px] font-extrabold text-[#0097A7] uppercase tracking-wider mb-3">Notas</p>
+            <p className="text-[11px] font-extrabold text-[#0097A7] uppercase tracking-wider mb-3">Notas</p>
             <div className="space-y-3">
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Observaciones de la Propiedad</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Observaciones de la Propiedad</Label>
                 <Textarea 
                   value={formData.obs_propiedad || ''} 
                   onChange={e => updateFields({ obs_propiedad: e.target.value })}
@@ -241,7 +241,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">Notas Estratégicas</Label>
+                <Label className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Notas Estratégicas</Label>
                 <Textarea 
                   value={formData.notas_estrategicas || ''} 
                   onChange={e => updateFields({ notas_estrategicas: e.target.value })}
@@ -260,7 +260,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
             type="button"
             onClick={handleClose}
             disabled={loading}
-            className="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-[0.98]"
+            className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-[0.98]"
           >
             Cancelar
           </button>
@@ -268,7 +268,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
             type="button"
             onClick={handleSave}
             disabled={loading}
-            className="flex items-center gap-2 px-5 py-2.5 text-[10px] font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50"
+            className="flex items-center gap-2 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50"
           >
             {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
             Guardar

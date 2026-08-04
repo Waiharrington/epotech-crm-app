@@ -247,7 +247,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Gestión de Recordatorios
                 </h1>
-                <p className="text-slate-300/80 text-[10px] hidden sm:block xl:text-[9px] 2xl:text-xs mt-1 font-medium">
+                <p className="text-slate-300/80 text-xs hidden sm:block xl:text-[11px] 2xl:text-xs mt-1 font-medium">
                   Agenda alertas y notificaciones para no olvidar compromisos importantes.
                 </p>
               </div>
@@ -255,13 +255,13 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
 
             <div className="flex items-center gap-2 shrink-0">
               {notificationPermission === 'granted' ? (
-                <div className="flex items-center gap-1.5 h-8 px-3 rounded-xl bg-emerald-500/10 border border-emerald-400/20 text-emerald-400 text-[10px] font-bold">
+                <div className="flex items-center gap-1.5 h-8 px-3 rounded-xl bg-emerald-500/10 border border-emerald-400/20 text-emerald-400 text-xs font-bold">
                   <Bell className="h-3.5 w-3.5" /> Notificaciones Activas
                 </div>
               ) : (
                 <button 
                   onClick={handleRequestPermission}
-                  className="flex items-center gap-1.5 h-8 px-3 rounded-xl bg-white/10 border border-white/15 text-white/70 hover:text-white hover:bg-white/15 text-[10px] font-bold transition-all backdrop-blur-md cursor-pointer"
+                  className="flex items-center gap-1.5 h-8 px-3 rounded-xl bg-white/10 border border-white/15 text-white/70 hover:text-white hover:bg-white/15 text-xs font-bold transition-all backdrop-blur-md cursor-pointer"
                 >
                   <BellOff className="h-3.5 w-3.5 animate-pulse" />
                   Activar Avisos
@@ -272,7 +272,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
 
               <button 
                 onClick={() => setShowCreateModal(true)}
-                className="flex items-center gap-1.5 h-8 px-3.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] hover:from-[#00b4ca] hover:to-[#00d4f0] text-white text-[10px] font-black shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
+                className="flex items-center gap-1.5 h-8 px-3.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] hover:from-[#00b4ca] hover:to-[#00d4f0] text-white text-xs font-black shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
               >
                 <Plus className="h-3.5 w-3.5" /> Nuevo Recordatorio
               </button>
@@ -301,14 +301,14 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                     </div>
                     <div>
                       <h4 className="font-bold text-xs text-amber-800">Modo Local Activo</h4>
-                      <p className="text-[10px] text-amber-700/80 mt-1 leading-relaxed">
+                      <p className="text-xs text-amber-700/80 mt-1 leading-relaxed">
                         La tabla <strong>recordatorios</strong> no existe en Supabase. Guardando localmente.
                       </p>
                     </div>
                   </div>
                   <button 
                     onClick={copyToClipboard}
-                    className="flex items-center gap-1.5 h-7 px-3 rounded-lg bg-amber-100 border border-amber-200/60 text-amber-800 text-[10px] font-bold hover:bg-amber-200 transition-colors shrink-0 cursor-pointer"
+                    className="flex items-center gap-1.5 h-7 px-3 rounded-lg bg-amber-100 border border-amber-200/60 text-amber-800 text-xs font-bold hover:bg-amber-200 transition-colors shrink-0 cursor-pointer"
                   >
                     <Clipboard className="h-3 w-3" /> Copiar SQL
                   </button>
@@ -329,7 +329,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                   style={{ borderLeftWidth: '4px', borderLeftColor: stat.borderColor }}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{stat.label}</p>
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">{stat.label}</p>
                     <div className={cn(
                       "h-7 w-7 rounded-lg flex items-center justify-center border",
                       stat.color === 'amber' ? 'bg-amber-50 border-amber-200/60 text-amber-600' :
@@ -362,7 +362,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                     key={tab.key}
                     onClick={() => setFilterTab(tab.key as any)}
                     className={cn(
-                      "px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97] flex items-center gap-1.5",
+                      "px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97] flex items-center gap-1.5",
                       filterTab === tab.key
                         ? "bg-[#0097A7] text-white border-[#0097A7] shadow-md shadow-cyan-500/20"
                         : "bg-white text-slate-500 border-slate-200/60 hover:border-[#0097A7]/40 hover:text-[#0097A7]"
@@ -370,7 +370,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                   >
                     {tab.label}
                     <span className={cn(
-                      "text-[8px] px-1.5 py-0.5 rounded-full font-black",
+                      "text-[10px] px-1.5 py-0.5 rounded-full font-black",
                       filterTab === tab.key ? "bg-white/20" : "bg-slate-100 text-slate-400"
                     )}>{tab.count}</span>
                   </button>
@@ -385,7 +385,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                     placeholder="Buscar..." 
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="h-8 pl-8 pr-3 rounded-xl bg-white border border-slate-200/60 text-[10px] font-medium text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0097A7]/30 focus:border-[#0097A7]/50 transition-all w-[140px]"
+                    className="h-8 pl-8 pr-3 rounded-xl bg-white border border-slate-200/60 text-xs font-medium text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0097A7]/30 focus:border-[#0097A7]/50 transition-all w-[140px]"
                   />
                 </div>
                 <div className="flex gap-1">
@@ -400,7 +400,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                       key={p.key}
                       onClick={() => setPriorityFilter(p.key)}
                       className={cn(
-                        "px-2 py-1 rounded-lg text-[9px] font-bold border transition-all cursor-pointer active:scale-[0.97] flex items-center gap-1 whitespace-nowrap",
+                        "px-2 py-1 rounded-lg text-[11px] font-bold border transition-all cursor-pointer active:scale-[0.97] flex items-center gap-1 whitespace-nowrap",
                         priorityFilter === p.key
                           ? "border-[#0097A7] bg-[#0097A7]/5 text-[#0097A7]"
                           : "border-slate-200/60 bg-white text-slate-500 hover:border-slate-300"
@@ -430,7 +430,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                 {/* Overdue Section */}
                 {overdueReminders.length > 0 && (
                   <div className="space-y-2.5">
-                    <div className="flex items-center gap-2 text-[10px] font-black uppercase text-rose-600 tracking-wider">
+                    <div className="flex items-center gap-2 text-xs font-black uppercase text-rose-600 tracking-wider">
                       <span className="h-2 w-2 rounded-full bg-rose-600 animate-ping" />
                       Vencidos ({overdueReminders.length})
                     </div>
@@ -448,7 +448,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                 {/* Upcoming Section */}
                 <div className="space-y-2.5">
                   {overdueReminders.length > 0 && (
-                    <div className="text-[10px] font-black uppercase text-slate-400 tracking-wider">
+                    <div className="text-xs font-black uppercase text-slate-400 tracking-wider">
                       Próximos / Programados
                     </div>
                   )}
@@ -480,7 +480,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                 <DialogTitle className="text-white text-sm font-bold leading-none">
                   Nuevo Recordatorio
                 </DialogTitle>
-                <DialogDescription className="text-slate-300/70 text-[10px] mt-1">
+                <DialogDescription className="text-slate-300/70 text-xs mt-1">
                   Programa una alerta con fecha y hora exacta
                 </DialogDescription>
               </div>
@@ -490,7 +490,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
           <form onSubmit={handleCreateReminder} className="p-5 space-y-4">
             {/* Title */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Título</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Título</label>
               <Input 
                 placeholder="Ej: Llamar a proveedor de resina" 
                 value={newReminder.titulo}
@@ -502,7 +502,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
 
             {/* Priority */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Prioridad</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Prioridad</label>
               <div className="flex gap-1.5">
                 {[
                   { value: 'baja', label: 'Baja', color: 'bg-emerald-500' },
@@ -515,7 +515,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                     type="button"
                     onClick={() => setNewReminder({...newReminder, prioridad: p.value})}
                     className={cn(
-                      "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer active:scale-[0.97]",
+                      "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer active:scale-[0.97]",
                       newReminder.prioridad === p.value
                         ? "border-[#0097A7] bg-[#0097A7]/5 text-[#0097A7]"
                         : "border-slate-200/60 bg-white text-slate-500 hover:border-slate-300"
@@ -531,7 +531,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
             {/* Date + Time */}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                   <CalendarIcon className="h-3 w-3" /> Fecha
                 </label>
                 <DatePicker 
@@ -540,7 +540,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                   <Clock className="h-3 w-3" /> Hora
                 </label>
                 <TimePicker 
@@ -552,7 +552,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
 
             {/* Description */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Notas (Opcional)</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-500">Notas (Opcional)</label>
               <Textarea 
                 placeholder="Detalles sobre llamadas, materiales, direcciones..."
                 value={newReminder.descripcion}
@@ -567,13 +567,13 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
               <button 
                 type="button" 
                 onClick={() => { setShowCreateModal(false); resetForm(); }}
-                className="px-4 py-2 text-[10px] font-bold text-slate-500 hover:text-[#0097A7] transition-colors rounded-xl hover:bg-slate-50 cursor-pointer"
+                className="px-4 py-2 text-xs font-bold text-slate-500 hover:text-[#0097A7] transition-colors rounded-xl hover:bg-slate-50 cursor-pointer"
               >
                 Cancelar
               </button>
               <button 
                 type="submit" 
-                className="flex items-center gap-1.5 h-9 px-5 text-[10px] font-black uppercase tracking-wider text-white rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
+                className="flex items-center gap-1.5 h-9 px-5 text-xs font-black uppercase tracking-wider text-white rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
               >
                 <Check className="h-3.5 w-3.5" /> Agendar
               </button>
@@ -634,7 +634,7 @@ function ReminderCard({ reminder, onToggleComplete, onDelete }: ReminderCardProp
                 {reminder.titulo}
               </h4>
               {!reminder.completado && (
-                <span className={cn("text-[8px] font-black uppercase px-1.5 py-0.5 rounded-md border", config.badge)}>
+                <span className={cn("text-[10px] font-black uppercase px-1.5 py-0.5 rounded-md border", config.badge)}>
                   {config.label}
                 </span>
               )}
@@ -643,7 +643,7 @@ function ReminderCard({ reminder, onToggleComplete, onDelete }: ReminderCardProp
             {/* Description */}
             {reminder.descripcion && (
               <p className={cn(
-                "text-[11px] mt-1.5 leading-relaxed truncate max-w-2xl",
+                "text-[13px] mt-1.5 leading-relaxed truncate max-w-2xl",
                 reminder.completado ? "text-slate-400" : "text-slate-500"
               )}>
                 {reminder.descripcion}
@@ -653,20 +653,20 @@ function ReminderCard({ reminder, onToggleComplete, onDelete }: ReminderCardProp
             {/* Meta Row */}
             <div className="flex flex-wrap items-center gap-3 mt-2.5">
               <span className={cn(
-                "flex items-center gap-1 text-[10px] font-bold",
+                "flex items-center gap-1 text-xs font-bold",
                 isOverdue ? "text-rose-600" : "text-slate-400"
               )}>
                 <CalendarIcon className="h-3 w-3 shrink-0" />
                 {new Date(reminder.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
               </span>
               {reminder.hora && (
-                <span className="flex items-center gap-1 text-[10px] font-bold text-slate-400">
+                <span className="flex items-center gap-1 text-xs font-bold text-slate-400">
                   <Clock className="h-3 w-3 shrink-0" />
                   {formatTime12(reminder.hora)}
                 </span>
               )}
               {reminder.notificado && !reminder.completado && (
-                <span className="text-[8px] font-black uppercase px-1.5 py-0.5 rounded-md bg-blue-50 text-blue-600 border border-blue-200/60">
+                <span className="text-[10px] font-black uppercase px-1.5 py-0.5 rounded-md bg-blue-50 text-blue-600 border border-blue-200/60">
                   Notificado
                 </span>
               )}

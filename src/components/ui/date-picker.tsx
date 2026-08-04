@@ -90,10 +90,10 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
             caption_label: "text-[13px] font-bold text-slate-800 select-none",
             table: "w-full border-collapse",
             head_row: "flex w-full",
-            head_cell: "text-[9px] font-bold text-slate-400 uppercase w-8 text-center pb-2",
+            head_cell: "text-[11px] font-bold text-slate-400 uppercase w-8 text-center pb-2",
             row: "flex w-full mt-1",
             cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20",
-            day: "h-8 w-8 p-0 font-bold text-[11px] aria-selected:opacity-100 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer flex items-center justify-center",
+            day: "h-8 w-8 p-0 font-bold text-[13px] aria-selected:opacity-100 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer flex items-center justify-center",
             day_selected: "bg-[#0097A7] text-white hover:bg-[#0097A7] hover:text-white shadow-md shadow-[#0097A7]/20",
             day_today: "text-[#0097A7] font-black",
             day_outside: "text-slate-300",
@@ -107,7 +107,7 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
                 <button 
                   type="button"
                   onClick={() => { onChange(''); setOpen(false) }}
-                  className="text-[10px] font-bold text-slate-400 hover:text-rose-500 transition-colors cursor-pointer"
+                  className="text-xs font-bold text-slate-400 hover:text-rose-500 transition-colors cursor-pointer"
                 >
                   BORRAR
                 </button>
@@ -121,7 +121,7 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
                     onChange(`${y}-${m}-${d}`)
                     setOpen(false) 
                   }}
-                  className="text-[10px] font-bold text-[#0097A7] hover:text-[#00b4ca] transition-colors cursor-pointer"
+                  className="text-xs font-bold text-[#0097A7] hover:text-[#00b4ca] transition-colors cursor-pointer"
                 >
                   HOY
                 </button>

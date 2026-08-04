@@ -114,7 +114,7 @@ export default function CotizacionesPage() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Cotizaciones
                 </h1>
-                <p className="text-slate-300/80 text-[10px] hidden sm:block xl:text-[9px] 2xl:text-xs mt-1 font-medium">
+                <p className="text-slate-300/80 text-xs hidden sm:block xl:text-[11px] 2xl:text-xs mt-1 font-medium">
                   Genera propuestas profesionales e impacta a tus clientes.
                 </p>
               </div>
@@ -127,7 +127,7 @@ export default function CotizacionesPage() {
                   setShowWizard(true)
                 }}
                 size="sm"
-                className="h-8 px-3.5 text-[10px] font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
+                className="h-8 px-3.5 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
               >
                 <Plus className="mr-1.5 h-3.5 w-3.5" />
                 Nueva Cotización
@@ -142,7 +142,7 @@ export default function CotizacionesPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#00C9E0]/70 pointer-events-none z-10" />
                 <Input
                   placeholder="Buscar por cliente, monto o número de presupuesto..."
-                  className="pl-9 h-8 text-[11px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
+                  className="pl-9 h-8 text-[13px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -176,7 +176,7 @@ export default function CotizacionesPage() {
                 <div className="p-2.5 px-3.5 flex items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <p className={cn(
-                      "text-[9px] font-bold uppercase tracking-wider truncate",
+                      "text-[11px] font-bold uppercase tracking-wider truncate",
                       statusFilter === stat.filterKey ? stat.labelCls : "text-slate-400"
                     )}>{stat.label}</p>
                     <p className="text-xl font-black text-slate-900 leading-tight">{stat.value}</p>
@@ -241,7 +241,7 @@ export default function CotizacionesPage() {
                         <p className="text-sm font-bold text-slate-800 leading-tight group-hover:text-[#0097A7] transition-colors">
                           #{c.id.substring(0, 8).toUpperCase()}
                         </p>
-                        <p className="text-[10px] font-medium text-slate-400 mt-0.5">
+                        <p className="text-xs font-medium text-slate-400 mt-0.5">
                           {new Date(c.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </p>
                       </div>
@@ -252,7 +252,7 @@ export default function CotizacionesPage() {
                   {/* Client row */}
                   <div className="flex items-center gap-2.5 mb-3 pl-[46px]">
                     <div className="h-7 w-7 rounded-full bg-gradient-to-br from-[#0097A7] to-[#00C9E0] flex items-center justify-center shrink-0 shadow-sm">
-                      <span className="text-[10px] font-black text-white">
+                      <span className="text-xs font-black text-white">
                         {c.clientes.nombre?.[0]}{c.clientes.apellido?.[0]}
                       </span>
                     </div>
@@ -261,14 +261,14 @@ export default function CotizacionesPage() {
                         {c.clientes.nombre} {c.clientes.apellido}
                       </p>
                       {c.clientes.telefono && (
-                        <p className="text-[10px] text-slate-400 truncate">{c.clientes.telefono}</p>
+                        <p className="text-xs text-slate-400 truncate">{c.clientes.telefono}</p>
                       )}
                     </div>
                   </div>
 
                   {/* Total row */}
                   <div className="flex items-center justify-between pl-[46px] pt-2 border-t border-slate-100">
-                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Total</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total</p>
                     <div className="flex items-center gap-2">
                       <p className={cn("text-lg font-black", totalText)}>${c.monto_total.toLocaleString()}</p>
                       <div onClick={e => e.stopPropagation()}>

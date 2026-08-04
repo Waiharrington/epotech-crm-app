@@ -99,7 +99,7 @@ export default function ArchivoPage() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
                   Historial de Archivados
                 </h1>
-                <p className="text-slate-300/80 text-[9.5px] xl:text-[9px] 2xl:text-xs mt-0.5 font-medium">
+                <p className="text-slate-300/80 text-[11px] xl:text-[11px] 2xl:text-xs mt-0.5 font-medium">
                   Consulta todos los trabajos completados que han sido retirados del tablero activo.
                 </p>
               </div>
@@ -112,7 +112,7 @@ export default function ArchivoPage() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#00C9E0]/70 pointer-events-none z-10" />
               <Input
                 placeholder="Buscar en el archivo..."
-                className="pl-9 h-9 xl:h-8.5 text-[11px] xl:text-[10.5px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 focus-visible:border-[#00C9E0]/40 transition-all"
+                className="pl-9 h-9 xl:h-8.5 text-[13px] xl:text-[10.5px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 focus-visible:border-[#00C9E0]/40 transition-all"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -131,11 +131,11 @@ export default function ArchivoPage() {
           <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-3.5 xl:px-3 py-2.5 xl:py-2 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
             <div className="flex items-center gap-2">
               <ArchiveRestore className="h-3.5 w-3.5 text-[#00C9E0]" />
-              <h2 className="text-[10px] xl:text-[9.5px] font-black text-white uppercase tracking-[0.15em]">
+              <h2 className="text-xs xl:text-[11px] font-black text-white uppercase tracking-[0.15em]">
                 Archivados
               </h2>
             </div>
-            <span className="text-[9px] xl:text-[8.5px] font-bold text-slate-300/80 tabular-nums">
+            <span className="text-[11px] xl:text-[10px] font-bold text-slate-300/80 tabular-nums">
               {filteredTrabajos.length} {filteredTrabajos.length === 1 ? 'trabajo' : 'trabajos'}
             </span>
           </div>
@@ -143,7 +143,7 @@ export default function ArchivoPage() {
           {loading ? (
             <div className="flex flex-col items-center justify-center flex-1 min-h-64 gap-3">
               <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cargando archivados...</p>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Cargando archivados...</p>
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto pb-4 md:pb-20">

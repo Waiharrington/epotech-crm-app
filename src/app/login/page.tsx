@@ -225,7 +225,7 @@ export default function LoginPage() {
             <span className="text-3xl font-black tracking-tight text-white uppercase">
               Gestión Inteligente
             </span>
-            <p className="text-[10px] font-black text-[#00C9E0] tracking-[0.25em] uppercase pl-0.5">
+            <p className="text-xs font-black text-[#00C9E0] tracking-[0.25em] uppercase pl-0.5">
               Portal CRM
             </p>
           </div>
@@ -236,29 +236,29 @@ export default function LoginPage() {
           <div className="flex flex-col items-center text-center space-y-2.5">
             <ShieldCheck className="h-9 w-9 text-[#00C9E0]" />
             <div className="flex flex-col leading-tight">
-              <span className="text-[11px] font-bold text-white">Control Total</span>
-              <span className="text-[11px] font-medium text-[#00C9E0]">Administrativo</span>
+              <span className="text-[13px] font-bold text-white">Control Total</span>
+              <span className="text-[13px] font-medium text-[#00C9E0]">Administrativo</span>
             </div>
           </div>
           <div className="flex flex-col items-center text-center space-y-2.5">
             <Users className="h-9 w-9 text-[#00C9E0]" />
             <div className="flex flex-col leading-tight">
-              <span className="text-[11px] font-bold text-white">Gestión de Clientes</span>
-              <span className="text-[11px] font-medium text-[#00C9E0]">Y Agendamientos</span>
+              <span className="text-[13px] font-bold text-white">Gestión de Clientes</span>
+              <span className="text-[13px] font-medium text-[#00C9E0]">Y Agendamientos</span>
             </div>
           </div>
           <div className="flex flex-col items-center text-center space-y-2.5">
             <Wallet className="h-9 w-9 text-[#00C9E0]" />
             <div className="flex flex-col leading-tight">
-              <span className="text-[11px] font-bold text-white">Caja y Presupuestos</span>
-              <span className="text-[11px] font-medium text-[#00C9E0]">Finanzas y Control</span>
+              <span className="text-[13px] font-bold text-white">Caja y Presupuestos</span>
+              <span className="text-[13px] font-medium text-[#00C9E0]">Finanzas y Control</span>
             </div>
           </div>
           <div className="flex flex-col items-center text-center space-y-2.5">
             <BarChart3 className="h-9 w-9 text-[#00C9E0]" />
             <div className="flex flex-col leading-tight">
-              <span className="text-[11px] font-bold text-white">Métricas de Negocio</span>
-              <span className="text-[11px] font-medium text-[#00C9E0]">Reportes Analíticos</span>
+              <span className="text-[13px] font-bold text-white">Métricas de Negocio</span>
+              <span className="text-[13px] font-medium text-[#00C9E0]">Reportes Analíticos</span>
             </div>
           </div>
         </div>
@@ -345,7 +345,7 @@ export default function LoginPage() {
                   />
                 </div>
                 
-                <CardDescription className="text-[11px] text-slate-500 font-semibold max-w-xs sm:max-w-none sm:whitespace-nowrap mx-auto leading-relaxed pt-0.5">
+                <CardDescription className="text-[13px] text-slate-500 font-semibold max-w-xs sm:max-w-none sm:whitespace-nowrap mx-auto leading-relaxed pt-0.5">
                   Ingresa tus credenciales para acceder<br className="block sm:hidden" /> al sistema interno de gestión
                 </CardDescription>
               </CardHeader>
@@ -356,12 +356,12 @@ export default function LoginPage() {
                   {error && (
                     <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5 shadow-inner py-2 px-3">
                       <AlertCircle className="h-3.5 w-3.5 text-destructive" />
-                      <AlertDescription className="text-[11px] font-semibold">{error}</AlertDescription>
+                      <AlertDescription className="text-[13px] font-semibold">{error}</AlertDescription>
                     </Alert>
                   )}
                   
                   <div className="space-y-1.5 group/input">
-                    <Label htmlFor="email" className="text-[9px] font-extrabold text-[#102A43] uppercase tracking-widest pl-1 transition-colors duration-300 group-focus-within/input:text-[#00C9E0]">
+                    <Label htmlFor="email" className="text-[11px] font-extrabold text-[#102A43] uppercase tracking-widest pl-1 transition-colors duration-300 group-focus-within/input:text-[#00C9E0]">
                       Correo Electrónico
                     </Label>
                     <div className="relative">
@@ -379,7 +379,7 @@ export default function LoginPage() {
                   </div>
                   
                   <div className="space-y-1.5 group/input">
-                    <Label htmlFor="password" className="text-[9px] font-extrabold text-[#102A43] uppercase tracking-widest pl-1 transition-colors duration-300 group-focus-within/input:text-[#00C9E0]">
+                    <Label htmlFor="password" className="text-[11px] font-extrabold text-[#102A43] uppercase tracking-widest pl-1 transition-colors duration-300 group-focus-within/input:text-[#00C9E0]">
                       Contraseña
                     </Label>
                     <div className="relative">
@@ -428,7 +428,7 @@ export default function LoginPage() {
                         />
                         <div className="relative z-10 flex items-center justify-center gap-2">
                           <Loader2 className="h-4 w-4 animate-spin text-white" />
-                          <span className="text-white uppercase tracking-widest text-[9px] font-black">Cargando Presión...</span>
+                          <span className="text-white uppercase tracking-widest text-[11px] font-black">Cargando Presión...</span>
                         </div>
                       </div>
                     ) : (

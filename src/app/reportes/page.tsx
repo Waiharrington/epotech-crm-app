@@ -313,7 +313,7 @@ export default function ReportesPage() {
           <div className="flex-1 overflow-y-auto min-h-0 space-y-3">
             
             {/* Top 3 Financial KPIs - Hero Stats */}
-            <div className="grid grid-cols-3 gap-3 shrink-0">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 shrink-0">
               {[
                 { label: 'Ventas Totales', value: `$${totalRevenue.toLocaleString()}`, sub: `${completedJobs.length} servicios completados`, icon: Wallet, gradient: 'from-[#0097A7] via-[#00b4ca] to-[#00C9E0]' },
                 { label: 'Ganancia Neta', value: `$${netProfit.toLocaleString()}`, sub: `${marginPercentage.toFixed(0)}% Margen`, icon: TrendingUp, gradient: 'from-[#00b4ca] via-[#00c9e0] to-[#00dde8]' },

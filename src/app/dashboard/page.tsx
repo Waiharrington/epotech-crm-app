@@ -39,6 +39,7 @@ import { NotificationBell } from '@/components/notifications/notification-bell'
 import { NewClientWizard, GestionarDrawer } from '@/components/clientes/new-client-wizard'
 import { NewJobWizard } from '@/components/trabajos/new-job-wizard'
 import { NewQuoteWizard } from '@/components/presupuestos/new-quote-wizard'
+import { VoiceReminderButton } from '@/components/voice-reminder-button'
 
 const formatTime12h = (timeStr?: string | null) => {
   if (!timeStr) return ''
@@ -753,150 +754,159 @@ export default function DashboardPage() {
                 </button>
               </div>
 
-              {/* Formulario Rápido con selectores UI estilizados */}
-              <form onSubmit={handleQuickAddReminder} className="flex items-center gap-1.5 mt-1.5 xl:mt-1 shrink-0 flex-wrap sm:flex-nowrap">
+              {/* Formulario Rápido Estilo Composer */}
+              <form onSubmit={handleQuickAddReminder} className="mt-2.5 flex flex-col gap-2.5 shrink-0 bg-slate-50/60 p-2.5 xl:p-2 rounded-[18px] border border-slate-100 shadow-[inset_0_1px_4px_rgba(0,0,0,0.02)]">
                 <Input
-                  placeholder="Pendiente rápido..."
+                  placeholder="Escribe un recordatorio o pendiente..."
                   value={quickTitle}
                   onChange={e => setQuickTitle(e.target.value)}
-                  className="text-base xl:text-[11px] h-11.5 xl:h-11 px-4.5 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex-1 min-w-[110px]"
+                  className="text-[15px] xl:text-sm h-12 xl:h-11 px-4 rounded-xl border-slate-200/80 focus-visible:ring-[#0097A7] bg-white transition-all shadow-sm w-full font-medium placeholder:text-slate-400"
                 />
 
-                {/* Styled Popover Date Picker */}
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button
-                      type="button"
-                      className="h-11.5 xl:h-11 px-4 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[11px] xl:text-[11px] font-bold text-slate-700 flex items-center gap-1 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
-                    >
-                      <CalendarIcon className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7]" />
-                      <span>
-                        {new Date(quickDate + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
-                      </span>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 border border-slate-100 shadow-xl rounded-2xl bg-white z-[100]" align="start">
-                    <CalendarUI
-                      mode="single"
-                      selected={new Date(quickDate + 'T00:00:00')}
-                      onSelect={(d) => {
-                        if (d) {
-                          const year = d.getFullYear()
-                          const month = String(d.getMonth() + 1).padStart(2, '0')
-                          const day = String(d.getDate()).padStart(2, '0')
-                          setQuickDate(`${year}-${month}-${day}`)
-                        }
-                      }}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-
-                {/* Styled Time Picker */}
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button
-                      type="button"
-                      className="h-11.5 xl:h-11 px-4 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[11px] xl:text-[11px] font-bold text-slate-700 flex items-center gap-1 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
-                    >
-                      <Clock className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7]" />
-                      <span>{formatTime12h(`${quickTime}:00`)}</span>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-64 p-3 border border-slate-100 shadow-xl rounded-2xl bg-white z-[100] space-y-3" align="start">
-                    <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                      <span className="text-[13px] font-black text-[#0B1E3F] flex items-center gap-1">
-                        <Clock className="h-3.5 w-3.5 text-[#0097A7]" /> Selección de Hora
-                      </span>
-                      <span className="text-base font-black text-[#0097A7] bg-[#E6F9FB] px-4 py-0.5 rounded-lg border border-[#0097A7]/20">
-                        {formatTime12h(`${quickTime}:00`)}
-                      </span>
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {/* Botón de Nota de Voz */}
+                    <div className="shrink-0">
+                      <VoiceReminderButton onCreated={() => fetchReminders()} />
                     </div>
 
-                    {/* Selector de Hora 12h */}
-                    <div className="space-y-1">
-                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Hora:</span>
-                      <div className="grid grid-cols-6 gap-1">
-                        {Array.from({ length: 12 }, (_, i) => i + 1).map((h) => {
-                          const str = String(h).padStart(2, '0')
-                          const isSelected = (parseInt(quickTime.split(':')[0] || '9', 10) % 12 || 12) === h
-                          return (
-                            <button
-                              key={h}
-                              type="button"
-                              onClick={() => {
-                                const isPM = parseInt(quickTime.split(':')[0] || '9', 10) >= 12
-                                const newH = isPM ? (h === 12 ? 12 : h + 12) : (h === 12 ? 0 : h)
-                                setQuickTime(`${String(newH).padStart(2, '0')}:${quickTime.split(':')[1] || '00'}`)
-                              }}
-                              className={`h-7 rounded-lg text-[10.5px] font-bold transition-all cursor-pointer border ${
-                                isSelected
-                                  ? 'bg-[#0B1E3F] text-white border-[#0B1E3F] shadow-xs'
-                                  : 'bg-slate-50 text-slate-700 border-slate-200/70 hover:bg-slate-100 hover:border-slate-300'
-                              }`}
-                            >
-                              {h}
-                            </button>
-                          )
-                        })}
-                      </div>
-                    </div>
+                    {/* Styled Popover Date Picker */}
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className="h-10 xl:h-9 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[13px] xl:text-xs font-bold text-slate-700 flex items-center gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                        >
+                          <CalendarIcon className="h-3.5 w-3.5 xl:h-3 xl:w-3 text-[#0097A7]" />
+                          <span>
+                            {new Date(quickDate + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                          </span>
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0 border border-slate-100 shadow-xl rounded-2xl bg-white z-[100]" align="start">
+                        <CalendarUI
+                          mode="single"
+                          selected={new Date(quickDate + 'T00:00:00')}
+                          onSelect={(d) => {
+                            if (d) {
+                              const year = d.getFullYear()
+                              const month = String(d.getMonth() + 1).padStart(2, '0')
+                              const day = String(d.getDate()).padStart(2, '0')
+                              setQuickDate(`${year}-${month}-${day}`)
+                            }
+                          }}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
 
-                    {/* Selector de Minutos */}
-                    <div className="space-y-1">
-                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Minutos:</span>
-                      <div className="grid grid-cols-6 gap-1">
-                        {['00', '10', '15', '30', '45', '50'].map((m) => {
-                          const isSelected = quickTime.split(':')[1] === m
-                          return (
-                            <button
-                              key={m}
-                              type="button"
-                              onClick={() => {
-                                setQuickTime(`${quickTime.split(':')[0] || '09'}:${m}`)
-                              }}
-                              className={`h-7 rounded-lg text-[10.5px] font-bold transition-all cursor-pointer border ${
-                                isSelected
-                                  ? 'bg-[#0097A7] text-white border-[#0097A7] shadow-xs'
-                                  : 'bg-slate-50 text-slate-700 border-slate-200/70 hover:bg-slate-100 hover:border-slate-300'
-                              }`}
-                            >
-                              {m}
-                            </button>
-                          )
-                        })}
-                      </div>
-                    </div>
+                    {/* Styled Time Picker */}
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className="h-10 xl:h-9 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[13px] xl:text-xs font-bold text-slate-700 flex items-center gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                        >
+                          <Clock className="h-3.5 w-3.5 xl:h-3 xl:w-3 text-[#0097A7]" />
+                          <span>{formatTime12h(`${quickTime}:00`)}</span>
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-64 p-3 border border-slate-100 shadow-xl rounded-2xl bg-white z-[100] space-y-3" align="start">
+                        <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                          <span className="text-[13px] font-black text-[#0B1E3F] flex items-center gap-1">
+                            <Clock className="h-3.5 w-3.5 text-[#0097A7]" /> Selección de Hora
+                          </span>
+                          <span className="text-base font-black text-[#0097A7] bg-[#E6F9FB] px-4 py-0.5 rounded-lg border border-[#0097A7]/20">
+                            {formatTime12h(`${quickTime}:00`)}
+                          </span>
+                        </div>
 
-                    {/* Selector AM / PM */}
-                    <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200/80 gap-1 pt-1">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const h = parseInt(quickTime.split(':')[0] || '9', 10)
-                          if (h >= 12) setQuickTime(`${String(h - 12).padStart(2, '0')}:${quickTime.split(':')[1] || '00'}`)
-                        }}
-                        className={`flex-1 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer text-center ${
-                          parseInt(quickTime.split(':')[0] || '9', 10) < 12 ? 'bg-[#0097A7] text-white shadow-sm' : 'text-slate-500'
-                        }`}
-                      >AM</button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const h = parseInt(quickTime.split(':')[0] || '9', 10)
-                          if (h < 12) setQuickTime(`${String(h + 12).padStart(2, '0')}:${quickTime.split(':')[1] || '00'}`)
-                        }}
-                        className={`flex-1 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer text-center ${
-                          parseInt(quickTime.split(':')[0] || '9', 10) >= 12 ? 'bg-[#0097A7] text-white shadow-sm' : 'text-slate-500'
-                        }`}
-                      >PM</button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                        {/* Selector de Hora 12h */}
+                        <div className="space-y-1">
+                          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Hora:</span>
+                          <div className="grid grid-cols-6 gap-1">
+                            {Array.from({ length: 12 }, (_, i) => i + 1).map((h) => {
+                              const str = String(h).padStart(2, '0')
+                              const isSelected = (parseInt(quickTime.split(':')[0] || '9', 10) % 12 || 12) === h
+                              return (
+                                <button
+                                  key={h}
+                                  type="button"
+                                  onClick={() => {
+                                    const isPM = parseInt(quickTime.split(':')[0] || '9', 10) >= 12
+                                    const newH = isPM ? (h === 12 ? 12 : h + 12) : (h === 12 ? 0 : h)
+                                    setQuickTime(`${String(newH).padStart(2, '0')}:${quickTime.split(':')[1] || '00'}`)
+                                  }}
+                                  className={`h-8 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
+                                    isSelected
+                                      ? 'bg-[#0B1E3F] text-white border-[#0B1E3F] shadow-xs'
+                                      : 'bg-slate-50 text-slate-700 border-slate-200/70 hover:bg-slate-100 hover:border-slate-300'
+                                  }`}
+                                >
+                                  {h}
+                                </button>
+                              )
+                            })}
+                          </div>
+                        </div>
 
-                <Button type="submit" size="sm" className="h-11.5 xl:h-11 text-base xl:text-[11px] font-black gap-1 px-4 bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
-                  <Plus className="h-3 w-3 stroke-[3]" /> Agregar
-                </Button>
+                        {/* Selector de Minutos */}
+                        <div className="space-y-1">
+                          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Minutos:</span>
+                          <div className="grid grid-cols-6 gap-1">
+                            {['00', '10', '15', '30', '45', '50'].map((m) => {
+                              const isSelected = quickTime.split(':')[1] === m
+                              return (
+                                <button
+                                  key={m}
+                                  type="button"
+                                  onClick={() => {
+                                    setQuickTime(`${quickTime.split(':')[0] || '09'}:${m}`)
+                                  }}
+                                  className={`h-8 rounded-lg text-xs font-bold transition-all cursor-pointer border ${
+                                    isSelected
+                                      ? 'bg-[#0097A7] text-white border-[#0097A7] shadow-xs'
+                                      : 'bg-slate-50 text-slate-700 border-slate-200/70 hover:bg-slate-100 hover:border-slate-300'
+                                  }`}
+                                >
+                                  {m}
+                                </button>
+                              )
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Selector AM / PM */}
+                        <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200/80 gap-1 pt-1 mt-1">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const h = parseInt(quickTime.split(':')[0] || '9', 10)
+                              if (h >= 12) setQuickTime(`${String(h - 12).padStart(2, '0')}:${quickTime.split(':')[1] || '00'}`)
+                            }}
+                            className={`flex-1 py-2 rounded-lg text-xs font-black transition-all cursor-pointer text-center ${
+                              parseInt(quickTime.split(':')[0] || '9', 10) < 12 ? 'bg-[#0097A7] text-white shadow-sm' : 'text-slate-500'
+                            }`}
+                          >AM</button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const h = parseInt(quickTime.split(':')[0] || '9', 10)
+                              if (h < 12) setQuickTime(`${String(h + 12).padStart(2, '0')}:${quickTime.split(':')[1] || '00'}`)
+                            }}
+                            className={`flex-1 py-2 rounded-lg text-xs font-black transition-all cursor-pointer text-center ${
+                              parseInt(quickTime.split(':')[0] || '9', 10) >= 12 ? 'bg-[#0097A7] text-white shadow-sm' : 'text-slate-500'
+                            }`}
+                          >PM</button>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+
+                  <Button type="submit" size="sm" className="h-10 xl:h-9 text-[13px] xl:text-xs font-black gap-1.5 px-4 bg-[#0B1E3F] hover:bg-[#1a3668] text-white rounded-xl shadow-md border-none shrink-0 transition-all duration-300 active:scale-[0.98] w-full sm:w-auto mt-2 sm:mt-0">
+                    <Plus className="h-3.5 w-3.5 stroke-[3]" /> Agregar
+                  </Button>
+                </div>
               </form>
 
               {/* Listado */}

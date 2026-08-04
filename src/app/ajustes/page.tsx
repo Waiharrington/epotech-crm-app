@@ -211,7 +211,7 @@ export default function AjustesPage() {
       </header>
 
       <main className="flex flex-col md:flex-1 md:min-h-0 gap-3 relative z-10">
-        <div className="flex-1 overflow-y-auto min-h-0 pb-24 md:pb-2 space-y-3">
+        <div className="flex-1 overflow-y-auto min-h-0 pb-10 md:pb-2 space-y-3">
 
           {/* Profile Photo Section */}
           <div className="bg-white border border-slate-200/60 rounded-2xl p-5 shadow-sm">

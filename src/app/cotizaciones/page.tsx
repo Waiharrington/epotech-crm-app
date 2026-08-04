@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
-import { Plus, Search, FileText, Send, Loader2, User, Check, Eye, Pencil, CheckCircle2, Clock, XCircle, TrendingUp, Filter, Download, ChevronRight } from 'lucide-react'
+import { Plus, Search, FileText, Send, Loader2, User, Check, Eye, Pencil, CheckCircle2, Clock, XCircle, TrendingUp, Filter, Download, ChevronRight, ArrowUpRight } from 'lucide-react'
+import { normalizeSearch } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { NewQuoteWizard } from '@/components/presupuestos/new-quote-wizard'
 import { QuoteDetailModal } from '@/components/presupuestos/quote-detail-modal'
@@ -50,8 +51,12 @@ export default function CotizacionesPage() {
   }
 
   const filteredCotizaciones = cotizaciones.filter(c => {
-    const matchesSearch = `${c.clientes.nombre} ${c.clientes.apellido}`.toLowerCase().includes(search.toLowerCase()) ||
-      c.id.includes(search)
+    let matchesSearch = true
+    if (search.trim()) {
+      const searchNorm = normalizeSearch(search)
+      matchesSearch = normalizeSearch(`${c.clientes.nombre} ${c.clientes.apellido}`).includes(searchNorm) ||
+        normalizeSearch(c.id).includes(searchNorm)
+    }
     const matchesStatus = statusFilter === 'todos' || c.estado === statusFilter
     return matchesSearch && matchesStatus
   })

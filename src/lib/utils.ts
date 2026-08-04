@@ -20,3 +20,11 @@ export function formatTime12(timeStr: string | null | undefined): string {
   if (h < 12) return `${h}:${m} AM`
   return `${h - 12}:${m} PM`
 }
+
+/**
+ * Normalizes text for search by removing accents/diacritics and converting to lowercase
+ */
+export function normalizeSearch(text: string | null | undefined): string {
+  if (!text) return ''
+  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+}

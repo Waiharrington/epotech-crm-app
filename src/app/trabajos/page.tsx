@@ -4,7 +4,8 @@ import { useState, useEffect, Suspense, useCallback } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
-import { Plus, CalendarDays, List as ListIcon, Archive, Search, Filter, Loader2, Briefcase, Clock, CheckCircle2, TrendingUp } from 'lucide-react'
+import { Plus, CalendarDays, List as ListIcon, Archive, Search, Filter, Loader2, Briefcase, Clock, CheckCircle2, TrendingUp, X, ChevronDown } from 'lucide-react'
+import { normalizeSearch } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -186,13 +187,15 @@ function TrabajosContent() {
 
   const filteredTrabajos = trabajos.filter(t => {
     // 1. Text Search Filter
-    const searchLower = search.toLowerCase()
-    const matchesSearch = (
-      t.clientes.nombre.toLowerCase().includes(searchLower) ||
-      t.clientes.apellido.toLowerCase().includes(searchLower) ||
-      t.catalogo_servicios?.nombre.toLowerCase().includes(searchLower) ||
-      t.clientes.telefono.includes(search)
-    )
+    let matchesSearch = true
+    if (search.trim()) {
+      const searchNorm = normalizeSearch(search)
+      matchesSearch = normalizeSearch(t.clientes.nombre).includes(searchNorm) ||
+        normalizeSearch(t.clientes.apellido).includes(searchNorm) ||
+        normalizeSearch(t.catalogo_servicios?.nombre || '').includes(searchNorm) ||
+        normalizeSearch(t.id).includes(searchNorm) ||
+        normalizeSearch(t.clientes.telefono).includes(searchNorm)
+    }
 
     // 2. Date Filter (only applies in List View, Calendar View handles its own dates)
     let matchesDate = true

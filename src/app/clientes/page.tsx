@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
@@ -15,8 +15,17 @@ import {
   Users,
   Building2,
   Home,
-  Phone
+  Phone,
+  Edit2,
+  Mail,
+  Loader2,
+  Star,
+  Calendar,
+  FileText,
+  ChevronRight,
+  Briefcase
 } from 'lucide-react'
+import { normalizeSearch } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { NewClientWizard } from '@/components/clientes/new-client-wizard'
@@ -49,15 +58,19 @@ export default function ClientesPage() {
     setLoading(false)
   }
 
-  const filteredClientes = clientes.filter(cliente => {
-    const searchLower = search.toLowerCase()
-    return (
-      cliente.nombre.toLowerCase().includes(searchLower) ||
-      cliente.apellido.toLowerCase().includes(searchLower) ||
-      cliente.telefono.includes(search) ||
-      cliente.ciudad?.toLowerCase().includes(searchLower)
-    )
-  })
+  const filteredClientes = useMemo(() => {
+    if (!search.trim()) return clientes
+    
+    const searchNorm = normalizeSearch(search)
+    return clientes.filter(cliente => {
+      return (
+        normalizeSearch(cliente.nombre).includes(searchNorm) ||
+        normalizeSearch(cliente.apellido).includes(searchNorm) ||
+        normalizeSearch(cliente.email || '').includes(searchNorm) ||
+        normalizeSearch(cliente.ciudad || '').includes(searchNorm)
+      )
+    })
+  }, [clientes, search])
 
   const totalComercial = clientes.filter(c => c.tipo_propiedad === 'comercial').length
   const totalResidencial = clientes.length - totalComercial

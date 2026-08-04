@@ -166,7 +166,7 @@ export default function CatalogoPage() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Catálogo de Servicios
                 </h1>
-                <p className="text-slate-300/80 text-base hidden sm:block xl:text-[11px] 2xl:text-base mt-1 font-medium">
+                <p className="text-sm sm:text-base text-slate-300/80 hidden sm:block mt-1 font-medium">
                   Define tus servicios, precios y costos estimados.
                 </p>
               </div>
@@ -177,7 +177,7 @@ export default function CatalogoPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowCategoriesModal(true)}
-                className="h-10 px-4 text-base font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-white/20 hover:border-white/25 backdrop-blur-md transition-all active:scale-[0.98]"
+                className="h-10 px-4 text-sm font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-white/20 hover:border-white/25 backdrop-blur-md transition-all active:scale-[0.98]"
               >
                 <FolderOpen className="mr-1.5 h-3.5 w-3.5" />
                 Categorías
@@ -198,7 +198,7 @@ export default function CatalogoPage() {
                   setShowModal(true)
                 }}
                 size="sm"
-                className="h-10 px-4.5 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
+                className="h-10 px-4 text-sm font-bold rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
               >
                 <Plus className="mr-1.5 h-3.5 w-3.5" />
                 Nuevo Servicio
@@ -213,7 +213,7 @@ export default function CatalogoPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#00C9E0]/70 pointer-events-none z-10" />
                 <Input
                   placeholder="Buscar por nombre o descripción del servicio..."
-                  className="pl-9 h-10 text-[13px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
+                  className="pl-9 h-10 text-sm rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -246,7 +246,7 @@ export default function CatalogoPage() {
                 <div className="p-2.5 px-4.5 flex items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <p className={cn(
-                      "text-[11px] font-bold uppercase tracking-wider truncate",
+                      "text-xs font-semibold uppercase tracking-wider truncate",
                       categoryFilter === stat.filterKey ? stat.labelCls : "text-slate-400"
                     )}>{stat.label}</p>
                     <p className="text-xl font-black text-slate-900 leading-tight">{stat.value}</p>
@@ -270,7 +270,7 @@ export default function CatalogoPage() {
           {/* Mobile Filter Dropdown */}
           <div className="sm:hidden relative mt-1 mb-2">
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-full bg-white border border-slate-200/60 rounded-xl !h-14 !py-4 px-6 text-[13px] font-black text-slate-700 uppercase tracking-widest focus:ring-[#0097A7]/50 shadow-md">
+              <SelectTrigger className="w-full bg-white border border-slate-200/60 rounded-xl !h-11 px-4 text-sm font-bold text-slate-700 uppercase tracking-wider focus:ring-[#0097A7]/50 shadow-md">
                 <div className="flex items-center gap-3">
                   <Filter className="h-5 w-5 text-[#00C9E0]" />
                   <SelectValue />
@@ -278,7 +278,7 @@ export default function CatalogoPage() {
               </SelectTrigger>
               <SelectContent className="rounded-xl border-slate-200 shadow-xl">
                 {['todos', ...categoryOptions].map((cat) => (
-                  <SelectItem key={cat} value={cat} className="text-base font-bold uppercase tracking-wider text-slate-700 focus:bg-[#0097A7]/10 focus:text-[#0097A7]">
+                  <SelectItem key={cat} value={cat} className="text-sm font-bold uppercase tracking-wider text-slate-700 focus:bg-[#0097A7]/10 focus:text-[#0097A7]">
                     {cat === 'epoxico' ? 'Epóxico' : cat === 'todos' ? 'Todas las Categorías' : cat}
                   </SelectItem>
                 ))}
@@ -293,7 +293,7 @@ export default function CatalogoPage() {
                 key={cat}
                 onClick={() => setCategoryFilter(cat)}
                 className={cn(
-                  "px-4 py-2.5 rounded-xl text-base font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97]",
+                  "px-3 h-9 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97]",
                   categoryFilter === cat
                     ? "bg-[#0097A7] text-white border-[#0097A7] shadow-md shadow-cyan-500/20"
                     : "bg-white text-slate-500 border-slate-200/60 hover:border-[#0097A7]/40 hover:text-[#0097A7]"
@@ -310,7 +310,7 @@ export default function CatalogoPage() {
           {loading && !servicios.length ? (
             <div className="flex flex-col items-center justify-center h-40 gap-3">
               <Loader2 className="h-6 w-6 animate-spin text-[#00C9E0]" />
-              <p className="text-base text-slate-400 font-medium">Cargando servicios...</p>
+              <p className="text-sm text-slate-400 font-medium">Cargando servicios...</p>
             </div>
           ) : filteredServicios.length > 0 ? (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

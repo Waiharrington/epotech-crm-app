@@ -280,18 +280,18 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Gestión de Recordatorios
                 </h1>
-                <p className="text-slate-300/80 text-base hidden sm:block xl:text-[11px] 2xl:text-base mt-1 font-medium truncate max-w-[280px] md:max-w-md lg:max-w-xl">
+                <p className="text-sm sm:text-base text-slate-300/80 hidden sm:block mt-1 font-medium truncate max-w-[280px] md:max-w-md lg:max-w-xl">
                   Organiza tus alertas y no olvides ningún compromiso.
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 sm:flex sm:flex-row sm:flex-nowrap items-stretch sm:items-center gap-2.5 shrink-0 w-full lg:w-auto">
-              <VoiceReminderButton onCreated={fetchReminders} className="w-full sm:w-auto h-11 text-[13px] sm:text-base px-2 sm:px-4.5" />
+              <VoiceReminderButton onCreated={fetchReminders} className="w-full sm:w-auto h-10 px-4 text-sm font-bold rounded-xl" />
 
               <button 
                 onClick={() => setShowCreateModal(true)}
-                className="flex items-center justify-center gap-1 sm:gap-1.5 h-11 px-2 sm:px-5 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] hover:from-[#00b4ca] hover:to-[#00d4f0] text-white text-[13px] sm:text-base font-black shadow-lg shadow-[#00C9E0]/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] w-full sm:w-auto"
+                className="flex items-center justify-center gap-1 sm:gap-1.5 h-10 px-4 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] hover:from-[#00b4ca] hover:to-[#00d4f0] text-white text-sm font-bold shadow-lg shadow-[#00C9E0]/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] w-full sm:w-auto"
               >
                 <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> 
                 <span className="sm:hidden">Nuevo</span>
@@ -320,15 +320,15 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                       <BellOff className="h-4 w-4 text-slate-500" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-base text-slate-800">Activa las notificaciones</h4>
-                      <p className="text-base text-slate-500 mt-1 leading-relaxed">
+                      <h4 className="text-base font-bold text-slate-800">Activa las notificaciones</h4>
+                      <p className="text-sm text-slate-500 mt-1 leading-relaxed">
                         Recibe avisos para no perder ningún seguimiento importante.
                       </p>
                     </div>
                   </div>
                   <button 
                     onClick={handleRequestPermission}
-                    className="flex items-center gap-1.5 h-11 px-4 rounded-lg bg-slate-800 text-white text-base font-bold hover:bg-slate-700 transition-colors shrink-0 cursor-pointer w-full md:w-auto justify-center md:justify-start"
+                    className="flex items-center justify-center gap-1.5 h-10 px-4 rounded-xl bg-slate-800 text-white text-sm font-bold hover:bg-slate-700 transition-colors shrink-0 cursor-pointer w-full md:w-auto md:justify-start"
                   >
                     Activar Avisos
                   </button>
@@ -346,8 +346,8 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                       <AlertTriangle className="h-4 w-4 text-amber-600" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-base text-amber-800">Modo Local Activo</h4>
-                      <p className="text-base text-amber-700/80 mt-1 leading-relaxed">
+                      <h4 className="text-base font-bold text-amber-800">Modo Local Activo</h4>
+                      <p className="text-sm text-amber-700/80 mt-1 leading-relaxed">
                         La tabla <strong>recordatorios</strong> no existe en Supabase. Guardando localmente.
                       </p>
                     </div>

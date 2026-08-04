@@ -312,32 +312,6 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
           </div>
         ) : (
           <div className="flex-1 overflow-y-auto min-h-0 pb-4 md:pb-4 md:pb-20 space-y-3">
-            {/* Notification Permission Banner */}
-            {notificationPermission !== 'granted' && (
-              <div className="bg-slate-50 border border-slate-200/60 rounded-2xl p-4 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1 h-full bg-[#0097A7]" />
-                <div className="flex flex-col md:flex-row gap-3 items-start justify-between">
-                  <div className="flex items-start gap-3">
-                    <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-white border border-slate-200/60 shrink-0">
-                      <BellOff className="h-4 w-4 text-slate-500" />
-                    </div>
-                    <div>
-                      <h4 className="text-base font-bold text-slate-800">Activa las notificaciones</h4>
-                      <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-                        Recibe avisos para no perder ningún seguimiento importante.
-                      </p>
-                    </div>
-                  </div>
-                  <button 
-                    onClick={handleRequestPermission}
-                    className="flex items-center justify-center gap-1.5 h-10 px-4 rounded-xl bg-slate-800 text-white text-sm font-bold hover:bg-slate-700 transition-colors shrink-0 cursor-pointer w-full md:w-auto md:justify-start"
-                  >
-                    Activar Avisos
-                  </button>
-                </div>
-              </div>
-            )}
-
             {/* Local Storage Warning */}
             {isUsingLocalStorage && (
               <div className="bg-amber-50 border border-amber-200/60 rounded-2xl p-4 relative overflow-hidden">

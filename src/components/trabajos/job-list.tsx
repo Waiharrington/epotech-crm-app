@@ -112,10 +112,10 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
           
           {Object.entries(groupedJobs[weekKey].services).map(([serviceName, jobs]) => (
             <div key={serviceName} className="space-y-2">
-              <h4 className="text-base md:text-[13px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 px-4">
-                <Briefcase className="h-3 w-3 text-[#0097A7]" />
+              <h4 className="text-[12px] md:text-[13px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 px-4 whitespace-nowrap overflow-x-auto no-scrollbar">
+                <Briefcase className="h-3 w-3 shrink-0 text-[#0097A7]" />
                 {serviceName}
-                <span className="text-[11px] text-slate-400 font-normal">({jobs.length})</span>
+                <span className="text-[11px] text-slate-400 font-normal shrink-0">({jobs.length})</span>
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3">
                 {jobs.map((job) => {
@@ -147,7 +147,7 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 mb-0.5">
-                          <h4 className="text-[12px] font-bold text-slate-800 truncate">
+                          <h4 className="text-[12px] font-bold text-slate-800 whitespace-nowrap overflow-x-auto no-scrollbar">
                             {job.catalogo_servicios?.nombre || 'Servicio Personalizado'}
                           </h4>
                           {priority && (
@@ -175,23 +175,26 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                     </div>
                   </div>
 
-                  {/* Status Section */}
-                  <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
-                    <div className="flex flex-col gap-0.5">
-                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Estado del servicio</p>
-                      <p className="text-base font-semibold text-slate-600">
-                        {job.estado === 'completado' && 'Trabajo finalizado exitosamente'}
-                        {job.estado === 'en_progreso' && 'El equipo está trabajando en el servicio'}
-                        {job.estado === 'proximo' && 'Servicio programado, pendiente de inicio'}
-                        {!job.estado && 'Sin estado definido'}
-                      </p>
+                  {/* Footer: Date, Time & Status */}
+                  <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500">
+                        <Calendar className="h-3.5 w-3.5 text-slate-400" />
+                        {new Date(job.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                      </div>
+                      {job.hora_servicio && (
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500">
+                          <Clock className="h-3.5 w-3.5 text-slate-400" />
+                          {formatTime12h(job.hora_servicio)}
+                        </div>
+                      )}
                     </div>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <button 
                           onClick={(e) => e.stopPropagation()}
                           className={cn(
-                            "flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-[11px] font-black uppercase tracking-wider cursor-pointer whitespace-nowrap",
+                            "flex items-center gap-1.5 px-3 py-2 rounded-lg text-[10px] sm:text-[11px] font-black uppercase tracking-wider cursor-pointer whitespace-nowrap shrink-0",
                             "border-2 border-dashed transition-all duration-200",
                             "hover:scale-[1.03] hover:shadow-md active:scale-[0.97]",
                             job.estado === 'completado' && "bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100 hover:border-emerald-400",
@@ -257,22 +260,6 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  </div>
-
-                  {/* Date & Time Footer */}
-                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-400">
-                        <Calendar className="h-3 w-3" />
-                        {new Date(job.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
-                      </div>
-                      {job.hora_servicio && (
-                        <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-400">
-                          <Clock className="h-3 w-3" />
-                          {formatTime12h(job.hora_servicio)}
-                        </div>
-                      )}
-                    </div>
                   </div>
                 </div>
               </div>

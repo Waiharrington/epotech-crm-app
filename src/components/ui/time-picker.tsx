@@ -82,7 +82,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
             )}
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-[260px] p-0 rounded-2xl border-slate-200/60 shadow-2xl z-[60] overflow-hidden" align="start" sideOffset={4}>
+        <PopoverContent className="w-[260px] p-0 rounded-2xl border-slate-200/60 shadow-2xl z-[200] overflow-hidden" align="start" sideOffset={4}>
           
           {/* Dark Navy Header */}
           <div className="sidebar-premium-bg px-4 py-3 relative">

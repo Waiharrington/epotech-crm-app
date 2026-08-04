@@ -472,11 +472,11 @@ function TrabajosContent() {
         </div>
       </header>
 
-      <main className="flex flex-col md:flex-1 md:min-h-0 gap-3 relative z-10">
+      <main className="flex-1 min-h-0 flex flex-col gap-3 relative z-10">
         {/* Kanban/List Content Card */}
         <div
           className={cn(
-            "rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] flex flex-col md:flex-1 md:min-h-0 animate-dashboard-item bg-[#F0F5FA] overflow-hidden"
+            "rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] flex flex-col flex-1 min-h-0 animate-dashboard-item bg-[#F0F5FA] overflow-hidden"
           )}
           style={{ animationDelay: '350ms' }}
         >

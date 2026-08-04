@@ -44,9 +44,15 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
     setOpen(true)
   }
 
+  const dropdownRef = React.useRef<HTMLDivElement>(null)
+
   React.useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
+      const target = e.target as Node
+      if (
+        ref.current && !ref.current.contains(target) &&
+        dropdownRef.current && !dropdownRef.current.contains(target)
+      ) {
         setOpen(false)
       }
     }
@@ -68,6 +74,7 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
 
   const dropdown = open ? createPortal(
     <div 
+      ref={dropdownRef}
       className="fixed z-[200]"
       style={{ top: pos.top, left: pos.left }}
     >

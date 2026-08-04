@@ -66,14 +66,14 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
         {/* Dark Navy Header */}
         <div className="sidebar-premium-bg px-6 py-4 relative">
           <div className="relative z-10 flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
+            <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
               {type === 'ingreso' ? <TrendingUp className="h-4 w-4 text-emerald-400" /> : <TrendingDown className="h-4 w-4 text-rose-400" />}
             </div>
             <div>
-              <DialogTitle className="text-white text-sm font-bold leading-none">
+              <DialogTitle className="text-white text-base font-bold leading-none">
                 Registrar {type === 'ingreso' ? 'Ingreso' : 'Egreso'}
               </DialogTitle>
-              <DialogDescription className="text-slate-300/70 text-xs mt-1">
+              <DialogDescription className="text-slate-300/70 text-base mt-1">
                 Añade un movimiento manual a la caja
               </DialogDescription>
             </div>
@@ -106,24 +106,24 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
                 value={formData.categoria} 
                 onValueChange={v => setFormData({ ...formData, categoria: v })}
             >
-              <SelectTrigger className="h-9 text-xs rounded-xl border-slate-200/60">
+              <SelectTrigger className="h-11 text-base rounded-xl border-slate-200/60">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {type === 'ingreso' ? (
                   <>
-                    <SelectItem value="otros_ingresos" className="text-xs">Otros Ingresos</SelectItem>
-                    <SelectItem value="adelanto" className="text-xs">Adelanto</SelectItem>
-                    <SelectItem value="reembolso" className="text-xs">Reembolso</SelectItem>
+                    <SelectItem value="otros_ingresos" className="text-base">Otros Ingresos</SelectItem>
+                    <SelectItem value="adelanto" className="text-base">Adelanto</SelectItem>
+                    <SelectItem value="reembolso" className="text-base">Reembolso</SelectItem>
                   </>
                 ) : (
                   <>
-                    <SelectItem value="materiales" className="text-xs">Compra de Materiales</SelectItem>
-                    <SelectItem value="nomina" className="text-xs">Pago Nómina / Ayudantes</SelectItem>
-                    <SelectItem value="combustible" className="text-xs">Combustible</SelectItem>
-                    <SelectItem value="herramientas" className="text-xs">Herramientas</SelectItem>
-                    <SelectItem value="publicidad" className="text-xs">Publicidad</SelectItem>
-                    <SelectItem value="otros_gastos" className="text-xs">Otros Gastos</SelectItem>
+                    <SelectItem value="materiales" className="text-base">Compra de Materiales</SelectItem>
+                    <SelectItem value="nomina" className="text-base">Pago Nómina / Ayudantes</SelectItem>
+                    <SelectItem value="combustible" className="text-base">Combustible</SelectItem>
+                    <SelectItem value="herramientas" className="text-base">Herramientas</SelectItem>
+                    <SelectItem value="publicidad" className="text-base">Publicidad</SelectItem>
+                    <SelectItem value="otros_gastos" className="text-base">Otros Gastos</SelectItem>
                   </>
                 )}
               </SelectContent>
@@ -137,7 +137,7 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
             <Textarea 
                 id="notas" 
                 placeholder="Detalles del movimiento..." 
-                className="text-xs rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40 resize-none min-h-[70px]"
+                className="text-base rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40 resize-none min-h-[70px]"
                 value={formData.notas}
                 onChange={e => setFormData({ ...formData, notas: e.target.value })}
             />

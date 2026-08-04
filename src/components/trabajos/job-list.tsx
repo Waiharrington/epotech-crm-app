@@ -61,7 +61,7 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
           <Briefcase className="h-6 w-6 text-slate-400" />
         </div>
         <p className="text-[12px] font-bold text-slate-500">No se encontraron trabajos</p>
-        <p className="text-xs text-slate-400 mt-1">Crea uno nuevo para comenzar</p>
+        <p className="text-base text-slate-400 mt-1">Crea uno nuevo para comenzar</p>
       </div>
     )
   }
@@ -105,14 +105,14 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
     <div className="space-y-6 md:space-y-8">
       {sortedWeeks.map(weekKey => (
         <div key={weekKey} className="space-y-4">
-          <h3 className="text-xs md:text-sm font-black text-slate-700 capitalize tracking-tight flex items-center gap-2 px-1">
+          <h3 className="text-base md:text-base font-black text-slate-700 capitalize tracking-tight flex items-center gap-2 px-1">
             <div className="w-1.5 h-1.5 rounded-full bg-[#00C9E0]" />
             {groupedJobs[weekKey].label}
           </h3>
           
           {Object.entries(groupedJobs[weekKey].services).map(([serviceName, jobs]) => (
             <div key={serviceName} className="space-y-2">
-              <h4 className="text-xs md:text-[13px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 px-2">
+              <h4 className="text-base md:text-[13px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 px-4">
                 <Briefcase className="h-3 w-3 text-[#0097A7]" />
                 {serviceName}
                 <span className="text-[11px] text-slate-400 font-normal">({jobs.length})</span>
@@ -135,7 +135,7 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-2.5 min-w-0 flex-1">
                       <div className={cn(
-                        "h-9 w-9 rounded-xl flex items-center justify-center shrink-0",
+                        "h-11 w-11 rounded-xl flex items-center justify-center shrink-0",
                         job.estado === 'completado' 
                           ? "bg-emerald-100" 
                           : "bg-gradient-to-br from-[#E6F9FB] to-[#E6F9FB]/60"
@@ -156,7 +156,7 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-slate-500 font-medium flex items-center gap-1">
+                        <p className="text-base text-slate-500 font-medium flex items-center gap-1">
                           <User className="h-3 w-3 shrink-0" />
                           <span className="truncate">{job.clientes.nombre} {job.clientes.apellido}</span>
                           {job.ayudantes && (
@@ -179,7 +179,7 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                   <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
                     <div className="flex flex-col gap-0.5">
                       <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Estado del servicio</p>
-                      <p className="text-xs font-semibold text-slate-600">
+                      <p className="text-base font-semibold text-slate-600">
                         {job.estado === 'completado' && 'Trabajo finalizado exitosamente'}
                         {job.estado === 'en_progreso' && 'El equipo está trabajando en el servicio'}
                         {job.estado === 'proximo' && 'Servicio programado, pendiente de inicio'}
@@ -191,7 +191,7 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                         <button 
                           onClick={(e) => e.stopPropagation()}
                           className={cn(
-                            "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-black uppercase tracking-wider cursor-pointer whitespace-nowrap",
+                            "flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-[11px] font-black uppercase tracking-wider cursor-pointer whitespace-nowrap",
                             "border-2 border-dashed transition-all duration-200",
                             "hover:scale-[1.03] hover:shadow-md active:scale-[0.97]",
                             job.estado === 'completado' && "bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100 hover:border-emerald-400",
@@ -204,17 +204,17 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                           {job.estado === 'en_progreso' && <RotateCw className="h-3 w-3" />}
                           {job.estado === 'proximo' && <Calendar className="h-3 w-3" />}
                           <span>{status.label}</span>
-                          <span className="text-xs leading-none ml-0.5">▾</span>
+                          <span className="text-base leading-none ml-0.5">▾</span>
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-48 rounded-xl border border-slate-200/80 shadow-lg bg-white p-1" onClick={(e) => e.stopPropagation()}>
                         <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onEditClick?.(job) }} className="cursor-pointer gap-2 font-semibold text-slate-700 hover:bg-slate-100/70 focus:bg-slate-100/70 focus:text-slate-800 py-2 rounded-lg">
                           <Pencil className="h-3.5 w-3.5 text-slate-500 shrink-0" />
-                          <span className="text-xs">Editar detalles</span>
+                          <span className="text-base">Editar detalles</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onRescheduleClick?.(job) }} className="cursor-pointer gap-2 font-semibold text-slate-700 hover:bg-slate-100/70 focus:bg-slate-100/70 focus:text-slate-800 py-2 rounded-lg">
                           <Calendar className="h-3.5 w-3.5 text-slate-500 shrink-0" />
-                          <span className="text-xs">Reagendar</span>
+                          <span className="text-base">Reagendar</span>
                         </DropdownMenuItem>
                         
                         <DropdownMenuSeparator className="bg-slate-100 my-1" />
@@ -222,26 +222,26 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                         {job.estado !== 'completado' && (
                           <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'completado') }} className="cursor-pointer gap-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 focus:bg-emerald-50 focus:text-emerald-700 py-2 rounded-lg font-semibold">
                             <CheckCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-                            <span className="text-xs">Marcar como Listo</span>
+                            <span className="text-base">Marcar como Listo</span>
                           </DropdownMenuItem>
                         )}
                         {job.estado !== 'en_progreso' && (
                           <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'en_progreso') }} className="cursor-pointer gap-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 focus:bg-blue-50 focus:text-blue-700 py-2 rounded-lg font-semibold">
                             <RotateCw className="h-3.5 w-3.5 text-blue-600 shrink-0" />
-                            <span className="text-xs">En Progreso</span>
+                            <span className="text-base">En Progreso</span>
                           </DropdownMenuItem>
                         )}
                         {job.estado !== 'proximo' && (
                           <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'proximo') }} className="cursor-pointer gap-2 text-amber-600 hover:text-amber-700 hover:bg-amber-50 focus:bg-amber-50 focus:text-amber-700 py-2 rounded-lg font-semibold">
                             <Calendar className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-                            <span className="text-xs">Marcar como Próximo</span>
+                            <span className="text-base">Marcar como Próximo</span>
                           </DropdownMenuItem>
                         )}
                         
                         <DropdownMenuSeparator className="bg-slate-100 my-1" />
                         <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onArchive?.(job) }} className="cursor-pointer gap-2 text-red-600 hover:text-red-700 hover:bg-red-50 focus:bg-red-50 focus:text-red-700 py-2 rounded-lg font-semibold">
                           <Archive className="h-3.5 w-3.5 text-red-500 shrink-0" />
-                          <span className="text-xs">Archivar / Cancelar</span>
+                          <span className="text-base">Archivar / Cancelar</span>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

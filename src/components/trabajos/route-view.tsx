@@ -182,12 +182,12 @@ function JobCard({
           {job.estado !== 'completado' ? (
               <button
                 onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'completado') }}
-                className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[10px] font-black text-white bg-emerald-600 hover:bg-emerald-700 py-1.5 rounded-lg active:scale-95 transition-all cursor-pointer whitespace-nowrap px-2"
+                className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[10px] font-black text-white bg-emerald-600 hover:bg-emerald-700 py-2.5 rounded-lg active:scale-95 transition-all cursor-pointer whitespace-nowrap px-4"
               >
                 <Check className="h-2.5 w-2.5 shrink-0" /> Listo
               </button>
           ) : (
-            <div className="flex-1 min-w-0 flex items-center justify-center text-[10px] font-black text-emerald-700 bg-emerald-50 rounded-lg py-1.5 border border-emerald-100 whitespace-nowrap">
+            <div className="flex-1 min-w-0 flex items-center justify-center text-[10px] font-black text-emerald-700 bg-emerald-50 rounded-lg py-2.5 border border-emerald-100 whitespace-nowrap">
               ✓ Servicio Finalizado
             </div>
           )}
@@ -195,13 +195,13 @@ function JobCard({
           <div className="flex items-center gap-0.5 shrink-0">
             <button
               onClick={(e) => { e.stopPropagation(); onRescheduleClick?.(job) }}
-              className="flex items-center justify-center gap-0.5 text-[7px] font-bold text-slate-500 bg-slate-100 hover:bg-slate-200 py-1.5 px-2 rounded-lg active:scale-95 transition-all cursor-pointer border border-slate-200/80 whitespace-nowrap"
+              className="flex items-center justify-center gap-0.5 text-[7px] font-bold text-slate-500 bg-slate-100 hover:bg-slate-200 py-2.5 px-4 rounded-lg active:scale-95 transition-all cursor-pointer border border-slate-200/80 whitespace-nowrap"
             >
               <Calendar className="h-2 w-2 shrink-0" /> Reagendar
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); onEditClick?.(job) }}
-              className="h-7 w-7 flex items-center justify-center text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg active:scale-95 transition-all cursor-pointer border border-slate-200/80 shrink-0"
+              className="h-11 w-11 flex items-center justify-center text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg active:scale-95 transition-all cursor-pointer border border-slate-200/80 shrink-0"
               title="Editar"
             >
               <Edit3 className="h-3 w-3 shrink-0" />
@@ -214,21 +214,21 @@ function JobCard({
           <a
             href={`http://maps.apple.com/?daddr=${encodeURIComponent(job.clientes.direccion || '')}`}
             target="_blank" rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-1 text-[7px] font-bold text-slate-500 hover:text-[#0097A7] bg-slate-50 hover:bg-[#0097A7]/5 py-1 rounded-md transition-all border border-slate-200/50"
+            className="flex-1 flex items-center justify-center gap-1 text-[7px] font-bold text-slate-500 hover:text-[#0097A7] bg-slate-50 hover:bg-[#0097A7]/5 py-2 rounded-md transition-all border border-slate-200/50"
           >
             <Navigation className="h-2 w-2" />Apple
           </a>
           <a
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(job.clientes.direccion || '')}`}
             target="_blank" rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-1 text-[7px] font-bold text-slate-500 hover:text-[#0097A7] bg-slate-50 hover:bg-[#0097A7]/5 py-1 rounded-md transition-all border border-slate-200/50"
+            className="flex-1 flex items-center justify-center gap-1 text-[7px] font-bold text-slate-500 hover:text-[#0097A7] bg-slate-50 hover:bg-[#0097A7]/5 py-2 rounded-md transition-all border border-slate-200/50"
           >
             <Navigation className="h-2 w-2" />Google
           </a>
           <a
             href={`https://waze.com/ul?q=${encodeURIComponent(job.clientes.direccion || '')}`}
             target="_blank" rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-1 text-[7px] font-bold text-slate-500 hover:text-[#0097A7] bg-slate-50 hover:bg-[#0097A7]/5 py-1 rounded-md transition-all border border-slate-200/50"
+            className="flex-1 flex items-center justify-center gap-1 text-[7px] font-bold text-slate-500 hover:text-[#0097A7] bg-slate-50 hover:bg-[#0097A7]/5 py-2 rounded-md transition-all border border-slate-200/50"
           >
             <Navigation className="h-2 w-2" />Waze
           </a>
@@ -378,10 +378,10 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
       <div className="flex h-full items-center justify-center p-8 bg-[#F0F5FA]">
         <div className="text-center p-10 bg-white rounded-3xl border border-dashed border-slate-300 max-w-sm w-full shadow-sm">
           <div className="h-14 w-14 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <MapPin className="h-7 w-7 text-slate-400" />
+            <MapPin className="h-11 w-11 text-slate-400" />
           </div>
           <h3 className="text-base font-bold text-slate-700 mb-1">Sin trabajos agendados</h3>
-          <p className="text-sm text-slate-500">No hay trabajos con dirección para esta fecha.</p>
+          <p className="text-base text-slate-500">No hay trabajos con dirección para esta fecha.</p>
         </div>
       </div>
     )
@@ -434,7 +434,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
               <Check className="h-5 w-5 text-emerald-600" />
             )}
           </div>
-          <div className="bg-white border border-slate-200/80 text-slate-700 px-2.5 py-1 rounded-lg text-[11px] font-black uppercase tracking-wider shadow-sm">
+          <div className="bg-white border border-slate-200/80 text-slate-700 px-4.5 py-2 rounded-lg text-[11px] font-black uppercase tracking-wider shadow-sm">
             Inicio de Ruta
           </div>
         </div>
@@ -448,7 +448,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
             transition: truckReady ? 'all 700ms ease-in-out' : 'none'
           }}
         >
-          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center">
+          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center">
             <Truck className="h-4 w-4 text-white truck-animate" />
           </div>
         </div>
@@ -467,7 +467,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                   className="flex flex-col items-center shrink-0 w-10 mt-2"
                 >
                   <div className={cn(
-                    "h-8 w-8 rounded-full border-[3px] shadow-md flex items-center justify-center relative transition-all duration-500",
+                    "h-10 w-10 rounded-full border-[3px] shadow-md flex items-center justify-center relative transition-all duration-500",
                     isTruckHere && "border-transparent bg-transparent shadow-none",
                     !isTruckHere && isCompleted && "bg-white border-emerald-400",
                     !isTruckHere && !isCompleted && isNext && "bg-white border-amber-400 shadow-amber-200/50",
@@ -510,7 +510,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
           <div className="h-10 w-10 shrink-0 rounded-full bg-white border-[3px] border-slate-300 shadow-md flex items-center justify-center">
             <Flag className="h-4 w-4 text-[#0097A7]" />
           </div>
-          <div className="bg-white border border-slate-200/80 text-slate-700 px-2.5 py-1 rounded-lg text-[11px] font-black uppercase tracking-wider shadow-sm">
+          <div className="bg-white border border-slate-200/80 text-slate-700 px-4.5 py-2 rounded-lg text-[11px] font-black uppercase tracking-wider shadow-sm">
             Fin de Ruta
           </div>
         </div>
@@ -541,7 +541,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
             )}>
               {truckPosition === -1 ? null : <Check className="h-4 w-4 text-emerald-600" />}
             </div>
-            <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-white border border-slate-200 text-slate-700 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
+            <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-white border border-slate-200 text-slate-700 px-4 py-0.5 rounded-lg whitespace-nowrap shadow-md">
               <span className="text-[10px] font-black uppercase tracking-widest">Inicio</span>
             </div>
           </div>
@@ -555,7 +555,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
               transition: tabletTruckReady ? 'all 700ms ease-in-out' : 'none'
             }}
           >
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center">
+            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center">
               <Truck className="h-4 w-4 text-white truck-animate" />
             </div>
           </div>
@@ -591,7 +591,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                 <div 
                   ref={el => { tabletNodeRefs.current[index] = el }}
                   className={cn(
-                    "absolute left-1/2 -translate-x-1/2 h-9 w-9 rounded-full border-[3px] shadow-md flex items-center justify-center z-20 transition-all duration-500",
+                    "absolute left-1/2 -translate-x-1/2 h-11 w-11 rounded-full border-[3px] shadow-md flex items-center justify-center z-20 transition-all duration-500",
                     isTruckHere && "border-transparent bg-transparent shadow-none",
                     !isTruckHere && isCompleted && "bg-white border-emerald-400",
                     !isTruckHere && !isCompleted && isNext && "bg-white border-amber-400 shadow-amber-200/50",
@@ -622,7 +622,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
             <div className="h-10 w-10 rounded-full bg-white border-[3px] border-slate-300 shadow-md flex items-center justify-center">
               <Flag className="h-4 w-4 text-[#0097A7]" />
             </div>
-            <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-white border border-slate-200 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
+            <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-white border border-slate-200 px-4 py-0.5 rounded-lg whitespace-nowrap shadow-md">
               <span className="text-[10px] font-black uppercase tracking-widest">Fin</span>
             </div>
           </div>
@@ -642,7 +642,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
               hasScrolled ? 'opacity-0 translate-x-2' : 'opacity-100 translate-x-0'
             }`}
           >
-            <div className="bg-slate-800/80 backdrop-blur rounded-full px-2.5 py-1.5 shadow-lg flex items-center gap-1.5 border border-slate-600/30">
+            <div className="bg-slate-800/80 backdrop-blur rounded-full px-4.5 py-2.5 shadow-lg flex items-center gap-1.5 border border-slate-600/30">
               <ChevronRight className="h-3.5 w-3.5" style={{ color: '#00C9E0' }} />
               <span className="text-[11px] font-bold text-slate-300 uppercase tracking-widest">Scroll</span>
             </div>
@@ -713,7 +713,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                   <Check className="h-4 w-4 text-emerald-600" />
                 )}
               </div>
-              <div className="bg-white border border-slate-200 text-slate-700 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
+              <div className="bg-white border border-slate-200 text-slate-700 px-4 py-0.5 rounded-lg whitespace-nowrap shadow-md">
                 <span className="text-[10px] font-black uppercase tracking-widest">Inicio</span>
               </div>
             </div>
@@ -727,7 +727,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                 transition: desktopTruckReady ? 'all 700ms ease-in-out' : 'none'
               }}
             >
-              <div className="h-9 w-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center">
+              <div className="h-11 w-11 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center">
                 <Truck className="h-4 w-4 text-white truck-animate" />
               </div>
             </div>
@@ -772,7 +772,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                     style={{ height: ROAD_H, transform: `translateY(${curveOffset}px)` }}
                   >
                     <div className={cn(
-                      "h-9 w-9 rounded-full border-[3px] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center relative cursor-pointer hover:scale-110 transition-all duration-500",
+                      "h-11 w-11 rounded-full border-[3px] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center relative cursor-pointer hover:scale-110 transition-all duration-500",
                       isTruckHere && "border-transparent bg-transparent shadow-none",
                       !isTruckHere && isCompleted && "bg-white border-emerald-400",
                       !isTruckHere && !isCompleted && isNext && "bg-white border-amber-400 shadow-amber-200/50",
@@ -825,7 +825,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
               <div className="h-10 w-10 rounded-full bg-white border-[3px] border-slate-300 shadow-lg flex items-center justify-center text-[#0097A7]">
                 <Flag className="h-4 w-4" />
               </div>
-              <div className="bg-white border border-slate-200 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
+              <div className="bg-white border border-slate-200 px-4 py-0.5 rounded-lg whitespace-nowrap shadow-md">
                 <span className="text-[10px] font-black uppercase tracking-widest">Fin</span>
               </div>
             </div>

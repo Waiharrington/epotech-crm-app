@@ -140,7 +140,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
               <button
                 type="button"
                 onClick={handleClose}
-                className="h-8 w-8 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95 shrink-0 ml-3"
+                className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95 shrink-0 ml-3"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -214,7 +214,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
                       </div>
                       <div className="text-left min-w-0">
                         <p className="text-[12px] font-bold text-slate-800 truncate">{client.nombre} {client.apellido}</p>
-                        <p className="text-xs text-slate-400 font-medium">{client.telefono}</p>
+                        <p className="text-base text-slate-400 font-medium">{client.telefono}</p>
                       </div>
                     </div>
                     <ChevronLeft className="h-4 w-4 text-slate-300 group-hover:text-[#0097A7] group-hover:-translate-x-0.5 transition-all rotate-180 shrink-0" />
@@ -226,7 +226,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
                       <Search className="h-5 w-5 text-slate-400" />
                     </div>
                     <p className="text-[12px] font-bold text-slate-600">Cliente no encontrado</p>
-                    <p className="text-xs text-slate-400 mt-1">Regístralo primero en la sección de Clientes</p>
+                    <p className="text-base text-slate-400 mt-1">Regístralo primero en la sección de Clientes</p>
                   </div>
                 )}
               </div>
@@ -285,7 +285,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
                       </div>
                       <div className="text-left min-w-0 flex-1">
                         <p className="font-bold text-slate-800 text-[12px]">{service.nombre}</p>
-                        <p className="text-xs text-slate-400 line-clamp-1">{service.descripcion_interna}</p>
+                        <p className="text-base text-slate-400 line-clamp-1">{service.descripcion_interna}</p>
                       </div>
                     </div>
                     <div className="font-black text-[14px] text-[#0097A7] shrink-0 ml-3">${service.precio_venta}</div>
@@ -297,14 +297,14 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
                       <Search className="h-5 w-5 text-slate-400" />
                     </div>
                     <p className="text-[12px] font-bold text-slate-600">Servicio no encontrado</p>
-                    <p className="text-xs text-slate-400 mt-1">Prueba con otro término de búsqueda</p>
+                    <p className="text-base text-slate-400 mt-1">Prueba con otro término de búsqueda</p>
                   </div>
                 )}
               </div>
               <button 
                 type="button" 
                 onClick={() => setStep(1)} 
-                className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-2.5 text-base font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
               >
                 <ChevronLeft className="h-3.5 w-3.5" /> Cambiar cliente
               </button>
@@ -318,7 +318,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
               {selectedClient && (
                 <div className="flex items-center justify-between p-3 bg-white rounded-xl border border-[#0097A7]/20 shadow-sm">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#00C9E0] to-[#0097A7] flex items-center justify-center shrink-0">
+                    <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-[#00C9E0] to-[#0097A7] flex items-center justify-center shrink-0">
                       <User className="h-4 w-4 text-white" />
                     </div>
                     <div className="min-w-0">
@@ -329,7 +329,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#0097A7] bg-[#E6F9FB] rounded-md hover:bg-[#00C9E0]/20 transition-all shrink-0 ml-2"
+                    className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-[#0097A7] bg-[#E6F9FB] rounded-md hover:bg-[#00C9E0]/20 transition-all shrink-0 ml-2"
                   >
                     Cambiar
                   </button>
@@ -340,7 +340,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
               {selectedService && (
                 <div className="flex items-center justify-between p-3 bg-white rounded-xl border border-[#0097A7]/20 shadow-sm">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#00C9E0] to-[#0097A7] flex items-center justify-center shrink-0">
+                    <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-[#00C9E0] to-[#0097A7] flex items-center justify-center shrink-0">
                       <Briefcase className="h-4 w-4 text-white" />
                     </div>
                     <div className="min-w-0">
@@ -351,7 +351,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
                    <button
                     type="button"
                     onClick={() => setStep(2)}
-                    className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#0097A7] bg-[#E6F9FB] rounded-md hover:bg-[#00C9E0]/20 transition-all shrink-0 ml-2"
+                    className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-[#0097A7] bg-[#E6F9FB] rounded-md hover:bg-[#00C9E0]/20 transition-all shrink-0 ml-2"
                   >
                     Cambiar
                   </button>
@@ -451,7 +451,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
                 type="button"
                 onClick={handleSave}
                 disabled={loading || !formData.fecha_servicio}
-                className="flex items-center justify-center gap-2 h-10 px-5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                className="flex items-center justify-center gap-2 h-10 px-5 text-base font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
               >
                 {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
                 Agendar Trabajo
@@ -462,7 +462,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
               <button
                 type="button"
                 onClick={handleClose}
-                className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
+                className="flex items-center gap-2 text-base font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
               >
                 <X className="h-3.5 w-3.5" /> Cancelar
               </button>

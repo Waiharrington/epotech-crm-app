@@ -166,7 +166,7 @@ export default function CatalogoPage() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Catálogo de Servicios
                 </h1>
-                <p className="text-slate-300/80 text-xs hidden sm:block xl:text-[11px] 2xl:text-xs mt-1 font-medium">
+                <p className="text-slate-300/80 text-base hidden sm:block xl:text-[11px] 2xl:text-base mt-1 font-medium">
                   Define tus servicios, precios y costos estimados.
                 </p>
               </div>
@@ -177,7 +177,7 @@ export default function CatalogoPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowCategoriesModal(true)}
-                className="h-8 px-3 text-xs font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-white/20 hover:border-white/25 backdrop-blur-md transition-all active:scale-[0.98]"
+                className="h-10 px-4 text-base font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-white/20 hover:border-white/25 backdrop-blur-md transition-all active:scale-[0.98]"
               >
                 <FolderOpen className="mr-1.5 h-3.5 w-3.5" />
                 Categorías
@@ -198,7 +198,7 @@ export default function CatalogoPage() {
                   setShowModal(true)
                 }}
                 size="sm"
-                className="h-8 px-3.5 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
+                className="h-10 px-4.5 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
               >
                 <Plus className="mr-1.5 h-3.5 w-3.5" />
                 Nuevo Servicio
@@ -213,7 +213,7 @@ export default function CatalogoPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#00C9E0]/70 pointer-events-none z-10" />
                 <Input
                   placeholder="Buscar por nombre o descripción del servicio..."
-                  className="pl-9 h-8 text-[13px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
+                  className="pl-9 h-10 text-[13px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -243,7 +243,7 @@ export default function CatalogoPage() {
                     : "bg-white border-slate-200/60"
                 )}
               >
-                <div className="p-2.5 px-3.5 flex items-center justify-between">
+                <div className="p-2.5 px-4.5 flex items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <p className={cn(
                       "text-[11px] font-bold uppercase tracking-wider truncate",
@@ -252,7 +252,7 @@ export default function CatalogoPage() {
                     <p className="text-xl font-black text-slate-900 leading-tight">{stat.value}</p>
                   </div>
                   <div className={cn(
-                    "h-8 w-8 rounded-xl flex items-center justify-center border shrink-0 transition-colors",
+                    "h-10 w-10 rounded-xl flex items-center justify-center border shrink-0 transition-colors",
                     categoryFilter === stat.filterKey
                       ? stat.iconBox
                       : "bg-slate-50 border-slate-100 text-slate-400"
@@ -278,7 +278,7 @@ export default function CatalogoPage() {
               </SelectTrigger>
               <SelectContent className="rounded-xl border-slate-200 shadow-xl">
                 {['todos', ...categoryOptions].map((cat) => (
-                  <SelectItem key={cat} value={cat} className="text-xs font-bold uppercase tracking-wider text-slate-700 focus:bg-[#0097A7]/10 focus:text-[#0097A7]">
+                  <SelectItem key={cat} value={cat} className="text-base font-bold uppercase tracking-wider text-slate-700 focus:bg-[#0097A7]/10 focus:text-[#0097A7]">
                     {cat === 'epoxico' ? 'Epóxico' : cat === 'todos' ? 'Todas las Categorías' : cat}
                   </SelectItem>
                 ))}
@@ -293,7 +293,7 @@ export default function CatalogoPage() {
                 key={cat}
                 onClick={() => setCategoryFilter(cat)}
                 className={cn(
-                  "px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97]",
+                  "px-4 py-2.5 rounded-xl text-base font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97]",
                   categoryFilter === cat
                     ? "bg-[#0097A7] text-white border-[#0097A7] shadow-md shadow-cyan-500/20"
                     : "bg-white text-slate-500 border-slate-200/60 hover:border-[#0097A7]/40 hover:text-[#0097A7]"
@@ -310,7 +310,7 @@ export default function CatalogoPage() {
           {loading && !servicios.length ? (
             <div className="flex flex-col items-center justify-center h-40 gap-3">
               <Loader2 className="h-6 w-6 animate-spin text-[#00C9E0]" />
-              <p className="text-xs text-slate-400 font-medium">Cargando servicios...</p>
+              <p className="text-base text-slate-400 font-medium">Cargando servicios...</p>
             </div>
           ) : filteredServicios.length > 0 ? (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -325,23 +325,23 @@ export default function CatalogoPage() {
                     {/* Top row: Category badge + Status */}
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
-                        <div className={cn("h-9 w-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-300", catColor.bg, "border", catColor.border)}>
+                        <div className={cn("h-11 w-11 rounded-xl flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-300", catColor.bg, "border", catColor.border)}>
                           <Briefcase className={cn("h-4 w-4", catColor.text)} />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-slate-800 leading-tight group-hover:text-[#0097A7] transition-colors">
+                          <p className="text-base font-bold text-slate-800 leading-tight group-hover:text-[#0097A7] transition-colors">
                             {servicio.nombre}
                           </p>
                           <div className="flex items-center gap-1.5 mt-0.5">
                             <div className={cn("h-1.5 w-1.5 rounded-full", catColor.dot)} />
-                            <p className={cn("text-xs font-semibold capitalize", catColor.text)}>
+                            <p className={cn("text-base font-semibold capitalize", catColor.text)}>
                               {servicio.categoria === 'epoxico' ? 'Epóxico' : servicio.categoria}
                             </p>
                           </div>
                         </div>
                       </div>
                       <Badge variant={servicio.activo ? 'default' : 'secondary'} className={cn(
-                        "text-[11px] font-bold px-2 py-0.5 rounded-full",
+                        "text-[11px] font-bold px-4 py-0.5 rounded-full",
                         servicio.activo 
                           ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" 
                           : "bg-slate-100 text-slate-500 border-slate-200"
@@ -353,12 +353,12 @@ export default function CatalogoPage() {
                     {/* Pricing */}
                     <div className="space-y-1.5 mb-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Precio Venta</span>
+                        <span className="text-base font-semibold text-slate-400 uppercase tracking-wider">Precio Venta</span>
                         <span className="text-lg font-black text-[#0097A7]">${servicio.precio_venta.toLocaleString()}</span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Costo Total Est.</span>
-                        <span className={cn("text-sm font-bold", (servicio.costo_materiales_est || 0) + (servicio.costo_variable_est || 0) > 0 ? "text-rose-500" : "text-slate-400")}>
+                        <span className="text-base font-semibold text-slate-400 uppercase tracking-wider">Costo Total Est.</span>
+                        <span className={cn("text-base font-bold", (servicio.costo_materiales_est || 0) + (servicio.costo_variable_est || 0) > 0 ? "text-rose-500" : "text-slate-400")}>
                           ${(servicio.costo_materiales_est || 0) + (servicio.costo_variable_est || 0)}
                         </span>
                       </div>
@@ -366,7 +366,7 @@ export default function CatalogoPage() {
 
                     {/* Description */}
                     {servicio.descripcion_interna && (
-                      <p className="text-xs text-slate-400 italic line-clamp-2 mb-3 border-t border-slate-100 pt-2">
+                      <p className="text-base text-slate-400 italic line-clamp-2 mb-3 border-t border-slate-100 pt-2">
                         {servicio.descripcion_interna}
                       </p>
                     )}
@@ -379,14 +379,14 @@ export default function CatalogoPage() {
                           setFormData(servicio)
                           setShowModal(true)
                         }}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 bg-slate-50 border border-slate-200/60 hover:bg-[#E6F9FB] hover:border-[#0097A7]/20 hover:text-[#0097A7] transition-all cursor-pointer active:scale-[0.97]"
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-base font-bold text-slate-500 bg-slate-50 border border-slate-200/60 hover:bg-[#E6F9FB] hover:border-[#0097A7]/20 hover:text-[#0097A7] transition-all cursor-pointer active:scale-[0.97]"
                       >
                         <Edit className="h-3 w-3" />
                         Editar
                       </button>
                       <button
                         onClick={() => handleDelete(servicio.id)}
-                        className="flex items-center justify-center h-8 w-8 rounded-xl text-slate-400 bg-slate-50 border border-slate-200/60 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-500 transition-all cursor-pointer active:scale-[0.97]"
+                        className="flex items-center justify-center h-10 w-10 rounded-xl text-slate-400 bg-slate-50 border border-slate-200/60 hover:bg-rose-50 hover:border-rose-200 hover:text-rose-500 transition-all cursor-pointer active:scale-[0.97]"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
@@ -398,13 +398,13 @@ export default function CatalogoPage() {
           ) : (
             <div className="flex flex-col items-center justify-center py-20 bg-white/50 border border-slate-200/50 rounded-3xl border-dashed">
               <Briefcase className="h-10 w-10 text-slate-300 mb-4" />
-              <p className="text-slate-400 font-medium text-sm">
+              <p className="text-slate-400 font-medium text-base">
                 {search || categoryFilter !== 'todos' ? 'No se encontraron servicios.' : 'No hay servicios registrados.'}
               </p>
               {!search && categoryFilter === 'todos' && (
                 <Button 
                   variant="outline" 
-                  className="mt-4 rounded-xl border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50"
+                  className="mt-4 rounded-xl border-slate-200 text-base font-bold text-slate-600 hover:bg-slate-50"
                   onClick={() => {
                     setEditingService(null)
                     setFormData({ 
@@ -435,14 +435,14 @@ export default function CatalogoPage() {
           <div className="sidebar-premium-bg px-6 py-4 relative">
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
+                <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
                   {editingService ? <Edit className="h-4 w-4 text-[#00C9E0]" /> : <Plus className="h-4 w-4 text-[#00C9E0]" />}
                 </div>
                 <div>
-                  <DialogTitle className="text-white text-sm font-bold leading-none">
+                  <DialogTitle className="text-white text-base font-bold leading-none">
                     {editingService ? 'Editar Servicio' : 'Nuevo Servicio'}
                   </DialogTitle>
-                  <DialogDescription className="text-slate-300/70 text-xs mt-1">
+                  <DialogDescription className="text-slate-300/70 text-base mt-1">
                     Define los parámetros comerciales y técnicos.
                   </DialogDescription>
                 </div>
@@ -470,19 +470,19 @@ export default function CatalogoPage() {
                     value={formData.nombre} 
                     onChange={e => setFormData({ ...formData, nombre: e.target.value })} 
                     required 
-                    className="h-9 text-xs rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40"
+                    className="h-11 text-base rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40"
                 />
              </div>
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                    <Label className="text-[13px] font-bold uppercase tracking-wider text-slate-500">Categoría</Label>
                     <Select value={formData.categoria as string} onValueChange={v => setFormData({ ...formData, categoria: v as any })}>
-                        <SelectTrigger className="capitalize h-9 text-xs rounded-xl border-slate-200/60">
+                        <SelectTrigger className="capitalize h-11 text-base rounded-xl border-slate-200/60">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           {categoryOptions.map((catName) => (
-                            <SelectItem key={catName} value={catName} className="capitalize text-xs">
+                            <SelectItem key={catName} value={catName} className="capitalize text-base">
                               {catName === 'epoxico' ? 'Epóxico' : catName}
                             </SelectItem>
                           ))}
@@ -497,7 +497,7 @@ export default function CatalogoPage() {
                         value={formData.precio_venta} 
                         onChange={e => setFormData({ ...formData, precio_venta: parseFloat(e.target.value) || 0 })} 
                         required 
-                        className="h-9 text-xs rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40"
+                        className="h-11 text-base rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40"
                     />
                 </div>
              </div>
@@ -510,7 +510,7 @@ export default function CatalogoPage() {
                     type="button" 
                     variant="outline" 
                     size="sm" 
-                    className="h-7 text-xs font-bold rounded-lg border-[#0097A7]/30 text-[#0097A7] hover:bg-[#E6F9FB]"
+                    className="h-11 text-base font-bold rounded-lg border-[#0097A7]/30 text-[#0097A7] hover:bg-[#E6F9FB]"
                     onClick={() => {
                       const current = (formData.materiales_receta as any[]) || []
                       setFormData({ ...formData, materiales_receta: [...current, { stock_id: '', cantidad: 1 }] })
@@ -532,7 +532,7 @@ export default function CatalogoPage() {
                                 setFormData({ ...formData, materiales_receta: current })
                               }}
                             >
-                               <SelectTrigger className="h-8 text-[13px] rounded-lg bg-white border-slate-200/60">
+                               <SelectTrigger className="h-10 text-[13px] rounded-lg bg-white border-slate-200/60">
                                   <SelectValue placeholder="Producto..." />
                                </SelectTrigger>
                                <SelectContent>
@@ -545,7 +545,7 @@ export default function CatalogoPage() {
                          <div className="w-16">
                             <Input 
                               type="number" 
-                              className="h-8 text-[13px] rounded-lg border-slate-200/60" 
+                              className="h-10 text-[13px] rounded-lg border-slate-200/60" 
                               value={item.cantidad} 
                               onChange={(e) => {
                                 const current = [...((formData.materiales_receta as any[]) || [])]
@@ -558,7 +558,7 @@ export default function CatalogoPage() {
                           type="button" 
                           variant="ghost" 
                           size="icon" 
-                          className="h-8 w-8 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg"
+                          className="h-10 w-10 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg"
                           onClick={() => {
                             const current = [...((formData.materiales_receta as any[]) || [])]
                             current.splice(idx, 1)
@@ -570,7 +570,7 @@ export default function CatalogoPage() {
                       </div>
                    ))}
                    {(!formData.materiales_receta || (formData.materiales_receta as any[]).length === 0) && (
-                     <p className="text-xs text-slate-400 italic text-center py-2">Sin materiales asignados.</p>
+                     <p className="text-base text-slate-400 italic text-center py-2">Sin materiales asignados.</p>
                    )}
                 </div>
              </div>
@@ -584,12 +584,12 @@ export default function CatalogoPage() {
                         value={formData.costo_variable_est || 0} 
                         onChange={e => setFormData({ ...formData, costo_variable_est: parseFloat(e.target.value) || 0 })} 
                         placeholder="Gasolina, peajes..."
-                        className="h-9 text-xs rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40"
+                        className="h-11 text-base rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40"
                     />
                 </div>
                 <div className="space-y-2">
                     <Label className="text-[13px] font-bold uppercase tracking-wider text-[#0097A7]">Costo Total Calculado</Label>
-                    <div className="h-9 px-3 flex items-center bg-[#E6F9FB] border border-[#0097A7]/20 rounded-xl font-bold text-[#0097A7] text-sm">
+                    <div className="h-11 px-4 flex items-center bg-[#E6F9FB] border border-[#0097A7]/20 rounded-xl font-bold text-[#0097A7] text-base">
                         ${(formData.costo_materiales_est || 0) + (formData.costo_variable_est || 0)}
                     </div>
                 </div>
@@ -600,12 +600,12 @@ export default function CatalogoPage() {
                     id="desc" 
                     value={formData.descripcion_interna || ''} 
                     onChange={e => setFormData({ ...formData, descripcion_interna: e.target.value })} 
-                    className="text-xs rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40 min-h-[60px]"
+                    className="text-base rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40 min-h-[60px]"
                 />
              </div>
              <Button 
                 type="submit" 
-                className="w-full h-10 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]" 
+                className="w-full h-10 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]" 
                 disabled={loading}
              >
                 {loading ? <Loader2 className="animate-spin" /> : 'Guardar Servicio'}

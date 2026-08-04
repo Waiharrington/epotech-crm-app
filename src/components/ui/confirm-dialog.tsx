@@ -93,7 +93,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
             >
               <div
                 className={cn(
-                  'h-9 w-9 rounded-xl flex items-center justify-center border shrink-0',
+                  'h-11 w-11 rounded-xl flex items-center justify-center border shrink-0',
                   pending.variant === 'destructive'
                     ? 'bg-red-500/15 border-red-400/25 text-red-300'
                     : 'bg-white/10 border-white/15 text-[#00C9E0]'
@@ -118,7 +118,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
               <button
                 type="button"
                 onClick={() => close(false)}
-                className="h-9 px-3.5 text-[10.5px] font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-50 transition-all active:scale-[0.98]"
+                className="h-11 px-4.5 text-[10.5px] font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-50 transition-all active:scale-[0.98]"
               >
                 {pending.cancelLabel}
               </button>
@@ -126,7 +126,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
                 type="button"
                 onClick={() => close(true)}
                 className={cn(
-                  'h-9 px-4 text-[10.5px] font-black rounded-xl text-white border-none shadow-md transition-all duration-300 active:scale-[0.98]',
+                  'h-11 px-4 text-[10.5px] font-black rounded-xl text-white border-none shadow-md transition-all duration-300 active:scale-[0.98]',
                   pending.variant === 'destructive'
                     ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 shadow-red-500/25 hover:shadow-red-500/35'
                     : 'bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] shadow-cyan-500/20 hover:shadow-cyan-500/30'

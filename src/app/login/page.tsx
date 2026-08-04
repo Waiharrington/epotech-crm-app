@@ -225,7 +225,7 @@ export default function LoginPage() {
             <span className="text-3xl font-black tracking-tight text-white uppercase">
               Gestión Inteligente
             </span>
-            <p className="text-xs font-black text-[#00C9E0] tracking-[0.25em] uppercase pl-0.5">
+            <p className="text-base font-black text-[#00C9E0] tracking-[0.25em] uppercase pl-0.5">
               Portal CRM
             </p>
           </div>
@@ -234,28 +234,28 @@ export default function LoginPage() {
         {/* Bottom Feature Badges Grid */}
         <div className="relative z-20 grid grid-cols-4 gap-4 border-t border-white/10 pt-10">
           <div className="flex flex-col items-center text-center space-y-2.5">
-            <ShieldCheck className="h-9 w-9 text-[#00C9E0]" />
+            <ShieldCheck className="h-11 w-11 text-[#00C9E0]" />
             <div className="flex flex-col leading-tight">
               <span className="text-[13px] font-bold text-white">Control Total</span>
               <span className="text-[13px] font-medium text-[#00C9E0]">Administrativo</span>
             </div>
           </div>
           <div className="flex flex-col items-center text-center space-y-2.5">
-            <Users className="h-9 w-9 text-[#00C9E0]" />
+            <Users className="h-11 w-11 text-[#00C9E0]" />
             <div className="flex flex-col leading-tight">
               <span className="text-[13px] font-bold text-white">Gestión de Clientes</span>
               <span className="text-[13px] font-medium text-[#00C9E0]">Y Agendamientos</span>
             </div>
           </div>
           <div className="flex flex-col items-center text-center space-y-2.5">
-            <Wallet className="h-9 w-9 text-[#00C9E0]" />
+            <Wallet className="h-11 w-11 text-[#00C9E0]" />
             <div className="flex flex-col leading-tight">
               <span className="text-[13px] font-bold text-white">Caja y Presupuestos</span>
               <span className="text-[13px] font-medium text-[#00C9E0]">Finanzas y Control</span>
             </div>
           </div>
           <div className="flex flex-col items-center text-center space-y-2.5">
-            <BarChart3 className="h-9 w-9 text-[#00C9E0]" />
+            <BarChart3 className="h-11 w-11 text-[#00C9E0]" />
             <div className="flex flex-col leading-tight">
               <span className="text-[13px] font-bold text-white">Métricas de Negocio</span>
               <span className="text-[13px] font-medium text-[#00C9E0]">Reportes Analíticos</span>
@@ -333,7 +333,7 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <CardHeader className="space-y-3 pb-4 pt-1 px-2 text-center flex-shrink-0">
+              <CardHeader className="space-y-3 pb-4 pt-1 px-4 text-center flex-shrink-0">
                 {/* Real Logo - Enlarged for greater brand presence */}
                 <div className="flex justify-center mb-1">
                   <img 
@@ -352,9 +352,9 @@ export default function LoginPage() {
               
               <form onSubmit={handleLogin} className="flex flex-col gap-0">
                 {/* Space between input elements */}
-                <CardContent className="space-y-4 px-2 pb-3 pt-2">
+                <CardContent className="space-y-4 px-4 pb-3 pt-2">
                   {error && (
-                    <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5 shadow-inner py-2 px-3">
+                    <Alert variant="destructive" className="rounded-xl border-destructive/20 bg-destructive/5 shadow-inner py-2 px-4">
                       <AlertCircle className="h-3.5 w-3.5 text-destructive" />
                       <AlertDescription className="text-[13px] font-semibold">{error}</AlertDescription>
                     </Alert>
@@ -373,7 +373,7 @@ export default function LoginPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="rounded-[12px] border-slate-200 focus:border-[#00C9E0] focus:ring-4 focus:ring-[#00C9E0]/12 h-10.5 pl-11 pr-4 shadow-sm bg-white font-medium text-slate-800 focus:shadow-[0_0_15px_rgba(0,201,224,0.1)] transition-all duration-300 text-xs hover:border-[#00C9E0]/40"
+                        className="rounded-[12px] border-slate-200 focus:border-[#00C9E0] focus:ring-4 focus:ring-[#00C9E0]/12 h-10.5 pl-11 pr-4 shadow-sm bg-white font-medium text-slate-800 focus:shadow-[0_0_15px_rgba(0,201,224,0.1)] transition-all duration-300 text-base hover:border-[#00C9E0]/40"
                       />
                     </div>
                   </div>
@@ -391,7 +391,7 @@ export default function LoginPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className="rounded-[12px] border-slate-200 focus:border-[#00C9E0] focus:ring-4 focus:ring-[#00C9E0]/12 h-10.5 pl-11 pr-10 shadow-sm bg-white font-medium text-slate-800 focus:shadow-[0_0_15px_rgba(0,201,224,0.1)] transition-all duration-300 text-xs hover:border-[#00C9E0]/40"
+                        className="rounded-[12px] border-slate-200 focus:border-[#00C9E0] focus:ring-4 focus:ring-[#00C9E0]/12 h-10.5 pl-11 pr-10 shadow-sm bg-white font-medium text-slate-800 focus:shadow-[0_0_15px_rgba(0,201,224,0.1)] transition-all duration-300 text-base hover:border-[#00C9E0]/40"
                       />
                       <button
                         type="button"
@@ -408,9 +408,9 @@ export default function LoginPage() {
                   </div>
                 </CardContent>
                 
-                <CardFooter className="px-2 pb-4 pt-3 bg-transparent border-0">
+                <CardFooter className="px-4 pb-4 pt-3 bg-transparent border-0">
                   <Button 
-                    className="w-full h-11 rounded-[12px] font-extrabold bg-[#00C9E0] hover:bg-[#00B5CC] text-white transition-all duration-300 shadow-lg shadow-[#00C9E0]/25 hover:shadow-[0_0_25px_rgba(0,201,224,0.45)] text-xs hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 border border-transparent relative overflow-hidden active:translate-y-px" 
+                    className="w-full h-11 rounded-[12px] font-extrabold bg-[#00C9E0] hover:bg-[#00B5CC] text-white transition-all duration-300 shadow-lg shadow-[#00C9E0]/25 hover:shadow-[0_0_25px_rgba(0,201,224,0.45)] text-base hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 border border-transparent relative overflow-hidden active:translate-y-px" 
                     type="submit" 
                     disabled={loading}
                   >

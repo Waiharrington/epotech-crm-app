@@ -84,16 +84,16 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
             months: "relative flex flex-col",
             month: "flex w-full flex-col gap-2",
             nav: "absolute inset-x-0 top-0 flex w-full items-center justify-between px-1",
-            button_previous: "h-7 w-7 rounded-lg bg-transparent p-0 hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors z-10",
-            button_next: "h-7 w-7 rounded-lg bg-transparent p-0 hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors z-10",
-            month_caption: "flex h-7 w-full items-center justify-center",
+            button_previous: "h-11 w-11 rounded-lg bg-transparent p-0 hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors z-10",
+            button_next: "h-11 w-11 rounded-lg bg-transparent p-0 hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors z-10",
+            month_caption: "flex h-11 w-full items-center justify-center",
             caption_label: "text-[13px] font-bold text-slate-800 select-none",
             table: "w-full border-collapse",
             head_row: "flex w-full",
-            head_cell: "text-[11px] font-bold text-slate-400 uppercase w-8 text-center pb-2",
+            head_cell: "text-[11px] font-bold text-slate-400 uppercase w-10 text-center pb-2",
             row: "flex w-full mt-1",
-            cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20",
-            day: "h-8 w-8 p-0 font-bold text-[13px] aria-selected:opacity-100 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer flex items-center justify-center",
+            cell: "relative p-0 text-center text-base focus-within:relative focus-within:z-20",
+            day: "h-10 w-10 p-0 font-bold text-[13px] aria-selected:opacity-100 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer flex items-center justify-center",
             day_selected: "bg-[#0097A7] text-white hover:bg-[#0097A7] hover:text-white shadow-md shadow-[#0097A7]/20",
             day_today: "text-[#0097A7] font-black",
             day_outside: "text-slate-300",
@@ -107,7 +107,7 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
                 <button 
                   type="button"
                   onClick={() => { onChange(''); setOpen(false) }}
-                  className="text-xs font-bold text-slate-400 hover:text-rose-500 transition-colors cursor-pointer"
+                  className="text-base font-bold text-slate-400 hover:text-rose-500 transition-colors cursor-pointer"
                 >
                   BORRAR
                 </button>
@@ -121,7 +121,7 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
                     onChange(`${y}-${m}-${d}`)
                     setOpen(false) 
                   }}
-                  className="text-xs font-bold text-[#0097A7] hover:text-[#00b4ca] transition-colors cursor-pointer"
+                  className="text-base font-bold text-[#0097A7] hover:text-[#00b4ca] transition-colors cursor-pointer"
                 >
                   HOY
                 </button>
@@ -141,7 +141,7 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
         disabled={disabled}
         onClick={openPicker}
         className={cn(
-          "flex h-9 w-full items-center justify-between rounded-xl border border-slate-200/60 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-all hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-2 focus:ring-[#0097A7]/20 focus:outline-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
+          "flex h-11 w-full items-center justify-between rounded-xl border border-slate-200/60 bg-white px-4 py-2 text-base font-semibold text-slate-700 transition-all hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-2 focus:ring-[#0097A7]/20 focus:outline-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
         )}
       >
         <span className={cn(!date && "text-slate-400")}>

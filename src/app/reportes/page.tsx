@@ -258,7 +258,7 @@ export default function ReportesPage() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Reportes de Rendimiento
                 </h1>
-                <p className="text-slate-300/80 text-xs hidden sm:block xl:text-[11px] 2xl:text-xs mt-1 font-medium">
+                <p className="text-slate-300/80 text-base hidden sm:block xl:text-[11px] 2xl:text-base mt-1 font-medium">
                   Visualiza la rentabilidad, ventas, mejores clientes y jornadas operativas.
                 </p>
               </div>
@@ -266,26 +266,26 @@ export default function ReportesPage() {
 
             <div className="flex items-center gap-2 shrink-0">
               <Select value={dateRange} onValueChange={setDateRange}>
-                <SelectTrigger className="w-[180px] h-8 text-xs font-bold rounded-xl bg-white/10 border-white/15 text-white backdrop-blur-md">
+                <SelectTrigger className="w-[180px] h-10 text-base font-bold rounded-xl bg-white/10 border-white/15 text-white backdrop-blur-md">
                   <Calendar className="mr-1.5 h-3.5 w-3.5 text-[#00C9E0]" />
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="hoy" className="text-xs">Hoy</SelectItem>
-                  <SelectItem value="semana" className="text-xs">Últimos 7 días</SelectItem>
-                  <SelectItem value="mes" className="text-xs">Últimos 30 días</SelectItem>
-                  <SelectItem value="mes_actual" className="text-xs">Este Mes</SelectItem>
-                  <SelectItem value="trimestre" className="text-xs">Últimos 90 días</SelectItem>
-                  <SelectItem value="todo" className="text-xs">Todos los registros</SelectItem>
-                  <SelectItem value="personalizado" className="text-xs">Rango Personalizado</SelectItem>
+                  <SelectItem value="hoy" className="text-base">Hoy</SelectItem>
+                  <SelectItem value="semana" className="text-base">Últimos 7 días</SelectItem>
+                  <SelectItem value="mes" className="text-base">Últimos 30 días</SelectItem>
+                  <SelectItem value="mes_actual" className="text-base">Este Mes</SelectItem>
+                  <SelectItem value="trimestre" className="text-base">Últimos 90 días</SelectItem>
+                  <SelectItem value="todo" className="text-base">Todos los registros</SelectItem>
+                  <SelectItem value="personalizado" className="text-base">Rango Personalizado</SelectItem>
                 </SelectContent>
               </Select>
 
               {dateRange === 'personalizado' && (
                 <div className="flex items-center gap-1.5 animate-in slide-in-from-right-2 duration-200">
-                  <DatePicker value={customStartDate} onChange={setCustomStartDate} className="h-8 w-[120px] text-xs rounded-xl" />
-                  <span className="text-xs text-slate-400 font-medium">a</span>
-                  <DatePicker value={customEndDate} onChange={setCustomEndDate} className="h-8 w-[120px] text-xs rounded-xl" />
+                  <DatePicker value={customStartDate} onChange={setCustomStartDate} className="h-10 w-[120px] text-base rounded-xl" />
+                  <span className="text-base text-slate-400 font-medium">a</span>
+                  <DatePicker value={customEndDate} onChange={setCustomEndDate} className="h-10 w-[120px] text-base rounded-xl" />
                 </div>
               )}
 
@@ -293,7 +293,7 @@ export default function ReportesPage() {
                 variant="outline"
                 size="sm"
                 onClick={fetchReportesData}
-                className="h-8 px-3 text-xs font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-white/20 backdrop-blur-md transition-all active:scale-[0.98]"
+                className="h-10 px-4 text-base font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-white/20 backdrop-blur-md transition-all active:scale-[0.98]"
               >
                 <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
                 Recargar
@@ -307,7 +307,7 @@ export default function ReportesPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center h-40 gap-3">
             <Loader2 className="h-6 w-6 animate-spin text-[#00C9E0]" />
-            <p className="text-xs text-slate-400 font-medium">Cargando reportes...</p>
+            <p className="text-base text-slate-400 font-medium">Cargando reportes...</p>
           </div>
         ) : (
           <div className="flex-1 overflow-y-auto min-h-0 space-y-3">
@@ -331,7 +331,7 @@ export default function ReportesPage() {
                   <div className="relative z-10">
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white/60">{stat.label}</p>
-                      <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-white/15 border border-white/20">
+                      <div className="h-11 w-11 rounded-lg flex items-center justify-center bg-white/15 border border-white/20">
                         <stat.icon className="h-3.5 w-3.5 text-white" />
                       </div>
                     </div>
@@ -349,10 +349,10 @@ export default function ReportesPage() {
                 className="w-full px-4 py-3 flex items-center justify-between hover:bg-slate-50/50 transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-2">
-                  <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-slate-100 border border-slate-200/60">
+                  <div className="h-11 w-11 rounded-lg flex items-center justify-center bg-slate-100 border border-slate-200/60">
                     <Target className="h-3.5 w-3.5 text-slate-500" />
                   </div>
-                  <span className="text-xs font-black uppercase tracking-wider text-slate-600">Métricas Secundarias</span>
+                  <span className="text-base font-black uppercase tracking-wider text-slate-600">Métricas Secundarias</span>
                   <span className="text-[11px] text-slate-400 font-medium">Gastos, cobros, fidelidad, leads</span>
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -401,10 +401,10 @@ export default function ReportesPage() {
             {completedJobs.length > 0 && (
               <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden shadow-sm">
                 <div className="px-4 py-3 border-b border-slate-100 flex items-center gap-2">
-                  <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
+                  <div className="h-11 w-11 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
                     <Lightbulb className="h-3.5 w-3.5 text-[#0097A7]" />
                   </div>
-                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">Insights Automáticos</h3>
+                  <h3 className="text-base font-black uppercase tracking-wider text-slate-700">Insights Automáticos</h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
                   {bestSellingService && (
@@ -413,9 +413,9 @@ export default function ReportesPage() {
                         <Star className="h-4 w-4 text-[#0097A7]" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Más Vendido</p>
-                        <p className="text-xs font-bold text-slate-700 truncate">{bestSellingService.nombre}</p>
-                        <p className="text-xs text-[#0097A7] font-bold">{bestSellingService.ventasCount} servicios</p>
+                        <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Más Vendido</p>
+                        <p className="text-base font-bold text-slate-700 truncate">{bestSellingService.nombre}</p>
+                        <p className="text-base text-[#0097A7] font-bold">{bestSellingService.ventasCount} servicios</p>
                       </div>
                     </div>
                   )}
@@ -425,9 +425,9 @@ export default function ReportesPage() {
                         <Clock className="h-4 w-4 text-amber-500" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Día Más Activo</p>
-                        <p className="text-xs font-bold text-slate-700">{busiestDay.name}</p>
-                        <p className="text-xs text-amber-600 font-bold">{busiestDay.trabajosCount} servicios</p>
+                        <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Día Más Activo</p>
+                        <p className="text-base font-bold text-slate-700">{busiestDay.name}</p>
+                        <p className="text-base text-amber-600 font-bold">{busiestDay.trabajosCount} servicios</p>
                       </div>
                     </div>
                   )}
@@ -437,9 +437,9 @@ export default function ReportesPage() {
                         <Users className="h-4 w-4 text-[#0097A7]" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Mejor Cliente</p>
-                        <p className="text-xs font-bold text-slate-700 truncate">{bestClient.nombre} {bestClient.apellido}</p>
-                        <p className="text-xs text-[#0097A7] font-bold">${bestClient.gastado.toLocaleString()}</p>
+                        <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Mejor Cliente</p>
+                        <p className="text-base font-bold text-slate-700 truncate">{bestClient.nombre} {bestClient.apellido}</p>
+                        <p className="text-base text-[#0097A7] font-bold">${bestClient.gastado.toLocaleString()}</p>
                       </div>
                     </div>
                   )}
@@ -450,8 +450,8 @@ export default function ReportesPage() {
             {completedJobs.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 bg-white/50 border border-slate-200/50 rounded-3xl border-dashed">
                 <Activity className="h-10 w-10 text-slate-300 mb-3 animate-pulse" />
-                <h3 className="font-bold text-sm text-slate-600">Sin registros en este periodo</h3>
-                <p className="text-xs text-slate-400 max-w-sm mt-1 text-center">
+                <h3 className="font-bold text-base text-slate-600">Sin registros en este periodo</h3>
+                <p className="text-base text-slate-400 max-w-sm mt-1 text-center">
                   No hay trabajos completados o movimientos de caja en el rango seleccionado.
                 </p>
               </div>
@@ -461,12 +461,12 @@ export default function ReportesPage() {
                 <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden shadow-sm">
                   <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
+                      <div className="h-11 w-11 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
                         <Clock className="h-3.5 w-3.5 text-[#0097A7]" />
                       </div>
                       <div>
-                        <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">Mapa de Calor Operativo</h3>
-                        <p className="text-xs text-slate-400">Jornadas más activas de la semana</p>
+                        <h3 className="text-base font-black uppercase tracking-wider text-slate-700">Mapa de Calor Operativo</h3>
+                        <p className="text-base text-slate-400">Jornadas más activas de la semana</p>
                       </div>
                     </div>
                     {busiestDay && busiestDay.trabajosCount > 0 && (
@@ -493,7 +493,7 @@ export default function ReportesPage() {
                                 : "bg-slate-50 border-slate-200/60"
                             )}
                           >
-                            <p className="text-xs font-bold uppercase tracking-wider text-slate-400">{day.name.substring(0, 3)}</p>
+                            <p className="text-base font-bold uppercase tracking-wider text-slate-400">{day.name.substring(0, 3)}</p>
                             <p className={cn(
                               "text-lg font-black mt-1",
                               day.trabajosCount > 0 ? 'text-slate-800' : 'text-slate-300'
@@ -510,7 +510,7 @@ export default function ReportesPage() {
                     {busiestDay && busiestDay.trabajosCount > 0 && (
                       <div className="mt-3 p-3 rounded-xl bg-[#0097A7]/5 border border-[#0097A7]/10 flex items-start gap-2.5">
                         <Info className="h-4 w-4 text-[#0097A7] shrink-0 mt-0.5" />
-                        <p className="text-xs text-slate-600 leading-relaxed">
+                        <p className="text-base text-slate-600 leading-relaxed">
                           Tus <strong>{busiestDay.name.toLowerCase()}s</strong> son el día más fuerte, con <strong>{busiestDay.trabajosCount}</strong> servicios y <strong>${busiestDay.ingresos.toLocaleString()}</strong> facturados.
                         </p>
                       </div>
@@ -524,12 +524,12 @@ export default function ReportesPage() {
                   <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden shadow-sm">
                     <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
+                        <div className="h-11 w-11 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
                           <Briefcase className="h-3.5 w-3.5 text-[#0097A7]" />
                         </div>
                         <div>
-                          <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">Rentabilidad por Servicio</h3>
-                          <p className="text-xs text-slate-400">Márgenes de ganancia reales</p>
+                          <h3 className="text-base font-black uppercase tracking-wider text-slate-700">Rentabilidad por Servicio</h3>
+                          <p className="text-base text-slate-400">Márgenes de ganancia reales</p>
                         </div>
                       </div>
                       <Sparkles className="h-4 w-4 text-[#0097A7]" />
@@ -543,9 +543,9 @@ export default function ReportesPage() {
                             <div className="flex items-center justify-between mb-1.5">
                               <div className="flex items-center gap-2">
                                 <span className="text-[11px] text-slate-400 font-mono font-bold">#{idx+1}</span>
-                                <h4 className="font-bold text-xs text-slate-700 capitalize">{svc.nombre}</h4>
+                                <h4 className="font-bold text-base text-slate-700 capitalize">{svc.nombre}</h4>
                               </div>
-                              <span className="font-black text-xs text-[#0097A7]">${svc.profit.toLocaleString()}</span>
+                              <span className="font-black text-base text-[#0097A7]">${svc.profit.toLocaleString()}</span>
                             </div>
                             <div className="flex items-center gap-2 mb-1.5">
                               <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
@@ -565,7 +565,7 @@ export default function ReportesPage() {
                         )
                       })}
                       {servicesRanked.length === 0 && (
-                        <div className="p-6 text-center text-xs text-slate-400 italic">No hay servicios en este rango.</div>
+                        <div className="p-6 text-center text-base text-slate-400 italic">No hay servicios en este rango.</div>
                       )}
                     </div>
                   </div>
@@ -574,12 +574,12 @@ export default function ReportesPage() {
                   <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden shadow-sm">
                     <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
+                        <div className="h-11 w-11 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
                           <Users className="h-3.5 w-3.5 text-[#0097A7]" />
                         </div>
                         <div>
-                          <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">Mejores Clientes</h3>
-                          <p className="text-xs text-slate-400">Mayor facturación acumulada</p>
+                          <h3 className="text-base font-black uppercase tracking-wider text-slate-700">Mejores Clientes</h3>
+                          <p className="text-base text-slate-400">Mayor facturación acumulada</p>
                         </div>
                       </div>
                       <Heart className="h-4 w-4 text-rose-400" />
@@ -591,25 +591,25 @@ export default function ReportesPage() {
                           <div key={client.id} className="px-4 py-3 hover:bg-slate-50/50 transition-colors flex items-center justify-between">
                             <div className="flex items-center gap-2.5">
                               <div className={cn(
-                                "h-8 w-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0",
+                                "h-10 w-10 rounded-full flex items-center justify-center font-bold text-base shrink-0",
                                 isStar ? "bg-gradient-to-br from-amber-400 to-amber-500 text-white shadow-sm" : "bg-slate-100 text-slate-500"
                               )}>
                                 {isStar ? '👑' : idx + 1}
                               </div>
                               <div>
-                                <h4 className="font-bold text-xs text-slate-700">{client.nombre} {client.apellido}</h4>
+                                <h4 className="font-bold text-base text-slate-700">{client.nombre} {client.apellido}</h4>
                                 <p className="text-[11px] text-slate-400">{client.ciudad} • {client.telefono}</p>
                               </div>
                             </div>
                             <div className="text-right">
-                              <span className="font-black text-xs text-emerald-600">${client.gastado.toLocaleString()}</span>
+                              <span className="font-black text-base text-emerald-600">${client.gastado.toLocaleString()}</span>
                               <p className="text-[11px] text-slate-400">{client.trabajosCount} servicios</p>
                             </div>
                           </div>
                         )
                       })}
                       {clientsRanked.length === 0 && (
-                        <div className="p-6 text-center text-xs text-slate-400 italic">No hay clientes en este rango.</div>
+                        <div className="p-6 text-center text-base text-slate-400 italic">No hay clientes en este rango.</div>
                       )}
                     </div>
                   </div>
@@ -619,12 +619,12 @@ export default function ReportesPage() {
                 {trendData.length > 1 && (
                   <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden shadow-sm">
                     <div className="px-4 py-3 border-b border-slate-100 flex items-center gap-2">
-                      <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
+                      <div className="h-11 w-11 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
                         <TrendingUp className="h-3.5 w-3.5 text-[#0097A7]" />
                       </div>
                       <div>
-                        <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">Tendencia de Facturación Diaria</h3>
-                        <p className="text-xs text-slate-400">Ingresos por fecha de servicio</p>
+                        <h3 className="text-base font-black uppercase tracking-wider text-slate-700">Tendencia de Facturación Diaria</h3>
+                        <p className="text-base text-slate-400">Ingresos por fecha de servicio</p>
                       </div>
                     </div>
                     <div className="p-4 h-56">

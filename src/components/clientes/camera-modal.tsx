@@ -109,8 +109,8 @@ export function CameraModal({ onCapture, onClose }: CameraModalProps) {
         <div className="relative aspect-[4/3] bg-black flex items-center justify-center overflow-hidden">
           {loading && (
             <div className="flex flex-col items-center gap-2">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <p className="text-sm">Iniciando cámara...</p>
+              <Loader2 className="h-10 w-10 animate-spin text-primary" />
+              <p className="text-base">Iniciando cámara...</p>
             </div>
           )}
 
@@ -138,7 +138,7 @@ export function CameraModal({ onCapture, onClose }: CameraModalProps) {
         <div className="p-6 bg-zinc-900 flex justify-center gap-4">
           {!capturedImage && !loading && !error && (
             <Button size="lg" className="rounded-full h-16 w-16 bg-white text-black hover:bg-white/90" onClick={takePhoto}>
-              <Camera className="h-8 w-8" />
+              <Camera className="h-10 w-10" />
             </Button>
           )}
 

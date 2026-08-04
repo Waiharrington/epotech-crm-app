@@ -91,10 +91,10 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
           <div className="relative z-10 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-[#00C9E0]" />
-              <span className="text-xs font-bold text-white">Seleccionar Hora</span>
+              <span className="text-base font-bold text-white">Seleccionar Hora</span>
             </div>
             {value && (
-              <span className="text-xs font-black text-[#00C9E0] bg-white/10 px-2 py-0.5 rounded-lg">
+              <span className="text-base font-black text-[#00C9E0] bg-white/10 px-4 py-0.5 rounded-lg">
                 {displayValue}
               </span>
             )}
@@ -108,7 +108,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
               type="button"
               onClick={() => updateTime(currentHour, currentMinute, false)}
               className={cn(
-                "flex-1 py-1.5 rounded-[10px] text-xs font-black uppercase tracking-wider transition-all cursor-pointer",
+                "flex-1 py-2.5 rounded-[10px] text-base font-black uppercase tracking-wider transition-all cursor-pointer",
                 !isPM && value
                   ? "bg-[#0097A7] text-white shadow-md shadow-[#0097A7]/20"
                   : "text-slate-500 hover:text-slate-700"
@@ -120,7 +120,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
               type="button"
               onClick={() => updateTime(currentHour, currentMinute, true)}
               className={cn(
-                "flex-1 py-1.5 rounded-[10px] text-xs font-black uppercase tracking-wider transition-all cursor-pointer",
+                "flex-1 py-2.5 rounded-[10px] text-base font-black uppercase tracking-wider transition-all cursor-pointer",
                 isPM && value
                   ? "bg-[#0097A7] text-white shadow-md shadow-[#0097A7]/20"
                   : "text-slate-500 hover:text-slate-700"
@@ -143,7 +143,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
                     else updateTime(h, currentMinute, isPM)
                   }}
                   className={cn(
-                    "h-8 rounded-lg text-[13px] font-bold transition-all cursor-pointer flex items-center justify-center",
+                    "h-10 rounded-lg text-[13px] font-bold transition-all cursor-pointer flex items-center justify-center",
                     value && currentHour === h
                       ? "bg-[#0097A7] text-white shadow-md shadow-[#0097A7]/20"
                       : "bg-slate-50 text-slate-600 hover:bg-[#0097A7]/10 hover:text-[#0097A7]"
@@ -168,7 +168,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
                     else updateTime(currentHour, m, isPM)
                   }}
                   className={cn(
-                    "h-8 rounded-lg text-[13px] font-bold transition-all cursor-pointer flex items-center justify-center",
+                    "h-10 rounded-lg text-[13px] font-bold transition-all cursor-pointer flex items-center justify-center",
                     value && currentMinute === m
                       ? "bg-[#0097A7] text-white shadow-md shadow-[#0097A7]/20"
                       : "bg-slate-50 text-slate-600 hover:bg-[#0097A7]/10 hover:text-[#0097A7]"
@@ -201,7 +201,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
                     setIsOpen(false)
                   }}
                   className={cn(
-                    "px-2 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer",
+                    "px-4 py-2 rounded-lg text-[11px] font-bold transition-all cursor-pointer",
                     value === time 
                       ? "bg-[#0097A7] text-white shadow-sm" 
                       : "bg-slate-100 text-slate-500 hover:bg-[#0097A7]/10 hover:text-[#0097A7]"
@@ -223,13 +223,13 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
       <div 
         onClick={openPicker}
         className={cn(
-          "flex items-center h-9 px-3 rounded-xl border bg-white transition-all cursor-pointer",
+          "flex items-center h-11 px-4 rounded-xl border bg-white transition-all cursor-pointer",
           isOpen ? "border-[#0097A7] ring-2 ring-[#0097A7]/20" : "border-slate-200/60 hover:border-[#0097A7]/40"
         )}
       >
         <Clock className={cn("h-3.5 w-3.5 shrink-0 mr-2 transition-colors", value ? "text-[#0097A7]" : "text-slate-400")} />
         <span className={cn(
-          "text-xs font-bold flex-1 truncate",
+          "text-base font-bold flex-1 truncate",
           value ? "text-slate-700" : "text-slate-400"
         )}>
           {displayValue}

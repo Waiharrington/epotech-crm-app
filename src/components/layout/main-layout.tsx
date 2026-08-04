@@ -92,7 +92,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         {/* Premium Logo Header & Toggle Button */}
         <div className={cn(
           "relative flex flex-col items-center bg-transparent border-b border-sidebar-border/10 overflow-visible transition-all duration-300 shrink-0",
-          isCollapsed ? "px-2 py-2" : "px-3.5 py-2.5"
+          isCollapsed ? "px-4 py-2" : "px-4.5 py-2.5"
         )}>
           {/* Toggle Button with Brand Cyan Tooltip */}
           <div className="relative group/toggle z-30">
@@ -109,7 +109,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             </button>
             {/* Custom Brand Tooltip */}
             <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/toggle:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
-              <div className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-[#030b17] to-[#0B1E3F] border border-[#00C9E0]/40 text-[#00C9E0] text-[10.5px] font-extrabold shadow-[0_4px_15px_rgba(0,201,224,0.25)] tracking-wide flex items-center gap-1">
+              <div className="px-4.5 py-2 rounded-lg bg-gradient-to-r from-[#030b17] to-[#0B1E3F] border border-[#00C9E0]/40 text-[#00C9E0] text-[10.5px] font-extrabold shadow-[0_4px_15px_rgba(0,201,224,0.25)] tracking-wide flex items-center gap-1">
                 <span>{isCollapsed ? "Maximizar menú" : "Minimizar menú"}</span>
               </div>
             </div>
@@ -134,12 +134,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         </div>
         
         <nav className={cn(
-          "flex-1 px-2.5 py-2 space-y-3 no-scrollbar",
+          "flex-1 px-4.5 py-2 space-y-3 no-scrollbar",
           isCollapsed ? "overflow-visible" : "overflow-y-auto"
         )}>
           <div>
             {!isCollapsed && (
-              <p className="px-3 mb-1 text-[11px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
+              <p className="px-4 mb-1 text-[11px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
                 Principal
               </p>
             )}
@@ -152,8 +152,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                       href={item.href}
                       style={{ animationDelay: `${index * 50}ms` }}
                       className={cn(
-                        "flex items-center gap-2.5 py-1.5 rounded-xl text-sm font-medium transition-all duration-300 ease-out relative overflow-hidden animate-sidebar-item",
-                        isCollapsed ? "justify-center px-0" : "px-3",
+                        "flex items-center gap-2.5 py-2.5 rounded-xl text-base font-medium transition-all duration-300 ease-out relative overflow-hidden animate-sidebar-item",
+                        isCollapsed ? "justify-center px-0" : "px-4",
                         isActive
                           ? "text-white font-semibold"
                           : "text-sidebar-foreground/70 hover:bg-white/[0.03] hover:text-sidebar-foreground"
@@ -182,7 +182,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     {/* Custom Brand Tooltip for Link - Shown ONLY when sidebar is collapsed */}
                     {isCollapsed && (
                       <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/navitem:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
-                        <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-[#00C9E0]/40 text-[#00C9E0] text-[13px] font-extrabold shadow-[0_4px_20px_rgba(0,201,224,0.3)] tracking-wide flex items-center gap-1.5">
+                        <div className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-[#00C9E0]/40 text-[#00C9E0] text-[13px] font-extrabold shadow-[0_4px_20px_rgba(0,201,224,0.3)] tracking-wide flex items-center gap-1.5">
                           <item.icon className="h-3.5 w-3.5 text-[#00C9E0]" />
                           <span>{item.name}</span>
                         </div>
@@ -196,7 +196,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           
           <div>
             {!isCollapsed && (
-              <p className="px-3 mb-1 text-[11px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
+              <p className="px-4 mb-1 text-[11px] font-bold text-slate-400/90 tracking-[0.2em] uppercase">
                 Gestión
               </p>
             )}
@@ -210,8 +210,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                       href={item.href}
                       style={{ animationDelay: `${globalIndex * 50}ms` }}
                       className={cn(
-                        "flex items-center gap-2.5 py-1.5 rounded-xl text-sm font-medium transition-all duration-300 ease-out relative overflow-hidden animate-sidebar-item",
-                        isCollapsed ? "justify-center px-0" : "px-3",
+                        "flex items-center gap-2.5 py-2.5 rounded-xl text-base font-medium transition-all duration-300 ease-out relative overflow-hidden animate-sidebar-item",
+                        isCollapsed ? "justify-center px-0" : "px-4",
                         isActive
                           ? "text-white font-semibold"
                           : "text-sidebar-foreground/70 hover:bg-white/[0.03] hover:text-sidebar-foreground"
@@ -240,7 +240,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     {/* Custom Brand Tooltip for Link - Shown ONLY when sidebar is collapsed */}
                     {isCollapsed && (
                       <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/navitem:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
-                        <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-[#00C9E0]/40 text-[#00C9E0] text-[13px] font-extrabold shadow-[0_4px_20px_rgba(0,201,224,0.3)] tracking-wide flex items-center gap-1.5">
+                        <div className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-[#00C9E0]/40 text-[#00C9E0] text-[13px] font-extrabold shadow-[0_4px_20px_rgba(0,201,224,0.3)] tracking-wide flex items-center gap-1.5">
                           <item.icon className="h-3.5 w-3.5 text-[#00C9E0]" />
                           <span>{item.name}</span>
                         </div>
@@ -254,12 +254,12 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         </nav>
 
         {/* Logout Footer */}
-        <div className="border-t border-sidebar-border/10 px-2.5 py-2 shrink-0 animate-sidebar-item relative group/logout" style={{ animationDelay: `${(mainNavItems.length + moreNavItems.length) * 50}ms` }}>
+        <div className="border-t border-sidebar-border/10 px-4.5 py-2 shrink-0 animate-sidebar-item relative group/logout" style={{ animationDelay: `${(mainNavItems.length + moreNavItems.length) * 50}ms` }}>
           <button
             onClick={handleLogout}
             className={cn(
               "w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[12.5px] font-bold text-red-500 border border-red-500/30 bg-red-950/10 hover:bg-red-500/15 hover:text-red-400 transition-all duration-300 ease-out group",
-              isCollapsed ? "px-0" : "px-3"
+              isCollapsed ? "px-0" : "px-4"
             )}
           >
             <LogOut className="h-[15px] w-[15px] flex-shrink-0 transition-transform duration-300 group-hover:scale-105" />
@@ -268,7 +268,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
           {/* Custom Brand Tooltip for Logout - Shown ONLY when sidebar is collapsed */}
           {isCollapsed && (
             <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 hidden group-hover/logout:block z-50 pointer-events-none whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
-              <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-red-500/40 text-red-400 text-[13px] font-extrabold shadow-[0_4px_20px_rgba(239,68,68,0.3)] tracking-wide flex items-center gap-1.5">
+              <div className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] border border-red-500/40 text-red-400 text-[13px] font-extrabold shadow-[0_4px_20px_rgba(239,68,68,0.3)] tracking-wide flex items-center gap-1.5">
                 <LogOut className="h-3.5 w-3.5 text-red-400" />
                 <span>Cerrar Sesión</span>
               </div>
@@ -287,7 +287,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
       {/* Mobile Bottom Navigation */}
       {mounted && (
-        <nav className="md:hidden fixed bottom-5 left-2.5 right-2.5 z-50 h-16 rounded-2xl border border-sidebar-border/10 sidebar-premium-bg overflow-hidden px-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.3)] flex items-center justify-around">
+        <nav className="md:hidden fixed bottom-5 left-2.5 right-2.5 z-50 h-16 rounded-2xl border border-sidebar-border/10 sidebar-premium-bg overflow-hidden px-4.5 shadow-[0_12px_40px_rgba(0,0,0,0.3)] flex items-center justify-around">
           <div className="flex items-center justify-between w-full h-full gap-0.5">
             {mainNavItems.map((item) => {
               const isActive = pathname.startsWith(item.href)
@@ -296,7 +296,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex flex-col items-center justify-center gap-0.5 rounded-xl transition-[transform,color] duration-300 ease-out relative group min-w-0 flex-1 py-1.5 h-[85%]",
+                    "flex flex-col items-center justify-center gap-0.5 rounded-xl transition-[transform,color] duration-300 ease-out relative group min-w-0 flex-1 py-2.5 h-[85%]",
                     isActive
                       ? "text-white font-semibold scale-105 px-1"
                       : "text-sidebar-foreground/50 active:scale-95 px-1"
@@ -326,7 +326,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
             
             <Sheet>
               <SheetTrigger asChild>
-                <button className="flex flex-col items-center justify-center gap-0.5 px-1 py-1.5 rounded-xl text-sidebar-foreground/50 active:scale-95 transition-all duration-300 group relative min-w-0 flex-1 h-[85%]">
+                <button className="flex flex-col items-center justify-center gap-0.5 px-1 py-2.5 rounded-xl text-sidebar-foreground/50 active:scale-95 transition-all duration-300 group relative min-w-0 flex-1 h-[85%]">
                   <MoreHorizontal className="h-5 w-5 transition-transform duration-300 group-hover:scale-105" />
                   <span className="text-[11px] font-medium tracking-tight text-sidebar-foreground/50">Más</span>
                 </button>
@@ -336,7 +336,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                   <SheetTitle className="font-extrabold text-xl tracking-tight text-sidebar-foreground">
                     Menú Principal
                   </SheetTitle>
-                  <SheetDescription className="text-xs text-sidebar-foreground/50">
+                  <SheetDescription className="text-base text-sidebar-foreground/50">
                     Accede a todos los módulos del sistema
                   </SheetDescription>
                   <SheetClose className="absolute right-6 top-[54px] rounded-full p-2 bg-white/5 hover:bg-white/10 active:scale-95 text-sidebar-foreground/70 transition-all border border-white/10 flex items-center justify-center">

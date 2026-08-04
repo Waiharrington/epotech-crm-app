@@ -93,14 +93,14 @@ export function QuoteDetailModal({
                   <h3 className="text-base font-black text-white leading-tight">
                     #{quote.id.substring(0, 8).toUpperCase()}
                   </h3>
-                  <p className="text-xs text-white/50 font-medium mt-0.5">
+                  <p className="text-base text-white/50 font-medium mt-0.5">
                     {new Date(quote.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <span className={cn(
-                  "px-2.5 py-1 rounded-lg text-[11px] font-black uppercase tracking-wider",
+                  "px-4.5 py-2 rounded-lg text-[11px] font-black uppercase tracking-wider",
                   statusColor === 'emerald' && "bg-emerald-500 text-white",
                   statusColor === 'amber' && "bg-amber-500 text-white",
                   statusColor === 'rose' && "bg-rose-500 text-white"
@@ -110,7 +110,7 @@ export function QuoteDetailModal({
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="h-8 w-8 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 transition-all active:scale-95"
+                  className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 transition-all active:scale-95"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -126,14 +126,14 @@ export function QuoteDetailModal({
           <div className="bg-white rounded-2xl border border-slate-200/60 p-4 shadow-sm">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#0097A7] to-[#00C9E0] flex items-center justify-center shadow-sm">
-                <span className="text-sm font-black text-white">
+                <span className="text-base font-black text-white">
                   {quote.clientes?.nombre?.[0]}{quote.clientes?.apellido?.[0]}
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-slate-800 truncate">{clientName}</p>
+                <p className="text-base font-bold text-slate-800 truncate">{clientName}</p>
                 {quote.clientes?.direccion && (
-                  <p className="text-xs text-slate-400 truncate flex items-center gap-1 mt-0.5">
+                  <p className="text-base text-slate-400 truncate flex items-center gap-1 mt-0.5">
                     <MapPin className="h-2.5 w-2.5 shrink-0" />{quote.clientes.direccion}
                   </p>
                 )}
@@ -141,12 +141,12 @@ export function QuoteDetailModal({
             </div>
             <div className="flex gap-3 mt-3 pt-3 border-t border-slate-100">
               {quote.clientes?.telefono && (
-                <a href={`tel:${quote.clientes.telefono}`} className="flex items-center gap-1.5 text-xs font-semibold text-[#0097A7] hover:underline">
+                <a href={`tel:${quote.clientes.telefono}`} className="flex items-center gap-1.5 text-base font-semibold text-[#0097A7] hover:underline">
                   <Phone className="h-3 w-3" />{quote.clientes.telefono}
                 </a>
               )}
               {quote.clientes?.email && (
-                <a href={`mailto:${quote.clientes.email}`} className="flex items-center gap-1.5 text-xs font-semibold text-[#0097A7] hover:underline">
+                <a href={`mailto:${quote.clientes.email}`} className="flex items-center gap-1.5 text-base font-semibold text-[#0097A7] hover:underline">
                   <Mail className="h-3 w-3" />{quote.clientes.email}
                 </a>
               )}
@@ -165,7 +165,7 @@ export function QuoteDetailModal({
                 <div key={idx} className="px-4 py-3 flex items-center justify-between hover:bg-slate-50/50 transition-colors">
                   <div className="flex-1 min-w-0">
                     <p className="text-[13px] font-bold text-slate-700 truncate">{item.nombre}</p>
-                    <p className="text-xs text-slate-400 mt-0.5">
+                    <p className="text-base text-slate-400 mt-0.5">
                       {item.cantidad} x ${item.precio?.toLocaleString()}
                     </p>
                   </div>
@@ -185,7 +185,7 @@ export function QuoteDetailModal({
                 type="button"
                 disabled={loading || quote.estado === 'aprobado'}
                 className={cn(
-                  "flex-1 flex items-center justify-center gap-1.5 h-10 text-xs font-black uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none",
+                  "flex-1 flex items-center justify-center gap-1.5 h-10 text-base font-black uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none",
                   quote.estado === 'aprobado'
                     ? "bg-emerald-500 text-white border border-emerald-500"
                     : "text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100"
@@ -198,7 +198,7 @@ export function QuoteDetailModal({
                 type="button"
                 disabled={loading || quote.estado === 'rechazado'}
                 className={cn(
-                  "flex-1 flex items-center justify-center gap-1.5 h-10 text-xs font-black uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none",
+                  "flex-1 flex items-center justify-center gap-1.5 h-10 text-base font-black uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none",
                   quote.estado === 'rechazado'
                     ? "bg-rose-500 text-white border border-rose-500"
                     : "text-rose-700 bg-rose-50 border border-rose-200 hover:bg-rose-100"
@@ -235,14 +235,14 @@ export function QuoteDetailModal({
             <button
               type="button"
               onClick={() => onDelete(quote.id)}
-              className="h-10 px-3 flex items-center justify-center gap-1.5 text-xs font-bold text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all shrink-0"
+              className="h-10 px-4 flex items-center justify-center gap-1.5 text-base font-bold text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all shrink-0"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>
             
             <button 
               type="button"
-              className="h-10 px-3 flex items-center justify-center gap-1.5 text-xs font-bold text-slate-600 bg-slate-100 rounded-xl hover:bg-slate-200 transition-all shrink-0"
+              className="h-10 px-4 flex items-center justify-center gap-1.5 text-base font-bold text-slate-600 bg-slate-100 rounded-xl hover:bg-slate-200 transition-all shrink-0"
               onClick={() => onEdit(quote)}
             >
               <Edit className="h-3.5 w-3.5" />
@@ -250,7 +250,7 @@ export function QuoteDetailModal({
             
             <button 
               type="button"
-              className="h-10 px-3 flex items-center justify-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl hover:bg-emerald-100 transition-all shrink-0"
+              className="h-10 px-4 flex items-center justify-center gap-1.5 text-base font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl hover:bg-emerald-100 transition-all shrink-0"
               onClick={shareOnWhatsApp}
             >
               <Send className="h-3.5 w-3.5" />

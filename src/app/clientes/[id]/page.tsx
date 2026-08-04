@@ -145,8 +145,8 @@ export default function ClienteProfilePage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-[#F0F5FA] gap-3">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Cargando cliente</p>
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
+        <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Cargando cliente</p>
       </div>
     )
   }
@@ -177,7 +177,7 @@ export default function ClienteProfilePage() {
         <div className="relative z-10 flex flex-col gap-3">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-1.5 text-xs font-bold text-slate-300 hover:text-[#00C9E0] transition-colors w-fit"
+            className="flex items-center gap-1.5 text-base font-bold text-slate-300 hover:text-[#00C9E0] transition-colors w-fit"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Volver
           </button>
@@ -185,7 +185,7 @@ export default function ClienteProfilePage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="h-12 w-12 rounded-xl flex items-center justify-center bg-gradient-to-tr from-[#00C9E0]/20 to-[#0097A7]/10 border border-[#00C9E0]/20 shrink-0">
-                <span className="text-sm font-black text-[#00C9E0]">
+                <span className="text-base font-black text-[#00C9E0]">
                   {getInitials(cliente.nombre, cliente.apellido)}
                 </span>
               </div>
@@ -197,19 +197,19 @@ export default function ClienteProfilePage() {
                   <Badge
                     className={
                       cliente.tipo_propiedad === 'comercial'
-                        ? 'h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-[#00C9E0]/15 text-[#00C9E0] border-[#00C9E0]/30 shadow-none'
-                        : 'h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-white/10 text-slate-200 border-white/15 shadow-none'
+                        ? 'h-5 px-4 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-[#00C9E0]/15 text-[#00C9E0] border-[#00C9E0]/30 shadow-none'
+                        : 'h-5 px-4 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-white/10 text-slate-200 border-white/15 shadow-none'
                     }
                   >
                     {cliente.tipo_propiedad === 'comercial' ? 'Comercial' : 'Residencial'}
                   </Badge>
                 </div>
                 <div className="flex flex-wrap gap-3 mt-1 text-slate-300/80">
-                  <div className="flex items-center gap-1.5 text-xs font-medium">
+                  <div className="flex items-center gap-1.5 text-base font-medium">
                     <Phone className="h-3 w-3 text-[#00C9E0]" />
                     <span>{cliente.telefono}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs font-medium">
+                  <div className="flex items-center gap-1.5 text-base font-medium">
                     <MapPin className="h-3 w-3 text-[#00C9E0]" />
                     <span>{cliente.ciudad}</span>
                   </div>
@@ -221,14 +221,14 @@ export default function ClienteProfilePage() {
               <Button
                 size="sm"
                 onClick={() => setShowEditModal(true)}
-                className="h-9 px-3 text-[10.5px] font-bold rounded-xl bg-white text-[#0B1E3F] hover:bg-slate-100 border-none shadow-md transition-all active:scale-[0.98]"
+                className="h-11 px-4 text-[10.5px] font-bold rounded-xl bg-white text-[#0B1E3F] hover:bg-slate-100 border-none shadow-md transition-all active:scale-[0.98]"
               >
                 <Edit className="mr-1.5 h-3.5 w-3.5" /> Editar
               </Button>
               <Button
                 size="sm"
                 onClick={() => setShowJobTypeSelector(true)}
-                className="h-9 px-3.5 text-[10.5px] font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98]"
+                className="h-11 px-4.5 text-[10.5px] font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98]"
               >
                 <Plus className="mr-1.5 h-3.5 w-3.5" /> Nuevo Servicio
               </Button>
@@ -264,8 +264,8 @@ export default function ClienteProfilePage() {
           <TabsContent value="datos" className="space-y-3.5 animate-in fade-in duration-500">
             <div className="grid gap-3.5 md:grid-cols-2">
               <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden">
-                <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-3.5 py-2.5 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
-                  <h2 className="text-xs font-black text-white uppercase tracking-[0.15em]">Datos Personales</h2>
+                <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-2.5 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+                  <h2 className="text-base font-black text-white uppercase tracking-[0.15em]">Datos Personales</h2>
                 </div>
                 <div className="p-4 space-y-3">
                   <div className="grid grid-cols-2 gap-1 border-b border-slate-50 pb-2.5">
@@ -292,8 +292,8 @@ export default function ClienteProfilePage() {
               </div>
 
               <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden">
-                <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-3.5 py-2.5 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
-                  <h2 className="text-xs font-black text-white uppercase tracking-[0.15em]">Información de la Propiedad</h2>
+                <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-2.5 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+                  <h2 className="text-base font-black text-white uppercase tracking-[0.15em]">Información de la Propiedad</h2>
                 </div>
                 <div className="p-4 space-y-3">
                   <div className="grid grid-cols-2 gap-1 border-b border-slate-50 pb-2.5">
@@ -321,8 +321,8 @@ export default function ClienteProfilePage() {
             </div>
 
             <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden">
-              <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-3.5 py-2.5 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
-                <h2 className="text-xs font-black text-white uppercase tracking-[0.15em]">Notas Estratégicas</h2>
+              <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-2.5 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+                <h2 className="text-base font-black text-white uppercase tracking-[0.15em]">Notas Estratégicas</h2>
                 <p className="text-[11px] text-slate-300/80 font-medium mt-0.5">Oportunidades de servicios futuros identificadas por Sebastián.</p>
               </div>
               <div className="p-4">
@@ -344,7 +344,7 @@ export default function ClienteProfilePage() {
                   >
                     <div className="flex items-center p-3.5">
                       <div className={cn(
-                        "h-9 w-9 rounded-xl flex items-center justify-center mr-3 shrink-0 border transition-all",
+                        "h-11 w-11 rounded-xl flex items-center justify-center mr-3 shrink-0 border transition-all",
                         trabajo.estado === 'completado'
                           ? "bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border-[#0097A7]/20 text-[#0097A7]"
                           : "bg-slate-50 border-slate-100 text-slate-500 group-hover:bg-[#E6F9FB] group-hover:text-[#0097A7] group-hover:border-[#0097A7]/20"
@@ -357,7 +357,7 @@ export default function ClienteProfilePage() {
                             {trabajo.catalogo_servicios?.nombre || 'Servicio Personalizado'}
                           </h4>
                           <Badge className={cn(
-                            "h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border shadow-none shrink-0",
+                            "h-5 px-4 rounded-lg text-[10px] font-black uppercase tracking-wider border shadow-none shrink-0",
                             trabajo.estado === 'completado'
                               ? "bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 text-[#0097A7] border-[#0097A7]/20"
                               : "bg-slate-50 text-slate-500 border-slate-200/80"
@@ -365,7 +365,7 @@ export default function ClienteProfilePage() {
                             {trabajo.estado === 'completado' ? 'Completado' : 'Pendiente'}
                           </Badge>
                         </div>
-                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-slate-400 font-medium">
+                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-base text-slate-400 font-medium">
                           <div className="flex items-center">
                             <Calendar className="mr-1 h-3 w-3 text-[#00C9E0]" />
                             {new Date(trabajo.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
@@ -384,11 +384,11 @@ export default function ClienteProfilePage() {
                 <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mb-3">
                   <ArrowLeft className="h-6 w-6 text-[#0097A7] rotate-180" />
                 </div>
-                <h3 className="font-bold text-sm text-slate-800">Historial de Servicios</h3>
+                <h3 className="font-bold text-base text-slate-800">Historial de Servicios</h3>
                 <p className="text-[10.5px] text-slate-400 font-medium max-w-sm mt-1">
                   Aún no hay servicios registrados para este cliente. Comienza agendando uno nuevo.
                 </p>
-                <Button onClick={() => setShowJobTypeSelector(true)} className="mt-4 h-8 px-3.5 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
+                <Button onClick={() => setShowJobTypeSelector(true)} className="mt-4 h-10 px-4.5 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
                   <Plus className="mr-1.5 h-3.5 w-3.5" /> Nuevo Servicio
                 </Button>
               </div>
@@ -413,16 +413,16 @@ export default function ClienteProfilePage() {
                       <div key={plan.id} className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden hover:border-[#0097A7]/30 hover:shadow-[0_8px_20px_rgba(0,151,167,0.08)] transition-all duration-300">
                          <div className="bg-gradient-to-tr from-[#E6F9FB]/60 to-[#E6F9FB]/20 p-3.5 border-b border-[#0097A7]/10 flex justify-between items-start">
                             <div className="flex items-center gap-2.5">
-                               <div className="h-8 w-8 rounded-xl bg-white border border-[#0097A7]/15 flex items-center justify-center shrink-0">
+                               <div className="h-10 w-10 rounded-xl bg-white border border-[#0097A7]/15 flex items-center justify-center shrink-0">
                                   <Repeat className="h-4 w-4 text-[#0097A7]" />
                                </div>
                                <div>
                                   <h4 className="font-bold text-[12px] text-[#0097A7]">{plan.catalogo_servicios?.nombre || 'Servicio'}</h4>
-                                  <Badge className="h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-white text-slate-500 border-slate-200/80 shadow-none">{plan.frecuencia}</Badge>
+                                  <Badge className="h-5 px-4 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-white text-slate-500 border-slate-200/80 shadow-none">{plan.frecuencia}</Badge>
                                </div>
                             </div>
                             <Badge className={cn(
-                              "h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border shadow-none",
+                              "h-5 px-4 rounded-lg text-[10px] font-black uppercase tracking-wider border shadow-none",
                               plan.activo
                                 ? "bg-emerald-50 text-emerald-600 border-emerald-200"
                                 : "bg-slate-100 text-slate-500 border-slate-200"
@@ -448,7 +448,7 @@ export default function ClienteProfilePage() {
                             <div className="pt-2.5 border-t border-slate-50 flex gap-2">
                                <Button
                                  size="sm"
-                                 className="flex-1 h-8 text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
+                                 className="flex-1 h-10 text-base font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
                                  onClick={() => {
                                     setSelectedPlan(plan)
                                     setShowEditPlanModal(true)
@@ -458,7 +458,7 @@ export default function ClienteProfilePage() {
                                </Button>
                                <Button
                                  size="sm"
-                                 className="flex-1 h-8 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]"
+                                 className="flex-1 h-10 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]"
                                  onClick={() => {
                                     setRecurringJobData({
                                        cliente_id: id,
@@ -482,7 +482,7 @@ export default function ClienteProfilePage() {
                   <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mb-3">
                     <RotateCcw className="h-6 w-6 text-[#0097A7]" />
                   </div>
-                  <h3 className="font-bold text-sm text-slate-800">Planes Recurrentes</h3>
+                  <h3 className="font-bold text-base text-slate-800">Planes Recurrentes</h3>
                   <p className="text-[10.5px] text-slate-400 font-medium max-w-sm mt-1">
                     Visualiza los servicios que se repiten periódicamente.
                   </p>
@@ -496,7 +496,7 @@ export default function ClienteProfilePage() {
                    <h3 className="text-[13px] font-bold text-slate-800">Bitácora de Notas</h3>
                    <p className="text-[10.5px] text-slate-400 font-medium">Registros y observaciones internas del cliente.</p>
                 </div>
-                <Button onClick={() => setShowAddNoteModal(true)} className="h-8 px-3.5 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
+                <Button onClick={() => setShowAddNoteModal(true)} className="h-10 px-4.5 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
                    <Plus className="mr-1.5 h-3.5 w-3.5" /> Nueva Nota
                 </Button>
              </div>
@@ -513,7 +513,7 @@ export default function ClienteProfilePage() {
                                   </span>
                                 </div>
                                 <button
-                                  className="h-7 w-7 rounded-lg flex items-center justify-center text-amber-700/40 hover:text-amber-800 hover:bg-amber-100 opacity-0 group-hover:opacity-100 transition-all"
+                                  className="h-11 w-11 rounded-lg flex items-center justify-center text-amber-700/40 hover:text-amber-800 hover:bg-amber-100 opacity-0 group-hover:opacity-100 transition-all"
                                   onClick={() => {
                                      setSelectedNote(nota)
                                      setShowEditNoteModal(true)
@@ -531,11 +531,11 @@ export default function ClienteProfilePage() {
                   <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mb-3">
                     <StickyNote className="h-6 w-6 text-[#0097A7]" />
                   </div>
-                  <h3 className="font-bold text-sm text-slate-800">Notas Adicionales</h3>
+                  <h3 className="font-bold text-base text-slate-800">Notas Adicionales</h3>
                   <p className="text-[10.5px] text-slate-400 font-medium max-w-sm mt-1">
                     Agrega comentarios o recordatorios específicos para este cliente.
                   </p>
-                  <Button onClick={() => setShowAddNoteModal(true)} className="mt-4 h-8 px-3.5 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
+                  <Button onClick={() => setShowAddNoteModal(true)} className="mt-4 h-10 px-4.5 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
                      Comenzar a anotar
                   </Button>
                 </div>
@@ -549,7 +549,7 @@ export default function ClienteProfilePage() {
                    <p className="text-[10.5px] text-slate-400 font-medium">Historial de presupuestos y propuestas enviadas.</p>
                 </div>
                 <Link href="/cotizaciones">
-                   <Button className="h-8 px-3 text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]">
+                   <Button className="h-10 px-4 text-base font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]">
                       <ExternalLinkIcon className="mr-1.5 h-3 w-3" /> Ir a Cotizaciones
                    </Button>
                 </Link>
@@ -584,7 +584,7 @@ export default function ClienteProfilePage() {
                                      )}
                                   </div>
                                   <Badge className={cn(
-                                     'h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border shadow-none',
+                                     'h-5 px-4 rounded-lg text-[10px] font-black uppercase tracking-wider border shadow-none',
                                      c.estado === 'aprobado'
                                         ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
                                         : 'bg-slate-50 text-slate-500 border-slate-200/80'
@@ -601,12 +601,12 @@ export default function ClienteProfilePage() {
                   <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mb-3">
                     <FileText className="h-6 w-6 text-[#0097A7]" />
                   </div>
-                  <h3 className="font-bold text-sm text-slate-800">Sin Cotizaciones</h3>
+                  <h3 className="font-bold text-base text-slate-800">Sin Cotizaciones</h3>
                   <p className="text-[10.5px] text-slate-400 font-medium max-w-sm mt-1">
                     Este cliente aún no tiene cotizaciones registradas.
                   </p>
                   <Link href="/cotizaciones">
-                     <Button className="mt-4 h-8 px-3.5 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
+                     <Button className="mt-4 h-10 px-4.5 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
                         Crear Cotización
                      </Button>
                   </Link>
@@ -621,12 +621,12 @@ export default function ClienteProfilePage() {
           <DialogContent showCloseButton={false} className="sm:max-w-[420px] p-0 gap-0 overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-[0_25px_60px_-12px_rgba(3,11,23,0.35)]">
             <DialogHeader className="sidebar-premium-bg p-4 md:p-5 space-y-0 text-left relative">
               <div className="relative z-10 flex items-center gap-2.5">
-                <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
+                <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
                   <Calendar className="h-4.5 w-4.5 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
                 </div>
                 <div className="min-w-0">
                   <DialogTitle className="text-base font-bold tracking-tight text-white">Tipo de Registro</DialogTitle>
-                  <DialogDescription className="text-slate-300/80 text-xs mt-0.5 font-medium">
+                  <DialogDescription className="text-slate-300/80 text-base mt-0.5 font-medium">
                     ¿El servicio ya fue realizado o se va a programar a futuro?
                   </DialogDescription>
                 </div>
@@ -634,7 +634,7 @@ export default function ClienteProfilePage() {
               <button
                 type="button"
                 onClick={() => setShowJobTypeSelector(false)}
-                className="absolute top-4 right-4 z-20 h-7 w-7 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
+                className="absolute top-4 right-4 z-20 h-11 w-11 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
                 aria-label="Cerrar"
               >
                 <X className="h-3.5 w-3.5" />
@@ -651,7 +651,7 @@ export default function ClienteProfilePage() {
                   setShowNewJobWizard(true)
                 }}
               >
-                <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-400 group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 group-hover:text-[#0097A7] transition-all shrink-0">
+                <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-400 group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 group-hover:text-[#0097A7] transition-all shrink-0">
                   <Calendar className="h-4.5 w-4.5" />
                 </div>
                 <div className="flex flex-col items-start">
@@ -668,7 +668,7 @@ export default function ClienteProfilePage() {
                   setShowNewJobWizard(true)
                 }}
               >
-                <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/15 border border-white/20 text-white backdrop-blur-md shrink-0">
+                <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/15 border border-white/20 text-white backdrop-blur-md shrink-0">
                   <Check className="h-4.5 w-4.5" />
                 </div>
                 <div className="flex flex-col items-start">

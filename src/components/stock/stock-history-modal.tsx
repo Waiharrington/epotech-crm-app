@@ -49,12 +49,12 @@ export function StockHistoryModal({ item, onClose }: StockHistoryModalProps) {
         {/* Dark Navy Header */}
         <div className="sidebar-premium-bg px-6 py-4 relative shrink-0">
           <div className="relative z-10 flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
+            <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
               <History className="h-4 w-4 text-[#00C9E0]" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-white leading-none">Historial de Movimientos</h3>
-              <p className="text-xs text-slate-300/70 mt-1">{item.nombre}</p>
+              <h3 className="text-base font-bold text-white leading-none">Historial de Movimientos</h3>
+              <p className="text-base text-slate-300/70 mt-1">{item.nombre}</p>
             </div>
           </div>
         </div>
@@ -82,10 +82,10 @@ export function StockHistoryModal({ item, onClose }: StockHistoryModalProps) {
                   
                   <div className="bg-white rounded-xl border border-slate-200/60 p-3 shadow-sm">
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-xs font-black text-slate-800">
+                      <span className="text-base font-black text-slate-800">
                         {move.tipo === 'entrada' ? '+' : '-'}{move.cantidad} {item.unidad_medida}
                       </span>
-                      <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-lg">
+                      <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-4 py-0.5 rounded-lg">
 {new Date(move.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })} {new Date(move.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}
                       </span>
                     </div>
@@ -93,14 +93,14 @@ export function StockHistoryModal({ item, onClose }: StockHistoryModalProps) {
                     {move.trabajo_id ? (
                       <Link 
                         href={`/trabajos?id=${move.trabajo_id}`}
-                        className="text-xs text-[#0097A7] font-bold hover:underline flex items-center gap-1 group"
+                        className="text-base text-[#0097A7] font-bold hover:underline flex items-center gap-1 group"
                         onClick={onClose}
                       >
                         {move.motivo}
                         <ExternalLink className="h-2.5 w-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </Link>
                     ) : (
-                      <p className="text-xs text-slate-600 font-medium">{move.motivo}</p>
+                      <p className="text-base text-slate-600 font-medium">{move.motivo}</p>
                     )}
                     <div className="flex items-center gap-1.5 mt-1.5">
                        <span className="text-[10px] font-bold text-slate-400 uppercase">Balance:</span>

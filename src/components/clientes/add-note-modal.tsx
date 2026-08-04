@@ -62,7 +62,7 @@ export function AddNoteModal({ clientId, onClose, onSuccess }: AddNoteModalProps
           <div className="relative px-6 py-5">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                <p className="text-base font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                   Clientes
                 </p>
                 <h3 className="text-lg font-black text-white leading-tight flex items-center gap-2">
@@ -76,7 +76,7 @@ export function AddNoteModal({ clientId, onClose, onSuccess }: AddNoteModalProps
               <button
                 type="button"
                 onClick={handleClose}
-                className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95"
+                className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -102,7 +102,7 @@ export function AddNoteModal({ clientId, onClose, onSuccess }: AddNoteModalProps
           <button
             type="button"
             onClick={handleClose}
-            className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
+            className="flex items-center gap-2 text-base font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
           >
             <X className="h-3.5 w-3.5" /> Cancelar
           </button>

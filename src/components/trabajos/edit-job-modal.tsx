@@ -296,18 +296,18 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_60%)]" />
           <div className="relative flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="h-8 w-8 rounded-xl flex items-center justify-center bg-white/20 border border-white/30 backdrop-blur-md shadow-xs">
+              <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/20 border border-white/30 backdrop-blur-md shadow-xs">
                 <Pen className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h2 className="text-sm font-black text-white tracking-tight">Editar Servicio</h2>
-                <p className="text-xs text-white/70 font-medium mt-0.5">Modifica los detalles del trabajo registrado.</p>
+                <h2 className="text-base font-black text-white tracking-tight">Editar Servicio</h2>
+                <p className="text-base text-white/70 font-medium mt-0.5">Modifica los detalles del trabajo registrado.</p>
               </div>
             </div>
             <button
               type="button"
               onClick={handleClose}
-              className="h-8 w-8 rounded-xl flex items-center justify-center bg-white/15 border border-white/20 text-white hover:bg-white/25 transition-all backdrop-blur-md"
+              className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/15 border border-white/20 text-white hover:bg-white/25 transition-all backdrop-blur-md"
             >
               <X className="h-4 w-4" />
             </button>
@@ -446,16 +446,16 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                                 </p>
                               </div>
                               <div className="flex items-center gap-1.5">
-                                 <div className="flex items-center bg-white border border-slate-200 rounded-lg h-7">
-                                    <button type="button" className="h-6 w-6 flex items-center justify-center text-slate-500 hover:text-[#0097A7] transition-colors text-xs font-bold" onClick={() => {
+                                 <div className="flex items-center bg-white border border-slate-200 rounded-lg h-11">
+                                    <button type="button" className="h-6 w-6 flex items-center justify-center text-slate-500 hover:text-[#0097A7] transition-colors text-base font-bold" onClick={() => {
                                        setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: Math.max(1, x.cantidad - 1) } : x))
                                     }}>-</button>
                                     <span className="text-[13px] font-black text-slate-800 px-1.5">{m.cantidad}</span>
-                                    <button type="button" className="h-6 w-6 flex items-center justify-center text-slate-500 hover:text-[#0097A7] transition-colors text-xs font-bold" onClick={() => {
+                                    <button type="button" className="h-6 w-6 flex items-center justify-center text-slate-500 hover:text-[#0097A7] transition-colors text-base font-bold" onClick={() => {
                                        setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: x.cantidad + 1 } : x))
                                     }}>+</button>
                                  </div>
-                                 <button type="button" className="h-7 w-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
+                                 <button type="button" className="h-11 w-11 rounded-lg flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
                                    <Trash2 className="h-3.5 w-3.5" />
                                  </button>
                               </div>
@@ -463,7 +463,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                             {m.cantidad > (stockItem?.cantidad_actual || 0) && (
                               <div className="flex flex-col gap-2 mt-1 p-2.5 bg-amber-50 border border-amber-100 rounded-xl">
                                  <div className="flex items-center justify-between">
-                                   <p className="text-xs text-amber-700 font-bold">
+                                   <p className="text-base text-amber-700 font-bold">
                                      ⚠️ Superas el stock ({stockItem?.cantidad_actual || 0} {unit} disponibles)
                                    </p>
                                    <span className="text-[10px] bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded-md font-black uppercase">Auto-compra</span>
@@ -475,7 +475,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                                        type="number"
                                        step="0.01"
                                        min="0"
-                                       className="h-7 text-xs bg-white border-amber-200 text-amber-950 font-bold rounded-lg"
+                                       className="h-11 text-base bg-white border-amber-200 text-amber-950 font-bold rounded-lg"
                                        value={m.precio_costo !== undefined ? m.precio_costo : precioCosto}
                                        onChange={(e) => {
                                          setMaterials(materials.map(x => x.id === m.id ? { ...x, precio_costo: parseFloat(e.target.value) || 0 } : x))
@@ -488,7 +488,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                                        type="number"
                                        step="0.01"
                                        min="0"
-                                       className="h-7 text-xs bg-white border-amber-200 text-amber-950 font-bold rounded-lg"
+                                       className="h-11 text-base bg-white border-amber-200 text-amber-950 font-bold rounded-lg"
                                        value={m.precio_cliente !== undefined ? m.precio_cliente : precioCliente}
                                        onChange={(e) => {
                                          setMaterials(materials.map(x => x.id === m.id ? { ...x, precio_cliente: parseFloat(e.target.value) || 0 } : x))
@@ -511,7 +511,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                         placeholder="Buscar e integrar material..." 
                         value={searchMaterial}
                         onChange={(e) => setSearchMaterial(e.target.value)}
-                        className="pl-9 h-9 text-[13px] rounded-xl border-slate-200"
+                        className="pl-9 h-11 text-[13px] rounded-xl border-slate-200"
                       />
                     </div>
                     
@@ -525,7 +525,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                           .map(s => (
                             <button
                               key={s.id}
-                              className="w-full text-left px-3 py-2 text-[13px] hover:bg-[#E6F9FB] rounded-lg flex items-center justify-between transition-colors group"
+                              className="w-full text-left px-4 py-2 text-[13px] hover:bg-[#E6F9FB] rounded-lg flex items-center justify-between transition-colors group"
                               onClick={() => {
                                 setMaterials([...materials, { 
                                   id: s.id, 
@@ -555,7 +555,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
               type="button"
               onClick={handleClose}
               disabled={loading}
-              className="h-9 px-4 text-[13px] font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all"
+              className="h-11 px-4 text-[13px] font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all"
             >
               Cancelar
             </button>
@@ -563,7 +563,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
               type="button"
               onClick={handleSave}
               disabled={loading}
-              className="h-9 px-4 text-[13px] font-black text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] rounded-xl shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98] flex items-center gap-1.5"
+              className="h-11 px-4 text-[13px] font-black text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] rounded-xl shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98] flex items-center gap-1.5"
             >
               {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
               Guardar Cambios

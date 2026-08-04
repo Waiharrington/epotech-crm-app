@@ -124,9 +124,9 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
         {/* Selection Area */}
         <div className="space-y-4">
            <div className="flex items-center justify-between">
-              <Label className="font-bold uppercase text-xs text-muted-foreground">Fotos Seleccionadas</Label>
+              <Label className="font-bold uppercase text-base text-muted-foreground">Fotos Seleccionadas</Label>
               {(beforePhoto || afterPhoto) && (
-                <Button variant="ghost" size="sm" onClick={() => { setBeforePhoto(null); setAfterPhoto(null); }} className="h-7 text-xs">
+                <Button variant="ghost" size="sm" onClick={() => { setBeforePhoto(null); setAfterPhoto(null); }} className="h-11 text-base">
                   <RotateCcw className="mr-1 h-3 w-3" /> Limpiar
                 </Button>
               )}
@@ -146,7 +146,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                 ) : (
                   <div className="text-center p-2">
                     <Plus className="mx-auto h-5 w-5 text-muted-foreground mb-1" />
-                    <p className="text-xs font-bold uppercase">Antes</p>
+                    <p className="text-base font-bold uppercase">Antes</p>
                   </div>
                 )}
                 {beforePhoto && <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />}
@@ -165,7 +165,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                 ) : (
                   <div className="text-center p-2">
                     <Plus className="mx-auto h-5 w-5 text-muted-foreground mb-1" />
-                    <p className="text-xs font-bold uppercase">Después</p>
+                    <p className="text-base font-bold uppercase">Después</p>
                   </div>
                 )}
                 {afterPhoto && <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />}
@@ -176,7 +176,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
         {/* Info / Tips */}
         <div className="bg-muted/30 rounded-2xl p-6 flex flex-col justify-center">
            <h4 className="font-bold mb-2">Instrucciones</h4>
-           <ul className="text-sm space-y-2 text-muted-foreground">
+           <ul className="text-base space-y-2 text-muted-foreground">
               <li className="flex gap-2"><Check className="h-4 w-4 text-primary shrink-0" /> Selecciona una foto para el "Antes" y otra para el "Después".</li>
               <li className="flex gap-2"><Check className="h-4 w-4 text-primary shrink-0" /> Usa el control deslizante para comparar el resultado.</li>
               <li className="flex gap-2"><Check className="h-4 w-4 text-primary shrink-0" /> Cambia la orientación para redes sociales.</li>
@@ -256,10 +256,10 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
               </div>
 
               {/* Labels */}
-              <div className="absolute bottom-4 left-4 z-20 px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-full text-xs font-bold text-white uppercase tracking-wider">
+              <div className="absolute bottom-4 left-4 z-20 px-4 py-2.5 bg-black/60 backdrop-blur-md rounded-full text-base font-bold text-white uppercase tracking-wider">
                 Antes - {new Date(beforePhoto.fecha_foto || beforePhoto.created_at).toLocaleDateString()}
               </div>
-              <div className="absolute bottom-4 right-4 z-20 px-3 py-1.5 bg-primary/80 backdrop-blur-md rounded-full text-xs font-bold text-white uppercase tracking-wider">
+              <div className="absolute bottom-4 right-4 z-20 px-4 py-2.5 bg-primary/80 backdrop-blur-md rounded-full text-base font-bold text-white uppercase tracking-wider">
                 Después - {new Date(afterPhoto.fecha_foto || afterPhoto.created_at).toLocaleDateString()}
               </div>
            </div>
@@ -280,7 +280,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
                 <div className="relative px-6 py-5 flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                    <p className="text-base font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                       {showPicker === 'before' ? 'Foto Antes' : 'Foto Después'}
                     </p>
                     <h3 className="text-lg font-black text-white leading-tight">Selecciona una foto</h3>
@@ -289,7 +289,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                   <button
                     type="button"
                     onClick={() => setShowPicker(null)}
-                    className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95"
+                    className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -318,7 +318,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                             <Check className="text-[#0097A7] h-5 w-5" />
                           </div>
                         </div>
-                        <div className="absolute bottom-2 left-2 px-2.5 py-1 bg-[#030b17]/70 backdrop-blur-md rounded-lg text-[11px] text-white font-black uppercase tracking-wider shadow-md">
+                        <div className="absolute bottom-2 left-2 px-4.5 py-2 bg-[#030b17]/70 backdrop-blur-md rounded-lg text-[11px] text-white font-black uppercase tracking-wider shadow-md">
                           {photo.etiqueta}
                         </div>
                       </button>
@@ -329,7 +329,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                     <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mb-3 shadow-[0_4px_16px_rgba(0,201,224,0.08)]">
                       <ImageIcon className="h-6 w-6 text-[#0097A7]" />
                     </div>
-                    <h3 className="text-sm font-bold text-slate-800 tracking-tight">Sin fotos disponibles</h3>
+                    <h3 className="text-base font-bold text-slate-800 tracking-tight">Sin fotos disponibles</h3>
                     <p className="text-[10.5px] text-slate-400 font-medium max-w-xs mt-1">
                       No hay fotos en la galería para seleccionar. Sube imágenes primero.
                     </p>

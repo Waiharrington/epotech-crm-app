@@ -64,7 +64,7 @@ export function ChangePasswordModal({ onClose }: ChangePasswordModalProps) {
               <Lock className="h-5 w-5 text-[#0097A7]" />
             </div>
             <div>
-              <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight">
+              <h2 className="text-base font-black text-slate-800 uppercase tracking-tight">
                 Cambiar Contraseña
               </h2>
               <p className="text-[13px] font-medium text-slate-500">
@@ -75,7 +75,7 @@ export function ChangePasswordModal({ onClose }: ChangePasswordModalProps) {
 
           <div className="p-5 space-y-4">
             <div className="space-y-1.5">
-              <Label className="text-xs font-bold uppercase tracking-wider text-slate-500">Nueva Contraseña</Label>
+              <Label className="text-base font-bold uppercase tracking-wider text-slate-500">Nueva Contraseña</Label>
               <Input
                 type="password"
                 required
@@ -87,7 +87,7 @@ export function ChangePasswordModal({ onClose }: ChangePasswordModalProps) {
             </div>
             
             <div className="space-y-1.5">
-              <Label className="text-xs font-bold uppercase tracking-wider text-slate-500">Confirmar Contraseña</Label>
+              <Label className="text-base font-bold uppercase tracking-wider text-slate-500">Confirmar Contraseña</Label>
               <Input
                 type="password"
                 required
@@ -105,14 +105,14 @@ export function ChangePasswordModal({ onClose }: ChangePasswordModalProps) {
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-5 h-11 rounded-xl text-xs font-bold text-slate-600 bg-white border border-slate-200/60 hover:bg-slate-50 transition-all"
+              className="px-5 h-11 rounded-xl text-base font-bold text-slate-600 bg-white border border-slate-200/60 hover:bg-slate-50 transition-all"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 px-6 h-11 rounded-xl text-xs font-black text-white bg-[#0097A7] hover:bg-[#007f8c] transition-all disabled:opacity-50"
+              className="flex items-center gap-2 px-6 h-11 rounded-xl text-base font-black text-white bg-[#0097A7] hover:bg-[#007f8c] transition-all disabled:opacity-50"
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
               Guardar Contraseña

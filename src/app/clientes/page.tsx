@@ -102,7 +102,7 @@ export default function ClientesPage() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
                   Directorio de Clientes
                 </h1>
-                <p className="text-slate-300/80 text-[11px] xl:text-[11px] 2xl:text-xs mt-0.5 font-medium">
+                <p className="text-slate-300/80 text-[11px] xl:text-[11px] 2xl:text-base mt-0.5 font-medium">
                   Gestiona y visualiza la información de tus clientes.
                 </p>
               </div>
@@ -112,7 +112,7 @@ export default function ClientesPage() {
               <Button
                 onClick={() => setShowWizard(true)}
                 size="sm"
-                className="flex-1 md:flex-none h-8 xl:h-7.5 px-3.5 text-xs xl:text-[11px] font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98]"
+                className="flex-1 md:flex-none h-10 xl:h-11.5 px-4.5 text-base xl:text-[11px] font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98]"
               >
                 <Plus className="mr-1.5 h-3.5 w-3.5" />
                 Nuevo Cliente
@@ -125,7 +125,7 @@ export default function ClientesPage() {
             <Search className="absolute left-3 top-1/2 translate-y-[1px] -translate-y-1/2 h-3.5 w-3.5 text-[#00C9E0]/70 pointer-events-none z-10" />
             <Input
               placeholder="Buscar por nombre, teléfono o ciudad..."
-              className="mt-2 pl-9 h-9 xl:h-8.5 text-[13px] xl:text-[10.5px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 focus-visible:border-[#00C9E0]/40 transition-all"
+              className="mt-2 pl-9 h-11 xl:h-10.5 text-[13px] xl:text-[10.5px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 focus-visible:border-[#00C9E0]/40 transition-all"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -155,7 +155,7 @@ export default function ClientesPage() {
                     <p className="text-lg xl:text-base 2xl:text-2xl font-bold text-slate-900 mt-0.5 tracking-tight">{stat.value}</p>
                     <p className="text-[10px] xl:text-[7.5px] 2xl:text-[11px] text-slate-400 mt-0.5 font-medium truncate">{stat.hint}</p>
                   </div>
-                  <div className="h-7 w-7 xl:h-6.5 xl:w-6.5 2xl:h-9 2xl:w-9 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
+                  <div className="h-11 w-11 xl:h-6.5 xl:w-6.5 2xl:h-11 2xl:w-11 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
                     <stat.icon className="h-3.5 w-3.5 xl:h-3 xl:w-3 2xl:h-4.5 2xl:w-4.5 text-slate-500 group-hover:text-[#0097A7] transition-colors" />
                   </div>
                 </div>
@@ -170,10 +170,10 @@ export default function ClientesPage() {
           style={{ animationDelay: '350ms' }}
         >
           {/* Gradient section header */}
-          <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-3.5 xl:px-3 py-2.5 xl:py-2 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+          <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 xl:px-4 py-2.5 xl:py-2 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
             <div className="flex items-center gap-2">
               <Users className="h-3.5 w-3.5 text-[#00C9E0]" />
-              <h2 className="text-xs xl:text-[11px] font-black text-white uppercase tracking-[0.15em]">
+              <h2 className="text-base xl:text-[11px] font-black text-white uppercase tracking-[0.15em]">
                 Listado de Clientes
               </h2>
             </div>
@@ -184,19 +184,19 @@ export default function ClientesPage() {
 
           {loading ? (
             <div className="flex flex-col items-center justify-center flex-1 min-h-64 gap-3">
-              <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Cargando clientes</p>
+              <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
+              <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Cargando clientes</p>
             </div>
           ) : filteredClientes.length > 0 ? (
             <div className="overflow-auto flex-1 min-h-0">
               <table className="w-full border-collapse">
                 <thead className="sticky top-0 z-10">
                   <tr className="bg-slate-50/95 backdrop-blur-sm">
-                    <th className="text-left px-3.5 xl:px-3 py-2 text-[10px] xl:text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">Cliente</th>
-                    <th className="hidden md:table-cell text-left px-3.5 xl:px-3 py-2 text-[10px] xl:text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">Teléfono</th>
-                    <th className="hidden sm:table-cell text-left px-3.5 xl:px-3 py-2 text-[10px] xl:text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">Ciudad</th>
-                    <th className="hidden md:table-cell text-left px-3.5 xl:px-3 py-2 text-[10px] xl:text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">Tipo</th>
-                    <th className="text-right px-3.5 xl:px-3 py-2 text-[10px] xl:text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">Acciones</th>
+                    <th className="text-left px-4.5 xl:px-4 py-2 text-[10px] xl:text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">Cliente</th>
+                    <th className="hidden md:table-cell text-left px-4.5 xl:px-4 py-2 text-[10px] xl:text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">Teléfono</th>
+                    <th className="hidden sm:table-cell text-left px-4.5 xl:px-4 py-2 text-[10px] xl:text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">Ciudad</th>
+                    <th className="hidden md:table-cell text-left px-4.5 xl:px-4 py-2 text-[10px] xl:text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">Tipo</th>
+                    <th className="text-right px-4.5 xl:px-4 py-2 text-[10px] xl:text-[10px] font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -206,9 +206,9 @@ export default function ClientesPage() {
                       onClick={() => router.push(`/clientes/${cliente.id}`)}
                       className="group border-b border-slate-50 last:border-b-0 hover:bg-[#E6F9FB]/40 transition-colors duration-200 cursor-pointer"
                     >
-                      <td className="px-3.5 xl:px-3 py-2 xl:py-1.5">
+                      <td className="px-4.5 xl:px-4 py-2 xl:py-2.5">
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <div className="h-7 w-7 xl:h-6.5 xl:w-6.5 rounded-xl flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] group-hover:border-[#0097A7]/30 transition-all shrink-0">
+                          <div className="h-11 w-11 xl:h-6.5 xl:w-6.5 rounded-xl flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] group-hover:border-[#0097A7]/30 transition-all shrink-0">
                             <span className="text-[11px] xl:text-[10px] font-black text-[#0097A7]">
                               {getInitials(cliente.nombre, cliente.apellido)}
                             </span>
@@ -224,27 +224,27 @@ export default function ClientesPage() {
                           </div>
                         </div>
                       </td>
-                      <td className="hidden md:table-cell px-3.5 xl:px-3 py-2 xl:py-1.5 text-[10.5px] xl:text-xs font-medium text-slate-600 tabular-nums">
+                      <td className="hidden md:table-cell px-4.5 xl:px-4 py-2 xl:py-2.5 text-[10.5px] xl:text-base font-medium text-slate-600 tabular-nums">
                         {cliente.telefono}
                       </td>
-                      <td className="hidden sm:table-cell px-3.5 xl:px-3 py-2 xl:py-1.5">
-                        <div className="flex items-center gap-1 text-[10.5px] xl:text-xs font-medium text-slate-500">
+                      <td className="hidden sm:table-cell px-4.5 xl:px-4 py-2 xl:py-2.5">
+                        <div className="flex items-center gap-1 text-[10.5px] xl:text-base font-medium text-slate-500">
                           <MapPin className="h-3 w-3 text-slate-300 group-hover:text-[#00C9E0] transition-colors shrink-0" />
                           <span className="truncate">{cliente.ciudad || '—'}</span>
                         </div>
                       </td>
-                      <td className="hidden md:table-cell px-3.5 xl:px-3 py-2 xl:py-1.5">
+                      <td className="hidden md:table-cell px-4.5 xl:px-4 py-2 xl:py-2.5">
                         <Badge
                           className={
                             cliente.tipo_propiedad === 'comercial'
-                              ? 'h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 text-[#0097A7] border-[#0097A7]/20 shadow-none'
-                              : 'h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-slate-50 text-slate-500 border-slate-200/80 shadow-none'
+                              ? 'h-5 px-4 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 text-[#0097A7] border-[#0097A7]/20 shadow-none'
+                              : 'h-5 px-4 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-slate-50 text-slate-500 border-slate-200/80 shadow-none'
                           }
                         >
                           {cliente.tipo_propiedad === 'comercial' ? 'Comercial' : 'Residencial'}
                         </Badge>
                       </td>
-                      <td className="px-3.5 xl:px-3 py-2 xl:py-1.5" onClick={(e) => e.stopPropagation()}>
+                      <td className="px-4.5 xl:px-4 py-2 xl:py-2.5" onClick={(e) => e.stopPropagation()}>
                         <div className="flex justify-end gap-1">
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -280,14 +280,14 @@ export default function ClientesPage() {
               <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mb-3 shadow-[0_4px_16px_rgba(0,201,224,0.08)]">
                 <Users className="h-6 w-6 text-[#0097A7]" />
               </div>
-              <h3 className="text-sm font-bold text-slate-800 tracking-tight">No se encontraron clientes</h3>
+              <h3 className="text-base font-bold text-slate-800 tracking-tight">No se encontraron clientes</h3>
               <p className="text-[10.5px] text-slate-400 max-w-sm mt-1 font-medium">
                 Intenta con otro término de búsqueda o agrega un nuevo cliente al sistema.
               </p>
               <Button
                 onClick={() => setShowWizard(true)}
                 size="sm"
-                className="mt-4 h-8 px-3.5 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]"
+                className="mt-4 h-10 px-4.5 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]"
               >
                 <Plus className="mr-1.5 h-3.5 w-3.5" />
                 Nuevo Cliente

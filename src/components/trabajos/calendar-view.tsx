@@ -128,7 +128,7 @@ function DraggableJobPill({ job, onClick }: { job: Trabajo; onClick: () => void 
             {job.catalogo_servicios?.nombre || 'Personalizado'}
           </p>
           {job.precio_acordado && (
-            <span className="text-xs font-black tabular-nums shrink-0 opacity-90">
+            <span className="text-base font-black tabular-nums shrink-0 opacity-90">
               ${job.precio_acordado}
             </span>
           )}
@@ -185,8 +185,8 @@ function DailyTimelineView({
         className="flex flex-col items-center justify-center h-full text-slate-400 gap-3 p-6 min-h-[300px] cursor-pointer hover:bg-slate-50/50 transition-colors"
       >
         <CalendarIcon className="h-12 w-12 opacity-20" />
-        <p className="font-medium text-sm">No hay trabajos agendados para este día.</p>
-        <p className="text-xs uppercase font-bold tracking-wider opacity-70">Clic para añadir trabajo</p>
+        <p className="font-medium text-base">No hay trabajos agendados para este día.</p>
+        <p className="text-base uppercase font-bold tracking-wider opacity-70">Clic para añadir trabajo</p>
       </div>
     )
   }
@@ -209,10 +209,10 @@ function DailyTimelineView({
           <div key={job.id} className="relative flex group">
             {/* Timeline Column */}
             <div className="w-16 sm:w-20 shrink-0 flex flex-col items-end pr-4 sm:pr-5 py-4 border-r-2 border-slate-100 relative">
-              <span className="text-xs sm:text-sm font-semibold text-slate-700 leading-none">
+              <span className="text-base sm:text-base font-semibold text-slate-700 leading-none">
                 {timeVal}
               </span>
-              <span className="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider mt-0.5">
+              <span className="text-[11px] sm:text-base font-bold text-slate-400 uppercase tracking-wider mt-0.5">
                 {timePeriod}
               </span>
               
@@ -231,10 +231,10 @@ function DailyTimelineView({
               >
                 <div className="flex-1 flex flex-col min-w-0">
                   <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                    <h3 className="text-sm font-bold text-inherit truncate flex items-center gap-2">
+                    <h3 className="text-base font-bold text-inherit truncate flex items-center gap-2">
                       {job.clientes.nombre} {job.clientes.apellido}
                       {job.ayudantes && (
-                        <span className="flex items-center gap-1 text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded-md" title={`Equipo: ${job.ayudantes}`}>
+                        <span className="flex items-center gap-1 text-base font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded-md" title={`Equipo: ${job.ayudantes}`}>
                           <Users className="h-3 w-3" />
                         </span>
                       )}
@@ -245,7 +245,7 @@ function DailyTimelineView({
                           onClick={(e) => e.stopPropagation()}
                           className={cn("flex items-center gap-0.5 text-[10px] uppercase font-black px-1.5 py-0.5 rounded-md border bg-white/50 tracking-wider shrink-0 cursor-pointer hover:bg-white/80 transition-colors text-inherit")}
                         >
-                          {job.estado.replace('_', ' ')} <span className="text-xs leading-none">▾</span>
+                          {job.estado.replace('_', ' ')} <span className="text-base leading-none">▾</span>
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start" className="w-48 rounded-xl" onClick={(e) => e.stopPropagation()}>
@@ -286,16 +286,16 @@ function DailyTimelineView({
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  <p className="text-xs font-medium text-inherit opacity-75 truncate">
+                  <p className="text-base font-medium text-inherit opacity-75 truncate">
                     {job.catalogo_servicios?.nombre || 'Servicio Personalizado'}
                   </p>
                 </div>
                 
                 {job.precio_acordado && (
                   <div className="shrink-0 flex items-center justify-start sm:justify-end mt-1 sm:mt-0">
-                    <div className="bg-white/60 border border-white/50 rounded-xl px-3 py-1.5 flex flex-col items-end shadow-sm">
+                    <div className="bg-white/60 border border-white/50 rounded-xl px-4 py-2.5 flex flex-col items-end shadow-sm">
                       <span className="text-[10px] font-black uppercase tracking-wider opacity-60">Total</span>
-                      <span className="text-sm font-black">${job.precio_acordado}</span>
+                      <span className="text-base font-black">${job.precio_acordado}</span>
                     </div>
                   </div>
                 )}
@@ -367,7 +367,7 @@ function DroppableDayCell({
         <div className="flex flex-col">
           <div className="flex items-center gap-1.5">
             <span className={cn(
-              "text-xs sm:text-sm font-bold flex items-center justify-center h-6 w-6 sm:h-7 sm:w-7 rounded-full",
+              "text-base sm:text-base font-bold flex items-center justify-center h-6 w-6 sm:h-11 sm:w-11 rounded-full",
               isToday 
                 ? "bg-gradient-to-br from-[#00C9E0] to-[#0097A7] text-white shadow-md shadow-cyan-500/20" 
                 : "text-slate-700"
@@ -375,7 +375,7 @@ function DroppableDayCell({
               {format(date, 'd')}
             </span>
             {date.getDate() === 1 && (
-              <span className="text-xs sm:text-xs font-bold text-slate-400 uppercase tracking-wider">
+              <span className="text-base sm:text-base font-bold text-slate-400 uppercase tracking-wider">
                 {format(date, 'MMM', { locale: es })}
               </span>
             )}
@@ -402,7 +402,7 @@ function DroppableDayCell({
 
       <div className={cn(
         "flex-1 min-h-0 overflow-x-hidden",
-        jobs.length > 0 ? "overflow-y-auto space-y-1.5 py-1 pr-1 styled-scrollbar" : "flex flex-col items-center justify-center overflow-hidden"
+        jobs.length > 0 ? "overflow-y-auto space-y-1.5 py-2 pr-1 styled-scrollbar" : "flex flex-col items-center justify-center overflow-hidden"
       )}>
         {jobs.length === 0 ? (
           <div className="opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center gap-1">
@@ -598,7 +598,7 @@ export function CalendarView({
                   key={f.key}
                   onClick={() => setStatusFilter(f.key)}
                   className={cn(
-                    "px-2.5 py-1.5 text-xs font-bold rounded-lg transition-all whitespace-nowrap",
+                    "px-4.5 py-2.5 text-base font-bold rounded-lg transition-all whitespace-nowrap",
                     statusFilter === f.key 
                       ? "bg-[#0B1E3F] text-white shadow-sm" 
                       : `${f.color} hover:bg-slate-50`
@@ -622,7 +622,7 @@ export function CalendarView({
               
               <button 
                 onClick={() => setCurrentDate(new Date())}
-                className="px-4 py-1.5 text-xs font-bold text-slate-600 hover:text-[#00C9E0] hover:bg-cyan-50/50 rounded-lg transition-all"
+                className="px-4 py-2.5 text-base font-bold text-slate-600 hover:text-[#00C9E0] hover:bg-cyan-50/50 rounded-lg transition-all"
               >
                 HOY
               </button>
@@ -677,7 +677,7 @@ export function CalendarView({
                   const dayName = format(day, 'EEEE', { locale: es })
                   
                   return (
-                    <div key={day.toISOString()} className="py-2.5 text-center text-xs font-bold text-slate-400 uppercase tracking-wider truncate px-1" title={dayName}>
+                    <div key={day.toISOString()} className="py-2.5 text-center text-base font-bold text-slate-400 uppercase tracking-wider truncate px-1" title={dayName}>
                       {dayName}
                     </div>
                   )

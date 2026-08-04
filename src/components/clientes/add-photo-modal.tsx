@@ -98,7 +98,7 @@ export function AddPhotoModal({ onUpload, onClose, initialData }: AddPhotoModalP
           <div className="relative px-6 py-5">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                <p className="text-base font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                   {step === 'source' ? 'Galería' : 'Nueva Foto'}
                 </p>
                 <h3 className="text-lg font-black text-white leading-tight">
@@ -113,7 +113,7 @@ export function AddPhotoModal({ onUpload, onClose, initialData }: AddPhotoModalP
               <button
                 type="button"
                 onClick={handleClose}
-                className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95"
+                className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -137,7 +137,7 @@ export function AddPhotoModal({ onUpload, onClose, initialData }: AddPhotoModalP
                   </div>
                   <div className="text-center">
                     <p className="text-[13px] font-black text-slate-800">Tomar Foto</p>
-                    <p className="text-xs text-slate-400 font-medium mt-1">Usa la cámara de tu dispositivo</p>
+                    <p className="text-base text-slate-400 font-medium mt-1">Usa la cámara de tu dispositivo</p>
                   </div>
                 </div>
               </button>
@@ -150,7 +150,7 @@ export function AddPhotoModal({ onUpload, onClose, initialData }: AddPhotoModalP
                   </div>
                   <div className="text-center">
                     <p className="text-[13px] font-black text-slate-800">Subir de Galería</p>
-                    <p className="text-xs text-slate-400 font-medium mt-1">Selecciona archivos existentes</p>
+                    <p className="text-base text-slate-400 font-medium mt-1">Selecciona archivos existentes</p>
                   </div>
                 </div>
                 <input type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
@@ -164,12 +164,12 @@ export function AddPhotoModal({ onUpload, onClose, initialData }: AddPhotoModalP
                 <button
                   type="button"
                   onClick={() => { setStep('source'); setFile(null); setPreview(null); }}
-                  className="absolute top-3 right-3 h-8 w-8 rounded-xl flex items-center justify-center bg-[#030b17]/70 backdrop-blur-md text-white hover:bg-red-500 transition-all active:scale-95"
+                  className="absolute top-3 right-3 h-10 w-10 rounded-xl flex items-center justify-center bg-[#030b17]/70 backdrop-blur-md text-white hover:bg-red-500 transition-all active:scale-95"
                 >
                   <X className="h-4 w-4" />
                 </button>
-                <div className="absolute bottom-3 left-3 px-3 py-1.5 bg-[#030b17]/70 backdrop-blur-md rounded-lg">
-                  <p className="text-xs font-bold text-white uppercase tracking-wider">Vista Previa</p>
+                <div className="absolute bottom-3 left-3 px-4 py-2.5 bg-[#030b17]/70 backdrop-blur-md rounded-lg">
+                  <p className="text-base font-bold text-white uppercase tracking-wider">Vista Previa</p>
                 </div>
               </div>
 
@@ -228,7 +228,7 @@ export function AddPhotoModal({ onUpload, onClose, initialData }: AddPhotoModalP
               type="button"
               onClick={() => setStep('source')}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 rounded-xl hover:bg-slate-200 transition-all active:scale-[0.98]"
+              className="flex items-center gap-2 px-4 py-2.5 text-base font-bold uppercase tracking-wider text-slate-500 bg-slate-100 border border-slate-200 rounded-xl hover:bg-slate-200 transition-all active:scale-[0.98]"
             >
               <ArrowLeft className="h-3.5 w-3.5" /> Volver
             </button>
@@ -239,7 +239,7 @@ export function AddPhotoModal({ onUpload, onClose, initialData }: AddPhotoModalP
               type="button"
               onClick={handleClose}
               disabled={loading}
-              className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-[0.98]"
+              className="px-4 py-2.5 text-base font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-[0.98]"
             >
               Cancelar
             </button>
@@ -248,7 +248,7 @@ export function AddPhotoModal({ onUpload, onClose, initialData }: AddPhotoModalP
                 type="button"
                 onClick={handleSave}
                 disabled={loading}
-                className="flex items-center gap-2 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50"
+                className="flex items-center gap-2 px-5 py-2.5 text-base font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50"
               >
                 {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
                 Guardar

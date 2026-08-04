@@ -468,7 +468,7 @@ export default function DashboardPage() {
               <img 
                 src="/assets/logo.png" 
                 alt="Epotech Solutions" 
-                className="h-9 w-auto object-contain logo-premium" 
+                className="h-11 w-auto object-contain logo-premium" 
               />
               <span className="text-[11px] font-black tracking-[0.25em] text-[#00C9E0] uppercase border-l border-slate-700/80 pl-2">Portal CRM</span>
             </div>
@@ -477,7 +477,7 @@ export default function DashboardPage() {
               <NotificationBell />
               <Link 
                 href="/ajustes" 
-                className="h-8 w-8 rounded-xl overflow-hidden border border-white/20 hover:border-[#00C9E0] shadow-md transition-all active:scale-95"
+                className="h-10 w-10 rounded-xl overflow-hidden border border-white/20 hover:border-[#00C9E0] shadow-md transition-all active:scale-95"
               >
                 <img 
                   src={profilePic} 
@@ -511,7 +511,7 @@ export default function DashboardPage() {
                   )}
                 </div>
               </div>
-              <p className="text-slate-300/80 text-[11px] xl:text-[11px] 2xl:text-xs mt-0.5 font-medium">{greetingState.sub}</p>
+              <p className="text-slate-300/80 text-[11px] xl:text-[11px] 2xl:text-base mt-0.5 font-medium">{greetingState.sub}</p>
             </div>
 
             {/* Right side: Desktop Icons */}
@@ -520,7 +520,7 @@ export default function DashboardPage() {
 
               <Link 
                 href="/ajustes" 
-                className="h-7 w-7 rounded-xl overflow-hidden border border-white/20 hover:border-[#00C9E0] shadow-md hover:shadow-[#00C9E0]/20 transition-all hover:scale-105 active:scale-95 duration-200"
+                className="h-11 w-11 rounded-xl overflow-hidden border border-white/20 hover:border-[#00C9E0] shadow-md hover:shadow-[#00C9E0]/20 transition-all hover:scale-105 active:scale-95 duration-200"
               >
                 <img 
                   src={profilePic} 
@@ -568,7 +568,7 @@ export default function DashboardPage() {
                     {stats.newClientsThisWeek > 0 ? `+${stats.newClientsThisWeek} esta semana` : 'Sin registros'}
                   </p>
                 </div>
-                <div className="h-7 w-7 xl:h-6.5 xl:w-6.5 2xl:h-9 2xl:w-9 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
+                <div className="h-11 w-11 xl:h-6.5 xl:w-6.5 2xl:h-11 2xl:w-11 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
                   <Users className="h-3.5 w-3.5 xl:h-3 xl:w-3 2xl:h-4.5 2xl:w-4.5 text-slate-500 group-hover:text-[#0097A7] transition-colors" />
                 </div>
               </div>
@@ -584,7 +584,7 @@ export default function DashboardPage() {
                     En tablero Kanban
                   </p>
                 </div>
-                <div className="h-7 w-7 xl:h-6.5 xl:w-6.5 2xl:h-9 2xl:w-9 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
+                <div className="h-11 w-11 xl:h-6.5 xl:w-6.5 2xl:h-11 2xl:w-11 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
                   <Briefcase className="h-3.5 w-3.5 xl:h-3 xl:w-3 2xl:h-4.5 2xl:w-4.5 text-slate-500 group-hover:text-[#0097A7] transition-colors animate-none" />
                 </div>
               </div>
@@ -600,7 +600,7 @@ export default function DashboardPage() {
                     Neto: ${stats.netIncome.toLocaleString()}
                   </p>
                 </div>
-                <div className="h-7 w-7 xl:h-6.5 xl:w-6.5 2xl:h-9 2xl:w-9 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
+                <div className="h-11 w-11 xl:h-6.5 xl:w-6.5 2xl:h-11 2xl:w-11 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
                   <Wallet className="h-3.5 w-3.5 xl:h-3 xl:w-3 2xl:h-4.5 2xl:w-4.5 text-slate-500 group-hover:text-[#0097A7] transition-colors" />
                 </div>
               </div>
@@ -616,7 +616,7 @@ export default function DashboardPage() {
                     {stats.lowStock > 0 ? `${stats.lowStock} reponer` : 'Stock sano'}
                   </p>
                 </div>
-                <div className="h-7 w-7 xl:h-6.5 xl:w-6.5 2xl:h-9 2xl:w-9 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
+                <div className="h-11 w-11 xl:h-6.5 xl:w-6.5 2xl:h-11 2xl:w-11 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
                   <AlertTriangle className={`h-3.5 w-3.5 xl:h-3 xl:w-3 2xl:h-4.5 2xl:w-4.5 transition-colors ${stats.lowStock > 0 ? 'text-[#0097A7]' : 'text-slate-500 group-hover:text-[#0097A7]'}`} />
                 </div>
               </div>
@@ -629,12 +629,12 @@ export default function DashboardPage() {
           {/* Próximos Servicios */}
           <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col xl:min-h-0 xl:h-full animate-dashboard-item" style={{ animationDelay: '350ms' }}>
             {/* Header */}
-            <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-3.5 xl:px-3 py-2.5 xl:py-2 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+            <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 xl:px-4 py-2.5 xl:py-2 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
               <div>
-                <h3 className="text-[13px] xl:text-xs 2xl:text-xs font-black text-white tracking-wide uppercase">Próximos Servicios</h3>
+                <h3 className="text-[13px] xl:text-base 2xl:text-base font-black text-white tracking-wide uppercase">Próximos Servicios</h3>
                 <p className="text-[10px] xl:text-[10px] 2xl:text-[11px] text-[#00C9E0]/80 font-medium">Compromisos más cercanos.</p>
               </div>
-              <Link href="/trabajos" className="text-[11px] xl:text-[11px] 2xl:text-xs font-black text-[#00C9E0] hover:text-white hover:underline flex items-center gap-0.5 transition-colors">
+              <Link href="/trabajos" className="text-[11px] xl:text-[11px] 2xl:text-base font-black text-[#00C9E0] hover:text-white hover:underline flex items-center gap-0.5 transition-colors">
                 Ver todos <ChevronRight className="h-2.5 w-2.5" />
               </Link>
             </div>
@@ -644,14 +644,14 @@ export default function DashboardPage() {
                 <div className="flex justify-center py-4"><Loader2 className="h-4 w-4 text-[#0097A7] animate-spin" /></div>
               ) : recentJobs.length > 0 ? (
                 recentJobs.map(job => (
-                  <div key={job.id} className="flex items-center justify-between py-1.5 px-2.5 xl:py-1 xl:px-2 rounded-xl border border-slate-100/60 bg-white hover:bg-slate-50/80 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,151,167,0.02)] transition-all duration-300 group">
+                  <div key={job.id} className="flex items-center justify-between py-2.5 px-4.5 xl:py-2 xl:px-4 rounded-xl border border-slate-100/60 bg-white hover:bg-slate-50/80 hover:border-[#00C9E0]/20 hover:shadow-[0_4px_12px_rgba(0,151,167,0.02)] transition-all duration-300 group">
                     <div className="flex items-center gap-2 min-w-0">
                       <div className="h-6 w-6 xl:h-5.5 xl:w-5.5 rounded-lg flex items-center justify-center bg-[#E6F9FB] border border-[#0097A7]/10 text-[#0097A7] shrink-0">
                         <Briefcase className="h-3 w-3 xl:h-2.5 xl:w-2.5" />
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-extrabold text-[10.5px] xl:text-xs text-slate-800 group-hover:text-[#0097A7] transition-colors truncate">{job.catalogo_servicios?.nombre}</span>
+                          <span className="font-extrabold text-[10.5px] xl:text-base text-slate-800 group-hover:text-[#0097A7] transition-colors truncate">{job.catalogo_servicios?.nombre}</span>
                           <span className="px-1.5 py-0.2 text-[6.5px] xl:text-[6px] font-black uppercase rounded-full bg-[#E6F9FB] text-[#0097A7] tracking-wider border border-[#0097A7]/10">
                             {job.estado === 'en_progreso' ? 'En Progreso' : job.estado === 'pendiente' ? 'Pendiente' : job.estado?.replace('_', ' ')}
                           </span>
@@ -683,46 +683,46 @@ export default function DashboardPage() {
           <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3.5 xl:p-2.5 2xl:p-4 flex flex-col gap-2 xl:gap-1.5 animate-dashboard-item xl:min-h-0 xl:h-full" style={{ animationDelay: '400ms' }}>
             <div className="flex flex-col gap-2 xl:gap-1.5">
               <div>
-                <h3 className="text-[13px] xl:text-xs 2xl:text-xs font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
+                <h3 className="text-[13px] xl:text-base 2xl:text-base font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
                 <p className="text-[10px] xl:text-[10px] text-slate-400 font-medium">Accesos directos operacionales.</p>
               </div>
               
               <div className="flex flex-col gap-1.5 xl:gap-1">
                 <button 
                   onClick={() => setShowClientWizard(true)}
-                  className="flex items-center justify-between py-1.5 xl:py-1 px-2.5 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
+                  className="flex items-center justify-between py-2.5 xl:py-2 px-4.5 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
                     <div className="h-5.5 w-5.5 xl:h-4.5 xl:w-4.5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
                       <Users className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-xs xl:text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
+                    <span className="text-base xl:text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
                   </div>
                   <ChevronRight className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
                 </button>
 
                 <button 
                   onClick={() => setShowJobWizard(true)}
-                  className="flex items-center justify-between py-1.5 xl:py-1 px-2.5 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
+                  className="flex items-center justify-between py-2.5 xl:py-2 px-4.5 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
                     <div className="h-5.5 w-5.5 xl:h-4.5 xl:w-4.5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
                       <Calendar className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-xs xl:text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
+                    <span className="text-base xl:text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
                   </div>
                   <ChevronRight className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
                 </button>
 
                 <button 
                   onClick={() => setShowQuoteWizard(true)}
-                  className="flex items-center justify-between py-1.5 xl:py-1 px-2.5 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
+                  className="flex items-center justify-between py-2.5 xl:py-2 px-4.5 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
                     <div className="h-5.5 w-5.5 xl:h-4.5 xl:w-4.5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
                       <FileText className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-xs xl:text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
+                    <span className="text-base xl:text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
                   </div>
                   <ChevronRight className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
                 </button>
@@ -738,7 +738,7 @@ export default function DashboardPage() {
             <div className="min-h-0 flex flex-col flex-1 h-auto">
               <div className="flex items-center justify-between pb-1.5 border-b border-slate-50 shrink-0">
                 <div>
-                  <h3 className="text-[13px] xl:text-xs 2xl:text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
+                  <h3 className="text-[13px] xl:text-base 2xl:text-base font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
                     <Bell className="h-3.5 w-3.5 xl:h-3 xl:w-3 text-[#0097A7]" />
                     Recordatorios y Pendientes
                   </h3>
@@ -759,7 +759,7 @@ export default function DashboardPage() {
                   placeholder="Pendiente rápido..."
                   value={quickTitle}
                   onChange={e => setQuickTitle(e.target.value)}
-                  className="text-xs xl:text-[11px] h-7.5 xl:h-7 px-2.5 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex-1 min-w-[110px]"
+                  className="text-base xl:text-[11px] h-11.5 xl:h-11 px-4.5 rounded-xl border-slate-200 focus-visible:ring-[#0097A7] bg-slate-50/40 focus:bg-white transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] flex-1 min-w-[110px]"
                 />
 
                 {/* Styled Popover Date Picker */}
@@ -767,7 +767,7 @@ export default function DashboardPage() {
                   <PopoverTrigger asChild>
                     <button
                       type="button"
-                      className="h-7.5 xl:h-7 px-2 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[11px] xl:text-[11px] font-bold text-slate-700 flex items-center gap-1 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                      className="h-11.5 xl:h-11 px-4 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[11px] xl:text-[11px] font-bold text-slate-700 flex items-center gap-1 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
                     >
                       <CalendarIcon className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7]" />
                       <span>
@@ -797,7 +797,7 @@ export default function DashboardPage() {
                   <PopoverTrigger asChild>
                     <button
                       type="button"
-                      className="h-7.5 xl:h-7 px-2 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[11px] xl:text-[11px] font-bold text-slate-700 flex items-center gap-1 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                      className="h-11.5 xl:h-11 px-4 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-100/70 text-[11px] xl:text-[11px] font-bold text-slate-700 flex items-center gap-1 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
                     >
                       <Clock className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7]" />
                       <span>{formatTime12h(`${quickTime}:00`)}</span>
@@ -808,7 +808,7 @@ export default function DashboardPage() {
                       <span className="text-[13px] font-black text-[#0B1E3F] flex items-center gap-1">
                         <Clock className="h-3.5 w-3.5 text-[#0097A7]" /> Selección de Hora
                       </span>
-                      <span className="text-xs font-black text-[#0097A7] bg-[#E6F9FB] px-2 py-0.5 rounded-lg border border-[#0097A7]/20">
+                      <span className="text-base font-black text-[#0097A7] bg-[#E6F9FB] px-4 py-0.5 rounded-lg border border-[#0097A7]/20">
                         {formatTime12h(`${quickTime}:00`)}
                       </span>
                     </div>
@@ -894,7 +894,7 @@ export default function DashboardPage() {
                   </PopoverContent>
                 </Popover>
 
-                <Button type="submit" size="sm" className="h-7.5 xl:h-7 text-xs xl:text-[11px] font-black gap-1 px-3 bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
+                <Button type="submit" size="sm" className="h-11.5 xl:h-11 text-base xl:text-[11px] font-black gap-1 px-4 bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white rounded-xl shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/15 border-none shrink-0 transition-all duration-300 active:scale-[0.98]">
                   <Plus className="h-3 w-3 stroke-[3]" /> Agregar
                 </Button>
               </form>
@@ -910,7 +910,7 @@ export default function DashboardPage() {
                             <Check className="h-2.5 w-2.5 stroke-[3] text-slate-300 hover:text-[#0097A7]" />
                           </button>
                           <div className="min-w-0">
-                            <p className="font-bold text-[10.5px] xl:text-xs text-slate-800 truncate">{reminder.titulo}</p>
+                            <p className="font-bold text-[10.5px] xl:text-base text-slate-800 truncate">{reminder.titulo}</p>
                             <div className="flex items-center gap-1.5 mt-0.2 text-[10px] xl:text-[7.5px] text-slate-400 font-medium">
                               <span>{new Date(reminder.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>
                               {reminder.hora && <span>{formatTime12h(reminder.hora)}</span>}
@@ -936,7 +936,7 @@ export default function DashboardPage() {
           <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3.5 xl:p-2.5 2xl:p-4 flex flex-col justify-between xl:min-h-0 xl:h-full animate-dashboard-item" style={{ animationDelay: '500ms' }}>
             <div className="min-h-0 flex flex-col flex-1 h-auto">
               <div className="pb-1.5 xl:pb-1 border-b border-slate-50 shrink-0">
-                <h3 className="text-[13px] xl:text-xs 2xl:text-xs font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
+                <h3 className="text-[13px] xl:text-base 2xl:text-base font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
                   <AlertTriangle className="h-3.5 w-3.5 xl:h-3 xl:w-3 text-[#0097A7]" />
                   Alertas y Operaciones
                 </h3>
@@ -948,7 +948,7 @@ export default function DashboardPage() {
                   <div className="p-2 xl:p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/15 flex items-start gap-2 shadow-2xs hover:border-[#0097A7]/30 transition-all">
                     <AlertTriangle className="h-3.5 w-3.5 text-[#0097A7] shrink-0 mt-0.5 animate-pulse" />
                     <div>
-                      <p className="font-extrabold text-[10.5px] xl:text-xs text-[#0B1E3F]">{stats.lowStock} productos en bajo stock</p>
+                      <p className="font-extrabold text-[10.5px] xl:text-base text-[#0B1E3F]">{stats.lowStock} productos en bajo stock</p>
                       <p className="text-[10px] xl:text-[10px] text-[#0097A7] mt-0.2 font-medium leading-tight">Insumos bajo el nivel mínimo.</p>
                     </div>
                   </div>
@@ -958,7 +958,7 @@ export default function DashboardPage() {
                       <Check className="h-2.5 w-2.5 stroke-[3]" />
                     </div>
                     <div>
-                      <p className="font-extrabold text-[10.5px] xl:text-xs text-[#0B1E3F]">Inventario al día</p>
+                      <p className="font-extrabold text-[10.5px] xl:text-base text-[#0B1E3F]">Inventario al día</p>
                       <p className="text-[10px] xl:text-[10px] text-slate-500 mt-0.2 font-medium leading-tight">Niveles de stock adecuados.</p>
                     </div>
                   </div>
@@ -969,7 +969,7 @@ export default function DashboardPage() {
                     <Wallet className="h-2.5 w-2.5" />
                   </div>
                   <div>
-                    <p className="font-extrabold text-[10.5px] xl:text-xs text-[#0B1E3F]">Balance de Caja</p>
+                    <p className="font-extrabold text-[10.5px] xl:text-base text-[#0B1E3F]">Balance de Caja</p>
                     <p className="text-[10px] xl:text-[10px] text-slate-500 mt-0.2 font-medium leading-tight">
                       Ganancia Neta: <strong className="text-slate-900 font-extrabold">${stats.netIncome.toLocaleString()}</strong> <span className="text-slate-400">(${stats.monthlyIncome.toLocaleString()} ing. / ${stats.totalExpenses.toLocaleString()} eg.)</span>
                     </p>
@@ -979,10 +979,10 @@ export default function DashboardPage() {
             </div>
 
             <div className="pt-2 xl:pt-1.5 border-t border-slate-100 mt-2 xl:mt-1.5 flex gap-2 shrink-0">
-              <Button variant="outline" size="sm" className="flex-1 h-7.5 xl:h-7 text-[11px] xl:text-[10px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#0097A7] hover:border-[#0097A7]/30 shadow-xs transition-all duration-300" asChild>
+              <Button variant="outline" size="sm" className="flex-1 h-11.5 xl:h-11 text-[11px] xl:text-[10px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#0097A7] hover:border-[#0097A7]/30 shadow-xs transition-all duration-300" asChild>
                 <Link href="/stock">Ver Inventario</Link>
               </Button>
-              <Button variant="outline" size="sm" className="flex-1 h-7.5 xl:h-7 text-[11px] xl:text-[10px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#00C9E0] hover:border-[#00C9E0]/30 shadow-xs transition-all duration-300" asChild>
+              <Button variant="outline" size="sm" className="flex-1 h-11.5 xl:h-11 text-[11px] xl:text-[10px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#00C9E0] hover:border-[#00C9E0]/30 shadow-xs transition-all duration-300" asChild>
                 <Link href="/caja">Ver Caja</Link>
               </Button>
             </div>
@@ -1565,11 +1565,11 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
           <div className="relative w-20 h-20 flex items-center justify-center">
             <div className="absolute inset-0 rounded-full border-[2px] border-slate-800" />
             <div className="absolute inset-0 rounded-full border-[2px] border-t-[#00C9E0] border-r-[#0097A7] animate-spin duration-700" />
-            <Droplets className="w-7 h-7 text-[#00C9E0] animate-pulse" />
+            <Droplets className="w-11 h-11 text-[#00C9E0] animate-pulse" />
           </div>
 
           <div className="text-center">
-            <h2 className="text-[#00C9E0] font-black text-sm uppercase tracking-[0.35em] drop-shadow-[0_0_12px_rgba(0,201,224,0.4)]">
+            <h2 className="text-[#00C9E0] font-black text-base uppercase tracking-[0.35em] drop-shadow-[0_0_12px_rgba(0,201,224,0.4)]">
               EPOTECH SOLUTIONS
             </h2>
             <p className="text-slate-400 text-[12px] font-medium uppercase mt-2">Cargando...</p>
@@ -1579,7 +1579,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
 
       {/* Live Calibration Panel */}
       {showTuner && (
-        <div className="fixed top-14 right-4 left-4 sm:left-auto sm:w-80 p-4 rounded-2xl bg-slate-950/95 border border-cyan-500/30 text-white z-[9999999] shadow-2xl backdrop-blur-xl pointer-events-auto text-xs space-y-3 touch-manipulation">
+        <div className="fixed top-14 right-4 left-4 sm:left-auto sm:w-80 p-4 rounded-2xl bg-slate-950/95 border border-cyan-500/30 text-white z-[9999999] shadow-2xl backdrop-blur-xl pointer-events-auto text-base space-y-3 touch-manipulation">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <span className="font-black text-[#00C9E0] uppercase tracking-wider text-[13px]">
               🎯 Calibrador de Chorro ({deviceMode.toUpperCase()})
@@ -1591,7 +1591,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
                 e.stopPropagation()
                 setShowTuner(false)
               }}
-              className="text-slate-400 hover:text-white font-bold text-sm px-2 py-1 cursor-pointer"
+              className="text-slate-400 hover:text-white font-bold text-base px-4 py-2 cursor-pointer"
             >
               ✕
             </button>
@@ -1599,7 +1599,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
 
           <div className="space-y-2">
             <div>
-              <div className="flex justify-between text-xs text-slate-300">
+              <div className="flex justify-between text-base text-slate-300">
                 <span>Orificio Nozzle X (px):</span>
                 <span className="font-mono text-[#00C9E0]">{nozzleX}px</span>
               </div>
@@ -1615,7 +1615,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-slate-300">
+              <div className="flex justify-between text-base text-slate-300">
                 <span>Orificio Nozzle Y (px):</span>
                 <span className="font-mono text-[#00C9E0]">{nozzleY}px</span>
               </div>
@@ -1631,7 +1631,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-slate-300">
+              <div className="flex justify-between text-base text-slate-300">
                 <span>Dirección X (Target %):</span>
                 <span className="font-mono text-[#00C9E0]">{(targetXPct * 100).toFixed(0)}%</span>
               </div>
@@ -1647,7 +1647,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
             </div>
 
             <div>
-              <div className="flex justify-between text-xs text-slate-300">
+              <div className="flex justify-between text-base text-slate-300">
                 <span>Dirección Y (Target %):</span>
                 <span className="font-mono text-[#00C9E0]">{(targetYPct * 100).toFixed(0)}%</span>
               </div>
@@ -1683,7 +1683,7 @@ function WelcomePressureWasherLoader({ onComplete }: { onComplete: () => void })
                 e.stopPropagation()
                 handleResetTuner()
               }}
-              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 font-bold rounded-xl text-[13px] transition-all cursor-pointer touch-none select-none"
+              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 font-bold rounded-xl text-[13px] transition-all cursor-pointer touch-none select-none"
             >
               🔄 Reset
             </button>

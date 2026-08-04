@@ -82,14 +82,14 @@ export function StockAdjustModal({ item, type, onClose, onSuccess }: StockAdjust
         {/* Dark Navy Header */}
         <div className="sidebar-premium-bg px-6 py-4 relative">
           <div className="relative z-10 flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
+            <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
               {type === 'in' ? <ArrowDownToLine className="h-4 w-4 text-emerald-400" /> : <ArrowUpFromLine className="h-4 w-4 text-rose-400" />}
             </div>
             <div>
-              <h3 className="text-sm font-bold text-white leading-none">
+              <h3 className="text-base font-bold text-white leading-none">
                 {type === 'in' ? 'Cargar Inventario' : 'Descargar Inventario'}
               </h3>
-              <p className="text-xs text-slate-300/70 mt-1">
+              <p className="text-base text-slate-300/70 mt-1">
                 {item.nombre} — {item.cantidad_actual} {item.unidad_medida}
               </p>
             </div>
@@ -122,7 +122,7 @@ export function StockAdjustModal({ item, type, onClose, onSuccess }: StockAdjust
             </div>
             <Input 
               type="number" 
-              className="w-24 text-center h-9 bg-slate-50 border-slate-200/60 rounded-xl text-xs font-bold text-slate-700 focus-visible:ring-[#00C9E0]/40" 
+              className="w-24 text-center h-11 bg-slate-50 border-slate-200/60 rounded-xl text-base font-bold text-slate-700 focus-visible:ring-[#00C9E0]/40" 
               value={adjustment} 
               onChange={e => setAdjustment(parseFloat(e.target.value) || 0)} 
             />
@@ -130,12 +130,12 @@ export function StockAdjustModal({ item, type, onClose, onSuccess }: StockAdjust
 
           {/* Reason */}
           <div className="space-y-2">
-            <Label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <Label className="text-base font-bold uppercase tracking-wider text-slate-500">
               Motivo (Opcional)
             </Label>
             <Input 
               placeholder={type === 'in' ? 'Ej: Compra nueva, devolución' : 'Ej: Merma, uso manual'} 
-              className="h-9 text-xs rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40"
+              className="h-11 text-base rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40"
               value={reason}
               onChange={e => setReason(e.target.value)}
             />

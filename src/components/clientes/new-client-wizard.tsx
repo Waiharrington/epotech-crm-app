@@ -31,9 +31,9 @@ type ClienteInsert = Database['public']['Tables']['clientes']['Insert']
 
 /* Shared premium field styles (Epotech design system) */
 const fieldLabel = "text-[11px] font-extrabold text-slate-400 uppercase tracking-wider"
-const fieldInput = "h-9 text-[13px] rounded-xl border-slate-200 bg-slate-50/40 focus:bg-white focus-visible:ring-[#00C9E0]/30 focus-visible:border-[#00C9E0]/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all placeholder:text-slate-300"
+const fieldInput = "h-11 text-[13px] rounded-xl border-slate-200 bg-slate-50/40 focus:bg-white focus-visible:ring-[#00C9E0]/30 focus-visible:border-[#00C9E0]/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all placeholder:text-slate-300"
 const fieldArea = "text-[13px] rounded-xl border-slate-200 bg-slate-50/40 focus:bg-white focus-visible:ring-[#00C9E0]/30 focus-visible:border-[#00C9E0]/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all placeholder:text-slate-300 resize-none"
-const btnPrimary = "h-9 px-4 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98]"
+const btnPrimary = "h-11 px-4 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98]"
 
 interface NewClientWizardProps {
   open?: boolean
@@ -147,14 +147,14 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
         {/* Premium Dark Navy Header */}
         <DialogHeader className="sidebar-premium-bg p-4 md:p-5 space-y-0 text-left relative">
           <div className="relative z-10 flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
+            <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
               <User className="h-4.5 w-4.5 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
             </div>
             <div className="min-w-0 flex-1">
               <DialogTitle className="text-base font-bold tracking-tight text-white">
                 Nuevo Cliente
               </DialogTitle>
-              <DialogDescription className="text-slate-300/80 text-xs mt-0.5 font-medium">
+              <DialogDescription className="text-slate-300/80 text-base mt-0.5 font-medium">
                 Completa los datos para dar de alta al cliente.
               </DialogDescription>
             </div>
@@ -163,7 +163,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
           <button
             type="button"
             onClick={handleClose}
-            className="absolute top-4 right-4 z-20 h-7 w-7 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
+            className="absolute top-4 right-4 z-20 h-11 w-11 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
             aria-label="Cerrar"
           >
             <X className="h-3.5 w-3.5" />
@@ -182,7 +182,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
               <div className="flex flex-col items-center gap-1 shrink-0">
                 <div
                   className={cn(
-                    "h-7 w-7 rounded-xl flex items-center justify-center text-[13px] font-black transition-all duration-300",
+                    "h-11 w-11 rounded-xl flex items-center justify-center text-[13px] font-black transition-all duration-300",
                     step === s.n
                       ? "bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white shadow-md shadow-cyan-500/25 scale-105"
                       : step > s.n
@@ -218,7 +218,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
           <button
             type="button"
             onClick={fillDemoData}
-            className="shrink-0 h-8 px-2.5 text-[11px] font-black rounded-lg bg-white border border-slate-200 text-[#0097A7] hover:bg-[#E6F9FB] hover:border-[#00C9E0]/40 hover:shadow-[0_2px_8px_rgba(0,201,224,0.1)] transition-all active:scale-95"
+            className="shrink-0 h-10 px-4.5 text-[11px] font-black rounded-lg bg-white border border-slate-200 text-[#0097A7] hover:bg-[#E6F9FB] hover:border-[#00C9E0]/40 hover:shadow-[0_2px_8px_rgba(0,201,224,0.1)] transition-all active:scale-95"
             title="Rellenar con datos de prueba"
           >
             📋 Demo
@@ -287,7 +287,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
                   value={formData.fuente_adq || 'referido'}
                   onValueChange={v => updateFields({ fuente_adq: v })}
                 >
-                  <SelectTrigger className="h-9 text-[13px] rounded-xl border-slate-200 bg-slate-50/40 focus:bg-white focus-visible:ring-[#00C9E0]/30 focus-visible:border-[#00C9E0]/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all placeholder:text-slate-300 w-full">
+                  <SelectTrigger className="h-11 text-[13px] rounded-xl border-slate-200 bg-slate-50/40 focus:bg-white focus-visible:ring-[#00C9E0]/30 focus-visible:border-[#00C9E0]/50 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] transition-all placeholder:text-slate-300 w-full">
                     <SelectValue placeholder="¿Cómo nos conoció?" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-slate-100 shadow-xl z-[9999]">
@@ -326,7 +326,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
                       >
                         <div
                           className={cn(
-                            "h-7 w-7 rounded-lg flex items-center justify-center shrink-0 transition-all",
+                            "h-11 w-11 rounded-lg flex items-center justify-center shrink-0 transition-all",
                             active
                               ? "bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white shadow-sm shadow-cyan-500/25"
                               : "bg-slate-50 border border-slate-100 text-slate-400"
@@ -404,7 +404,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
           {step === 3 && (
             <div className="py-2 text-center animate-in fade-in zoom-in-95 duration-300">
               <div className="h-16 w-16 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mx-auto shadow-[0_8px_24px_rgba(0,201,224,0.15)]">
-                <Check className="h-7 w-7 stroke-[3] text-[#0097A7]" />
+                <Check className="h-11 w-11 stroke-[3] text-[#0097A7]" />
               </div>
               <h3 className="text-base font-bold text-slate-800 tracking-tight mt-3.5">¡Datos listos!</h3>
               <p className="text-[10.5px] text-slate-400 font-medium mt-1 max-w-xs mx-auto">
@@ -418,7 +418,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
                   disabled={loading}
                   className="w-full flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 bg-white hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none text-left group"
                 >
-                  <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-400 group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 group-hover:text-[#0097A7] transition-all shrink-0">
+                  <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-400 group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 group-hover:text-[#0097A7] transition-all shrink-0">
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
                   </div>
                   <div className="min-w-0">
@@ -433,7 +433,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
                   disabled={loading}
                   className="w-full flex items-center gap-2.5 p-2.5 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none text-left"
                 >
-                  <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-white/15 border border-white/20 text-white backdrop-blur-md shrink-0">
+                  <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-white/15 border border-white/20 text-white backdrop-blur-md shrink-0">
                     {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CalendarPlus className="h-4 w-4" />}
                   </div>
                   <div className="min-w-0">
@@ -451,7 +451,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
             variant="ghost"
             onClick={handleClose}
             disabled={loading}
-            className="h-9 px-3 text-xs font-bold rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100/80 transition-all active:scale-[0.98]"
+            className="h-11 px-4 text-base font-bold rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100/80 transition-all active:scale-[0.98]"
           >
             Cancelar
           </Button>
@@ -461,7 +461,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
                 variant="ghost"
                 onClick={handleBack}
                 disabled={loading}
-                className="h-9 px-3.5 text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
+                className="h-11 px-4.5 text-base font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
               >
                 <ChevronLeft className="mr-1 h-3.5 w-3.5" /> Atrás
               </Button>
@@ -603,7 +603,7 @@ function SortableReminderItem({
         </button>
 
         <div className="min-w-0 flex-1">
-          <p className="font-bold text-xs text-slate-800 truncate">{reminder.titulo}</p>
+          <p className="font-bold text-base text-slate-800 truncate">{reminder.titulo}</p>
           <div className="flex items-center gap-2 mt-0.5 text-[11px] text-slate-400 font-medium">
             {reminder.hora && (
               <span className="flex items-center gap-0.5">
@@ -806,14 +806,14 @@ export function GestionarDrawer({
       <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col bg-white border-l border-slate-100 z-[120]">
         <SheetHeader className="p-4 pb-3 border-b border-slate-100 bg-gradient-to-r from-[#030b17] to-[#0B1E3F] text-white">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-xl bg-[#00C9E0]/20 border border-[#00C9E0]/30 flex items-center justify-center text-[#00C9E0]">
+            <div className="h-10 w-10 rounded-xl bg-[#00C9E0]/20 border border-[#00C9E0]/30 flex items-center justify-center text-[#00C9E0]">
               <Bell className="h-4 w-4" />
             </div>
             <div>
-              <SheetTitle className="text-sm font-black text-white tracking-wide uppercase">
+              <SheetTitle className="text-base font-black text-white tracking-wide uppercase">
                 Panel de Recordatorios
               </SheetTitle>
-              <SheetDescription className="text-xs text-slate-300">
+              <SheetDescription className="text-base text-slate-300">
                 Organiza la jornada de Sebastián: prioridades y vista semanal.
               </SheetDescription>
             </div>
@@ -822,22 +822,22 @@ export function GestionarDrawer({
 
         <Tabs defaultValue="today_tomorrow" className="flex-1 flex flex-col min-h-0">
           <div className="px-4 pt-3 pb-2 border-b border-slate-100 bg-slate-50/50">
-            <TabsList className="grid grid-cols-3 w-full bg-slate-200/60 p-1 rounded-xl h-9">
+            <TabsList className="grid grid-cols-3 w-full bg-slate-200/60 p-1 rounded-xl h-11">
               <TabsTrigger
                 value="today_tomorrow"
-                className="text-xs font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1"
+                className="text-base font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1"
               >
                 📅 Hoy vs. Mañana
               </TabsTrigger>
               <TabsTrigger
                 value="week"
-                className="text-xs font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1"
+                className="text-base font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1"
               >
                 🗓️ Semanal
               </TabsTrigger>
               <TabsTrigger
                 value="history"
-                className="text-xs font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1"
+                className="text-base font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1"
               >
                 ✅ Completados
               </TabsTrigger>
@@ -878,7 +878,7 @@ export function GestionarDrawer({
                   </SortableContext>
                 </DndContext>
               ) : (
-                <div className="p-3 text-center text-xs text-slate-400 bg-slate-50/50 border border-dashed border-slate-200 rounded-xl">
+                <div className="p-3 text-center text-base text-slate-400 bg-slate-50/50 border border-dashed border-slate-200 rounded-xl">
                   Sin pendientes registrados para hoy 🎉
                 </div>
               )}
@@ -916,7 +916,7 @@ export function GestionarDrawer({
                   </SortableContext>
                 </DndContext>
               ) : (
-                <div className="p-3 text-center text-xs text-slate-400 bg-slate-50/50 border border-dashed border-slate-200 rounded-xl">
+                <div className="p-3 text-center text-base text-slate-400 bg-slate-50/50 border border-dashed border-slate-200 rounded-xl">
                   Nada agendado para mañana por ahora.
                 </div>
               )}
@@ -943,7 +943,7 @@ export function GestionarDrawer({
           </TabsContent>
 
           <TabsContent value="week" className="flex-1 overflow-y-auto p-4 space-y-3 m-0">
-            <p className="text-xs text-slate-400 font-medium mb-1">
+            <p className="text-base text-slate-400 font-medium mb-1">
               Resumen semanal de tareas y compromisos:
             </p>
             <div className="space-y-2">
@@ -968,7 +968,7 @@ export function GestionarDrawer({
                         <span className="uppercase text-[7px] leading-none">{day.dayName}</span>
                         <span className="leading-none mt-0.5">{day.dayNum}</span>
                       </div>
-                      <span className="font-bold text-xs text-slate-800 capitalize">
+                      <span className="font-bold text-base text-slate-800 capitalize">
                         {day.dayName} {day.dayNum}
                       </span>
                     </div>
@@ -990,7 +990,7 @@ export function GestionarDrawer({
                       {day.items.map((item) => (
                         <div
                           key={item.id}
-                          className="flex items-center justify-between text-xs p-1.5 rounded-lg bg-slate-50 border border-slate-100"
+                          className="flex items-center justify-between text-base p-1.5 rounded-lg bg-slate-50 border border-slate-100"
                         >
                           <span className="font-semibold text-slate-700 text-[13px] truncate">
                             {item.titulo}
@@ -1010,7 +1010,7 @@ export function GestionarDrawer({
           </TabsContent>
 
           <TabsContent value="history" className="flex-1 overflow-y-auto p-4 space-y-3 m-0">
-            <p className="text-xs text-slate-400 font-medium mb-1">
+            <p className="text-base text-slate-400 font-medium mb-1">
               Historial de recordatorios completados recientemente:
             </p>
             
@@ -1026,7 +1026,7 @@ export function GestionarDrawer({
                         <Check className="h-3.5 w-3.5 stroke-[3]" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-bold text-xs text-slate-700 line-through truncate">{item.titulo}</p>
+                        <p className="font-bold text-base text-slate-700 line-through truncate">{item.titulo}</p>
                         <div className="flex items-center gap-2 mt-0.5 text-[11px] text-slate-400 font-medium">
                           {item.fecha && (
                             <span className="flex items-center gap-0.5">
@@ -1050,7 +1050,7 @@ export function GestionarDrawer({
                 ))}
               </div>
             ) : (
-              <div className="p-4 text-center text-xs text-slate-400 bg-slate-50/50 border border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center gap-1">
+              <div className="p-4 text-center text-base text-slate-400 bg-slate-50/50 border border-dashed border-slate-200 rounded-xl flex flex-col items-center justify-center gap-1">
                 <Check className="h-4 w-4 text-slate-300" />
                 Aún no hay recordatorios en el historial de completados.
               </div>

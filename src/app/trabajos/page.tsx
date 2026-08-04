@@ -238,7 +238,7 @@ function TrabajosContent() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Agenda Epotech
                 </h1>
-                <p className="text-slate-300/80 text-xs mt-1.5 font-medium hidden sm:block">
+                <p className="text-slate-300/80 text-base mt-1.5 font-medium hidden sm:block">
                   Organiza tu semana y revisa tus próximos compromisos.
                 </p>
               </div>
@@ -252,18 +252,18 @@ function TrabajosContent() {
                   { label: 'Progreso', value: enProgreso },
                   { label: 'Listos', value: completados },
                 ].map((stat, i) => (
-                  <div key={stat.label} className={cn("text-center px-4 py-1", i !== 2 && "border-r border-white/10")}>
+                  <div key={stat.label} className={cn("text-center px-4 py-2", i !== 2 && "border-r border-white/10")}>
                     <p className="text-[11px] font-bold text-white/50 uppercase tracking-widest">{stat.label}</p>
                     <p className="text-base font-black text-white leading-tight">{stat.value}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="w-[1px] h-8 bg-white/10 hidden lg:block mx-1" />
+              <div className="w-[1px] h-10 bg-white/10 hidden lg:block mx-1" />
 
               <Link
                 href="/trabajos/archivo"
-                className="flex items-center gap-1.5 h-9 px-3 text-xs font-bold rounded-xl text-white/80 bg-white/10 border border-white/15 hover:bg-white/20 hover:text-white transition-all backdrop-blur-md"
+                className="flex items-center gap-1.5 h-11 px-4 text-base font-bold rounded-xl text-white/80 bg-white/10 border border-white/15 hover:bg-white/20 hover:text-white transition-all backdrop-blur-md"
               >
                 <Archive className="h-4 w-4" /> <span className="hidden sm:inline">Archivo</span>
               </Link>
@@ -273,7 +273,7 @@ function TrabajosContent() {
                   setShowWizard(true)
                 }}
                 size="sm"
-                className="h-9 px-4 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
+                className="h-11 px-4 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
               >
                 <Plus className="mr-1.5 h-4 w-4" />
                 Nuevo Trabajo
@@ -289,7 +289,7 @@ function TrabajosContent() {
                   type="button"
                   onClick={() => setView('calendar')}
                   className={cn(
-                    "flex items-center gap-1.5 h-7 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all",
+                    "flex items-center gap-1.5 h-11 px-4 rounded-lg text-base font-bold uppercase tracking-wider transition-all",
                     view === 'calendar'
                       ? "bg-white/15 text-white shadow-sm"
                       : "text-slate-400 hover:text-white hover:bg-white/10"
@@ -301,7 +301,7 @@ function TrabajosContent() {
                   type="button"
                   onClick={() => setView('list')}
                   className={cn(
-                    "flex items-center gap-1.5 h-7 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all",
+                    "flex items-center gap-1.5 h-11 px-4 rounded-lg text-base font-bold uppercase tracking-wider transition-all",
                     view === 'list'
                       ? "bg-white/15 text-white shadow-sm"
                       : "text-slate-400 hover:text-white hover:bg-white/10"
@@ -313,7 +313,7 @@ function TrabajosContent() {
                   type="button"
                   onClick={() => setView('route')}
                   className={cn(
-                    "flex items-center gap-1.5 h-7 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all",
+                    "flex items-center gap-1.5 h-11 px-4 rounded-lg text-base font-bold uppercase tracking-wider transition-all",
                     view === 'route'
                       ? "bg-white/15 text-white shadow-sm"
                       : "text-slate-400 hover:text-white hover:bg-white/10"
@@ -332,11 +332,11 @@ function TrabajosContent() {
                     onChange={(newDate) => {
                       if (newDate) setRouteDate(new Date(newDate + 'T00:00:00'))
                     }}
-                    className="bg-white/10 border-white/20 text-white h-7 text-xs w-32 shadow-none"
+                    className="bg-white/10 border-white/20 text-white h-11 text-base w-32 shadow-none"
                   />
                   <button
                     onClick={handleResetJobs}
-                    className="text-[10px] font-bold text-white/50 hover:text-white/80 bg-white/10 hover:bg-white/20 px-2 py-1 rounded-lg transition-all uppercase tracking-wider"
+                    className="text-[10px] font-bold text-white/50 hover:text-white/80 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-all uppercase tracking-wider"
                   >
                     Reset
                   </button>
@@ -358,7 +358,7 @@ function TrabajosContent() {
                       type="button"
                       onClick={() => setCalendarViewMode(p.value as any)}
                       className={cn(
-                        "flex items-center h-7 px-2.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0",
+                        "flex items-center h-11 px-4.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0",
                         calendarViewMode === p.value
                           ? "bg-[#00C9E0]/20 text-[#00C9E0] border border-[#00C9E0]/30 shadow-sm"
                           : "text-slate-400 hover:text-white hover:bg-white/10 border border-transparent"
@@ -385,7 +385,7 @@ function TrabajosContent() {
                       type="button"
                       onClick={() => setListDateFilter(p.value as any)}
                       className={cn(
-                        "flex items-center h-7 px-2.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0",
+                        "flex items-center h-11 px-4.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0",
                         listDateFilter === p.value
                           ? "bg-[#00C9E0]/20 text-[#00C9E0] border border-[#00C9E0]/30 shadow-sm"
                           : "text-slate-400 hover:text-white hover:bg-white/10 border border-transparent"
@@ -400,14 +400,14 @@ function TrabajosContent() {
               {/* Service Filter Dropdown */}
               {view === 'list' && (
                 <Select value={serviceFilter} onValueChange={setServiceFilter}>
-                  <SelectTrigger className="h-7 w-auto min-w-[120px] px-2.5 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white/[0.06] border border-white/10 text-white hover:bg-white/10 transition-all backdrop-blur-md data-[placeholder]:text-slate-400">
+                  <SelectTrigger className="h-11 w-auto min-w-[120px] px-4.5 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white/[0.06] border border-white/10 text-white hover:bg-white/10 transition-all backdrop-blur-md data-[placeholder]:text-slate-400">
                     <Filter className="h-3 w-3 mr-1 text-[#00C9E0]" />
                     <SelectValue placeholder="Servicio" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border border-slate-200/80 shadow-lg bg-white">
-                    <SelectItem value="all" className="text-xs font-semibold rounded-lg">Todos los servicios</SelectItem>
+                    <SelectItem value="all" className="text-base font-semibold rounded-lg">Todos los servicios</SelectItem>
                     {Array.from(new Set(trabajos.map(t => t.catalogo_servicios?.nombre).filter(Boolean))).map(service => (
-                      <SelectItem key={service} value={service!} className="text-xs font-semibold rounded-lg">{service}</SelectItem>
+                      <SelectItem key={service} value={service!} className="text-base font-semibold rounded-lg">{service}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -418,7 +418,7 @@ function TrabajosContent() {
                 <Popover>
                   <PopoverTrigger asChild>
                     <button
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-white/[0.06] border border-white/10 text-xs font-bold text-white hover:bg-white/10 transition-all backdrop-blur-md"
+                      className="flex items-center gap-2 h-11 px-4 rounded-xl bg-white/[0.06] border border-white/10 text-base font-bold text-white hover:bg-white/10 transition-all backdrop-blur-md"
                     >
                       <CalendarDays className="h-3.5 w-3.5" />
                       {customDateRange?.start ? (
@@ -463,7 +463,7 @@ function TrabajosContent() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#00C9E0]/70 pointer-events-none z-10" />
               <Input
                 placeholder="Buscar trabajo, cliente o servicio..."
-                className="pl-9 h-9 text-xs rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
+                className="pl-9 h-11 text-base rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -483,8 +483,8 @@ function TrabajosContent() {
 
           {loading ? (
             <div className="flex flex-col items-center justify-center flex-1 min-h-64 gap-3">
-              <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Cargando trabajos...</p>
+              <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
+              <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Cargando trabajos...</p>
             </div>
           ) : (
             <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
@@ -513,7 +513,7 @@ function TrabajosContent() {
                     customDateRange={customDateRange}
                   />
                 ) : view === 'list' ? (
-                  <div className="overflow-y-auto flex-1 min-h-0 pt-4 pb-20 px-2 lg:pl-4 lg:pr-6">
+                  <div className="overflow-y-auto flex-1 min-h-0 pt-4 pb-20 px-4 lg:pl-4 lg:pr-6">
                     <div className="w-full mx-auto max-w-none">
                       <JobList 
                         trabajos={filteredTrabajos} 
@@ -637,9 +637,9 @@ function TrabajosContent() {
 
           {/* Header element styled identically to Finalizar Trabajo (check-out modal) */}
           <div className="bg-[#0097A7] p-5 text-white relative">
-            <span className="text-xs font-bold uppercase tracking-wider opacity-85">Reagendar</span>
+            <span className="text-base font-bold uppercase tracking-wider opacity-85">Reagendar</span>
             <h2 className="text-lg font-bold mt-0.5">Reagendar Servicio</h2>
-            <p className="text-xs font-semibold opacity-90 mt-1">
+            <p className="text-base font-semibold opacity-90 mt-1">
               Para {jobToReschedule ? `${jobToReschedule.clientes.nombre} ${jobToReschedule.clientes.apellido}` : ''}
             </p>
           </div>
@@ -649,7 +649,7 @@ function TrabajosContent() {
               <>
                 {/* 1. Date selection section */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  <span className="text-base font-bold text-slate-400 uppercase tracking-widest">
                     Selecciona el nuevo día
                   </span>
                   <div className="grid grid-cols-5 gap-2 max-h-36 overflow-y-auto no-scrollbar pr-0.5">
@@ -683,7 +683,7 @@ function TrabajosContent() {
                           <span className="text-[11px] font-bold uppercase tracking-wider opacity-85 leading-none">
                             {dayLabel}
                           </span>
-                          <span className="text-xs font-bold mt-1 leading-none">
+                          <span className="text-base font-bold mt-1 leading-none">
                             {format(targetDate, 'd')}
                           </span>
                           <span className="text-[10px] font-medium opacity-65 mt-0.5 leading-none">
@@ -697,7 +697,7 @@ function TrabajosContent() {
 
                 {/* 2. Time selection section using the imported TimePicker */}
                 <div className="flex flex-col gap-1.5 mt-1">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  <span className="text-base font-bold text-slate-400 uppercase tracking-widest">
                     Selecciona la hora del servicio
                   </span>
                   <TimePicker
@@ -713,7 +713,7 @@ function TrabajosContent() {
             <div className="flex justify-end gap-2 mt-4 border-t border-slate-100 pt-4">
               <Button 
                 variant="outline" 
-                className="rounded-xl h-10 text-xs font-bold text-slate-500 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 px-4 transition-all"
+                className="rounded-xl h-10 text-base font-bold text-slate-500 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 px-4 transition-all"
                 onClick={() => {
                   setShowRescheduleModal(false)
                   setJobToReschedule(null)
@@ -722,7 +722,7 @@ function TrabajosContent() {
                 Cerrar
               </Button>
               <Button 
-                className="rounded-xl h-10 text-xs font-bold text-white bg-[#0097A7] hover:bg-[#008394] border-none px-5 transition-all"
+                className="rounded-xl h-10 text-base font-bold text-white bg-[#0097A7] hover:bg-[#008394] border-none px-5 transition-all"
                 onClick={async () => {
                   if (jobToReschedule) {
                     await handleJobReschedule(jobToReschedule.id, rescheduleDate, rescheduleTime || undefined)
@@ -744,7 +744,7 @@ function TrabajosContent() {
 
 export default function TrabajosPage() {
   return (
-    <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
+    <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-10 w-10 animate-spin text-primary" /></div>}>
       <TrabajosContent />
     </Suspense>
   )

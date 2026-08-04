@@ -91,11 +91,11 @@ export default function CotizacionesPage() {
   const getStatusBadge = (estado: string) => {
     switch (estado) {
       case 'aprobado':
-        return <Badge className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-emerald-500/20 font-bold px-2.5 py-0.5 rounded-full capitalize">Aprobado</Badge>
+        return <Badge className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border-emerald-500/20 font-bold px-4.5 py-0.5 rounded-full capitalize">Aprobado</Badge>
       case 'rechazado':
-        return <Badge className="bg-rose-500/10 text-rose-600 hover:bg-rose-500/20 border-rose-500/20 font-bold px-2.5 py-0.5 rounded-full capitalize">Rechazado</Badge>
+        return <Badge className="bg-rose-500/10 text-rose-600 hover:bg-rose-500/20 border-rose-500/20 font-bold px-4.5 py-0.5 rounded-full capitalize">Rechazado</Badge>
       default:
-        return <Badge className="bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 border-amber-500/20 font-bold px-2.5 py-0.5 rounded-full capitalize">Pendiente</Badge>
+        return <Badge className="bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 border-amber-500/20 font-bold px-4.5 py-0.5 rounded-full capitalize">Pendiente</Badge>
     }
   }
 
@@ -114,7 +114,7 @@ export default function CotizacionesPage() {
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Cotizaciones
                 </h1>
-                <p className="text-slate-300/80 text-xs hidden sm:block xl:text-[11px] 2xl:text-xs mt-1 font-medium">
+                <p className="text-slate-300/80 text-base hidden sm:block xl:text-[11px] 2xl:text-base mt-1 font-medium">
                   Genera propuestas profesionales e impacta a tus clientes.
                 </p>
               </div>
@@ -127,7 +127,7 @@ export default function CotizacionesPage() {
                   setShowWizard(true)
                 }}
                 size="sm"
-                className="h-8 px-3.5 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
+                className="h-10 px-4.5 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
               >
                 <Plus className="mr-1.5 h-3.5 w-3.5" />
                 Nueva Cotización
@@ -142,7 +142,7 @@ export default function CotizacionesPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#00C9E0]/70 pointer-events-none z-10" />
                 <Input
                   placeholder="Buscar por cliente, monto o número de presupuesto..."
-                  className="pl-9 h-8 text-[13px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
+                  className="pl-9 h-10 text-[13px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -173,7 +173,7 @@ export default function CotizacionesPage() {
                     : "bg-white border-slate-200/60 hover:border-[#0097A7]/40 hover:bg-slate-50/50"
                 )}
               >
-                <div className="p-2.5 px-3.5 flex items-center justify-between">
+                <div className="p-2.5 px-4.5 flex items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <p className={cn(
                       "text-[11px] font-bold uppercase tracking-wider truncate",
@@ -183,7 +183,7 @@ export default function CotizacionesPage() {
                   </div>
                   <div className="flex items-center gap-1.5">
                     <div className={cn(
-                      "h-8 w-8 rounded-xl flex items-center justify-center border shrink-0 transition-colors",
+                      "h-10 w-10 rounded-xl flex items-center justify-center border shrink-0 transition-colors",
                       statusFilter === stat.filterKey
                         ? stat.iconBox
                         : "bg-slate-50 border-slate-100 text-slate-400 group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 group-hover:text-[#0097A7]"
@@ -209,7 +209,7 @@ export default function CotizacionesPage() {
             {loading && !cotizaciones.length ? (
               <div className="flex flex-col items-center justify-center h-40 gap-3">
                 <Loader2 className="h-6 w-6 animate-spin text-[#00C9E0]" />
-                <p className="text-xs text-slate-400 font-medium">Cargando cotizaciones...</p>
+                <p className="text-base text-slate-400 font-medium">Cargando cotizaciones...</p>
               </div>
             ) : filteredCotizaciones.length > 0 ? (
               filteredCotizaciones.map((c) => {
@@ -232,16 +232,16 @@ export default function CotizacionesPage() {
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2.5">
                       <div className={cn(
-                        "h-9 w-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-300",
+                        "h-11 w-11 rounded-xl flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-300",
                         iconBg
                       )}>
                         <FileText className={cn("h-4 w-4", iconText)} />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-slate-800 leading-tight group-hover:text-[#0097A7] transition-colors">
+                        <p className="text-base font-bold text-slate-800 leading-tight group-hover:text-[#0097A7] transition-colors">
                           #{c.id.substring(0, 8).toUpperCase()}
                         </p>
-                        <p className="text-xs font-medium text-slate-400 mt-0.5">
+                        <p className="text-base font-medium text-slate-400 mt-0.5">
                           {new Date(c.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </p>
                       </div>
@@ -251,24 +251,24 @@ export default function CotizacionesPage() {
 
                   {/* Client row */}
                   <div className="flex items-center gap-2.5 mb-3 pl-[46px]">
-                    <div className="h-7 w-7 rounded-full bg-gradient-to-br from-[#0097A7] to-[#00C9E0] flex items-center justify-center shrink-0 shadow-sm">
-                      <span className="text-xs font-black text-white">
+                    <div className="h-11 w-11 rounded-full bg-gradient-to-br from-[#0097A7] to-[#00C9E0] flex items-center justify-center shrink-0 shadow-sm">
+                      <span className="text-base font-black text-white">
                         {c.clientes.nombre?.[0]}{c.clientes.apellido?.[0]}
                       </span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-slate-700 truncate">
+                      <p className="text-base font-bold text-slate-700 truncate">
                         {c.clientes.nombre} {c.clientes.apellido}
                       </p>
                       {c.clientes.telefono && (
-                        <p className="text-xs text-slate-400 truncate">{c.clientes.telefono}</p>
+                        <p className="text-base text-slate-400 truncate">{c.clientes.telefono}</p>
                       )}
                     </div>
                   </div>
 
                   {/* Total row */}
                   <div className="flex items-center justify-between pl-[46px] pt-2 border-t border-slate-100">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total</p>
+                    <p className="text-base font-semibold text-slate-400 uppercase tracking-wider">Total</p>
                     <div className="flex items-center gap-2">
                       <p className={cn("text-lg font-black", totalText)}>${c.monto_total.toLocaleString()}</p>
                       <div onClick={e => e.stopPropagation()}>
@@ -291,10 +291,10 @@ export default function CotizacionesPage() {
             ) : (
               <div className="flex flex-col items-center justify-center py-20 bg-white/50 border border-slate-200/50 rounded-3xl border-dashed">
                 <FileText className="h-10 w-10 text-slate-300 mb-4" />
-                <p className="text-slate-400 font-medium text-sm">No hay cotizaciones registradas.</p>
+                <p className="text-slate-400 font-medium text-base">No hay cotizaciones registradas.</p>
                 <Button 
                   variant="outline" 
-                  className="mt-4 rounded-xl border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50"
+                  className="mt-4 rounded-xl border-slate-200 text-base font-bold text-slate-600 hover:bg-slate-50"
                   onClick={() => {
                     setQuoteToEdit(null)
                     setShowWizard(true)

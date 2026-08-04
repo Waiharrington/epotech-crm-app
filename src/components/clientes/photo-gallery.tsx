@@ -154,11 +154,11 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
           <button
             type="button"
             onClick={() => setShowCollageMode(false)}
-            className="flex items-center gap-1.5 h-8 px-3 text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
+            className="flex items-center gap-1.5 h-10 px-4 text-base font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
           >
             <X className="h-3.5 w-3.5" /> Cancelar Comparativa
           </button>
-          <Badge className="h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 text-[#0097A7] border-[#0097A7]/20 shadow-none">
+          <Badge className="h-5 px-4 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 text-[#0097A7] border-[#0097A7]/20 shadow-none">
             Modo Creador de Collage
           </Badge>
         </div>
@@ -193,8 +193,8 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-12 gap-3">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Cargando galería</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
+          <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Cargando galería</p>
         </div>
       ) : photos.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
@@ -210,13 +210,13 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
                 <button
                   type="button"
                   onClick={() => handleDelete(photo)}
-                  className="h-7 w-7 rounded-lg flex items-center justify-center bg-white/90 backdrop-blur-md border border-white/60 text-slate-500 hover:text-red-500 hover:border-red-200 hover:bg-red-50 shadow-md transition-all active:scale-95"
+                  className="h-11 w-11 rounded-lg flex items-center justify-center bg-white/90 backdrop-blur-md border border-white/60 text-slate-500 hover:text-red-500 hover:border-red-200 hover:bg-red-50 shadow-md transition-all active:scale-95"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>
               </div>
               <div className="absolute bottom-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                 <Badge className="h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border-none bg-[#030b17]/75 backdrop-blur-md text-white shadow-none">
+                 <Badge className="h-5 px-4 rounded-lg text-[10px] font-black uppercase tracking-wider border-none bg-[#030b17]/75 backdrop-blur-md text-white shadow-none">
                     {new Date(photo.created_at).toLocaleDateString()}
                  </Badge>
               </div>
@@ -228,7 +228,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
           <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/50 border border-[#0097A7]/15 flex items-center justify-center mb-3 shadow-[0_4px_16px_rgba(0,201,224,0.08)]">
             <Grid className="h-6 w-6 text-[#0097A7]" />
           </div>
-          <h3 className="text-sm font-bold text-slate-800 tracking-tight">Galería Vacía</h3>
+          <h3 className="text-base font-bold text-slate-800 tracking-tight">Galería Vacía</h3>
           <p className="text-[10.5px] text-slate-400 font-medium max-w-xs mt-1">
             Aún no has documentado este trabajo. Usa la cámara de arriba para empezar.
           </p>
@@ -243,7 +243,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
         >
            <button
               type="button"
-              className="absolute top-4 right-4 z-[10000] h-8 w-8 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
+              className="absolute top-4 right-4 z-[10000] h-10 w-10 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
               onClick={() => setSelectedPhoto(null)}
               aria-label="Cerrar"
            >
@@ -264,7 +264,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
            <div className="sidebar-premium-bg w-full md:w-80 border-t md:border-t-0 md:border-l border-white/10 p-5 flex flex-col gap-4 text-white overflow-y-auto shrink-0">
               <div className="space-y-1.5 relative z-10">
                  <p className="text-[11px] font-extrabold text-[#00C9E0] uppercase tracking-wider">Estado / Categoría</p>
-                 <Badge className="h-5 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-[#00C9E0]/15 text-[#00C9E0] border-[#00C9E0]/30 shadow-none capitalize">
+                 <Badge className="h-5 px-4 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-[#00C9E0]/15 text-[#00C9E0] border-[#00C9E0]/30 shadow-none capitalize">
                     {selectedPhoto.etiqueta}
                  </Badge>
               </div>
@@ -309,7 +309,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
               <div className="mt-auto pt-4 relative z-10">
                  <button
                     type="button"
-                    className="w-full flex items-center justify-center gap-2 h-9 px-4 text-xs font-black uppercase tracking-wider rounded-xl bg-red-500/15 border border-red-400/30 text-red-300 hover:bg-red-500/25 hover:border-red-400/50 hover:text-red-200 backdrop-blur-md transition-all active:scale-[0.98]"
+                    className="w-full flex items-center justify-center gap-2 h-11 px-4 text-base font-black uppercase tracking-wider rounded-xl bg-red-500/15 border border-red-400/30 text-red-300 hover:bg-red-500/25 hover:border-red-400/50 hover:text-red-200 backdrop-blur-md transition-all active:scale-[0.98]"
                     onClick={(e) => {
                        e.stopPropagation();
                        handleDelete(selectedPhoto);

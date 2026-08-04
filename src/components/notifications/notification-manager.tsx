@@ -42,7 +42,7 @@ export function NotificationManager() {
 
   if (permission === 'granted') {
     return (
-        <div className="flex items-center gap-2 text-xs text-green-600 font-medium bg-green-50 px-3 py-1.5 rounded-full border border-green-100">
+        <div className="flex items-center gap-2 text-base text-green-600 font-medium bg-green-50 px-4 py-2.5 rounded-full border border-green-100">
             <Bell className="h-3.5 w-3.5" /> Notificaciones Activas
         </div>
     )
@@ -55,7 +55,7 @@ export function NotificationManager() {
         onClick={requestPermission}
         disabled={loading}
         className={cn(
-            "h-9 rounded-full",
+            "h-11 rounded-full",
             permission === 'denied' && "opacity-50 grayscale"
         )}
     >

@@ -140,7 +140,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
               <button
                 type="button"
                 onClick={handleClose}
-                className="h-8 w-8 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95 shrink-0 ml-3"
+                className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95 shrink-0 ml-3"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -210,7 +210,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                     onClick={() => setSelectedClient(c)}
                   >
                     <div className={cn(
-                      "h-8 w-8 rounded-lg flex items-center justify-center shrink-0",
+                      "h-10 w-10 rounded-lg flex items-center justify-center shrink-0",
                       selectedClient?.id === c.id
                         ? "bg-gradient-to-br from-[#00C9E0] to-[#0097A7]"
                         : "bg-slate-100"
@@ -243,17 +243,17 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
               {selectedClient && (
                 <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-[#0097A7]/20 shadow-sm">
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-[#00C9E0] to-[#0097A7] flex items-center justify-center shrink-0">
+                    <div className="h-11 w-11 rounded-lg bg-gradient-to-br from-[#00C9E0] to-[#0097A7] flex items-center justify-center shrink-0">
                       <User className="h-3.5 w-3.5 text-white" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs font-bold text-slate-800 truncate">{selectedClient.nombre} {selectedClient.apellido}</p>
+                      <p className="text-base font-bold text-slate-800 truncate">{selectedClient.nombre} {selectedClient.apellido}</p>
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#0097A7] bg-[#E6F9FB] rounded-md hover:bg-[#00C9E0]/20 transition-all shrink-0"
+                    className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-[#0097A7] bg-[#E6F9FB] rounded-md hover:bg-[#00C9E0]/20 transition-all shrink-0"
                   >
                     Cambiar
                   </button>
@@ -274,7 +274,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                       className="flex items-center gap-1.5 p-2 bg-[#F0F5FA] rounded-lg hover:bg-[#E6F9FB] hover:text-[#0097A7] transition-all text-left group"
                     >
                       <Plus className="h-3 w-3 text-slate-400 group-hover:text-[#0097A7] shrink-0" />
-                      <span className="text-xs font-semibold text-slate-600 group-hover:text-[#0097A7] truncate">{s.nombre}</span>
+                      <span className="text-base font-semibold text-slate-600 group-hover:text-[#0097A7] truncate">{s.nombre}</span>
                     </button>
                   ))}
                 </div>
@@ -289,7 +289,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                   {lineItems.map((item, idx) => (
                     <div key={item.id || idx} className="flex items-center gap-2 p-2 bg-[#F0F5FA] rounded-lg">
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-slate-700 truncate">{item.nombre}</p>
+                        <p className="text-base font-bold text-slate-700 truncate">{item.nombre}</p>
                         <p className="text-[11px] text-slate-400">${item.precio.toLocaleString()} c/u</p>
                       </div>
                       <div className="flex items-center gap-1">
@@ -306,7 +306,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                         >
                           -
                         </button>
-                        <span className="text-xs font-black text-slate-700 min-w-[16px] text-center">{item.cantidad}</span>
+                        <span className="text-base font-black text-slate-700 min-w-[16px] text-center">{item.cantidad}</span>
                         <button
                           type="button"
                           onClick={() => setLineItems(lineItems.map(i => i.id === item.id ? { ...i, cantidad: i.cantidad + 1 } : i))}
@@ -315,7 +315,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                           +
                         </button>
                       </div>
-                      <p className="text-xs font-black text-slate-700 w-14 text-right">${(item.precio * item.cantidad).toLocaleString()}</p>
+                      <p className="text-base font-black text-slate-700 w-14 text-right">${(item.precio * item.cantidad).toLocaleString()}</p>
                       <button
                         type="button"
                         onClick={() => setLineItems(lineItems.filter(i => i.id !== item.id))}
@@ -327,7 +327,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                   ))}
                   {lineItems.length === 0 && (
                     <div className="text-center py-5 bg-white rounded-lg border-2 border-dashed border-slate-200">
-                      <p className="text-xs font-bold text-slate-400">Agrega servicios arriba</p>
+                      <p className="text-base font-bold text-slate-400">Agrega servicios arriba</p>
                     </div>
                   )}
                 </div>
@@ -335,15 +335,15 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
 
               {/* Totales */}
               <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm space-y-2">
-                <div className="flex justify-between text-xs text-slate-500">
+                <div className="flex justify-between text-base text-slate-500">
                   <span>Subtotal</span>
                   <span className="font-bold">${subtotal.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between items-center text-xs text-slate-500">
+                <div className="flex justify-between items-center text-base text-slate-500">
                   <span>Descuento ($)</span>
                   <Input 
                     type="number" 
-                    className="w-20 h-7 text-right font-bold text-xs bg-[#F0F5FA] border-slate-200 rounded-lg" 
+                    className="w-20 h-11 text-right font-bold text-base bg-[#F0F5FA] border-slate-200 rounded-lg" 
                     value={descuento || ''} 
                     onChange={e => setDescuento(parseFloat(e.target.value) || 0)} 
                   />
@@ -372,7 +372,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                 type="button"
                 onClick={() => setStep(2)}
                 disabled={!selectedClient}
-                className="flex items-center gap-1.5 h-9 px-5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                className="flex items-center gap-1.5 h-11 px-5 text-base font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
               >
                 Continuar <ChevronRight className="h-3.5 w-3.5" />
               </button>
@@ -390,7 +390,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                 type="button"
                 onClick={handleSave}
                 disabled={loading || lineItems.length === 0}
-                className="flex items-center gap-2 h-9 px-5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                className="flex items-center gap-2 h-11 px-5 text-base font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
               >
                 {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
                 Guardar

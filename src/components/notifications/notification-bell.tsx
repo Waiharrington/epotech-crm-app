@@ -160,7 +160,7 @@ export function NotificationBell() {
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "h-7.5 w-7.5 rounded-xl flex items-center justify-center border transition-all duration-300 active:scale-95 relative group",
+          "h-11.5 w-11.5 rounded-xl flex items-center justify-center border transition-all duration-300 active:scale-95 relative group",
           isOpen 
             ? "bg-white/15 border-white/30 text-white shadow-lg shadow-[#00C9E0]/10 scale-105" 
             : "bg-white/5 border-white/10 text-white/80 hover:text-white hover:bg-white/10"
@@ -185,12 +185,12 @@ export function NotificationBell() {
           <div className="p-4 border-b border-black/5 dark:border-white/10 flex items-center justify-between bg-zinc-50/50 dark:bg-white/[0.02]">
             <div className="flex items-center gap-1.5">
               <Sparkles className="h-4 w-4 text-[#00C9E0]" />
-              <span className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-white">
+              <span className="text-base font-black uppercase tracking-wider text-slate-800 dark:text-white">
                 Notificaciones
               </span>
             </div>
             {hasUnread && (
-              <span className="text-xs font-bold bg-[#00C9E0]/15 text-[#00C9E0] px-2 py-0.5 rounded-full">
+              <span className="text-base font-bold bg-[#00C9E0]/15 text-[#00C9E0] px-4 py-0.5 rounded-full">
                 {unreadReminders.length} activas
               </span>
             )}
@@ -198,7 +198,7 @@ export function NotificationBell() {
 
           {/* Quick Actions Panel */}
           {reminders.length > 0 && (
-            <div className="px-4 py-2 border-b border-black/5 dark:border-white/5 bg-zinc-50/20 dark:bg-white/[0.01] flex items-center justify-between gap-2 text-xs">
+            <div className="px-4 py-2 border-b border-black/5 dark:border-white/5 bg-zinc-50/20 dark:bg-white/[0.01] flex items-center justify-between gap-2 text-base">
               <button 
                 onClick={handleMarkAllRead}
                 disabled={!hasUnread}
@@ -220,13 +220,13 @@ export function NotificationBell() {
             {loading ? (
               <div className="flex flex-col items-center justify-center py-10 gap-2">
                 <Clock className="h-6 w-6 text-[#00C9E0] animate-spin" />
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Cargando alertas...</span>
+                <span className="text-base text-slate-400 font-bold uppercase tracking-wider">Cargando alertas...</span>
               </div>
             ) : reminders.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-                <BellOff className="h-8 w-8 text-slate-300 dark:text-slate-700 mb-2.5 animate-pulse" />
-                <span className="text-xs font-bold text-slate-800 dark:text-white">Bandeja impecable</span>
-                <span className="text-xs text-slate-400 mt-1 max-w-[200px]">No tienes alertas ni notificaciones registradas en la plataforma.</span>
+                <BellOff className="h-10 w-10 text-slate-300 dark:text-slate-700 mb-2.5 animate-pulse" />
+                <span className="text-base font-bold text-slate-800 dark:text-white">Bandeja impecable</span>
+                <span className="text-base text-slate-400 mt-1 max-w-[200px]">No tienes alertas ni notificaciones registradas en la plataforma.</span>
               </div>
             ) : (
               reminders.map((reminder) => {
@@ -250,7 +250,7 @@ export function NotificationBell() {
                     <div className="flex-1 min-w-0 pl-1.5">
                       <div className="flex items-start justify-between gap-1.5">
                         <h4 className={cn(
-                          "text-xs font-bold leading-tight truncate text-slate-800 dark:text-slate-100",
+                          "text-base font-bold leading-tight truncate text-slate-800 dark:text-slate-100",
                           reminder.completado && "line-through text-slate-400 dark:text-slate-500"
                         )}>
                           {reminder.titulo}
@@ -258,7 +258,7 @@ export function NotificationBell() {
                       </div>
                       
                       {reminder.descripcion && (
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed line-clamp-2">
+                        <p className="text-base text-slate-500 dark:text-slate-400 mt-1 leading-relaxed line-clamp-2">
                           {reminder.descripcion}
                         </p>
                       )}
@@ -303,7 +303,7 @@ export function NotificationBell() {
                 setIsOpen(false)
                 router.push('/recordatorios')
               }}
-              className="w-full py-2 rounded-xl text-xs font-black uppercase tracking-wider text-white bg-[#00C9E0] hover:bg-[#00B4C8] flex items-center justify-center gap-1.5 transition-all shadow-[0_4px_12px_rgba(0,201,224,0.2)] hover:shadow-[0_6px_16px_rgba(0,201,224,0.3)] active:scale-98"
+              className="w-full py-2 rounded-xl text-base font-black uppercase tracking-wider text-white bg-[#00C9E0] hover:bg-[#00B4C8] flex items-center justify-center gap-1.5 transition-all shadow-[0_4px_12px_rgba(0,201,224,0.2)] hover:shadow-[0_6px_16px_rgba(0,201,224,0.3)] active:scale-98"
             >
               <ExternalLink className="h-3.5 w-3.5 stroke-[2.5]" /> Ver todas las notificaciones
             </button>

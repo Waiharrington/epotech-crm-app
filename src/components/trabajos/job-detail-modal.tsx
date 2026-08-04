@@ -52,7 +52,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
             <DialogHeader className="space-y-0 p-0">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
-                  <DialogDescription className="text-xs font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                  <DialogDescription className="text-base font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                     Detalle del Servicio
                   </DialogDescription>
                   <DialogTitle className="text-lg font-black text-white leading-tight truncate">
@@ -64,7 +64,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
                     <button
                       onClick={() => onArchive(job)}
                       title="Archivar"
-                      className="h-8 w-8 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-200 active:scale-95"
+                      className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-200 active:scale-95"
                     >
                       <Archive className="h-3.5 w-3.5" />
                     </button>
@@ -73,7 +73,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
                     <button
                       onClick={() => onEdit(job)}
                       title="Editar"
-                      className="h-8 w-8 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-200 active:scale-95"
+                      className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-200 active:scale-95"
                     >
                       <Edit className="h-3.5 w-3.5" />
                     </button>
@@ -85,7 +85,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
             {/* Status + Date row */}
             <div className="flex items-center gap-2.5 mt-3.5">
               <span className={cn(
-                "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider",
+                "inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-base font-black uppercase tracking-wider",
                 isCompleted
                   ? "bg-emerald-400/20 text-emerald-100 ring-1 ring-emerald-400/30"
                   : "bg-amber-400/20 text-amber-100 ring-1 ring-amber-400/30"
@@ -93,7 +93,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
                 {isCompleted ? <CheckCircle2 className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
                 {isCompleted ? 'Completado' : 'Pendiente'}
               </span>
-              <span className="text-xs font-bold text-white/50">
+              <span className="text-base font-bold text-white/50">
                 <Calendar className="h-3 w-3 inline mr-1" />
                 {new Date(job.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
               </span>
@@ -108,7 +108,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
           <div className="grid grid-cols-2 gap-2.5">
             <div className="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
               <div className="flex items-center gap-2 mb-1.5">
-                <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-[#E6F9FB] to-[#E6F9FB]/60 flex items-center justify-center">
+                <div className="h-11 w-11 rounded-lg bg-gradient-to-br from-[#E6F9FB] to-[#E6F9FB]/60 flex items-center justify-center">
                   <DollarSign className="h-3.5 w-3.5 text-[#0097A7]" />
                 </div>
                 <p className="text-[11px] font-black text-slate-400 uppercase tracking-wider">Precio Acordado</p>
@@ -119,7 +119,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
             {isCompleted && job.precio_cobrado !== null ? (
               <div className="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-emerald-50 to-emerald-100/60 flex items-center justify-center">
+                  <div className="h-11 w-11 rounded-lg bg-gradient-to-br from-emerald-50 to-emerald-100/60 flex items-center justify-center">
                     <TrendingUp className="h-3.5 w-3.5 text-emerald-600" />
                   </div>
                   <p className="text-[11px] font-black text-slate-400 uppercase tracking-wider">Cobrado</p>
@@ -129,12 +129,12 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
             ) : (
               <div className="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-[#E6F9FB] to-[#E6F9FB]/60 flex items-center justify-center">
+                  <div className="h-11 w-11 rounded-lg bg-gradient-to-br from-[#E6F9FB] to-[#E6F9FB]/60 flex items-center justify-center">
                     <Calendar className="h-3.5 w-3.5 text-[#0097A7]" />
                   </div>
                   <p className="text-[11px] font-black text-slate-400 uppercase tracking-wider">Fecha</p>
                 </div>
-                <p className="text-sm font-bold text-slate-700 pl-0.5">
+                <p className="text-base font-bold text-slate-700 pl-0.5">
                   {new Date(job.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
                 </p>
               </div>
@@ -156,7 +156,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
                     href={`/clientes/${job.clientes.id}`}
                     className="group flex items-center gap-2 hover:text-[#0097A7] transition-colors"
                   >
-                    <span className="text-sm font-bold text-slate-800 group-hover:text-[#0097A7] transition-colors">{job.clientes.nombre} {job.clientes.apellido}</span>
+                    <span className="text-base font-bold text-slate-800 group-hover:text-[#0097A7] transition-colors">{job.clientes.nombre} {job.clientes.apellido}</span>
                     <ExternalLink className="h-3 w-3 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </Link>
                   <Badge variant="outline" className="text-[11px] font-black bg-slate-50 border-slate-200 text-slate-400 rounded-lg">
@@ -183,7 +183,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
                   </div>
                   <h4 className="text-[11px] font-black uppercase tracking-[0.12em] text-[#0097A7]">Ficha Técnica</h4>
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#0097A7] bg-[#E6F9FB] px-2.5 py-1 rounded-lg">Log Final</span>
+                <span className="text-[10px] font-black uppercase tracking-wider text-[#0097A7] bg-[#E6F9FB] px-4.5 py-2 rounded-lg">Log Final</span>
               </div>
 
               <div className="space-y-2.5">
@@ -229,7 +229,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
                       {(job as any).materiales_utilizados.map((m: any, idx: number) => (
                         <div key={idx} className="flex justify-between items-center text-[13px] border-b border-white/[0.06] pb-1.5 last:border-0 last:pb-0">
                           <span className="text-slate-300 font-medium">{m.nombre}</span>
-                          <span className="bg-white/10 px-2.5 py-0.5 rounded-lg font-black text-xs">{m.cantidad} {m.unidad || 'ud'}</span>
+                          <span className="bg-white/10 px-4.5 py-0.5 rounded-lg font-black text-base">{m.cantidad} {m.unidad || 'ud'}</span>
                         </div>
                       ))}
                     </div>
@@ -241,8 +241,8 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
                   <div className="space-y-2 pt-1">
                     {(job as any).costo_variable > 0 && (
                       <div className="flex justify-between items-center p-3 bg-amber-50/80 rounded-xl border border-amber-100/80">
-                        <span className="text-xs font-black text-amber-700 uppercase tracking-wider">Gastos Adicionales</span>
-                        <span className="text-sm font-black text-amber-600">-${(job as any).costo_variable}</span>
+                        <span className="text-base font-black text-amber-700 uppercase tracking-wider">Gastos Adicionales</span>
+                        <span className="text-base font-black text-amber-600">-${(job as any).costo_variable}</span>
                       </div>
                     )}
 
@@ -256,7 +256,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_60%)]" />
                       <div className="relative flex justify-between items-center p-4">
                         <div>
-                          <span className="text-xs font-black text-white/70 uppercase tracking-wider block">Ganancia Neta</span>
+                          <span className="text-base font-black text-white/70 uppercase tracking-wider block">Ganancia Neta</span>
                           <p className="text-[11px] text-white/40 mt-0.5">Cobrado - Gastos</p>
                         </div>
                         <span className="text-2xl font-black text-white">
@@ -279,7 +279,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
                 </div>
                 <h4 className="text-[11px] font-black uppercase tracking-[0.12em] text-indigo-500">Equipo de Apoyo</h4>
               </div>
-              <div className="flex items-start gap-2 text-slate-600 font-medium text-sm">
+              <div className="flex items-start gap-2 text-slate-600 font-medium text-base">
                 <p className="leading-relaxed">
                   {job.ayudantes}
                 </p>
@@ -316,7 +316,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
           {/* Recurrence Info */}
           {job.es_recurrente && (
             <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-[#E6F9FB] to-[#E6F9FB]/40 border border-[#0097A7]/10">
-              <div className="h-8 w-8 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] flex items-center justify-center shrink-0 shadow-sm shadow-cyan-500/20">
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] flex items-center justify-center shrink-0 shadow-sm shadow-cyan-500/20">
                 <Clock className="h-3.5 w-3.5 text-white" />
               </div>
               <div>

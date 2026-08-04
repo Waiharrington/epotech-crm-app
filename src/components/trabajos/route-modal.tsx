@@ -83,19 +83,19 @@ export function RouteModal({ isOpen, onClose, jobs }: RouteModalProps) {
 
         <div className="py-4 flex flex-col gap-4">
           <div className="flex items-center justify-between bg-slate-50 p-2 rounded-xl border border-slate-100">
-            <span className="text-sm font-semibold text-slate-700 ml-2">Día de la ruta</span>
+            <span className="text-base font-semibold text-slate-700 ml-2">Día de la ruta</span>
             <input 
               type="date" 
               value={format(selectedDate, 'yyyy-MM-dd')} 
               onChange={(e) => setSelectedDate(new Date(e.target.value + 'T00:00:00'))}
-              className="px-3 py-1.5 text-sm font-bold text-slate-800 bg-white border border-slate-200 rounded-lg shadow-sm"
+              className="px-4 py-2.5 text-base font-bold text-slate-800 bg-white border border-slate-200 rounded-lg shadow-sm"
             />
           </div>
 
           {sortedJobs.length === 0 ? (
             <div className="text-center p-8 bg-slate-50 rounded-xl border border-slate-100">
-              <MapPin className="h-8 w-8 text-slate-300 mx-auto mb-3" />
-              <p className="text-sm font-medium text-slate-500">
+              <MapPin className="h-10 w-10 text-slate-300 mx-auto mb-3" />
+              <p className="text-base font-medium text-slate-500">
                 No hay trabajos con dirección registrada para este día.
               </p>
             </div>
@@ -108,23 +108,23 @@ export function RouteModal({ isOpen, onClose, jobs }: RouteModalProps) {
                 <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 [scrollbar-width:thin]">
                   {sortedJobs.map((job, index) => (
                     <div key={job.id} className="flex gap-4">
-                      <div className="shrink-0 h-8 w-8 rounded-full bg-white border-2 border-[#0097A7] text-[#0097A7] flex items-center justify-center font-bold text-xs shadow-sm">
+                      <div className="shrink-0 h-10 w-10 rounded-full bg-white border-2 border-[#0097A7] text-[#0097A7] flex items-center justify-center font-bold text-base shadow-sm">
                         {index + 1}
                       </div>
                       <div className="flex-1 bg-slate-50 rounded-xl p-3 border border-slate-100/60">
                         <div className="flex items-start justify-between gap-2 mb-1">
-                          <p className="font-semibold text-slate-800 text-sm">
+                          <p className="font-semibold text-slate-800 text-base">
                             {job.clientes.nombre} {job.clientes.apellido}
                           </p>
-                          <span className="text-[13px] font-medium text-slate-500 bg-white px-2 py-0.5 rounded-md border border-slate-200 shrink-0">
+                          <span className="text-[13px] font-medium text-slate-500 bg-white px-4 py-0.5 rounded-md border border-slate-200 shrink-0">
                             {formatTime12(job.hora_servicio)}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-600 mb-1 flex items-center gap-1.5">
+                        <p className="text-base text-slate-600 mb-1 flex items-center gap-1.5">
                           <MapPin className="h-3 w-3 text-slate-400 shrink-0" />
                           <span className="truncate">{job.clientes.direccion}</span>
                         </p>
-                        <p className="text-xs text-slate-500 mb-3">
+                        <p className="text-base text-slate-500 mb-3">
                           {job.catalogo_servicios?.nombre || 'Trabajo personalizado'}
                         </p>
                         
@@ -134,7 +134,7 @@ export function RouteModal({ isOpen, onClose, jobs }: RouteModalProps) {
                             href={`http://maps.apple.com/?daddr=${encodeURIComponent(job.clientes.direccion || '')}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs font-bold text-white bg-black hover:bg-slate-800 px-2 py-1 rounded-md transition-colors"
+                            className="text-base font-bold text-white bg-black hover:bg-slate-800 px-4 py-2 rounded-md transition-colors"
                           >
                             Apple
                           </a>
@@ -142,7 +142,7 @@ export function RouteModal({ isOpen, onClose, jobs }: RouteModalProps) {
                             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(job.clientes.direccion || '')}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded-md transition-colors"
+                            className="text-base font-bold text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md transition-colors"
                           >
                             Google
                           </a>
@@ -150,7 +150,7 @@ export function RouteModal({ isOpen, onClose, jobs }: RouteModalProps) {
                             href={`https://waze.com/ul?q=${encodeURIComponent(job.clientes.direccion || '')}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs font-bold text-white bg-[#33ccff] hover:bg-[#2eb8e6] px-2 py-1 rounded-md transition-colors"
+                            className="text-base font-bold text-white bg-[#33ccff] hover:bg-[#2eb8e6] px-4 py-2 rounded-md transition-colors"
                           >
                             Waze
                           </a>

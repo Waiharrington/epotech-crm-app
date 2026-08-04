@@ -351,11 +351,205 @@ body.modal-open html {
   0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
   50% { box-shadow: 0 0 0 8px rgba(251, 191, 36, 0); }
 }
+}
+
+/* Sidebar Menu Animations */
+@keyframes sidebarItemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-sidebar-item {
+  animation: sidebarItemFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Micro-animations for Icons */
+.group:hover .icon-spin {
+  transform: rotate(90deg);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.group:hover .icon-bounce {
+  transform: translateY(-2px);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.group:hover .icon-tilt {
+  transform: rotate(-10deg) scale(1.05);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes bell-ring {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(15deg); }
+  30% { transform: rotate(-15deg); }
+  45% { transform: rotate(10deg); }
+  60% { transform: rotate(-10deg); }
+  75% { transform: rotate(4deg); }
+  85% { transform: rotate(-4deg); }
+}
+
+.group:hover .icon-ring {
+  animation: bell-ring 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform-origin: top center;
+}
+
+.group:hover .icon-wrench {
+  transform: rotate(20deg) scale(1.05);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.group:hover .icon-pulse-glow {
+  filter: drop-shadow(0 0 4px rgba(0, 201, 224, 0.6));
+  transform: scale(1.05);
+  transition: all 0.25s ease;
+}
+
+/* Glassmorphism Hover/Active States */
+.sidebar-link-active {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.2), 
+    inset 0 1px 0px rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.sidebar-premium-bg {
+  background-color: #030b17 !important;
+  background-image: 
+    radial-gradient(circle at 100% 95%, rgba(0, 201, 224, 0.38) 0%, rgba(0, 151, 167, 0.18) 30%, transparent 60%),
+    radial-gradient(circle at 0% 0%, rgba(0, 201, 224, 0.08) 0%, transparent 45%),
+    linear-gradient(to bottom, #030b17 35%, transparent 75%),
+    radial-gradient(circle, rgba(0, 201, 224, 0.16) 1.5px, transparent 1.5px) !important;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 20px 20px !important;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Water drop pulse on active indicator */
+@keyframes water-drop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+}
+
+.active-indicator-pulse {
+  animation: water-drop 2s infinite ease-in-out;
+}
+
+/* Scrollbar Hider Utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Custom premium logo styling and transition */
+.logo-premium {
+  filter: drop-shadow(0 2px 8px rgba(0, 201, 224, 0.15)) !important;
+  transition: all 0.4s ease-out !important;
+}
+.logo-premium:hover {
+  filter: drop-shadow(0 0 12px rgba(0, 201, 224, 0.45)) !important;
+  transform: scale(1.04) rotate(0.5deg);
+}
+
+/* Delicate Premium Scrollbar & Momentum Touch Scrolling for smooth mobile experience */
+html {
+  scroll-behavior: smooth !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  -webkit-overflow-scrolling: touch !important;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+/* Customize scrollbars globally to be invisible */
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 201, 224, 0.35); /* brand cian by default */
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 201, 224, 0.7) !important; /* glowing brand cian on hover */
+}
+
+/* Firefox scrollbar customization */
+* {
+  scrollbar-width: none;
+}
+
+/* Force body and layout scroll locking when modal dialogues/overlays are open */
+body[style*="pointer-events: none"], 
+body[data-scroll-locked],
+html:has(div[data-slot="dialog-content"]),
+body:has(div[data-slot="dialog-content"]),
+body.modal-open,
+body.modal-open html {
+  overflow: hidden !important;
+  margin-right: 0 !important;
+}
+
+/* Dialog animations handled by Tailwind tw-animate-css classes */
+
+/* Truck bounce animation for route view */
+@keyframes truckBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes truckPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(251, 191, 36, 0); }
+}
 
 .truck-animate {
   animation: truckBounce 1.5s ease-in-out infinite, truckPulse 2s ease-in-out infinite;
 }
 
-. h i d e - s c r o l l b a r : : - w e b k i t - s c r o l l b a r   {   d i s p l a y :   n o n e ;   }  
- . h i d e - s c r o l l b a r   {   - m s - o v e r f l o w - s t y l e :   n o n e ;   s c r o l l b a r - w i d t h :   n o n e ;   }  
- 
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

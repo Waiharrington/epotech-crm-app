@@ -182,7 +182,7 @@ export function VoiceReminderButton({ onCreated }: VoiceReminderButtonProps) {
             ? "bg-rose-500 text-white shadow-rose-500/30 animate-pulse"
             : isProcessing
               ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-              : "bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white shadow-rose-500/20 hover:shadow-rose-500/30"
+              : "bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white shadow-cyan-500/20 hover:shadow-cyan-500/30"
         )}
       >
         {isProcessing ? (

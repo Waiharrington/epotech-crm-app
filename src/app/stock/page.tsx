@@ -698,7 +698,7 @@ export default function StockPage() {
 
       {/* Add Item Modal */}
       <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
-        <DialogContent className="p-0 gap-0 rounded-2xl overflow-hidden max-w-lg border-slate-200/60 shadow-2xl">
+        <DialogContent className="w-[calc(100%-24px)] sm:w-full p-0 gap-0 rounded-2xl overflow-hidden max-w-lg border-slate-200/60 shadow-2xl">
           <div className="sidebar-premium-bg px-6 py-4 relative">
             <div className="relative z-10 flex items-center gap-3">
               <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
@@ -796,7 +796,7 @@ export default function StockPage() {
 
       {/* Edit Item Modal */}
       <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
-        <DialogContent className="p-0 gap-0 rounded-2xl overflow-hidden max-w-lg border-slate-200/60 shadow-2xl">
+        <DialogContent className="w-[calc(100%-24px)] sm:w-full p-0 gap-0 rounded-2xl overflow-hidden max-w-lg border-slate-200/60 shadow-2xl">
           <div className="sidebar-premium-bg px-6 py-4 relative">
             <div className="relative z-10 flex items-center gap-3">
               <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">

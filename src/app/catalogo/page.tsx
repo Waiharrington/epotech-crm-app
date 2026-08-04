@@ -430,7 +430,7 @@ export default function CatalogoPage() {
       </main>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="p-0 gap-0 rounded-2xl overflow-hidden max-w-lg border-slate-200/60 shadow-2xl">
+        <DialogContent className="w-[calc(100%-24px)] sm:w-full p-0 gap-0 rounded-2xl overflow-hidden max-w-lg border-slate-200/60 shadow-2xl">
           {/* Dark Navy Header */}
           <div className="sidebar-premium-bg px-6 py-4 relative">
             <div className="relative z-10 flex items-center justify-between">

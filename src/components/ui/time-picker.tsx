@@ -1,13 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-import { Clock, X, Check } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { Clock, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 
 interface TimePickerProps {
   value?: string
@@ -17,6 +12,7 @@ interface TimePickerProps {
 
 export function TimePicker({ value = '', onChange, className }: TimePickerProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
   
   const [hStr, mStr] = value ? value.split(':') : ['', '']
   let currentHour = 12
@@ -34,6 +30,16 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
       currentHour = h === 0 ? 12 : h
     }
   }
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    if (isOpen) document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen])
 
   const updateTime = (newH: number, newM: number, pm: boolean) => {
     let finalH = newH
@@ -55,35 +61,36 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
   const minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
 
   return (
-    <div className={cn("relative", className)}>
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger asChild>
-          <div className="flex items-center gap-1.5 cursor-pointer">
-            <div className={cn(
-              "flex-1 flex items-center h-9 px-3 rounded-xl border bg-white transition-all min-w-0",
-              isOpen ? "border-[#0097A7] ring-2 ring-[#0097A7]/20" : "border-slate-200/60 hover:border-[#0097A7]/40"
-            )}>
-              <Clock className={cn("h-3.5 w-3.5 shrink-0 mr-2 transition-colors", value ? "text-[#0097A7]" : "text-slate-400")} />
-              <span className={cn(
-                "text-xs font-bold flex-1 truncate",
-                value ? "text-slate-700" : "text-slate-400"
-              )}>
-                {displayValue}
-              </span>
-            </div>
-            {value && (
-              <button
-                type="button"
-                onClick={clearTime}
-                className="h-9 w-8 rounded-xl border border-slate-200/60 bg-white flex items-center justify-center text-slate-400 hover:text-rose-500 hover:border-rose-300 hover:bg-rose-50 transition-all shrink-0 cursor-pointer"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            )}
-          </div>
-        </PopoverTrigger>
-        <PopoverContent className="w-[260px] p-0 rounded-2xl border-slate-200/60 shadow-2xl z-[200] overflow-hidden" align="start" side="bottom" sideOffset={4}>
-          
+    <div className={cn("relative", className)} ref={ref}>
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className={cn(
+          "flex items-center h-9 px-3 rounded-xl border bg-white transition-all cursor-pointer",
+          isOpen ? "border-[#0097A7] ring-2 ring-[#0097A7]/20" : "border-slate-200/60 hover:border-[#0097A7]/40"
+        )}
+      >
+        <Clock className={cn("h-3.5 w-3.5 shrink-0 mr-2 transition-colors", value ? "text-[#0097A7]" : "text-slate-400")} />
+        <span className={cn(
+          "text-xs font-bold flex-1 truncate",
+          value ? "text-slate-700" : "text-slate-400"
+        )}>
+          {displayValue}
+        </span>
+        {value ? (
+          <button
+            type="button"
+            onClick={clearTime}
+            className="h-6 w-6 rounded-md flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-all shrink-0 cursor-pointer"
+          >
+            <X className="h-3 w-3" />
+          </button>
+        ) : (
+          <Clock className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+        )}
+      </div>
+
+      {isOpen && (
+        <div className="absolute top-full left-0 mt-1 w-[260px] bg-white rounded-2xl border border-slate-200/60 shadow-2xl z-[200] overflow-hidden">
           {/* Dark Navy Header */}
           <div className="sidebar-premium-bg px-4 py-3 relative">
             <div className="relative z-10 flex items-center justify-between">
@@ -103,6 +110,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
             {/* AM / PM Toggle */}
             <div className="flex p-0.5 bg-slate-100 rounded-xl">
               <button
+                type="button"
                 onClick={() => updateTime(currentHour, currentMinute, false)}
                 className={cn(
                   "flex-1 py-1.5 rounded-[10px] text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer",
@@ -114,6 +122,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
                 AM
               </button>
               <button
+                type="button"
                 onClick={() => updateTime(currentHour, currentMinute, true)}
                 className={cn(
                   "flex-1 py-1.5 rounded-[10px] text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer",
@@ -133,6 +142,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
                 {hours.map((h) => (
                   <button
                     key={h}
+                    type="button"
                     onClick={() => {
                       if (!value) updateTime(h, 0, false)
                       else updateTime(h, currentMinute, isPM)
@@ -157,6 +167,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
                 {minutes.map((m) => (
                   <button
                     key={m}
+                    type="button"
                     onClick={() => {
                       if (!value) updateTime(12, m, false)
                       else updateTime(currentHour, m, isPM)
@@ -190,7 +201,10 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
                   <button
                     key={time}
                     type="button"
-                    onClick={() => onChange(time)}
+                    onClick={() => {
+                      onChange(time)
+                      setIsOpen(false)
+                    }}
                     className={cn(
                       "px-2 py-1 rounded-lg text-[9px] font-bold transition-all cursor-pointer",
                       value === time 
@@ -204,8 +218,8 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
               </div>
             </div>
           </div>
-        </PopoverContent>
-      </Popover>
+        </div>
+      )}
     </div>
   )
 }

@@ -5,13 +5,7 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
 
 interface DatePickerProps {
   value?: string
@@ -23,8 +17,19 @@ interface DatePickerProps {
 
 export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha', className, disabled }: DatePickerProps) {
   const [open, setOpen] = React.useState(false)
+  const ref = React.useRef<HTMLDivElement>(null)
 
   const date = value ? new Date(value + 'T00:00:00') : undefined
+
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    if (open) document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [open])
 
   const handleSelect = (selectedDate: Date | undefined) => {
     if (selectedDate) {
@@ -37,29 +42,23 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          disabled={disabled}
-          className={cn(
-            "flex h-11 w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2 text-[12px] font-semibold text-slate-700 shadow-[0_1px_3px_rgba(0,0,0,0.03)] transition-all hover:border-[#0097A7]/40 hover:shadow-[0_4px_12px_rgba(0,151,167,0.08)] focus:border-[#0097A7] focus:ring-2 focus:ring-[#0097A7]/20 focus:outline-none disabled:opacity-50 disabled:pointer-events-none",
-            className
-          )}
-        >
-          <span className={cn(!date && "text-slate-400")}>
-            {date ? format(date, 'dd/MM/yyyy', { locale: es }) : placeholder}
-          </span>
-          <CalendarIcon className="h-4 w-4 text-slate-400" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent 
-        className="w-auto p-0 bg-white border border-slate-200/60 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] rounded-2xl z-[200]" 
-        align="start"
-        side="bottom"
-        sideOffset={4}
+    <div className={cn("relative", className)} ref={ref}>
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => setOpen(!open)}
+        className={cn(
+          "flex h-9 w-full items-center justify-between rounded-xl border border-slate-200/60 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-all hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-2 focus:ring-[#0097A7]/20 focus:outline-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
+        )}
       >
-        <div className="p-3 pb-0">
+        <span className={cn(!date && "text-slate-400")}>
+          {date ? format(date, 'dd/MM/yyyy', { locale: es }) : placeholder}
+        </span>
+        <CalendarIcon className="h-3.5 w-3.5 text-slate-400" />
+      </button>
+
+      {open && (
+        <div className="absolute top-full left-0 mt-1 bg-white border border-slate-200/60 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] rounded-2xl z-[200] p-3 pb-0">
           <Calendar
             mode="single"
             selected={date}
@@ -78,37 +77,48 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
               month_caption: "flex h-7 w-full items-center justify-center",
               caption_label: "text-[13px] font-bold text-slate-800 select-none",
               table: "w-full border-collapse",
-              weekdays: "flex mb-1",
-              weekday: "flex-1 text-[9px] font-bold text-slate-400 uppercase tracking-wider select-none",
-              week: "mt-1 flex w-full gap-1",
-              day: "group/day relative aspect-square h-8 w-full rounded-lg p-0 text-center select-none text-[12px] font-medium transition-colors hover:bg-slate-50",
-              today: "bg-[#E6F9FB] text-[#0097A7] font-bold",
-              selected: "bg-gradient-to-br from-[#00C9E0] to-[#0097A7] text-white font-bold shadow-md shadow-cyan-500/25 hover:from-[#00b4ca] hover:to-[#035bb3]",
-              outside: "text-slate-300 hover:bg-transparent",
-              disabled: "text-slate-200 opacity-50 hover:bg-transparent",
+              head_row: "flex w-full",
+              head_cell: "text-[9px] font-bold text-slate-400 uppercase w-8 text-center pb-2",
+              row: "flex w-full mt-1",
+              cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20",
+              day: "h-8 w-8 p-0 font-bold text-[11px] aria-selected:opacity-100 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer flex items-center justify-center",
+              day_selected: "bg-[#0097A7] text-white hover:bg-[#0097A7] hover:text-white shadow-md shadow-[#0097A7]/20",
+              day_today: "text-[#0097A7] font-black",
+              day_outside: "text-slate-300",
+              day_disabled: "text-slate-300",
+              day_range_middle: "bg-[#0097A7]/10 text-[#0097A7]",
+              day_hidden: "invisible",
+            }}
+            components={{
+              Footer: () => (
+                <div className="flex justify-between p-3 pt-0">
+                  <button 
+                    type="button"
+                    onClick={() => { onChange(''); setOpen(false) }}
+                    className="text-[10px] font-bold text-slate-400 hover:text-rose-500 transition-colors cursor-pointer"
+                  >
+                    BORRAR
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => { 
+                      const today = new Date()
+                      const y = today.getFullYear()
+                      const m = String(today.getMonth() + 1).padStart(2, '0')
+                      const d = String(today.getDate()).padStart(2, '0')
+                      onChange(`${y}-${m}-${d}`)
+                      setOpen(false) 
+                    }}
+                    className="text-[10px] font-bold text-[#0097A7] hover:text-[#00b4ca] transition-colors cursor-pointer"
+                  >
+                    HOY
+                  </button>
+                </div>
+              )
             }}
           />
         </div>
-        <div className="flex items-center justify-between border-t border-slate-100 px-3 py-2 bg-slate-50/50 mt-auto shrink-0 rounded-b-2xl">
-          <button
-            type="button"
-            onClick={() => {
-              onChange('')
-              setOpen(false)
-            }}
-            className="text-[10px] font-bold text-slate-400 hover:text-red-500 uppercase tracking-wider transition-colors"
-          >
-            Borrar
-          </button>
-          <button
-            type="button"
-            onClick={() => handleSelect(new Date())}
-            className="text-[10px] font-bold text-[#0097A7] hover:text-[#006570] uppercase tracking-wider transition-colors"
-          >
-            Hoy
-          </button>
-        </div>
-      </PopoverContent>
-    </Popover>
+      )}
+    </div>
   )
 }

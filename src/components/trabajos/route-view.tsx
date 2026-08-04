@@ -324,25 +324,25 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
           </svg>
         </div>
 
-        {/* Animated Truck - Mobile */}
-        <div 
-          className="absolute z-20 transition-all duration-1000 ease-in-out"
-          style={{ 
-            left: '-8px',
-            top: `${16 + (nextJobIndex >= 0 ? nextJobIndex * 280 + 90 : sortedJobs.length * 280 + 20) - 30}px`
-          }}
-        >
-          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center truck-animate">
-            <Truck className="h-4 w-4 text-white" />
-          </div>
-          {nextJobIndex >= 0 && nextJobIndex < sortedJobs.length && (
+        {/* Animated Truck - Mobile (only show when there's a next job) */}
+        {sortedJobs.length > 0 && nextJobIndex >= 0 && nextJobIndex < sortedJobs.length && (
+          <div 
+            className="absolute z-20 transition-all duration-1000 ease-in-out"
+            style={{ 
+              left: '-8px',
+              top: `${16 + nextJobIndex * 280 + 90 - 30}px`
+            }}
+          >
+            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center truck-animate">
+              <Truck className="h-4 w-4 text-white" />
+            </div>
             <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap">
               <span className="text-[6px] font-black text-amber-600 bg-amber-50 px-1 py-0.5 rounded border border-amber-200 shadow-sm">
                 En ruta
               </span>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Start Point */}
         <div className="w-full flex items-center gap-3 mb-6 pl-[14px] relative z-10">
@@ -490,25 +490,27 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
               </div>
             </div>
 
-            {/* Animated Truck - Desktop */}
-            <div 
-              className="absolute z-30 transition-all duration-1000 ease-in-out pointer-events-none"
-              style={{ 
-                left: `${48 + 64 + (nextJobIndex >= 0 ? nextJobIndex : sortedJobs.length) * 240 + 120 - 100}px`,
-                top: `${CARD_H + ROAD_H / 2 - 40}px`
-              }}
-            >
-              <div className="h-9 w-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center truck-animate">
-                <Truck className="h-4 w-4 text-white" />
-              </div>
-              {nextJobIndex >= 0 && nextJobIndex < sortedJobs.length && (
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                  <span className="text-[7px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 shadow-sm">
-                    Próxima parada
-                  </span>
+            {/* Animated Truck - Desktop (only show when there are jobs) */}
+            {sortedJobs.length > 0 && (
+              <div 
+                className="absolute z-30 transition-all duration-1000 ease-in-out pointer-events-none"
+                style={{ 
+                  left: `${48 + 64 + (nextJobIndex >= 0 ? nextJobIndex : sortedJobs.length) * 240 + 120 - 100}px`,
+                  top: `${CARD_H + ROAD_H / 2 - 40}px`
+                }}
+              >
+                <div className="h-9 w-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center truck-animate">
+                  <Truck className="h-4 w-4 text-white" />
                 </div>
-              )}
-            </div>
+                {nextJobIndex >= 0 && nextJobIndex < sortedJobs.length && (
+                  <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                    <span className="text-[7px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 shadow-sm">
+                      Próxima parada
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* STOPS */}
             {sortedJobs.map((job, index) => {

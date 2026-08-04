@@ -8,6 +8,7 @@ import { DatePicker } from '@/components/ui/date-picker'
 import { TimePicker } from '@/components/ui/time-picker'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { 
   Bell, 
@@ -390,29 +391,27 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                     className="h-10 pl-8 pr-3 rounded-xl bg-white border border-slate-200/60 text-base font-medium text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0097A7]/30 focus:border-[#0097A7]/50 transition-all w-full sm:w-[140px]"
                   />
                 </div>
-                <div className="flex flex-wrap gap-1 justify-between sm:justify-start">
-                  {[
-                    { key: 'all', label: 'Todas' },
-                    { key: 'urgente', label: 'Urgente', color: 'bg-rose-500' },
-                    { key: 'alta', label: 'Alta', color: 'bg-amber-500' },
-                    { key: 'normal', label: 'Normal', color: 'bg-slate-400' },
-                    { key: 'baja', label: 'Baja', color: 'bg-emerald-500' },
-                  ].map(p => (
-                    <button
-                      key={p.key}
-                      onClick={() => setPriorityFilter(p.key)}
-                      className={cn(
-                        "px-4 py-2 rounded-lg text-[11px] font-bold border transition-all cursor-pointer active:scale-[0.97] flex items-center gap-1 whitespace-nowrap",
-                        priorityFilter === p.key
-                          ? "border-[#0097A7] bg-[#0097A7]/5 text-[#0097A7]"
-                          : "border-slate-200/60 bg-white text-slate-500 hover:border-slate-300"
-                      )}
-                    >
-                      {p.color && <span className={cn("h-1.5 w-1.5 rounded-full shrink-0", p.color)} />}
-                      {p.label}
-                    </button>
-                  ))}
-                </div>
+                <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+                  <SelectTrigger className="w-full sm:w-[160px] h-10 rounded-xl bg-white border-slate-200/60 focus:ring-[#0097A7]/30 focus:border-[#0097A7]/50 text-slate-600 font-medium text-[13px]">
+                    <SelectValue placeholder="Prioridad" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-slate-100 shadow-xl">
+                    {[
+                      { key: 'all', label: 'Todas las prioridades' },
+                      { key: 'urgente', label: 'Urgente', color: 'bg-rose-500' },
+                      { key: 'alta', label: 'Alta', color: 'bg-amber-500' },
+                      { key: 'normal', label: 'Normal', color: 'bg-slate-400' },
+                      { key: 'baja', label: 'Baja', color: 'bg-emerald-500' },
+                    ].map(p => (
+                      <SelectItem key={p.key} value={p.key} className="text-[13px] font-bold cursor-pointer rounded-lg my-0.5 focus:bg-slate-50 focus:text-[#0097A7]">
+                        <div className="flex items-center gap-2">
+                          {p.color && <span className={cn("h-1.5 w-1.5 rounded-full shrink-0", p.color)} />}
+                          {p.label}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 

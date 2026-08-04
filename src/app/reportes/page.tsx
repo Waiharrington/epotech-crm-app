@@ -314,18 +314,17 @@ export default function ReportesPage() {
             {/* Top 3 Financial KPIs - Hero Stats */}
             <div className="grid grid-cols-3 gap-3 shrink-0">
               {[
-                { label: 'Ventas Totales', value: `$${totalRevenue.toLocaleString()}`, sub: `${completedJobs.length} servicios completados`, icon: Wallet, color: 'cyan', borderColor: '#0097A7', bgClass: 'from-[#0097A7] via-[#00b4ca] to-[#00C9E0]' },
-                { label: 'Ganancia Neta', value: `$${netProfit.toLocaleString()}`, sub: `${marginPercentage.toFixed(0)}% Margen`, icon: TrendingUp, color: 'emerald', borderColor: '#10b981', bgClass: 'from-emerald-500 to-emerald-600' },
-                { label: 'Ticket Promedio', value: `$${averageTicket.toLocaleString()}`, sub: 'Valor medio por servicio', icon: ShoppingBag, color: 'violet', borderColor: '#8b5cf6', bgClass: 'from-violet-500 to-violet-600' },
+                { label: 'Ventas Totales', value: `$${totalRevenue.toLocaleString()}`, sub: `${completedJobs.length} servicios completados`, icon: Wallet, gradient: 'from-[#0097A7] via-[#00b4ca] to-[#00C9E0]' },
+                { label: 'Ganancia Neta', value: `$${netProfit.toLocaleString()}`, sub: `${marginPercentage.toFixed(0)}% Margen`, icon: TrendingUp, gradient: 'from-[#00b4ca] via-[#00c9e0] to-[#00dde8]' },
+                { label: 'Ticket Promedio', value: `$${averageTicket.toLocaleString()}`, sub: 'Valor medio por servicio', icon: ShoppingBag, gradient: 'from-[#008b99] via-[#0097A7] to-[#00b4ca]' },
               ].map((stat) => (
                 <div
                   key={stat.label}
                   className={cn(
-                    "rounded-2xl p-4 shadow-lg relative overflow-hidden transition-all hover:shadow-xl",
-                    stat.color === 'cyan' ? 'bg-gradient-to-br from-[#0097A7] via-[#00b4ca] to-[#00C9E0] shadow-cyan-500/20' :
-                    stat.color === 'emerald' ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-emerald-500/20' :
-                    'bg-gradient-to-br from-violet-500 to-violet-600 shadow-violet-500/20'
+                    "rounded-2xl p-4 shadow-lg relative overflow-hidden transition-all hover:shadow-xl bg-gradient-to-br",
+                    stat.gradient
                   )}
+                  style={{ boxShadow: '0 10px 30px -10px rgba(0,151,167,0.25)' }}
                 >
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
                   <div className="relative z-10">
@@ -399,39 +398,47 @@ export default function ReportesPage() {
 
             {/* Auto-Insights */}
             {completedJobs.length > 0 && (
-              <div className="bg-gradient-to-r from-[#0097A7]/5 to-transparent border border-[#0097A7]/10 rounded-2xl p-4 shrink-0">
-                <div className="flex items-center gap-2 mb-3">
+              <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden shadow-sm">
+                <div className="px-4 py-3 border-b border-slate-100 flex items-center gap-2">
                   <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
                     <Lightbulb className="h-3.5 w-3.5 text-[#0097A7]" />
                   </div>
                   <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">Insights Automáticos</h3>
-                  <Zap className="h-3.5 w-3.5 text-[#0097A7]" />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
                   {bestSellingService && (
-                    <div className="flex items-start gap-2 bg-white/60 rounded-xl p-2.5 border border-slate-200/40">
-                      <span className="text-base">🏆</span>
-                      <div>
-                        <p className="text-[10px] font-bold text-slate-700">Más Vendido</p>
-                        <p className="text-[9px] text-slate-500">{bestSellingService.nombre} — {bestSellingService.ventasCount} servicios</p>
+                    <div className="flex items-center gap-3 p-4 hover:bg-slate-50/50 transition-colors">
+                      <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20 shrink-0">
+                        <Star className="h-4 w-4 text-[#0097A7]" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Más Vendido</p>
+                        <p className="text-xs font-bold text-slate-700 truncate">{bestSellingService.nombre}</p>
+                        <p className="text-[10px] text-[#0097A7] font-bold">{bestSellingService.ventasCount} servicios</p>
                       </div>
                     </div>
                   )}
                   {busiestDay && busiestDay.trabajosCount > 0 && (
-                    <div className="flex items-start gap-2 bg-white/60 rounded-xl p-2.5 border border-slate-200/40">
-                      <span className="text-base">🔥</span>
-                      <div>
-                        <p className="text-[10px] font-bold text-slate-700">Día Más Activo</p>
-                        <p className="text-[9px] text-slate-500">{busiestDay.name} — {busiestDay.trabajosCount} servicios</p>
+                    <div className="flex items-center gap-3 p-4 hover:bg-slate-50/50 transition-colors">
+                      <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-amber-50 border border-amber-200/60 shrink-0">
+                        <Clock className="h-4 w-4 text-amber-500" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Día Más Activo</p>
+                        <p className="text-xs font-bold text-slate-700">{busiestDay.name}</p>
+                        <p className="text-[10px] text-amber-600 font-bold">{busiestDay.trabajosCount} servicios</p>
                       </div>
                     </div>
                   )}
                   {bestClient && (
-                    <div className="flex items-start gap-2 bg-white/60 rounded-xl p-2.5 border border-slate-200/40">
-                      <span className="text-base">👑</span>
-                      <div>
-                        <p className="text-[10px] font-bold text-slate-700">Mejor Cliente</p>
-                        <p className="text-[9px] text-slate-500">{bestClient.nombre} {bestClient.apellido} — ${bestClient.gastado.toLocaleString()}</p>
+                    <div className="flex items-center gap-3 p-4 hover:bg-slate-50/50 transition-colors">
+                      <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20 shrink-0">
+                        <Users className="h-4 w-4 text-[#0097A7]" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mejor Cliente</p>
+                        <p className="text-xs font-bold text-slate-700 truncate">{bestClient.nombre} {bestClient.apellido}</p>
+                        <p className="text-[10px] text-[#0097A7] font-bold">${bestClient.gastado.toLocaleString()}</p>
                       </div>
                     </div>
                   )}

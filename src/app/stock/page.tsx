@@ -333,21 +333,6 @@ export default function StockPage() {
               </Button>
             </div>
           </div>
-
-          {/* Search Bar */}
-          <div className="relative pt-2 border-t border-white/[0.06]">
-            <div className="flex flex-col md:flex-row gap-2">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#00C9E0]/70 pointer-events-none z-10" />
-                <Input
-                  placeholder="Buscar por nombre de producto..."
-                  className="pl-9 h-10 text-[13px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
         </div>
       </header>
 
@@ -460,6 +445,17 @@ export default function StockPage() {
         <div className="flex-1 overflow-y-auto min-h-0 pt-1 pb-4 md:pb-4 md:pb-20 px-1 -mx-1">
           {activeTab === 'inventario' ? (
             <>
+              {/* Inventory Search */}
+              <div className="relative mb-3">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none z-10" />
+                <Input
+                  placeholder="Buscar por nombre de producto..."
+                  className="pl-9 h-10 text-[13px] rounded-xl bg-white border-slate-200/60 text-slate-700 placeholder:text-slate-400 focus-visible:ring-[#00C9E0]/40 transition-all"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+
               {loading && !items.length ? (
                 <div className="flex flex-col items-center justify-center h-40 gap-3">
                   <Loader2 className="h-6 w-6 animate-spin text-[#00C9E0]" />
@@ -484,12 +480,12 @@ export default function StockPage() {
                               <TypeIcon className={cn("h-4 w-4", typeColor.text)} />
                             </div>
                             <div>
-                              <p className="text-base font-bold text-slate-800 leading-tight">
+                              <p className="text-[13px] font-bold text-slate-800 leading-tight">
                                 {item.nombre}
                               </p>
                               <div className="flex items-center gap-1.5 mt-0.5">
                                 <div className={cn("h-1.5 w-1.5 rounded-full", typeColor.dot)} />
-                                <p className={cn("text-base font-semibold capitalize", typeColor.text)}>
+                                <p className={cn("text-[11px] font-semibold capitalize", typeColor.text)}>
                                   {item.tipo}
                                 </p>
                               </div>
@@ -508,21 +504,21 @@ export default function StockPage() {
                         {/* Stock info */}
                         <div className="space-y-1.5 mb-3">
                           <div className="flex items-center justify-between">
-                            <span className="text-base font-semibold text-slate-400 uppercase tracking-wider">Cantidad</span>
+                            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Cantidad</span>
                             <div className="flex items-baseline gap-1">
-                              <span className={cn("text-lg font-black", isLow ? "text-rose-500" : "text-slate-800")}>{item.cantidad_actual}</span>
-                              <span className="text-base text-slate-400 font-medium uppercase">{item.unidad_medida || 'unidades'}</span>
+                              <span className={cn("text-[15px] font-black", isLow ? "text-rose-500" : "text-slate-800")}>{item.cantidad_actual}</span>
+                              <span className="text-[11px] text-slate-400 font-medium uppercase">{item.unidad_medida || 'unidades'}</span>
                             </div>
                           </div>
                           {item.tipo === 'consumible' && (
                             <>
                               <div className="flex items-center justify-between">
-                                <span className="text-base font-semibold text-slate-400 uppercase tracking-wider">Precio Costo</span>
-                                <span className="text-base font-bold text-slate-600">${item.precio_costo}</span>
+                                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Precio Costo</span>
+                                <span className="text-[13px] font-bold text-slate-600">${item.precio_costo}</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-base font-semibold text-slate-400 uppercase tracking-wider">Precio Cliente</span>
-                                <span className="text-base font-bold text-[#0097A7]">${(item as any).precio_cliente ?? 0}</span>
+                                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Precio Cliente</span>
+                                <span className="text-[13px] font-bold text-[#0097A7]">${(item as any).precio_cliente ?? 0}</span>
                               </div>
                             </>
                           )}
@@ -535,7 +531,7 @@ export default function StockPage() {
                               <TooltipTrigger asChild>
                                 <button
                                   onClick={() => setAdjustModal({ open: true, item, type: 'in' })}
-                                  className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-xl text-base font-bold text-emerald-600 bg-emerald-50 border border-emerald-200/60 hover:bg-emerald-100 transition-all cursor-pointer active:scale-[0.97]"
+                                  className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl text-[12px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200/60 hover:bg-emerald-100 transition-all cursor-pointer active:scale-[0.97]"
                                 >
                                   <ArrowUpRight className="h-3 w-3" />
                                   Entrada
@@ -548,7 +544,7 @@ export default function StockPage() {
                               <TooltipTrigger asChild>
                                 <button
                                   onClick={() => setAdjustModal({ open: true, item, type: 'out' })}
-                                  className="flex-1 flex items-center justify-center gap-1 py-2.5 rounded-xl text-base font-bold text-rose-600 bg-rose-50 border border-rose-200/60 hover:bg-rose-100 transition-all cursor-pointer active:scale-[0.97]"
+                                  className="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl text-[12px] font-bold text-rose-600 bg-rose-50 border border-rose-200/60 hover:bg-rose-100 transition-all cursor-pointer active:scale-[0.97]"
                                 >
                                   <ArrowDownRight className="h-3 w-3" />
                                   Salida

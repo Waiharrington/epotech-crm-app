@@ -253,26 +253,26 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
               </div>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="grid grid-cols-1 sm:flex sm:flex-row sm:items-center gap-2 shrink-0 w-full md:w-auto">
               {notificationPermission === 'granted' ? (
-                <div className="flex items-center gap-1.5 h-10 px-4 rounded-xl bg-emerald-500/10 border border-emerald-400/20 text-emerald-400 text-base font-bold">
+                <div className="flex items-center justify-center sm:justify-start gap-1.5 h-10 px-4 rounded-xl bg-emerald-500/10 border border-emerald-400/20 text-emerald-400 text-base font-bold">
                   <Bell className="h-3.5 w-3.5" /> Notificaciones Activas
                 </div>
               ) : (
                 <button 
                   onClick={handleRequestPermission}
-                  className="flex items-center gap-1.5 h-10 px-4 rounded-xl bg-white/10 border border-white/15 text-white/70 hover:text-white hover:bg-white/15 text-base font-bold transition-all backdrop-blur-md cursor-pointer"
+                  className="flex items-center justify-center sm:justify-start gap-1.5 h-10 px-4 rounded-xl bg-white/10 border border-white/15 text-white/70 hover:text-white hover:bg-white/15 text-base font-bold transition-all backdrop-blur-md cursor-pointer"
                 >
                   <BellOff className="h-3.5 w-3.5 animate-pulse" />
                   Activar Avisos
                 </button>
               )}
 
-              <VoiceReminderButton onCreated={fetchReminders} />
+              <VoiceReminderButton onCreated={fetchReminders} className="w-full sm:w-auto" />
 
               <button 
                 onClick={() => setShowCreateModal(true)}
-                className="flex items-center gap-1.5 h-10 px-4.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] hover:from-[#00b4ca] hover:to-[#00d4f0] text-white text-base font-black shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
+                className="flex items-center justify-center sm:justify-start gap-1.5 h-10 px-4.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] hover:from-[#00b4ca] hover:to-[#00d4f0] text-white text-base font-black shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98] w-full sm:w-auto"
               >
                 <Plus className="h-3.5 w-3.5" /> Nuevo Recordatorio
               </button>
@@ -308,7 +308,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                   </div>
                   <button 
                     onClick={copyToClipboard}
-                    className="flex items-center gap-1.5 h-11 px-4 rounded-lg bg-amber-100 border border-amber-200/60 text-amber-800 text-base font-bold hover:bg-amber-200 transition-colors shrink-0 cursor-pointer"
+                    className="flex items-center gap-1.5 h-11 px-4 rounded-lg bg-amber-100 border border-amber-200/60 text-amber-800 text-base font-bold hover:bg-amber-200 transition-colors shrink-0 cursor-pointer w-full md:w-auto justify-center md:justify-start"
                   >
                     <Clipboard className="h-3 w-3" /> Copiar SQL
                   </button>
@@ -317,7 +317,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
             )}
 
             {/* Stat Cards */}
-            <div className="grid grid-cols-3 gap-3 shrink-0">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0">
               {[
                 { label: 'Pendientes', value: pendingCount, icon: ListTodo, color: 'amber', borderColor: '#f59e0b' },
                 { label: 'Completados', value: completedCount, icon: CheckCheck, color: 'emerald', borderColor: '#10b981' },
@@ -362,7 +362,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                     key={tab.key}
                     onClick={() => setFilterTab(tab.key as any)}
                     className={cn(
-                      "px-4 py-2.5 rounded-xl text-base font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97] flex items-center gap-1.5",
+                      "px-4 py-2.5 rounded-xl text-base font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97] flex items-center gap-1.5 flex-1 sm:flex-none justify-center",
                       filterTab === tab.key
                         ? "bg-[#0097A7] text-white border-[#0097A7] shadow-md shadow-cyan-500/20"
                         : "bg-white text-slate-500 border-slate-200/60 hover:border-[#0097A7]/40 hover:text-[#0097A7]"
@@ -378,17 +378,17 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
               </div>
 
               {/* Search + Priority */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <div className="relative">
                   <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
                   <input 
                     placeholder="Buscar..." 
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="h-10 pl-8 pr-3 rounded-xl bg-white border border-slate-200/60 text-base font-medium text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0097A7]/30 focus:border-[#0097A7]/50 transition-all w-[140px]"
+                    className="h-10 pl-8 pr-3 rounded-xl bg-white border border-slate-200/60 text-base font-medium text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0097A7]/30 focus:border-[#0097A7]/50 transition-all w-full sm:w-[140px]"
                   />
                 </div>
-                <div className="flex gap-1">
+                <div className="flex flex-wrap gap-1 justify-between sm:justify-start">
                   {[
                     { key: 'all', label: 'Todas' },
                     { key: 'urgente', label: 'Urgente', color: 'bg-rose-500' },

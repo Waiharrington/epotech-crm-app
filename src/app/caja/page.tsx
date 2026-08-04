@@ -204,13 +204,13 @@ export default function CajaPage() {
             <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden">
               {/* Desktop Table */}
               <div className="hidden md:block overflow-auto">
-                <table className="w-full">
+                <table className="w-full table-fixed">
                   <thead>
                     <tr className="border-b border-slate-100">
-                      <th className="text-left text-[11px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Fecha</th>
+                      <th className="w-[100px] text-left text-[11px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Fecha</th>
                       <th className="text-left text-[11px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Descripción</th>
-                      <th className="text-left text-[11px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Categoría</th>
-                      <th className="text-right text-[11px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Monto</th>
+                      <th className="w-[130px] text-left text-[11px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Categoría</th>
+                      <th className="w-[120px] text-right text-[11px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Monto</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -234,8 +234,8 @@ export default function CajaPage() {
                                 <ArrowDownRight className="h-3.5 w-3.5 text-rose-500" />
                               )}
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-bold text-slate-700 truncate max-w-[250px] group-hover:text-[#0097A7] transition-colors">
+                            <div className="flex-1 min-w-0 overflow-hidden">
+                              <p className="text-sm font-bold text-slate-700 truncate group-hover:text-[#0097A7] transition-colors">
                                 {entry.notas || 'Sin descripción'}
                               </p>
                             </div>

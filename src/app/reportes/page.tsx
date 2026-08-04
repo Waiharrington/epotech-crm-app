@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -48,6 +48,27 @@ import {
 } from 'recharts'
 
 export default function ReportesPage() {
+  const carouselRef = useRef<HTMLDivElement>(null)
+
+  // Auto-scroll logic for mobile KPI carousel
+  useEffect(() => {
+    const container = carouselRef.current
+    if (!container) return
+
+    let scrollAmount = 0
+    const interval = setInterval(() => {
+      // Only scroll if we are on mobile (where scrollWidth > clientWidth)
+      if (container.scrollWidth <= container.clientWidth) return
+
+      if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
+        container.scrollTo({ left: 0, behavior: 'smooth' })
+      } else {
+        container.scrollBy({ left: container.clientWidth * 0.8, behavior: 'smooth' })
+      }
+    }, 4000)
+
+    return () => clearInterval(interval)
+  }, [])
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
   const [rawData, setRawData] = useState<any>({
@@ -313,7 +334,10 @@ export default function ReportesPage() {
           <div className="flex-1 overflow-y-auto min-h-0 space-y-3">
             
             {/* Top 3 Financial KPIs - Hero Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 shrink-0">
+            <div 
+              ref={carouselRef}
+              className="flex md:grid md:grid-cols-3 gap-3 shrink-0 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-2 -mx-4 px-4 md:mx-0 md:px-0"
+            >
               {[
                 { label: 'Ventas Totales', value: `$${totalRevenue.toLocaleString()}`, sub: `${completedJobs.length} servicios completados`, icon: Wallet, gradient: 'from-[#0097A7] via-[#00b4ca] to-[#00C9E0]' },
                 { label: 'Ganancia Neta', value: `$${netProfit.toLocaleString()}`, sub: `${marginPercentage.toFixed(0)}% Margen`, icon: TrendingUp, gradient: 'from-[#00b4ca] via-[#00c9e0] to-[#00dde8]' },
@@ -322,7 +346,7 @@ export default function ReportesPage() {
                 <div
                   key={stat.label}
                   className={cn(
-                    "rounded-2xl p-4 shadow-lg relative overflow-hidden transition-all hover:shadow-xl bg-gradient-to-br",
+                    "w-[85vw] md:w-auto shrink-0 snap-center md:snap-align-none rounded-2xl p-4 shadow-lg relative overflow-hidden transition-all hover:shadow-xl bg-gradient-to-br",
                     stat.gradient
                   )}
                   style={{ boxShadow: '0 10px 30px -10px rgba(0,151,167,0.25)' }}

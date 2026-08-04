@@ -31,6 +31,7 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn, formatTime12 } from '@/lib/utils'
+import { VoiceReminderButton } from '@/components/voice-reminder-button'
 
 export default function RecordatoriosPage() {
   const supabase = createClient() as any
@@ -266,6 +267,8 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                   Activar Avisos
                 </button>
               )}
+
+              <VoiceReminderButton onCreated={fetchReminders} />
 
               <button 
                 onClick={() => setShowCreateModal(true)}

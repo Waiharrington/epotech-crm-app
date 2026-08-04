@@ -289,8 +289,12 @@ export default function AjustesPage() {
                     <img 
                       src={selectedImg} 
                       alt="Preview" 
-                      className="w-full h-full object-cover pointer-events-none select-none"
+                      className="absolute top-1/2 left-1/2 pointer-events-none select-none"
                       style={{
+                        width: imgSize?.width || 200,
+                        height: imgSize?.height || 200,
+                        marginLeft: imgSize ? -(imgSize.width / 2) : -100,
+                        marginTop: imgSize ? -(imgSize.height / 2) : -100,
                         transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom * (imgSize?.baseScale || 1)}) rotate(${rotation}deg)`,
                         transformOrigin: 'center center'
                       }}

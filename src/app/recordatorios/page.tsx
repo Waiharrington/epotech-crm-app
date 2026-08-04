@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { DatePicker } from '@/components/ui/date-picker'
+import { TimePicker } from '@/components/ui/time-picker'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -539,12 +540,9 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                 <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                   <Clock className="h-3 w-3" /> Hora
                 </label>
-                <Input 
-                  type="time" 
+                <TimePicker 
                   value={newReminder.hora}
-                  onChange={e => setNewReminder({...newReminder, hora: e.target.value})}
-                  required
-                  className="h-9 text-xs rounded-xl border-slate-200/60 focus-visible:ring-[#0097A7]/40"
+                  onChange={(time) => setNewReminder({...newReminder, hora: time})}
                 />
               </div>
             </div>

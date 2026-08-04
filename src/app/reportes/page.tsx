@@ -254,12 +254,12 @@ export default function ReportesPage() {
               <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
                 <BarChart3 className="h-5 w-5 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Reportes de Rendimiento
                 </h1>
-                <p className="text-slate-300/80 text-base hidden sm:block xl:text-[11px] 2xl:text-base mt-1 font-medium">
-                  Visualiza la rentabilidad, ventas, mejores clientes y jornadas operativas.
+                <p className="text-slate-300/80 text-xs sm:text-base mt-1 font-medium">
+                  Visualiza tu rentabilidad y ventas.
                 </p>
               </div>
             </div>

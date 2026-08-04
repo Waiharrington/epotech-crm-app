@@ -216,7 +216,7 @@ export function VoiceReminderButton({ onCreated, className }: VoiceReminderButto
                 <DialogTitle className="text-white text-base font-bold leading-none">
                   Recordatorio por Voz
                 </DialogTitle>
-                <DialogDescription className="text-slate-300/70 text-base mt-1">
+                <DialogDescription className="text-slate-300/70 text-xs sm:text-base mt-1">
                   La IA analizó tu nota de voz
                 </DialogDescription>
               </div>

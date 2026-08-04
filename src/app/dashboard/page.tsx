@@ -152,7 +152,7 @@ export default function DashboardPage() {
         if (utahHour >= 5 && utahHour < 12) {
           setGreetingState({
             text: '¡Buenos días, Sebastián!',
-            sub: 'Que tengas una excelente y productiva mañana en Utah.',
+            sub: 'Excelente y productiva mañana.',
             icon: 'sunrise',
             glowClass: 'bg-[#00C9E0]/8',
             titleColor: 'text-white',
@@ -161,7 +161,7 @@ export default function DashboardPage() {
         } else if (utahHour >= 12 && utahHour < 19) {
           setGreetingState({
             text: '¡Buenas tardes, Sebastián!',
-            sub: 'El motor de tu negocio sigue con toda la presión hoy.',
+            sub: 'El motor de tu negocio sigue activo.',
             icon: 'sun',
             glowClass: 'bg-[#0097A7]/8',
             titleColor: 'text-white',
@@ -170,7 +170,7 @@ export default function DashboardPage() {
         } else {
           setGreetingState({
             text: '¡Buenas noches, Sebastián!',
-            sub: 'Es hora de descansar y planificar las operaciones de mañana.',
+            sub: 'Planifica las operaciones de mañana.',
             icon: 'moon',
             glowClass: 'bg-cyan-500/10',
             titleColor: 'text-white',
@@ -182,7 +182,7 @@ export default function DashboardPage() {
         if (hour >= 5 && hour < 12) {
           setGreetingState({
             text: '¡Buenos días, Sebastián!',
-            sub: 'Que tengas una excelente mañana.',
+            sub: 'Excelente y productiva mañana.',
             icon: 'sunrise',
             glowClass: 'bg-[#00C9E0]/8',
             titleColor: 'text-white',
@@ -191,7 +191,7 @@ export default function DashboardPage() {
         } else if (hour >= 12 && hour < 19) {
           setGreetingState({
             text: '¡Buenas tardes, Sebastián!',
-            sub: 'El motor de tu negocio sigue con toda la presión hoy.',
+            sub: 'El motor de tu negocio sigue activo.',
             icon: 'sun',
             glowClass: 'bg-[#0097A7]/8',
             titleColor: 'text-white',
@@ -200,7 +200,7 @@ export default function DashboardPage() {
         } else {
           setGreetingState({
             text: '¡Buenas noches, Sebastián!',
-            sub: 'Es hora de descansar y planificar las operaciones de mañana.',
+            sub: 'Planifica las operaciones de mañana.',
             icon: 'moon',
             glowClass: 'bg-cyan-500/10',
             titleColor: 'text-white',
@@ -512,7 +512,7 @@ export default function DashboardPage() {
                   )}
                 </div>
               </div>
-              <p className="text-slate-300/80 text-[11px] xl:text-[11px] 2xl:text-base mt-0.5 font-medium">{greetingState.sub}</p>
+              <p className="text-slate-300/80 text-xs sm:text-base mt-0.5 font-medium">{greetingState.sub}</p>
             </div>
 
             {/* Right side: Desktop Icons */}

@@ -34,6 +34,7 @@ import { PostJobWizard } from '@/components/trabajos/post-job-wizard'
 import { EditRecurringPlanModal } from '@/components/clientes/edit-recurring-plan-modal'
 import { AddNoteModal } from '@/components/clientes/add-note-modal'
 import { EditNoteModal } from '@/components/clientes/edit-note-modal'
+import { NewQuoteWizard } from '@/components/presupuestos/new-quote-wizard'
 import { JobDetailModal } from '@/components/trabajos/job-detail-modal'
 import { EditJobModal } from '@/components/trabajos/edit-job-modal'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
@@ -72,6 +73,7 @@ export default function ClienteProfilePage() {
   const [selectedNote, setSelectedNote] = useState<any | null>(null)
   const [showEditNoteModal, setShowEditNoteModal] = useState(false)
   const [cotizaciones, setCotizaciones] = useState<any[]>([])
+  const [showQuoteWizard, setShowQuoteWizard] = useState(false)
 
   useEffect(() => {
     fetchCliente()
@@ -543,16 +545,21 @@ export default function ClienteProfilePage() {
           </TabsContent>
 
           <TabsContent value="cotizaciones" className="animate-in fade-in duration-500">
-             <div className="flex items-center justify-between mb-3.5">
+             <div className="flex items-center justify-between mb-3.5 gap-2">
                 <div>
                    <h3 className="text-[13px] font-bold text-slate-800">Cotizaciones del Cliente</h3>
-                   <p className="text-[10.5px] text-slate-400 font-medium">Historial de presupuestos y propuestas enviadas.</p>
+                   <p className="text-[10.5px] text-slate-400 font-medium hidden sm:block">Historial de presupuestos y propuestas enviadas.</p>
                 </div>
-                <Link href="/cotizaciones">
-                   <Button className="h-10 px-4 text-base font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]">
-                      <ExternalLinkIcon className="mr-1.5 h-3 w-3" /> Ir a Cotizaciones
-                   </Button>
-                </Link>
+                <div className="flex items-center gap-2 shrink-0">
+                  <Button onClick={() => setShowQuoteWizard(true)} className="h-10 px-3 sm:px-4 text-[13px] sm:text-base font-bold rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white hover:opacity-90 transition-all shadow-md shadow-cyan-500/20 active:scale-95">
+                     <Plus className="mr-1.5 h-3.5 w-3.5 sm:h-4 sm:w-4" /> Nueva
+                  </Button>
+                  <Link href="/cotizaciones">
+                     <Button className="h-10 px-3 sm:px-4 text-[13px] sm:text-base font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-95">
+                        <ExternalLinkIcon className="sm:mr-1.5 h-3 w-3" /> <span className="hidden sm:inline">Ver Todas</span>
+                     </Button>
+                  </Link>
+                </div>
              </div>
 
              {cotizaciones.length > 0 ? (
@@ -605,11 +612,9 @@ export default function ClienteProfilePage() {
                   <p className="text-[10.5px] text-slate-400 font-medium max-w-sm mt-1">
                     Este cliente aún no tiene cotizaciones registradas.
                   </p>
-                  <Link href="/cotizaciones">
-                     <Button className="mt-4 h-10 px-4.5 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
-                        Crear Cotización
-                     </Button>
-                  </Link>
+                  <Button onClick={() => setShowQuoteWizard(true)} className="mt-4 h-10 px-4.5 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
+                     Crear Cotización
+                  </Button>
                 </div>
              )}
           </TabsContent>
@@ -624,10 +629,10 @@ export default function ClienteProfilePage() {
                 <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
                   <Calendar className="h-4.5 w-4.5 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
                 </div>
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1 pr-12">
                   <DialogTitle className="text-base font-bold tracking-tight text-white">Tipo de Registro</DialogTitle>
-                  <DialogDescription className="text-slate-300/80 text-base mt-0.5 font-medium">
-                    ¿El servicio ya fue realizado o se va a programar a futuro?
+                  <DialogDescription className="text-slate-300/80 text-xs sm:text-base mt-0.5 font-medium">
+                    Elige el tipo de servicio a registrar.
                   </DialogDescription>
                 </div>
               </div>
@@ -641,39 +646,42 @@ export default function ClienteProfilePage() {
               </button>
             </DialogHeader>
 
-            <div className="flex flex-col gap-2.5 p-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 sm:p-5 bg-slate-50/50">
               <button
                 type="button"
-                className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 bg-white hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 active:scale-[0.98] text-left group"
+                className="group relative flex flex-col items-center justify-center gap-3 p-5 rounded-2xl border-2 border-slate-100 bg-white hover:border-[#00C9E0] hover:bg-[#F4FDFF] transition-all duration-300 active:scale-95 text-center overflow-hidden shadow-sm hover:shadow-md"
                 onClick={() => {
                   setJobWizardState('proximo')
                   setShowJobTypeSelector(false)
                   setShowNewJobWizard(true)
                 }}
               >
-                <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-400 group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 group-hover:text-[#0097A7] transition-all shrink-0">
-                  <Calendar className="h-4.5 w-4.5" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#00C9E0]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative z-10 h-12 w-12 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-400 group-hover:bg-[#00C9E0] group-hover:border-[#00C9E0] group-hover:text-white transition-all duration-300 group-hover:shadow-[0_4px_12px_rgba(0,201,224,0.3)]">
+                  <Calendar className="h-5 w-5" />
                 </div>
-                <div className="flex flex-col items-start">
-                  <span className="text-[11.5px] font-black text-slate-700 group-hover:text-[#0097A7] transition-colors">Por Realizar</span>
-                  <span className="text-[11px] font-medium text-slate-400">Agendar para el futuro</span>
+                <div className="relative z-10 flex flex-col items-center">
+                  <span className="text-[13px] font-black text-slate-700 group-hover:text-[#0097A7] transition-colors mb-0.5">Por Realizar</span>
+                  <span className="text-[10.5px] font-medium text-slate-400 group-hover:text-cyan-700/70 transition-colors">Programar a futuro</span>
                 </div>
               </button>
+
               <button
                 type="button"
-                className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all duration-300 active:scale-[0.98] text-left"
+                className="group relative flex flex-col items-center justify-center gap-3 p-5 rounded-2xl border-2 border-slate-100 bg-white hover:border-emerald-500 hover:bg-emerald-50/50 transition-all duration-300 active:scale-95 text-center overflow-hidden shadow-sm hover:shadow-md"
                 onClick={() => {
                   setJobWizardState('completado')
                   setShowJobTypeSelector(false)
                   setShowNewJobWizard(true)
                 }}
               >
-                <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/15 border border-white/20 text-white backdrop-blur-md shrink-0">
-                  <Check className="h-4.5 w-4.5" />
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative z-10 h-12 w-12 rounded-2xl flex items-center justify-center bg-slate-50 border border-slate-100 text-slate-400 group-hover:bg-emerald-500 group-hover:border-emerald-500 group-hover:text-white transition-all duration-300 group-hover:shadow-[0_4px_12px_rgba(16,185,129,0.3)]">
+                  <Check className="h-6 w-6 stroke-[3]" />
                 </div>
-                <div className="flex flex-col items-start">
-                  <span className="text-[11.5px] font-black text-white">Ya Realizado</span>
-                  <span className="text-[11px] font-medium text-white/70">Registrar servicio completado</span>
+                <div className="relative z-10 flex flex-col items-center">
+                  <span className="text-[13px] font-black text-slate-700 group-hover:text-emerald-700 transition-colors mb-0.5">Ya Realizado</span>
+                  <span className="text-[10.5px] font-medium text-slate-400 group-hover:text-emerald-700/70 transition-colors">Registrar completado</span>
                 </div>
               </button>
             </div>
@@ -802,6 +810,18 @@ export default function ClienteProfilePage() {
           }}
         />
       )}
+      {/* Quotes Wizard Modal */}
+      {showQuoteWizard && (
+        <NewQuoteWizard
+          onClose={() => setShowQuoteWizard(false)}
+          onSuccess={() => {
+            setShowQuoteWizard(false)
+            fetchCotizaciones()
+          }}
+          defaultClient={cliente}
+        />
+      )}
+
     </div>
   )
 }

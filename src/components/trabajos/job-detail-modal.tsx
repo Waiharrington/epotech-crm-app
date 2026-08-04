@@ -48,55 +48,56 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
             ))}
           </div>
 
-          <div className="relative px-6 pt-6 pb-5">
+          <div className="relative px-5 sm:px-6 pt-6 pb-5">
             <DialogHeader className="space-y-0 p-0">
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex-1 min-w-0">
-                  <DialogDescription className="text-base font-black uppercase tracking-[0.15em] text-white/60 mb-1">
-                    Detalle del Servicio
-                  </DialogDescription>
-                  <DialogTitle className="text-lg font-black text-white leading-tight truncate">
-                    {job.catalogo_servicios?.nombre || 'Servicio Personalizado'}
-                  </DialogTitle>
-                </div>
-                <div className="flex items-center gap-1.5 shrink-0 mt-1 mr-9">
-                  {isCompleted && onArchive && (
-                    <button
-                      onClick={() => onArchive(job)}
-                      title="Archivar"
-                      className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-200 active:scale-95"
-                    >
-                      <Archive className="h-3.5 w-3.5" />
-                    </button>
-                  )}
-                  {onEdit && (
-                    <button
-                      onClick={() => onEdit(job)}
-                      title="Editar"
-                      className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-200 active:scale-95"
-                    >
-                      <Edit className="h-3.5 w-3.5" />
-                    </button>
-                  )}
-                </div>
+              <div className="pr-8">
+                <DialogDescription className="text-xs font-black uppercase tracking-wider text-white/60 mb-1">
+                  Detalle del Servicio
+                </DialogDescription>
+                <DialogTitle className="text-xl font-black text-white leading-tight">
+                  {job.catalogo_servicios?.nombre || 'Servicio Personalizado'}
+                </DialogTitle>
               </div>
             </DialogHeader>
 
-            {/* Status + Date row */}
-            <div className="flex items-center gap-2.5 mt-3.5">
-              <span className={cn(
-                "inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-base font-black uppercase tracking-wider",
-                isCompleted
-                  ? "bg-emerald-400/20 text-emerald-100 ring-1 ring-emerald-400/30"
-                  : "bg-amber-400/20 text-amber-100 ring-1 ring-amber-400/30"
-              )}>
-                {isCompleted ? <CheckCircle2 className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
-                {isCompleted ? 'Completado' : 'Pendiente'}
-              </span>
-              <span className="text-base font-bold text-white/50">
-                <Calendar className="h-3 w-3 inline mr-1" />
-                {new Date(job.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
-              </span>
+            {/* Status, Date, and Actions row */}
+            <div className="flex flex-wrap items-center justify-between gap-3 mt-4">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className={cn(
+                  "inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider",
+                  isCompleted
+                    ? "bg-emerald-400/20 text-emerald-100 ring-1 ring-emerald-400/30"
+                    : "bg-amber-400/20 text-amber-100 ring-1 ring-amber-400/30"
+                )}>
+                  {isCompleted ? <CheckCircle2 className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
+                  {isCompleted ? 'Completado' : 'Pendiente'}
+                </span>
+                <span className="text-sm font-bold text-white/80 whitespace-nowrap">
+                  <Calendar className="h-3.5 w-3.5 inline mr-1.5" />
+                  {new Date(job.fecha_servicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                </span>
+              </div>
+              
+              <div className="flex items-center gap-2 shrink-0">
+                {isCompleted && onArchive && (
+                  <button
+                    onClick={() => onArchive(job)}
+                    title="Archivar"
+                    className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white hover:text-white transition-all duration-200 active:scale-95"
+                  >
+                    <Archive className="h-3.5 w-3.5" />
+                  </button>
+                )}
+                {onEdit && (
+                  <button
+                    onClick={() => onEdit(job)}
+                    title="Editar"
+                    className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 hover:bg-white/20 text-white hover:text-white transition-all duration-200 active:scale-95"
+                  >
+                    <Edit className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

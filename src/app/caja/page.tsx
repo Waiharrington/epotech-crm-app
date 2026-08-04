@@ -67,12 +67,12 @@ export default function CajaPage() {
               <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
                 <Wallet className="h-5 w-5 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Caja y Finanzas
                 </h1>
-                <p className="text-sm sm:text-base text-slate-300/80 hidden sm:block mt-1 font-medium">
-                  Control de flujo de caja, ingresos por servicios y gastos.
+                <p className="text-xs sm:text-base text-slate-300/80 mt-1 font-medium">
+                  Control de ingresos y gastos.
                 </p>
               </div>
             </div>

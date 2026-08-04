@@ -73,8 +73,8 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
               <DialogTitle className="text-white text-base font-bold leading-none">
                 Registrar {type === 'ingreso' ? 'Ingreso' : 'Egreso'}
               </DialogTitle>
-              <DialogDescription className="text-slate-300/70 text-base mt-1">
-                Añade un movimiento manual a la caja
+              <DialogDescription className="text-slate-300/70 text-xs sm:text-base mt-1">
+                Añade un movimiento manual
               </DialogDescription>
             </div>
           </div>

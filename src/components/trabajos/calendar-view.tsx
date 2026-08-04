@@ -297,40 +297,53 @@ function DailyTimelineView({
                           {job.estado.replace('_', ' ')} <span className="text-base leading-none">▾</span>
                         </button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start" className="w-48 rounded-xl" onClick={(e) => e.stopPropagation()}>
-                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onJobEditClick?.(job) }} className="cursor-pointer gap-2 font-medium">
-                          <Pencil className="h-4 w-4 text-slate-500" />
-                          Editar detalles
+                      <DropdownMenuContent align="start" className="w-56 rounded-2xl border border-slate-200/70 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] bg-white p-1.5" onClick={(e) => e.stopPropagation()}>
+                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onJobEditClick?.(job) }} className="cursor-pointer gap-3 font-semibold text-slate-700 hover:bg-slate-50 focus:bg-slate-50 focus:text-slate-900 p-2 rounded-xl transition-all">
+                          <div className="h-7 w-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                            <Pencil className="h-3.5 w-3.5 text-slate-500" />
+                          </div>
+                          <span className="text-sm">Editar detalles</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onJobRescheduleClick?.(job) }} className="cursor-pointer gap-2 font-medium">
-                          <CalendarIcon className="h-4 w-4 text-slate-500" />
-                          Reagendar
+                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onJobRescheduleClick?.(job) }} className="cursor-pointer gap-3 font-semibold text-slate-700 hover:bg-slate-50 focus:bg-slate-50 focus:text-slate-900 p-2 rounded-xl transition-all">
+                          <div className="h-7 w-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                            <CalendarIcon className="h-3.5 w-3.5 text-slate-500" />
+                          </div>
+                          <span className="text-sm">Reagendar</span>
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
+                        
+                        <DropdownMenuSeparator className="bg-slate-100/80 my-1" />
                         
                         {job.estado !== 'completado' && (
-                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'completado') }} className="cursor-pointer gap-2 text-emerald-600 font-bold focus:bg-emerald-50 focus:text-emerald-700">
-                            <CheckCircle className="h-4 w-4" />
-                            Marcar como Listo
+                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'completado') }} className="cursor-pointer gap-3 text-emerald-700 hover:bg-emerald-50 focus:bg-emerald-50 p-2 rounded-xl font-bold transition-all">
+                            <div className="h-7 w-7 rounded-lg bg-emerald-100/50 flex items-center justify-center shrink-0">
+                              <CheckCircle className="h-4 w-4 text-emerald-600" />
+                            </div>
+                            <span className="text-sm">Marcar como Listo</span>
                           </DropdownMenuItem>
                         )}
                         {job.estado !== 'en_progreso' && (
-                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'en_progreso') }} className="cursor-pointer gap-2 text-blue-600 font-bold focus:bg-blue-50 focus:text-blue-700">
-                            <RotateCw className="h-4 w-4" />
-                            En Progreso
+                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'en_progreso') }} className="cursor-pointer gap-3 text-blue-700 hover:bg-blue-50 focus:bg-blue-50 p-2 rounded-xl font-bold transition-all">
+                            <div className="h-7 w-7 rounded-lg bg-blue-100/50 flex items-center justify-center shrink-0">
+                              <RotateCw className="h-4 w-4 text-blue-600" />
+                            </div>
+                            <span className="text-sm">En Progreso</span>
                           </DropdownMenuItem>
                         )}
                         {job.estado !== 'proximo' && (
-                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'proximo') }} className="cursor-pointer gap-2 text-amber-600 font-bold focus:bg-amber-50 focus:text-amber-700">
-                            <CalendarIcon className="h-4 w-4" />
-                            Marcar como Próximo
+                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'proximo') }} className="cursor-pointer gap-3 text-amber-700 hover:bg-amber-50 focus:bg-amber-50 p-2 rounded-xl font-bold transition-all">
+                            <div className="h-7 w-7 rounded-lg bg-amber-100/50 flex items-center justify-center shrink-0">
+                              <CalendarIcon className="h-4 w-4 text-amber-600" />
+                            </div>
+                            <span className="text-sm">Marcar como Próximo</span>
                           </DropdownMenuItem>
                         )}
                         
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onArchive?.(job) }} className="cursor-pointer gap-2 text-red-600 font-bold focus:bg-red-50 focus:text-red-700">
-                          <Archive className="h-4 w-4" />
-                          Archivar / Cancelar
+                        <DropdownMenuSeparator className="bg-slate-100/80 my-1" />
+                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onArchive?.(job) }} className="cursor-pointer gap-3 text-red-600 hover:bg-red-50 focus:bg-red-50 p-2 rounded-xl font-bold transition-all">
+                          <div className="h-7 w-7 rounded-lg bg-red-100/50 flex items-center justify-center shrink-0">
+                            <Archive className="h-4 w-4 text-red-500" />
+                          </div>
+                          <span className="text-sm">Archivar / Cancelar</span>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -677,10 +690,10 @@ export function CalendarView({
             </div>
 
             {/* Navigation */}
-            <div className="flex items-center bg-white p-1 rounded-xl border border-slate-200/60 shadow-sm">
+            <div className="flex items-center bg-white p-1 rounded-xl border border-slate-200/60 shadow-sm h-11">
               <button 
                 onClick={prevPeriod}
-                className="p-2 hover:bg-slate-50 hover:text-slate-900 rounded-lg transition-colors text-slate-500 active:bg-slate-100"
+                className="h-full px-2.5 sm:px-3 flex items-center justify-center hover:bg-slate-50 hover:text-slate-900 rounded-lg transition-colors text-slate-500 active:bg-slate-100"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -689,7 +702,7 @@ export function CalendarView({
               
               <button 
                 onClick={() => setCurrentDate(new Date())}
-                className="px-4 py-2.5 text-base font-bold text-slate-600 hover:text-[#00C9E0] hover:bg-cyan-50/50 rounded-lg transition-all"
+                className="h-full px-3 sm:px-4 text-sm sm:text-base font-bold text-slate-600 hover:text-[#00C9E0] hover:bg-cyan-50/50 rounded-lg transition-all flex items-center justify-center"
               >
                 HOY
               </button>
@@ -698,7 +711,7 @@ export function CalendarView({
 
               <button 
                 onClick={nextPeriod}
-                className="p-2 hover:bg-slate-50 hover:text-slate-900 rounded-lg transition-colors text-slate-500 active:bg-slate-100"
+                className="h-full px-2.5 sm:px-3 flex items-center justify-center hover:bg-slate-50 hover:text-slate-900 rounded-lg transition-colors text-slate-500 active:bg-slate-100"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>

@@ -154,8 +154,8 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
               <DialogTitle className="text-base font-bold tracking-tight text-white">
                 Nuevo Cliente
               </DialogTitle>
-              <DialogDescription className="text-slate-300/80 text-base mt-0.5 font-medium truncate">
-                Completa los datos del nuevo cliente.
+              <DialogDescription className="text-slate-300/80 text-xs sm:text-base mt-0.5 font-medium">
+                Registra los datos del cliente.
               </DialogDescription>
             </div>
           </div>

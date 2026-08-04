@@ -30,18 +30,19 @@ interface NewQuoteWizardProps {
   onClose: () => void
   onSuccess: () => void
   quoteToEdit?: any
+  defaultClient?: any
 }
 
-export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }: NewQuoteWizardProps) {
+export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit, defaultClient }: NewQuoteWizardProps) {
   const supabase = createClient()
   const { isOpen, isMounted, handleClose } = useDialogClose(onClose, 200, open)
-  const [step, setStep] = useState(quoteToEdit ? 2 : 1)
+  const [step, setStep] = useState(quoteToEdit ? 2 : (defaultClient ? 2 : 1))
   const [loading, setLoading] = useState(false)
   const [clients, setClients] = useState<Cliente[]>([])
   const [services, setServices] = useState<Servicio[]>([])
   const [searchClient, setSearchClient] = useState('')
   
-  const [selectedClient, setSelectedClient] = useState<Cliente | null>(quoteToEdit ? quoteToEdit.clientes : null)
+  const [selectedClient, setSelectedClient] = useState<Cliente | null>(quoteToEdit ? quoteToEdit.clientes : (defaultClient || null))
   const [lineItems, setLineItems] = useState<LineItem[]>(quoteToEdit ? quoteToEdit.items_detalle : [])
   const [descuento, setDescuento] = useState(quoteToEdit ? quoteToEdit.monto_descuento : 0)
 

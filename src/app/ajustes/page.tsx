@@ -184,7 +184,7 @@ export default function AjustesPage() {
       {/* Premium Dark Navy Header */}
       <header className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-3 md:p-4 shrink-0 relative z-30 shadow-xl">
         <div className="relative z-10 flex flex-col gap-2.5">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
               <div className="h-9 w-9 xl:h-8 xl:w-8 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
                 <Settings className="h-4.5 w-4.5 xl:h-4 xl:w-4 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
@@ -193,7 +193,7 @@ export default function AjustesPage() {
                 <h1 className="text-lg sm:text-xl xl:text-lg 2xl:text-2xl font-bold tracking-tight text-white leading-none">
                   Configuración
                 </h1>
-                <p className="text-slate-300/80 text-[10px] xl:text-[9px] 2xl:text-xs mt-1 font-medium">
+                <p className="hidden sm:block text-slate-300/80 text-[10px] xl:text-[9px] 2xl:text-xs mt-1 font-medium">
                   Personaliza tu experiencia y parámetros del sistema.
                 </p>
               </div>
@@ -201,10 +201,11 @@ export default function AjustesPage() {
             <button 
               onClick={handleSave}
               disabled={loading}
-              className="flex items-center gap-1.5 h-8 px-4 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] hover:from-[#00b4ca] hover:to-[#00d4f0] text-white text-[10px] font-black shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98] shrink-0 cursor-pointer disabled:opacity-50"
+              className="flex items-center justify-center gap-1.5 h-8 px-3 sm:px-4 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] hover:from-[#00b4ca] hover:to-[#00d4f0] text-white text-[10px] font-black shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98] shrink-0 cursor-pointer disabled:opacity-50"
             >
               {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-              Guardar Cambios
+              <span className="hidden sm:inline">Guardar Cambios</span>
+              <span className="sm:hidden">Guardar</span>
             </button>
           </div>
         </div>

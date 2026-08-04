@@ -71,7 +71,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
       {shouldRender && pending && (
         <div
           className={cn(
-            "fixed inset-0 z-[999] flex items-center justify-center p-4 bg-[#030b17]/80 backdrop-blur-md duration-200",
+            "fixed inset-0 z-[999] flex items-center justify-center p-4 bg-[#030b17]/80 backdrop-blur-md duration-200 pointer-events-auto",
             isClosing ? "animate-out fade-out-0" : "animate-in fade-in-0"
           )}
           onClick={() => close(false)}

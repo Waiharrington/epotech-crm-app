@@ -620,11 +620,11 @@ export default function StockPage() {
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex flex-col justify-center shadow-sm">
                   <span className="text-emerald-600/70 text-[11px] font-bold uppercase tracking-wider mb-1">Total Entradas</span>
-                  <span className="text-emerald-600 text-2xl font-black leading-none">+{historySummary.entradas}</span>
+                  <span className="text-emerald-600 text-2xl font-black leading-none">+{parseFloat(historySummary.entradas.toFixed(2))}</span>
                 </div>
                 <div className="bg-rose-50 border border-rose-100 rounded-2xl p-4 flex flex-col justify-center shadow-sm">
                   <span className="text-rose-600/70 text-[11px] font-bold uppercase tracking-wider mb-1">Total Salidas</span>
-                  <span className="text-rose-600 text-2xl font-black leading-none">-{historySummary.salidas}</span>
+                  <span className="text-rose-600 text-2xl font-black leading-none">-{parseFloat(historySummary.salidas.toFixed(2))}</span>
                 </div>
               </div>
 

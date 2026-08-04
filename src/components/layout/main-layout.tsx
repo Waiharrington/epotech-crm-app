@@ -331,8 +331,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                   <span className="text-[11px] font-medium tracking-tight text-sidebar-foreground/50">Más</span>
                 </button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[85%] p-0 rounded-l-3xl border-l border-sidebar-border sidebar-premium-bg overflow-hidden" showCloseButton={false}>
-                <SheetHeader className="pt-14 pb-5 px-6 text-left border-b border-sidebar-border/15 relative">
+              <SheetContent side="right" className="w-[85%] sm:max-w-sm p-0 rounded-l-3xl border-l border-sidebar-border sidebar-premium-bg flex flex-col h-full overflow-hidden" showCloseButton={false}>
+                <SheetHeader className="pt-14 pb-5 px-6 text-left border-b border-sidebar-border/15 relative shrink-0">
                   <SheetTitle className="font-extrabold text-xl tracking-tight text-sidebar-foreground">
                     Menú Principal
                   </SheetTitle>
@@ -343,7 +343,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                     <X className="h-4 w-4" />
                   </SheetClose>
                 </SheetHeader>
-                <div className="py-6 px-4 space-y-3 overflow-y-auto max-h-[calc(100vh-9rem)]">
+                <div className="py-6 px-4 space-y-3 flex-1 overflow-y-auto">
                   {moreNavItems.map((item) => {
                     const isActive = pathname.startsWith(item.href)
                     return (
@@ -390,7 +390,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                   })}
                 </div>
                 {/* Logout in sheet */}
-                <div className="absolute bottom-0 left-0 right-0 border-t border-sidebar-border/15 px-4 py-4 bg-[#030b17]">
+                <div className="mt-auto shrink-0 border-t border-sidebar-border/15 px-4 py-4 bg-[#030b17]">
                   <button
                     onClick={handleLogout}
                     className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-xl text-base font-bold text-red-400 border border-red-500/20 bg-red-950/20 hover:bg-red-500/10 hover:text-red-300 hover:border-red-500/40 active:scale-98 transition-all duration-300 ease-out group shadow-[0_4px_16px_rgba(239,68,68,0.1)]"

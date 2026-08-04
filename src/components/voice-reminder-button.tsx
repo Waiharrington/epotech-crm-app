@@ -180,7 +180,7 @@ export function VoiceReminderButton({ onCreated, className }: VoiceReminderButto
         className={cn(
           "flex items-center justify-center xl:justify-start gap-1.5 h-10 px-4.5 rounded-xl text-base font-black shadow-md transition-all active:scale-[0.98]",
           isRecording
-            ? "bg-rose-500 text-white shadow-rose-500/30 animate-pulse"
+            ? "bg-[#0B1E3F] text-white shadow-[#0B1E3F]/30 animate-pulse"
             : isProcessing
               ? "bg-slate-200 text-slate-500 cursor-not-allowed"
               : "bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white shadow-cyan-500/20 hover:shadow-cyan-500/30",

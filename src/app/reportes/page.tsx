@@ -50,6 +50,9 @@ import {
 export default function ReportesPage() {
   const carouselRef = useRef<HTMLDivElement>(null)
 
+  const supabase = createClient()
+  const [loading, setLoading] = useState(true)
+
   // Auto-scroll logic for mobile KPI carousel
   useEffect(() => {
     // Only setup interval if not loading and container exists
@@ -71,8 +74,7 @@ export default function ReportesPage() {
 
     return () => clearInterval(interval)
   }, [loading])
-  const supabase = createClient()
-  const [loading, setLoading] = useState(true)
+
   const [rawData, setRawData] = useState<any>({
     trabajos: [],
     caja: [],

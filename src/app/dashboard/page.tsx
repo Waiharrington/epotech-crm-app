@@ -494,7 +494,7 @@ export default function DashboardPage() {
             {/* Left side: Greeting */}
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-lg sm:text-xl xl:text-lg 2xl:text-2xl font-bold tracking-tight text-white">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
                   {greetingState.text}
                 </h1>
                 
@@ -954,7 +954,7 @@ export default function DashboardPage() {
                   </div>
                 ) : (
                   <div className="p-2 xl:p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/30 to-white border border-[#0097A7]/10 flex items-start gap-2 shadow-2xs hover:border-[#0097A7]/20 transition-all">
-                    <div className="h-4.5 w-4.5 xl:h-4 xl:w-4 rounded-lg flex items-center justify-center bg-[#E6F9FB] text-[#0097A7] shrink-0 mt-0.5 border border-[#0097A7]/10">
+                    <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-[#E6F9FB] text-[#0097A7] shrink-0 mt-0.5 border border-[#0097A7]/10">
                       <Check className="h-2.5 w-2.5 stroke-[3]" />
                     </div>
                     <div>
@@ -965,7 +965,7 @@ export default function DashboardPage() {
                 )}
 
                 <div className="p-2 xl:p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB] flex items-start gap-2 shadow-2xs hover:border-[#0097A7]/20 transition-all">
-                  <div className="h-4.5 w-4.5 xl:h-4 xl:w-4 rounded-lg flex items-center justify-center bg-white text-[#0097A7] shrink-0 mt-0.5 border border-[#E6F9FB] shadow-2xs">
+                  <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-white text-[#0097A7] shrink-0 mt-0.5 border border-[#E6F9FB] shadow-2xs">
                     <Wallet className="h-2.5 w-2.5" />
                   </div>
                   <div>

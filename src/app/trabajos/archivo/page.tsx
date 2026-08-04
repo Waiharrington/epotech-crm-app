@@ -88,15 +88,15 @@ export default function ArchivoPage() {
             <div className="flex items-center gap-2.5">
               <Link
                 href="/trabajos"
-                className="h-9 w-9 xl:h-8 xl:w-8 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0 hover:bg-white/20 transition-all"
+                className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0 hover:bg-white/20 transition-all"
               >
-                <ArrowLeft className="h-4.5 w-4.5 xl:h-4 xl:w-4 text-[#00C9E0]" />
+                <ArrowLeft className="h-5 w-5 text-[#00C9E0]" />
               </Link>
-              <div className="h-9 w-9 xl:h-8 xl:w-8 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
-                <Archive className="h-4.5 w-4.5 xl:h-4 xl:w-4 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
+              <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
+                <Archive className="h-5 w-5 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
               </div>
               <div>
-                <h1 className="text-lg sm:text-xl xl:text-lg 2xl:text-2xl font-bold tracking-tight text-white">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
                   Historial de Archivados
                 </h1>
                 <p className="text-slate-300/80 text-[9.5px] xl:text-[9px] 2xl:text-xs mt-0.5 font-medium">

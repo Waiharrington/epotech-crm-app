@@ -243,14 +243,14 @@ export default function StockPage() {
         <div className="relative z-10 flex flex-col gap-2.5">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div className="flex items-center gap-2.5">
-              <div className="h-9 w-9 xl:h-8 xl:w-8 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
-                <Package className="h-4.5 w-4.5 xl:h-4 xl:w-4 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
+              <div className="h-10 w-10 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
+                <Package className="h-5 w-5 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
               </div>
               <div>
-                <h1 className="text-lg sm:text-xl xl:text-lg 2xl:text-2xl font-bold tracking-tight text-white leading-none">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Inventario de Stock
                 </h1>
-                <p className="text-slate-300/80 text-[10px] xl:text-[9px] 2xl:text-xs mt-1 font-medium">
+                <p className="text-slate-300/80 text-[10px] hidden sm:block xl:text-[9px] 2xl:text-xs mt-1 font-medium">
                   Control de materiales, herramientas y maquinaria.
                 </p>
               </div>

@@ -191,7 +191,7 @@ export default function ClienteProfilePage() {
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                  <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
                     {cliente.nombre} {cliente.apellido}
                   </h1>
                   <Badge

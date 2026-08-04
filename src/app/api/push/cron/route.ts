@@ -96,7 +96,7 @@ export async function GET(req: Request) {
 
         const pushPromise = webpush.sendNotification(pushSubscription, payload)
           .then(() => { pushCount++; })
-          .catch(err => {
+          .catch((err: any) => {
             if (err.statusCode === 410 || err.statusCode === 404) {
               // La suscripción expiró o ya no es válida, eliminarla de la DB
               return supabase.from('push_subscriptions').delete().eq('endpoint', sub.endpoint);

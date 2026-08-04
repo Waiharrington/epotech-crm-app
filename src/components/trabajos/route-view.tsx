@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import { MapPin, Truck, Home, Flag, ChevronRight, Calendar, Check, Play, Edit3 } from 'lucide-react'
+import { useRef, useState, useMemo } from 'react'
+import { MapPin, Truck, Home, Flag, ChevronRight, Calendar, Check, Play, Edit3, Clock, Navigation, Star } from 'lucide-react'
 import { isSameDay } from 'date-fns'
 import { cn } from '@/lib/utils'
 
@@ -32,7 +32,24 @@ function formatTime(time: string | null): string {
   return `${h12}:${m.toString().padStart(2, '0')} ${ampm}`
 }
 
-// Light theme status config
+function getETA(startIndex: number, jobs: TrabajoWithDetails[]): string {
+  if (startIndex === 0) return 'Primera parada'
+  const prevJob = jobs[startIndex - 1]
+  const currJob = jobs[startIndex]
+  if (!prevJob?.hora_servicio || !currJob?.hora_servicio) return ''
+  
+  const [h1, m1] = prevJob.hora_servicio.split(':').map(Number)
+  const [h2, m2] = currJob.hora_servicio.split(':').map(Number)
+  const diffMin = (h2 * 60 + m2) - (h1 * 60 + m1)
+  
+  if (diffMin <= 0) return ''
+  if (diffMin < 60) return `${diffMin} min entre paradas`
+  const hrs = Math.floor(diffMin / 60)
+  const mins = diffMin % 60
+  return `${hrs}h ${mins > 0 ? `${mins}m` : ''} entre paradas`
+}
+
+// Status config
 const statusConfig: Record<string, {
   label: string
   borderColor: string
@@ -49,7 +66,7 @@ const statusConfig: Record<string, {
     badgeText: 'text-cyan-700',
     badgeBorder: 'border-cyan-200',
     dot: 'bg-[#0097A7]',
-    description: 'Trabajo programado y listo para iniciar',
+    description: 'Programado, listo para iniciar',
   },
   en_progreso: {
     label: 'En Camino',
@@ -58,135 +75,163 @@ const statusConfig: Record<string, {
     badgeText: 'text-sky-700',
     badgeBorder: 'border-sky-200',
     dot: 'bg-sky-500',
-    description: 'Técnico en ruta o ejecutando el servicio',
+    description: 'Técnico en ruta o ejecutando',
   },
   completado: {
-    label: 'Listo ✓',
+    label: 'Listo',
     borderColor: '#059669', 
     badgeBg: 'bg-emerald-50',
     badgeText: 'text-emerald-700',
     badgeBorder: 'border-emerald-200',
     dot: 'bg-emerald-500',
-    description: 'Servicio finalizado exitosamente',
+    description: 'Servicio finalizado',
   },
 }
 
+// ----------------------------------------------------------------------
+// Compact Job Card
+// ----------------------------------------------------------------------
 function JobCard({ 
   job, 
   onStatusChange, 
   onRescheduleClick, 
-  onEditClick 
+  onEditClick,
+  isNext,
+  eta,
+  index
 }: { 
   job: TrabajoWithDetails
   onStatusChange?: (job: TrabajoWithDetails, newStatus: 'proximo' | 'en_progreso' | 'completado') => void
   onRescheduleClick?: (job: TrabajoWithDetails) => void
   onEditClick?: (job: TrabajoWithDetails) => void
+  isNext?: boolean
+  eta?: string
+  index?: number
 }) {
   const st = statusConfig[job.estado ?? 'proximo'] ?? statusConfig['proximo']
 
   return (
     <div
-      className="w-full rounded-2xl bg-white/95 border border-slate-200/60
-                 shadow-[0_8px_30px_rgba(0,0,0,0.03)] backdrop-blur-md
-                 hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)]
-                 transition-all duration-200"
-      style={{ borderLeft: `4px solid ${st.borderColor}` }}
+      className={cn(
+        "w-full rounded-xl bg-white border transition-all duration-200",
+        isNext 
+          ? "border-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.25)] ring-2 ring-amber-200/50" 
+          : "border-slate-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.05)]"
+      )}
+      style={{ borderLeft: `3px solid ${isNext ? '#F59E0B' : st.borderColor}` }}
     >
-      <div className="p-2 flex flex-col gap-1.5">
-        {/* Header: Name and Time */}
+      <div className="p-2 flex flex-col gap-1">
+        {/* Header: Name, Time, Status */}
         <div className="flex items-start justify-between gap-1.5">
-          <div>
-            <p className="font-extrabold text-slate-800 text-xs leading-none mb-0.5 tracking-tight">
-              {job.clientes.nombre} {job.clientes.apellido}
-            </p>
-            <p className="text-[8px] text-slate-400 font-bold uppercase tracking-wider">
-              {job.catalogo_servicios?.nombre || 'Personalizado'}
-            </p>
+          <div className="flex items-center gap-1.5 min-w-0">
+            {isNext && (
+              <div className="shrink-0 h-4 w-4 rounded-full bg-amber-400 flex items-center justify-center shadow-sm">
+                <Star className="h-2.5 w-2.5 text-white fill-white" />
+              </div>
+            )}
+            <div className="min-w-0">
+              <p className="font-extrabold text-slate-800 text-[11px] leading-none mb-0.5 tracking-tight truncate">
+                {job.clientes.nombre} {job.clientes.apellido}
+              </p>
+              <p className="text-[8px] text-slate-400 font-bold uppercase tracking-wider truncate">
+                {job.catalogo_servicios?.nombre || 'Personalizado'}
+              </p>
+            </div>
           </div>
-          <span
-            className="shrink-0 text-[8.5px] font-black text-white px-1.5 py-0.5 rounded shadow-sm tracking-wide"
-            style={{ background: 'linear-gradient(135deg, #0097A7, #00acc1)' }}
-          >
-            {formatTime(job.hora_servicio)}
-          </span>
+          <div className="flex items-center gap-1 shrink-0">
+            <span className={`text-[7px] font-bold px-1 py-0.2 rounded border ${st.badgeBg} ${st.badgeText} ${st.badgeBorder}`}>
+              {st.label}
+            </span>
+            <span
+              className="text-[8px] font-black text-white px-1.5 py-0.5 rounded shadow-sm"
+              style={{ background: 'linear-gradient(135deg, #0097A7, #00acc1)' }}
+            >
+              {formatTime(job.hora_servicio)}
+            </span>
+          </div>
         </div>
 
         {/* Address */}
-        <p className="text-[9.5px] text-slate-500 font-medium flex items-start gap-1 leading-tight">
-          <MapPin className="h-3 w-3 shrink-0 text-[#0097A7] mt-0.5" />
+        <p className="text-[8.5px] text-slate-500 font-medium flex items-start gap-1 leading-tight">
+          <MapPin className="h-2.5 w-2.5 shrink-0 text-[#0097A7] mt-0.5" />
           <span className="line-clamp-1">{job.clientes.direccion}</span>
         </p>
 
-        {/* Action Center Section */}
-        <div className="bg-slate-50/60 border border-slate-100 rounded-lg p-1.5 mt-0.5">
-          <div className="flex items-center justify-between gap-1 mb-1">
-            <span className="text-[8px] font-black text-slate-400 uppercase tracking-wider">Bitácora</span>
-            <span className={`text-[8px] font-bold px-1 py-0.2 rounded border ${st.badgeBg} ${st.badgeText} ${st.badgeBorder}`}>
-              {st.label}
-            </span>
+        {/* ETA between stops */}
+        {eta && (
+          <div className="flex items-center gap-1 text-[8px] font-bold text-[#0097A7]">
+            <Navigation className="h-2.5 w-2.5" />
+            <span>{eta}</span>
           </div>
-          <p className="text-[9px] text-slate-500 font-medium mb-1.5 leading-tight line-clamp-1">
+        )}
+
+        {/* Bitácora Compacta */}
+        <div className="bg-slate-50/80 border border-slate-100 rounded-lg p-1.5">
+          <div className="flex items-center gap-1 mb-1">
+            <Clock className="h-2.5 w-2.5 text-slate-400" />
+            <span className="text-[7px] font-black text-slate-400 uppercase tracking-wider">Bitácora</span>
+          </div>
+          <p className="text-[8px] text-slate-500 font-medium leading-tight line-clamp-1 mb-1">
             {st.description}
           </p>
           
-          {/* Quick Actions buttons: Clean single-line layout without wrap collapses */}
+          {/* Actions row */}
           <div className="flex items-center gap-1">
             {job.estado !== 'completado' ? (
-              // If it's not completed, show either 'En Ruta' or 'Listo' dynamically as the active main action
               job.estado === 'en_progreso' ? (
                 <button
                   onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'completado') }}
-                  className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[8.5px] font-black text-white bg-emerald-600 hover:bg-emerald-700 py-1 rounded active:scale-95 transition-all cursor-pointer whitespace-nowrap px-1"
+                  className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[8px] font-black text-white bg-emerald-600 hover:bg-emerald-700 py-1 rounded active:scale-95 transition-all cursor-pointer whitespace-nowrap px-1"
                 >
-                  <Check className="h-2.5 w-2.5 shrink-0" /> Listo
+                  <Check className="h-2 w-2 shrink-0" /> Listo
                 </button>
               ) : (
                 <button
                   onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'en_progreso') }}
-                  className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[8.5px] font-black text-white bg-sky-600 hover:bg-sky-700 py-1 rounded active:scale-95 transition-all cursor-pointer whitespace-nowrap px-1"
+                  className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[8px] font-black text-white bg-sky-600 hover:bg-sky-700 py-1 rounded active:scale-95 transition-all cursor-pointer whitespace-nowrap px-1"
                 >
                   <Play className="h-2 w-2 shrink-0" /> En Ruta
                 </button>
               )
             ) : (
-              <div className="flex-1 min-w-0 flex items-center justify-center text-[8.5px] font-black text-emerald-700 bg-emerald-50 rounded py-1 border border-emerald-100 whitespace-nowrap">
-                ✓ Completado
+              <div className="flex-1 min-w-0 flex items-center justify-center text-[8px] font-black text-emerald-700 bg-emerald-50 rounded py-1 border border-emerald-100 whitespace-nowrap">
+                ✓ Listo
               </div>
             )}
 
             <button
               onClick={(e) => { e.stopPropagation(); onRescheduleClick?.(job) }}
-              className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[8.5px] font-black text-slate-700 bg-slate-100 hover:bg-slate-200 py-1 rounded active:scale-95 transition-all cursor-pointer border border-slate-200/80 whitespace-nowrap px-1"
+              className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[8px] font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 py-1 rounded active:scale-95 transition-all cursor-pointer border border-slate-200/80 whitespace-nowrap px-1"
             >
               <Calendar className="h-2 w-2 shrink-0" /> Reagendar
             </button>
 
             <button
               onClick={(e) => { e.stopPropagation(); onEditClick?.(job) }}
-              className="w-7 h-6 flex items-center justify-center text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 rounded active:scale-95 transition-all cursor-pointer border border-slate-200/80 shrink-0"
+              className="h-5 w-5 flex items-center justify-center text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded active:scale-95 transition-all cursor-pointer border border-slate-200/80 shrink-0"
               title="Editar"
             >
-              <Edit3 className="h-2.5 w-2.5 shrink-0" />
+              <Edit3 className="h-2 w-2 shrink-0" />
             </button>
           </div>
         </div>
 
-        {/* GPS Maps buttons */}
-        <div className="border-t border-slate-100 pt-1.5 flex gap-1">
+        {/* GPS Links */}
+        <div className="flex gap-0.5">
           <a
             href={`http://maps.apple.com/?daddr=${encodeURIComponent(job.clientes.direccion || '')}`}
             target="_blank" rel="noopener noreferrer"
-            className="flex-1 text-center text-[9px] font-bold text-slate-500 hover:text-slate-700 bg-slate-50/50 hover:bg-slate-50 py-1 rounded transition-all border border-slate-200/50"
+            className="flex-1 text-center text-[8px] font-bold text-slate-500 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 py-0.5 rounded transition-all border border-slate-200/50"
           >Apple</a>
           <a
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(job.clientes.direccion || '')}`}
             target="_blank" rel="noopener noreferrer"
-            className="flex-1 text-center text-[10px] font-bold text-slate-500 hover:text-slate-700 bg-slate-50/50 hover:bg-slate-50 py-1.5 rounded-lg transition-all border border-slate-200/50"
+            className="flex-1 text-center text-[8px] font-bold text-slate-500 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 py-0.5 rounded transition-all border border-slate-200/50"
           >Google</a>
           <a
             href={`https://waze.com/ul?q=${encodeURIComponent(job.clientes.direccion || '')}`}
             target="_blank" rel="noopener noreferrer"
-            className="flex-1 text-center text-[10px] font-bold text-slate-500 hover:text-slate-700 bg-slate-50/50 hover:bg-slate-50 py-1.5 rounded-lg transition-all border border-slate-200/50"
+            className="flex-1 text-center text-[8px] font-bold text-slate-500 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 py-0.5 rounded transition-all border border-slate-200/50"
           >Waze</a>
         </div>
       </div>
@@ -194,6 +239,9 @@ function JobCard({
   )
 }
 
+// ----------------------------------------------------------------------
+// Main Route View
+// ----------------------------------------------------------------------
 export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClick, onEditClick }: RouteViewProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [hasScrolled, setHasScrolled] = useState(false)
@@ -210,17 +258,22 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
     return a.hora_servicio.localeCompare(b.hora_servicio)
   })
 
+  // Find next incomplete job index
+  const nextJobIndex = useMemo(() => {
+    return sortedJobs.findIndex(j => j.estado !== 'completado')
+  }, [sortedJobs])
+
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     if (scrollRef.current && e.deltaY !== 0) {
+      e.preventDefault()
       scrollRef.current.scrollLeft += e.deltaY
       if (!hasScrolled) setHasScrolled(true)
     }
   }
 
-  // Premium corporate slate/teal light colors
-  const ROAD_COLOR = '#ffffff' 
+  const LINE_COLOR = '#0097A7'
   const BORDER_COLOR = '#e2e8f0'
-  const LINE_COLOR = '#0097A7' // Teal brand theme
+  const ROAD_COLOR = '#ffffff'
 
   if (sortedJobs.length === 0) {
     return (
@@ -236,135 +289,96 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
     )
   }
 
-  const CARD_H = 200
-  const ROAD_H = 80 
+  const CARD_H = 180
+  const ROAD_H = 70 
   const TOTAL_H = CARD_H * 2 + ROAD_H
 
   return (
     <div className="w-full flex-1 min-h-0 relative overflow-hidden rounded-2xl bg-[#f0f6fa] flex flex-col justify-center">
       
-      {/* 🗺️ Background Image: Beautiful light blue map of Utah */}
+      {/* Background Map */}
       <div 
         className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-65"
         style={{ backgroundImage: `url('/utah_light_blue_map.jpg')` }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/5 to-white/20 pointer-events-none" />
 
-      {/* 📱 MOBILE VIEW: Clean vertical route layout */}
-      <div className="xl:hidden w-full px-4 py-8 relative flex flex-col z-10">
+      {/* MOBILE VIEW */}
+      <div className="xl:hidden w-full px-4 py-6 relative flex flex-col z-10">
         
-        {/* Road layout underlay: Fixed straight lines connecting cards with rounded anchors (no jagged fake curve nodes) */}
-        <div className="absolute inset-y-8 left-[24px] w-[38px] pointer-events-none z-0">
+        {/* Road SVG */}
+        <div className="absolute inset-y-6 left-[22px] w-[36px] pointer-events-none z-0">
           <svg className="w-full h-full" style={{ minHeight: '100%' }}>
-            {/* Broad gray highway boundary outline */}
             <path
-              d={`
-                M 18, 20
-                ${sortedJobs.map((_, i) => {
-                  const y = 60 + i * 340 + 110
-                  // Straight vertical paths instead of wide Bezier curves to look extremely neat and professional
-                  return `L 18, ${y}`
-                }).join(' ')}
-                L 18, ${60 + (sortedJobs.length) * 340 + 40}
-              `}
-              fill="none"
-              stroke={BORDER_COLOR}
-              strokeWidth="16"
-              strokeLinecap="round"
+              d={`M 18, 16 ${sortedJobs.map((_, i) => `L 18, ${50 + i * 280 + 90}`).join(' ')} L 18, ${50 + sortedJobs.length * 280 + 20}`}
+              fill="none" stroke={BORDER_COLOR} strokeWidth="14" strokeLinecap="round"
             />
-            {/* White highway surface */}
             <path
-              d={`
-                M 18, 20
-                ${sortedJobs.map((_, i) => {
-                  const y = 60 + i * 340 + 110
-                  return `L 18, ${y}`
-                }).join(' ')}
-                L 18, ${60 + (sortedJobs.length) * 340 + 40}
-              `}
-              fill="none"
-              stroke={ROAD_COLOR}
-              strokeWidth="12"
-              strokeLinecap="round"
+              d={`M 18, 16 ${sortedJobs.map((_, i) => `L 18, ${50 + i * 280 + 90}`).join(' ')} L 18, ${50 + sortedJobs.length * 280 + 20}`}
+              fill="none" stroke={ROAD_COLOR} strokeWidth="10" strokeLinecap="round"
             />
-            {/* Clean cyan-teal route connector line */}
             <path
-              d={`
-                M 18, 20
-                ${sortedJobs.map((_, i) => {
-                  const y = 60 + i * 340 + 110
-                  return `L 18, ${y}`
-                }).join(' ')}
-                L 18, ${60 + (sortedJobs.length) * 340 + 40}
-              `}
-              fill="none"
-              stroke={LINE_COLOR}
-              strokeWidth="4"
-              strokeLinecap="round"
-              className="opacity-95"
+              d={`M 18, 16 ${sortedJobs.map((_, i) => `L 18, ${50 + i * 280 + 90}`).join(' ')} L 18, ${50 + sortedJobs.length * 280 + 20}`}
+              fill="none" stroke={LINE_COLOR} strokeWidth="3" strokeLinecap="round" className="opacity-90"
             />
           </svg>
         </div>
 
         {/* Start Point */}
-        <div className="w-full flex items-center gap-4 mb-8 pl-[18px] relative z-10">
-          <div
-            className="h-11 w-11 shrink-0 rounded-full border-[3px] border-white shadow-md
-                       flex items-center justify-center bg-gradient-to-br from-[#0097A7] to-[#00acc1]"
-          >
-            <Truck className="h-5 w-5 text-white" />
+        <div className="w-full flex items-center gap-3 mb-6 pl-[14px] relative z-10">
+          <div className="h-10 w-10 shrink-0 rounded-full border-[3px] border-white shadow-md flex items-center justify-center bg-gradient-to-br from-[#0097A7] to-[#00acc1]">
+            <Truck className="h-4 w-4 text-white" />
           </div>
-          <div className="bg-white border border-slate-200/80 text-slate-800 px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider shadow-sm">
+          <div className="bg-white border border-slate-200/80 text-slate-700 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider shadow-sm">
             Inicio de Ruta
           </div>
         </div>
 
-        {/* Vertical Cards Loop */}
-        <div className="w-full flex flex-col gap-6 relative z-10 pl-[4px]">
-          {sortedJobs.map((job, index) => {
-            // Keep nodes perfectly vertically aligned with the straight highway path for clean tablet grid layouts
-            return (
-              <div key={job.id} className="w-full flex items-start gap-4">
-                <div className="flex flex-col items-center shrink-0 w-11 mt-3">
-                  <div
-                    className="h-10 w-10 rounded-full bg-white border-[3px] border-[#0097A7]
-                               shadow-md flex items-center justify-center text-slate-700 relative"
-                  >
-                    <Home className="h-4.5 w-4.5 text-[#0097A7]" />
-                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black
-                                    w-4 h-4 rounded-full flex items-center justify-center border border-white shadow">
-                      {index + 1}
-                    </div>
+        {/* Cards */}
+        <div className="w-full flex flex-col gap-5 relative z-10 pl-[2px]">
+          {sortedJobs.map((job, index) => (
+            <div key={job.id} className="w-full flex items-start gap-3">
+              <div className="flex flex-col items-center shrink-0 w-10 mt-2">
+                <div className={cn(
+                  "h-8 w-8 rounded-full bg-white border-[3px] shadow-md flex items-center justify-center relative",
+                  index === nextJobIndex ? "border-amber-400 shadow-amber-200/50" : "border-[#0097A7]"
+                )}>
+                  <Home className={cn("h-3.5 w-3.5", index === nextJobIndex ? "text-amber-500" : "text-[#0097A7]")} />
+                  <div className={cn(
+                    "absolute -top-1 -right-1 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border border-white shadow",
+                    index === nextJobIndex ? "bg-amber-500" : "bg-red-500"
+                  )}>
+                    {index + 1}
                   </div>
                 </div>
-
-                {/* Card element */}
-                <div className="flex-1 min-w-0 pr-2">
-                  <JobCard 
-                    job={job} 
-                    onStatusChange={onStatusChange} 
-                    onRescheduleClick={onRescheduleClick}
-                    onEditClick={onEditClick}
-                  />
-                </div>
               </div>
-            )
-          })}
+              <div className="flex-1 min-w-0 pr-1">
+                <JobCard 
+                  job={job} 
+                  onStatusChange={onStatusChange} 
+                  onRescheduleClick={onRescheduleClick}
+                  onEditClick={onEditClick}
+                  isNext={index === nextJobIndex}
+                  eta={getETA(index, sortedJobs)}
+                  index={index}
+                />
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* End Point */}
-        <div className="w-full flex items-center gap-4 mt-8 pl-[18px] relative z-10">
-          <div className="h-11 w-11 shrink-0 rounded-full bg-white border-[3px] border-slate-300 shadow-md
-                         flex items-center justify-center">
-            <Flag className="h-5 w-5 text-[#0097A7]" />
+        <div className="w-full flex items-center gap-3 mt-6 pl-[14px] relative z-10">
+          <div className="h-10 w-10 shrink-0 rounded-full bg-white border-[3px] border-slate-300 shadow-md flex items-center justify-center">
+            <Flag className="h-4 w-4 text-[#0097A7]" />
           </div>
-          <div className="bg-white border border-slate-200/80 text-slate-800 px-3 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider shadow-sm">
+          <div className="bg-white border border-slate-200/80 text-slate-700 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider shadow-sm">
             Fin de Ruta
           </div>
         </div>
       </div>
 
-      {/* 💻 DESKTOP VIEW */}
+      {/* DESKTOP VIEW */}
       <div 
         className="hidden xl:block relative w-full z-10"
         style={{ minHeight: `${TOTAL_H}px` }}
@@ -381,7 +395,6 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
           </div>
         </div>
 
-        {/* Scroll container: allows raw horizontal overflow on small laptops while enabling auto centering on large screens */}
         <div
           ref={scrollRef}
           onWheel={handleWheel}
@@ -394,82 +407,51 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
             style={{ height: `${TOTAL_H}px` }}
           >
             
-            {/* SVG Curvy Path underlay: Stretches along the entire scrollable width */}
+            {/* SVG Path */}
             <div className="absolute inset-0 pointer-events-none z-0 mt-4">
               <svg className="w-full h-full" style={{ minWidth: '100%', minHeight: '100%' }}>
                 <path
-                  d={`
-                    M 48, ${CARD_H + ROAD_H / 2 + 16} 
-                    ${sortedJobs.map((_, i) => {
-                      const x = 48 + 64 + i * 268 + 126
-                      const y = CARD_H + (i % 2 === 0 ? 20 : ROAD_H - 20) + 16
-                      const prevX = 48 + 64 + (i - 1) * 268 + 126
-                      const prevY = i === 0 ? (CARD_H + ROAD_H / 2 + 16) : (CARD_H + ((i - 1) % 2 === 0 ? 20 : ROAD_H - 20) + 16)
-                      const cpX1 = prevX + 100
-                      const cpX2 = x - 100
-                      return `C ${cpX1},${prevY} ${cpX2},${y} ${x},${y}`
-                    }).join(' ')}
-                    L ${48 + 64 + (sortedJobs.length - 1) * 268 + 252 + 32 + 32}, ${CARD_H + ROAD_H / 2 + 16}
-                  `}
-                  fill="none"
-                  stroke={BORDER_COLOR}
-                  strokeWidth="32"
-                  strokeLinecap="round"
+                  d={`M 48, ${CARD_H + ROAD_H / 2 + 16} ${sortedJobs.map((_, i) => {
+                    const x = 48 + 64 + i * 240 + 120
+                    const y = CARD_H + (i % 2 === 0 ? 20 : ROAD_H - 20) + 16
+                    const prevX = 48 + 64 + (i - 1) * 240 + 120
+                    const prevY = i === 0 ? (CARD_H + ROAD_H / 2 + 16) : (CARD_H + ((i - 1) % 2 === 0 ? 20 : ROAD_H - 20) + 16)
+                    return `C ${prevX + 80},${prevY} ${x - 80},${y} ${x},${y}`
+                  }).join(' ')} L ${48 + 64 + (sortedJobs.length - 1) * 240 + 240 + 32 + 32}, ${CARD_H + ROAD_H / 2 + 16}`}
+                  fill="none" stroke={BORDER_COLOR} strokeWidth="30" strokeLinecap="round"
                 />
                 <path
-                  d={`
-                    M 48, ${CARD_H + ROAD_H / 2 + 16} 
-                    ${sortedJobs.map((_, i) => {
-                      const x = 48 + 64 + i * 268 + 126
-                      const y = CARD_H + (i % 2 === 0 ? 20 : ROAD_H - 20) + 16
-                      const prevX = 48 + 64 + (i - 1) * 268 + 126
-                      const prevY = i === 0 ? (CARD_H + ROAD_H / 2 + 16) : (CARD_H + ((i - 1) % 2 === 0 ? 20 : ROAD_H - 20) + 16)
-                      const cpX1 = prevX + 100
-                      const cpX2 = x - 100
-                      return `C ${cpX1},${prevY} ${cpX2},${y} ${x},${y}`
-                    }).join(' ')}
-                    L ${48 + 64 + (sortedJobs.length - 1) * 268 + 252 + 32 + 32}, ${CARD_H + ROAD_H / 2 + 16}
-                  `}
-                  fill="none"
-                  stroke={ROAD_COLOR}
-                  strokeWidth="26"
-                  strokeLinecap="round"
+                  d={`M 48, ${CARD_H + ROAD_H / 2 + 16} ${sortedJobs.map((_, i) => {
+                    const x = 48 + 64 + i * 240 + 120
+                    const y = CARD_H + (i % 2 === 0 ? 20 : ROAD_H - 20) + 16
+                    const prevX = 48 + 64 + (i - 1) * 240 + 120
+                    const prevY = i === 0 ? (CARD_H + ROAD_H / 2 + 16) : (CARD_H + ((i - 1) % 2 === 0 ? 20 : ROAD_H - 20) + 16)
+                    return `C ${prevX + 80},${prevY} ${x - 80},${y} ${x},${y}`
+                  }).join(' ')} L ${48 + 64 + (sortedJobs.length - 1) * 240 + 240 + 32 + 32}, ${CARD_H + ROAD_H / 2 + 16}`}
+                  fill="none" stroke={ROAD_COLOR} strokeWidth="24" strokeLinecap="round"
                 />
                 <path
-                  d={`
-                    M 48, ${CARD_H + ROAD_H / 2 + 16} 
-                    ${sortedJobs.map((_, i) => {
-                      const x = 48 + 64 + i * 268 + 126
-                      const y = CARD_H + (i % 2 === 0 ? 20 : ROAD_H - 20) + 16
-                      const prevX = 48 + 64 + (i - 1) * 268 + 126
-                      const prevY = i === 0 ? (CARD_H + ROAD_H / 2 + 16) : (CARD_H + ((i - 1) % 2 === 0 ? 20 : ROAD_H - 20) + 16)
-                      const cpX1 = prevX + 100
-                      const cpX2 = x - 100
-                      return `C ${cpX1},${prevY} ${cpX2},${y} ${x},${y}`
-                    }).join(' ')}
-                    L ${48 + 64 + (sortedJobs.length - 1) * 268 + 252 + 32 + 32}, ${CARD_H + ROAD_H / 2 + 16}
-                  `}
-                  fill="none"
-                  stroke={LINE_COLOR}
-                  strokeWidth="6"
-                  strokeLinecap="round"
-                  className="opacity-95"
+                  d={`M 48, ${CARD_H + ROAD_H / 2 + 16} ${sortedJobs.map((_, i) => {
+                    const x = 48 + 64 + i * 240 + 120
+                    const y = CARD_H + (i % 2 === 0 ? 20 : ROAD_H - 20) + 16
+                    const prevX = 48 + 64 + (i - 1) * 240 + 120
+                    const prevY = i === 0 ? (CARD_H + ROAD_H / 2 + 16) : (CARD_H + ((i - 1) % 2 === 0 ? 20 : ROAD_H - 20) + 16)
+                    return `C ${prevX + 80},${prevY} ${x - 80},${y} ${x},${y}`
+                  }).join(' ')} L ${48 + 64 + (sortedJobs.length - 1) * 240 + 240 + 32 + 32}, ${CARD_H + ROAD_H / 2 + 16}`}
+                  fill="none" stroke={LINE_COLOR} strokeWidth="5" strokeLinecap="round" className="opacity-90"
                 />
               </svg>
             </div>
 
-            {/* START POINT */}
+            {/* START */}
             <div
               className="shrink-0 w-16 relative z-10 flex flex-col items-center justify-center gap-1.5"
               style={{ width: '64px', height: `${TOTAL_H}px` }}
             >
-              <div
-                className="h-11 w-11 rounded-full border-[3px] border-white shadow-lg
-                           flex items-center justify-center hover:scale-110 transition-transform cursor-pointer bg-gradient-to-br from-[#0097A7] to-[#00acc1]"
-              >
-                <Truck className="h-5 w-5 text-white" />
+              <div className="h-10 w-10 rounded-full border-[3px] border-white shadow-lg flex items-center justify-center bg-gradient-to-br from-[#0097A7] to-[#00acc1]">
+                <Truck className="h-4 w-4 text-white" />
               </div>
-              <div className="bg-white border border-slate-200 text-slate-800 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
+              <div className="bg-white border border-slate-200 text-slate-700 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
                 <span className="text-[8px] font-black uppercase tracking-widest">Inicio</span>
               </div>
             </div>
@@ -478,12 +460,13 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
             {sortedJobs.map((job, index) => {
               const isTop = index % 2 === 0
               const curveOffset = isTop ? -20 : 20
+              const isNextStop = index === nextJobIndex
 
               return (
                 <div
                   key={job.id}
                   className="shrink-0 relative z-10 flex flex-col justify-between"
-                  style={{ width: '252px', margin: '0 8px' }}
+                  style={{ width: '224px', margin: '0 8px' }}
                 >
                   <div className="flex flex-col justify-end pb-1.5 px-1" style={{ height: CARD_H }}>
                     {isTop && (
@@ -493,10 +476,13 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                           onStatusChange={onStatusChange} 
                           onRescheduleClick={onRescheduleClick}
                           onEditClick={onEditClick}
+                          isNext={isNextStop}
+                          eta={getETA(index, sortedJobs)}
+                          index={index}
                         />
                         <div
                           className="mx-auto w-[2px] mt-1 shrink-0"
-                          style={{ height: 18, background: 'linear-gradient(to bottom, rgba(148,163,184,0.5), #0097A7)' }}
+                          style={{ height: 16, background: 'linear-gradient(to bottom, rgba(148,163,184,0.5), #0097A7)' }}
                         />
                       </>
                     )}
@@ -504,20 +490,17 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
 
                   <div 
                     className="flex items-center justify-center relative" 
-                    style={{ 
-                      height: ROAD_H,
-                      transform: `translateY(${curveOffset}px)`
-                    }}
+                    style={{ height: ROAD_H, transform: `translateY(${curveOffset}px)` }}
                   >
-                    <div
-                      className="h-10 w-10 rounded-full bg-white border-[3px] border-[#0097A7]
-                                 shadow-[0_2px_12px_rgba(0,0,0,0.1)]
-                                 flex items-center justify-center text-slate-700
-                                 hover:border-[#0097A7] transition-all cursor-pointer relative"
-                    >
-                      <Home className="h-4.5 w-4.5 text-[#0097A7]" />
-                      <div className="absolute -top-1.5 -right-1.5 bg-[#EA4335] text-white text-[9px] font-black
-                                      w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow">
+                    <div className={cn(
+                      "h-9 w-9 rounded-full bg-white border-[3px] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center relative cursor-pointer hover:scale-110 transition-transform",
+                      isNextStop ? "border-amber-400 shadow-amber-200/50" : "border-[#0097A7]"
+                    )}>
+                      <Home className={cn("h-4 w-4", isNextStop ? "text-amber-500" : "text-[#0097A7]")} />
+                      <div className={cn(
+                        "absolute -top-1 -right-1 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border-2 border-white shadow",
+                        isNextStop ? "bg-amber-500" : "bg-red-500"
+                      )}>
                         {index + 1}
                       </div>
                     </div>
@@ -528,13 +511,16 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                       <>
                         <div
                           className="mx-auto w-[2px] mb-1 shrink-0"
-                          style={{ height: 18, background: 'linear-gradient(to bottom, #0097A7, rgba(148,163,184,0.5))' }}
+                          style={{ height: 16, background: 'linear-gradient(to bottom, #0097A7, rgba(148,163,184,0.5))' }}
                         />
                         <JobCard 
                           job={job} 
                           onStatusChange={onStatusChange} 
                           onRescheduleClick={onRescheduleClick}
                           onEditClick={onEditClick}
+                          isNext={isNextStop}
+                          eta={getETA(index, sortedJobs)}
+                          index={index}
                         />
                       </>
                     )}
@@ -543,14 +529,13 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
               )
             })}
 
-            {/* END POINT */}
+            {/* END */}
             <div
               className="shrink-0 w-16 relative z-10 flex flex-col items-center justify-center gap-1.5"
               style={{ width: '64px', marginLeft: '32px', height: `${TOTAL_H}px` }}
             >
-              <div className="h-11 w-11 rounded-full bg-white border-[3px] border-slate-350
-                             shadow-lg flex items-center justify-center text-[#0097A7]">
-                <Flag className="h-5 w-5" />
+              <div className="h-10 w-10 rounded-full bg-white border-[3px] border-slate-300 shadow-lg flex items-center justify-center text-[#0097A7]">
+                <Flag className="h-4 w-4" />
               </div>
               <div className="bg-white border border-slate-200 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
                 <span className="text-[8px] font-black uppercase tracking-widest">Fin</span>

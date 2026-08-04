@@ -632,11 +632,11 @@ export default function DashboardPage() {
             {/* Header */}
             <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 xl:px-4 py-2.5 xl:py-2 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
               <div>
-                <h3 className="text-[13px] xl:text-base 2xl:text-base font-black text-white tracking-wide uppercase">Próximos Servicios</h3>
-                <p className="text-[10px] xl:text-[10px] 2xl:text-[11px] text-[#00C9E0]/80 font-medium">Compromisos más cercanos.</p>
+                <h3 className="text-sm sm:text-base font-bold text-white tracking-wide uppercase">Próximos Servicios</h3>
+                <p className="text-xs font-semibold text-[#00C9E0]/90">Compromisos más cercanos.</p>
               </div>
-              <Link href="/trabajos" className="text-[11px] xl:text-[11px] 2xl:text-base font-black text-[#00C9E0] hover:text-white hover:underline flex items-center gap-0.5 transition-colors">
-                Ver todos <ChevronRight className="h-2.5 w-2.5" />
+              <Link href="/trabajos" className="text-xs sm:text-sm font-bold text-[#00C9E0] hover:text-white hover:underline flex items-center gap-0.5 transition-colors">
+                Ver todos <ChevronRight className="h-3 w-3" />
               </Link>
             </div>
             
@@ -652,28 +652,28 @@ export default function DashboardPage() {
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-extrabold text-[10.5px] xl:text-base text-slate-800 group-hover:text-[#0097A7] transition-colors truncate">{job.catalogo_servicios?.nombre}</span>
-                          <span className="px-1.5 py-0.2 text-[6.5px] xl:text-[6px] font-black uppercase rounded-full bg-[#E6F9FB] text-[#0097A7] tracking-wider border border-[#0097A7]/10">
+                          <span className="font-bold text-sm sm:text-base text-slate-800 group-hover:text-[#0097A7] transition-colors truncate">{job.catalogo_servicios?.nombre}</span>
+                          <span className="px-2 py-0.5 text-[9px] sm:text-[10px] font-black uppercase rounded-full bg-[#E6F9FB] text-[#0097A7] tracking-wider border border-[#0097A7]/10">
                             {job.estado === 'en_progreso' ? 'En Progreso' : job.estado === 'pendiente' ? 'Pendiente' : job.estado?.replace('_', ' ')}
                           </span>
                         </div>
-                        <p className="text-[11px] xl:text-[10px] text-slate-400 mt-0.2 font-medium">{job.clientes?.nombre} {job.clientes?.apellido}</p>
+                        <p className="text-xs sm:text-sm text-slate-500 font-medium">{job.clientes?.nombre} {job.clientes?.apellido}</p>
                       </div>
                     </div>
                     
                     {/* Price */}
                     <div className="text-right shrink-0">
-                      <span className="font-black text-[13px] xl:text-[10.5px] text-slate-900">${job.precio_acordado}</span>
+                      <span className="font-black text-base sm:text-lg text-slate-900">${job.precio_acordado}</span>
                       {job.hora_servicio && (
-                        <div className="flex items-center text-[10px] xl:text-[7.5px] text-slate-400 mt-0.2 font-medium justify-end">
-                          <Clock className="mr-0.5 h-2 w-2 text-[#00C9E0]" /> {formatTime12h(job.hora_servicio)}
+                        <div className="flex items-center justify-end text-xs sm:text-sm text-slate-500 font-medium">
+                          <Clock className="mr-1 h-3 w-3 text-[#00C9E0]" /> {formatTime12h(job.hora_servicio)}
                         </div>
                       )}
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="text-center py-4 xl:py-3 text-[11px] xl:text-[10px] text-slate-400 italic bg-white/60 rounded-xl border border-dashed border-slate-200">
+                <div className="text-center py-4 xl:py-3 text-sm text-slate-500 italic bg-white/60 rounded-xl border border-dashed border-slate-200">
                   No hay servicios próximos agendados.
                 </div>
               )}
@@ -684,8 +684,8 @@ export default function DashboardPage() {
           <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3.5 xl:p-2.5 2xl:p-4 flex flex-col gap-2 xl:gap-1.5 animate-dashboard-item xl:min-h-0 xl:h-full" style={{ animationDelay: '400ms' }}>
             <div className="flex flex-col gap-2 xl:gap-1.5">
               <div>
-                <h3 className="text-[13px] xl:text-base 2xl:text-base font-black text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
-                <p className="text-[10px] xl:text-[10px] text-slate-400 font-medium">Accesos directos operacionales.</p>
+                <h3 className="text-sm sm:text-base font-bold text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
+                <p className="text-xs sm:text-sm text-slate-500 font-medium">Accesos directos operacionales.</p>
               </div>
               
               <div className="flex flex-col gap-1.5 xl:gap-1">
@@ -694,10 +694,10 @@ export default function DashboardPage() {
                   className="flex items-center justify-between py-2.5 xl:py-2 px-4.5 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <div className="h-5.5 w-5.5 xl:h-4.5 xl:w-4.5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
-                      <Users className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7] transition-transform group-hover:scale-105" />
+                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
+                      <Users className="h-3.5 w-3.5 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-base xl:text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
+                    <span className="text-sm font-bold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
                   </div>
                   <ChevronRight className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
                 </button>
@@ -707,10 +707,10 @@ export default function DashboardPage() {
                   className="flex items-center justify-between py-2.5 xl:py-2 px-4.5 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <div className="h-5.5 w-5.5 xl:h-4.5 xl:w-4.5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
-                      <Calendar className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7] transition-transform group-hover:scale-105" />
+                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
+                      <Calendar className="h-3.5 w-3.5 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-base xl:text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
+                    <span className="text-sm font-bold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
                   </div>
                   <ChevronRight className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
                 </button>
@@ -720,10 +720,10 @@ export default function DashboardPage() {
                   className="flex items-center justify-between py-2.5 xl:py-2 px-4.5 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <div className="h-5.5 w-5.5 xl:h-4.5 xl:w-4.5 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
-                      <FileText className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-[#0097A7] transition-transform group-hover:scale-105" />
+                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
+                      <FileText className="h-3.5 w-3.5 text-[#0097A7] transition-transform group-hover:scale-105" />
                     </div>
-                    <span className="text-base xl:text-[11px] font-extrabold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
+                    <span className="text-sm font-bold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
                   </div>
                   <ChevronRight className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
                 </button>
@@ -739,18 +739,18 @@ export default function DashboardPage() {
             <div className="min-h-0 flex flex-col flex-1 h-auto">
               <div className="flex items-center justify-between pb-1.5 border-b border-slate-50 shrink-0">
                 <div>
-                  <h3 className="text-[13px] xl:text-base 2xl:text-base font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
-                    <Bell className="h-3.5 w-3.5 xl:h-3 xl:w-3 text-[#0097A7]" />
+                  <h3 className="text-sm sm:text-base font-bold text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
+                    <Bell className="h-4 w-4 text-[#0097A7]" />
                     Recordatorios y Pendientes
                   </h3>
-                  <p className="text-[10px] xl:text-[10px] text-slate-400 font-medium">Alertas y avisos rápidos.</p>
+                  <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Alertas y avisos rápidos.</p>
                 </div>
                 <button 
                   type="button"
                   onClick={() => setShowGestionar(true)} 
-                  className="text-[11px] xl:text-[11px] font-black text-[#0097A7] hover:text-[#00C9E0] hover:underline flex items-center gap-0.5 transition-colors cursor-pointer"
+                  className="text-xs sm:text-sm font-bold text-[#0097A7] hover:text-[#00C9E0] hover:underline flex items-center gap-0.5 transition-colors cursor-pointer"
                 >
-                  Gestionar <ChevronRight className="h-2.5 w-2.5" />
+                  Gestionar <ChevronRight className="h-3 w-3" />
                 </button>
               </div>
 
@@ -760,7 +760,7 @@ export default function DashboardPage() {
                   placeholder="Escribe un recordatorio o pendiente..."
                   value={quickTitle}
                   onChange={e => setQuickTitle(e.target.value)}
-                  className="text-[15px] xl:text-sm h-12 xl:h-11 px-4 rounded-xl border-slate-200/80 focus-visible:ring-[#0097A7] bg-white transition-all shadow-sm w-full font-medium placeholder:text-slate-400"
+                  className="text-sm h-10 px-4 rounded-xl border-slate-200/80 focus-visible:ring-[#0097A7] bg-white transition-all shadow-sm w-full font-medium placeholder:text-slate-400"
                 />
 
                 <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2.5">
@@ -775,9 +775,9 @@ export default function DashboardPage() {
                       <PopoverTrigger asChild>
                         <button
                           type="button"
-                          className="w-full h-10 xl:h-9 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[13px] xl:text-xs font-bold text-slate-700 flex items-center justify-center xl:justify-start gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                          className="w-full h-10 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 flex items-center justify-center xl:justify-start gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
                         >
-                          <CalendarIcon className="h-3.5 w-3.5 xl:h-3 xl:w-3 text-[#0097A7]" />
+                          <CalendarIcon className="h-3.5 w-3.5 text-[#0097A7]" />
                           <span>
                             {new Date(quickDate + 'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
                           </span>
@@ -805,9 +805,9 @@ export default function DashboardPage() {
                       <PopoverTrigger asChild>
                         <button
                           type="button"
-                          className="w-full h-10 xl:h-9 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[13px] xl:text-xs font-bold text-slate-700 flex items-center justify-center xl:justify-start gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                          className="w-full h-10 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 flex items-center justify-center xl:justify-start gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
                         >
-                          <Clock className="h-3.5 w-3.5 xl:h-3 xl:w-3 text-[#0097A7]" />
+                          <Clock className="h-3.5 w-3.5 text-[#0097A7]" />
                           <span>{formatTime12h(`${quickTime}:00`)}</span>
                         </button>
                       </PopoverTrigger>

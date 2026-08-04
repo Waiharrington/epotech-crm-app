@@ -329,14 +329,14 @@ export default function ReportesPage() {
                 >
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
                   <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white/60">{stat.label}</p>
-                      <div className="h-11 w-11 rounded-lg flex items-center justify-center bg-white/15 border border-white/20">
-                        <stat.icon className="h-3.5 w-3.5 text-white" />
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="text-xs font-bold uppercase tracking-wider text-white/90">{stat.label}</p>
+                      <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-white/15 border border-white/20">
+                        <stat.icon className="h-4 w-4 text-white" />
                       </div>
                     </div>
-                    <p className="text-2xl font-black text-white">{stat.value}</p>
-                    <p className="text-[11px] text-white/50 font-medium mt-1">{stat.sub}</p>
+                    <p className="text-3xl font-black text-white tracking-tight">{stat.value}</p>
+                    <p className="text-xs text-white/80 font-medium mt-1">{stat.sub}</p>
                   </div>
                 </div>
               ))}

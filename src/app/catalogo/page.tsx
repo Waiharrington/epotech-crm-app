@@ -330,20 +330,18 @@ export default function CatalogoPage() {
                         <div className={cn("h-11 w-11 rounded-xl flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-300", catColor.bg, "border", catColor.border)}>
                           <Briefcase className={cn("h-4 w-4", catColor.text)} />
                         </div>
-                        <div>
-                          <p className="text-base font-bold text-slate-800 leading-tight group-hover:text-[#0097A7] transition-colors">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-bold text-slate-700 truncate leading-tight text-[14px] mb-1">
                             {servicio.nombre}
+                          </h4>
+                          <p className={cn("text-[11px] font-bold flex items-center gap-1.5 uppercase tracking-wide", catColor.text)}>
+                            <span className={cn("h-1 w-1 rounded-full", catColor.dot)} />
+                            {servicio.categoria === 'epoxico' ? 'Epóxico' : servicio.categoria}
                           </p>
-                          <div className="flex items-center gap-1.5 mt-0.5">
-                            <div className={cn("h-1.5 w-1.5 rounded-full", catColor.dot)} />
-                            <p className={cn("text-base font-semibold capitalize", catColor.text)}>
-                              {servicio.categoria === 'epoxico' ? 'Epóxico' : servicio.categoria}
-                            </p>
-                          </div>
                         </div>
                       </div>
                       <Badge variant={servicio.activo ? 'default' : 'secondary'} className={cn(
-                        "text-[11px] font-bold px-4 py-0.5 rounded-full",
+                        "text-[10px] font-bold px-3 py-0 rounded-full",
                         servicio.activo 
                           ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" 
                           : "bg-slate-100 text-slate-500 border-slate-200"
@@ -355,12 +353,12 @@ export default function CatalogoPage() {
                     {/* Pricing */}
                     <div className="space-y-1.5 mb-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-base font-semibold text-slate-400 uppercase tracking-wider">Precio Venta</span>
-                        <span className="text-lg font-black text-[#0097A7]">${servicio.precio_venta.toLocaleString()}</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Precio Venta</span>
+                        <span className="text-[15px] font-black text-[#0097A7]">${servicio.precio_venta.toLocaleString()}</span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-base font-semibold text-slate-400 uppercase tracking-wider">Costo Total Est.</span>
-                        <span className={cn("text-base font-bold", (servicio.costo_materiales_est || 0) + (servicio.costo_variable_est || 0) > 0 ? "text-rose-500" : "text-slate-400")}>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Costo Total Est.</span>
+                        <span className={cn("text-[13px] font-bold", (servicio.costo_materiales_est || 0) + (servicio.costo_variable_est || 0) > 0 ? "text-rose-500" : "text-slate-400")}>
                           ${(servicio.costo_materiales_est || 0) + (servicio.costo_variable_est || 0)}
                         </span>
                       </div>
@@ -368,7 +366,7 @@ export default function CatalogoPage() {
 
                     {/* Description */}
                     {servicio.descripcion_interna && (
-                      <p className="text-base text-slate-400 italic line-clamp-2 mb-3 border-t border-slate-100 pt-2">
+                      <p className="text-[12px] text-slate-500 italic line-clamp-2 mb-3 border-t border-slate-100 pt-2">
                         {servicio.descripcion_interna}
                       </p>
                     )}
@@ -381,9 +379,9 @@ export default function CatalogoPage() {
                           setFormData(servicio)
                           setShowModal(true)
                         }}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-base font-bold text-slate-500 bg-slate-50 border border-slate-200/60 hover:bg-[#E6F9FB] hover:border-[#0097A7]/20 hover:text-[#0097A7] transition-all cursor-pointer active:scale-[0.97]"
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 bg-slate-50 border border-slate-200/60 hover:bg-[#E6F9FB] hover:border-[#0097A7]/20 hover:text-[#0097A7] transition-all cursor-pointer active:scale-[0.97]"
                       >
-                        <Edit className="h-3 w-3" />
+                        <Edit className="h-3.5 w-3.5" />
                         Editar
                       </button>
                       <button

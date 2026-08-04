@@ -232,7 +232,7 @@ export default function AjustesPage() {
                 <div className="absolute inset-0 rounded-2xl bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                   <Camera className="h-6 w-6 text-white" />
                 </div>
-                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+                <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
               </div>
 
               {/* Photo Actions */}

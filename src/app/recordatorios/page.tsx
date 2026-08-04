@@ -379,7 +379,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                     key={tab.key}
                     onClick={() => setFilterTab(tab.key as any)}
                     className={cn(
-                      "px-4 py-2.5 rounded-xl text-base font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97] flex items-center gap-1.5 flex-1 sm:flex-none justify-center",
+                      "px-3 py-2 rounded-xl text-sm font-bold whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97] flex items-center gap-1.5 flex-1 sm:flex-none justify-center",
                       filterTab === tab.key
                         ? "bg-[#0097A7] text-white border-[#0097A7] shadow-md shadow-cyan-500/20"
                         : "bg-white text-slate-500 border-slate-200/60 hover:border-[#0097A7]/40 hover:text-[#0097A7]"

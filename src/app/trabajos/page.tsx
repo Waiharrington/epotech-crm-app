@@ -508,12 +508,11 @@ function TrabajosContent() {
                       setRescheduleDate(job.fecha_servicio)
                       setRescheduleTime(job.hora_servicio || '')
                       setShowRescheduleModal(true)
-                    }}
                     viewMode={calendarViewMode}
                     customDateRange={customDateRange}
                   />
                 ) : view === 'list' ? (
-                  <div className="overflow-y-auto flex-1 min-h-0 pt-4 pb-20 px-4 lg:pl-4 lg:pr-6">
+                  <div className="overflow-y-auto flex-1 min-h-0 pt-4 pb-8 px-4 lg:pl-4 lg:pr-6">
                     <div className="w-full mx-auto max-w-none">
                       <JobList 
                         trabajos={filteredTrabajos} 

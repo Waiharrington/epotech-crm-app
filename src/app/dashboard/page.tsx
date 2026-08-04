@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Calendar as CalendarUI } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { BarChart, Bar, ResponsiveContainer, Cell } from 'recharts'
 import { 
   Users, 
   Briefcase, 
@@ -31,7 +32,8 @@ import {
   Sunrise,
   Sunset,
   Sparkles,
-  Trash2
+  Trash2,
+  Search
 } from 'lucide-react'
 import { toast } from 'sonner'
 import Link from 'next/link'
@@ -64,6 +66,11 @@ export default function DashboardPage() {
   const [showJobWizard, setShowJobWizard] = useState(false)
   const [showQuoteWizard, setShowQuoteWizard] = useState(false)
   const [showGestionar, setShowGestionar] = useState(false)
+
+  // Global Search State
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
+  const [searchResults, setSearchResults] = useState<{ id: string; type: 'cliente'|'trabajo'; title: string; subtitle: string; link: string }[]>([])
 
   useEffect(() => {
     setMounted(true)
@@ -241,6 +248,66 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchDashboardData()
+  }, [])
+
+  // Global Search Effect
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults([])
+      return
+    }
+
+    const delayDebounceFn = setTimeout(async () => {
+      setIsSearching(true)
+      try {
+        const searchTerm = `%${searchQuery.trim()}%`
+        
+        const { data: clients, error: errC } = await supabase
+          .from('clientes')
+          .select('id, nombre, empresa, telefono')
+          .or(`nombre.ilike.${searchTerm},empresa.ilike.${searchTerm},telefono.ilike.${searchTerm}`)
+          .limit(3)
+
+        const { data: jobs, error: errJ } = await supabase
+          .from('trabajos')
+          .select('id, cliente_id, vehiculo, patente, status, numero_orden, clientes(nombre)')
+          .or(`vehiculo.ilike.${searchTerm},patente.ilike.${searchTerm},numero_orden.ilike.${searchTerm}`)
+          .limit(3)
+
+        const results: any[] = []
+        
+        if (clients) {
+          clients.forEach((c: any) => results.push({
+            id: c.id,
+            type: 'cliente',
+            title: c.nombre,
+            subtitle: c.empresa || c.telefono || 'Cliente',
+            link: `/clientes/${c.id}`
+          }))
+        }
+
+        if (jobs) {
+          jobs.forEach((j: any) => results.push({
+            id: j.id,
+            type: 'trabajo',
+            title: j.numero_orden ? `Orden #${j.numero_orden} - ${j.vehiculo}` : j.vehiculo,
+            subtitle: j.clientes?.nombre || 'Sin cliente',
+            link: `/trabajos`
+          }))
+        }
+
+        setSearchResults(results)
+      } catch (err) {
+        console.error('Search error:', err)
+      } finally {
+        setIsSearching(false)
+      }
+    }, 400)
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [searchQuery, supabase])
+
+  useEffect(() => {
     fetchReminders()
 
     const handleChanges = () => {
@@ -551,11 +618,66 @@ export default function DashboardPage() {
               </span>
             </div>
           </div>
+          
+          {/* Global Search Bar (Integrated) */}
+          <div className="relative mt-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Input 
+                placeholder="Buscar clientes o trabajos..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 h-10 bg-white/10 border-white/10 shadow-inner rounded-xl text-[13px] font-medium text-white placeholder:text-slate-400 focus-visible:ring-[#00C9E0]"
+              />
+              {isSearching && (
+                <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#00C9E0] animate-spin" />
+              )}
+            </div>
+            
+            {searchQuery.trim() && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-100 overflow-hidden z-50">
+                {searchResults.length > 0 ? (
+                  <div className="py-2">
+                    {searchResults.map(result => (
+                      <Link key={`${result.type}-${result.id}`} href={result.link} className="flex flex-col px-4 py-2 hover:bg-slate-50 border-b border-slate-50 last:border-0 transition-colors">
+                        <span className="text-[13px] font-bold text-slate-900">{result.title}</span>
+                        <span className="text-[11px] text-slate-500 font-medium">{result.subtitle}</span>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-4 text-center text-slate-500 text-[12px] font-medium">
+                    {isSearching ? 'Buscando...' : 'No se encontraron resultados'}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
       {/* Main Content layout */}
       <main className="flex flex-col xl:flex-1 xl:min-h-0 gap-3.5 xl:gap-2.5 2xl:gap-4 relative z-10">
+        
+        {/* Conditional Stock Alert Banner */}
+        {stats.lowStock > 0 && (
+          <Link href="/stock" className="shrink-0 -mt-2 mb-1">
+            <div className="p-3 rounded-xl bg-gradient-to-r from-red-50 to-orange-50 border border-red-100 flex items-center justify-between shadow-sm hover:shadow-md transition-all group">
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 shrink-0 group-hover:scale-110 transition-transform">
+                  <AlertTriangle className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="font-bold text-[13px] text-red-900 leading-tight">Alerta de Inventario</p>
+                  <p className="text-[11px] text-red-700 font-medium">Hay {stats.lowStock} productos bajo el nivel mínimo.</p>
+                </div>
+              </div>
+              <ChevronRight className="h-4 w-4 text-red-400 group-hover:text-red-600 transition-colors" />
+            </div>
+          </Link>
+        )}
+        
+
         {/* Statistics Grid */}
         <div className="p-0.5 -m-0.5 overflow-visible shrink-0">
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 xl:gap-2.5 2xl:gap-4.5 shrink-0">
@@ -601,8 +723,19 @@ export default function DashboardPage() {
                     Neto: ${stats.netIncome.toLocaleString()}
                   </p>
                 </div>
-                <div className="h-11 w-11 xl:h-6.5 xl:w-6.5 2xl:h-11 2xl:w-11 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100/80 shrink-0 transition-all group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 ml-1">
-                  <Wallet className="h-3.5 w-3.5 xl:h-3 xl:w-3 2xl:h-4.5 2xl:w-4.5 text-slate-500 group-hover:text-[#0097A7] transition-colors" />
+                <div className="h-10 w-16 xl:h-8 xl:w-14 2xl:h-12 2xl:w-20 shrink-0 ml-2 opacity-80 group-hover:opacity-100 transition-opacity">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={[
+                      { value: 120 }, { value: 200 }, { value: 150 }, 
+                      { value: 300 }, { value: 250 }, { value: 400 }, { value: 350 }
+                    ]}>
+                      <Bar dataKey="value" radius={[2, 2, 0, 0]}>
+                        {[120, 200, 150, 300, 250, 400, 350].map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={index === 6 ? '#0097A7' : '#E6F9FB'} className="transition-all duration-300 group-hover:fill-[#00C9E0]" />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </Link>
@@ -688,44 +821,35 @@ export default function DashboardPage() {
                 <p className="text-xs sm:text-sm text-slate-500 font-medium">Accesos directos operacionales.</p>
               </div>
               
-              <div className="flex flex-col gap-1.5 xl:gap-1">
+              <div className="grid grid-cols-3 gap-2">
                 <button 
                   onClick={() => setShowClientWizard(true)}
-                  className="flex items-center justify-between py-2.5 xl:py-2 px-4.5 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
+                  className="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 transition-all duration-300 shadow-sm hover:shadow-md group active:scale-[0.98] cursor-pointer"
                 >
-                  <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
-                      <Users className="h-3.5 w-3.5 text-[#0097A7] transition-transform group-hover:scale-105" />
-                    </div>
-                    <span className="text-sm font-bold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nuevo Cliente</span>
+                  <div className="h-10 w-10 mb-2 rounded-xl flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
+                    <Users className="h-5 w-5 text-[#0097A7] transition-transform group-hover:scale-105" />
                   </div>
-                  <ChevronRight className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
+                  <span className="text-[11px] font-bold text-slate-700 group-hover:text-slate-900 transition-colors leading-tight text-center">Nuevo<br/>Cliente</span>
                 </button>
 
                 <button 
                   onClick={() => setShowJobWizard(true)}
-                  className="flex items-center justify-between py-2.5 xl:py-2 px-4.5 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
+                  className="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 transition-all duration-300 shadow-sm hover:shadow-md group active:scale-[0.98] cursor-pointer"
                 >
-                  <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
-                      <Calendar className="h-3.5 w-3.5 text-[#0097A7] transition-transform group-hover:scale-105" />
-                    </div>
-                    <span className="text-sm font-bold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Agendar Servicio</span>
+                  <div className="h-10 w-10 mb-2 rounded-xl flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
+                    <Calendar className="h-5 w-5 text-[#0097A7] transition-transform group-hover:scale-105" />
                   </div>
-                  <ChevronRight className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
+                  <span className="text-[11px] font-bold text-slate-700 group-hover:text-slate-900 transition-colors leading-tight text-center">Agendar<br/>Servicio</span>
                 </button>
 
                 <button 
                   onClick={() => setShowQuoteWizard(true)}
-                  className="flex items-center justify-between py-2.5 xl:py-2 px-4.5 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 hover:shadow-[0_4px_12px_rgba(0,201,224,0.1)] transition-all duration-300 shadow-xs group min-w-0 text-left active:scale-[0.98] cursor-pointer"
+                  className="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-100/80 bg-white hover:bg-[#E6F9FB]/50 hover:border-[#00C9E0]/40 transition-all duration-300 shadow-sm hover:shadow-md group active:scale-[0.98] cursor-pointer"
                 >
-                  <div className="flex items-center gap-2 min-w-0 flex-1">
-                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
-                      <FileText className="h-3.5 w-3.5 text-[#0097A7] transition-transform group-hover:scale-105" />
-                    </div>
-                    <span className="text-sm font-bold text-slate-700 group-hover:text-slate-900 transition-colors truncate">Nueva Cotización</span>
+                  <div className="h-10 w-10 mb-2 rounded-xl flex items-center justify-center bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/10 shadow-xs group-hover:shadow-[0_0_8px_rgba(0,201,224,0.25)] shrink-0">
+                    <FileText className="h-5 w-5 text-[#0097A7] transition-transform group-hover:scale-105" />
                   </div>
-                  <ChevronRight className="h-3 w-3 xl:h-2.5 xl:w-2.5 text-slate-400 transition-all group-hover:translate-x-0.5 group-hover:text-[#00C9E0] shrink-0 ml-1" />
+                  <span className="text-[11px] font-bold text-slate-700 group-hover:text-slate-900 transition-colors leading-tight text-center">Nueva<br/>Cotización</span>
                 </button>
               </div>
             </div>
@@ -754,8 +878,17 @@ export default function DashboardPage() {
                 </button>
               </div>
 
-              {/* Formulario Rápido Estilo Composer */}
-              <form onSubmit={handleQuickAddReminder} className="mt-2.5 flex flex-col gap-2.5 shrink-0 bg-slate-50/60 p-2.5 xl:p-2 rounded-[18px] border border-slate-100 shadow-[inset_0_1px_4px_rgba(0,0,0,0.02)]">
+              {/* Botón Nuevo Recordatorio (Popover) */}
+              <div className="mt-2.5 shrink-0">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="w-full h-11 border-dashed border-slate-300 text-[#0097A7] hover:border-[#0097A7]/50 hover:bg-[#E6F9FB]/50 rounded-xl font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm">
+                      <Plus className="h-4 w-4" />
+                      Nuevo Recordatorio
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[calc(100vw-2rem)] md:w-[400px] p-0 rounded-[18px] border-slate-100 shadow-2xl" align="center" sideOffset={10}>
+                    <form onSubmit={handleQuickAddReminder} className="flex flex-col gap-2.5 bg-white p-3 rounded-[18px]">
                 <Input
                   placeholder="Escribe un recordatorio o pendiente..."
                   value={quickTitle}
@@ -907,7 +1040,10 @@ export default function DashboardPage() {
                     <Plus className="h-3.5 w-3.5 stroke-[3]" /> Agregar
                   </Button>
                 </div>
-              </form>
+                    </form>
+                  </PopoverContent>
+                </Popover>
+              </div>
 
               {/* Listado */}
               <div className="space-y-1.5 mt-1.5 overflow-y-auto pr-1 pb-1 no-scrollbar flex-1 min-h-0 h-auto">
@@ -942,61 +1078,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Alertas y Operaciones */}
-          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3.5 xl:p-2.5 2xl:p-4 flex flex-col justify-between xl:min-h-0 xl:h-full animate-dashboard-item" style={{ animationDelay: '500ms' }}>
-            <div className="min-h-0 flex flex-col flex-1 h-auto">
-              <div className="pb-1.5 xl:pb-1 border-b border-slate-50 shrink-0">
-                <h3 className="text-[13px] xl:text-base 2xl:text-base font-black text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
-                  <AlertTriangle className="h-3.5 w-3.5 xl:h-3 xl:w-3 text-[#0097A7]" />
-                  Alertas y Operaciones
-                </h3>
-                <p className="text-[10px] xl:text-[10px] text-slate-400 font-medium">Alertas de inventario y caja.</p>
-              </div>
-              
-              <div className="space-y-2 xl:space-y-1.5 pt-2 xl:pt-1.5 overflow-y-auto no-scrollbar flex-1 min-h-0 h-auto">
-                {stats.lowStock > 0 ? (
-                  <div className="p-2 xl:p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB] to-[#E6F9FB]/60 border border-[#0097A7]/15 flex items-start gap-2 shadow-2xs hover:border-[#0097A7]/30 transition-all">
-                    <AlertTriangle className="h-3.5 w-3.5 text-[#0097A7] shrink-0 mt-0.5 animate-pulse" />
-                    <div>
-                      <p className="font-extrabold text-[10.5px] xl:text-base text-[#0B1E3F]">{stats.lowStock} productos en bajo stock</p>
-                      <p className="text-[10px] xl:text-[10px] text-[#0097A7] mt-0.2 font-medium leading-tight">Insumos bajo el nivel mínimo.</p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-2 xl:p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/30 to-white border border-[#0097A7]/10 flex items-start gap-2 shadow-2xs hover:border-[#0097A7]/20 transition-all">
-                    <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-[#E6F9FB] text-[#0097A7] shrink-0 mt-0.5 border border-[#0097A7]/10">
-                      <Check className="h-2.5 w-2.5 stroke-[3]" />
-                    </div>
-                    <div>
-                      <p className="font-extrabold text-[10.5px] xl:text-base text-[#0B1E3F]">Inventario al día</p>
-                      <p className="text-[10px] xl:text-[10px] text-slate-500 mt-0.2 font-medium leading-tight">Niveles de stock adecuados.</p>
-                    </div>
-                  </div>
-                )}
 
-                <div className="p-2 xl:p-1.5 rounded-xl bg-gradient-to-tr from-[#E6F9FB]/40 to-[#E6F9FB]/10 border border-[#E6F9FB] flex items-start gap-2 shadow-2xs hover:border-[#0097A7]/20 transition-all">
-                  <div className="h-5 w-5 rounded-lg flex items-center justify-center bg-white text-[#0097A7] shrink-0 mt-0.5 border border-[#E6F9FB] shadow-2xs">
-                    <Wallet className="h-2.5 w-2.5" />
-                  </div>
-                  <div>
-                    <p className="font-extrabold text-[10.5px] xl:text-base text-[#0B1E3F]">Balance de Caja</p>
-                    <p className="text-[10px] xl:text-[10px] text-slate-500 mt-0.2 font-medium leading-tight">
-                      Ganancia Neta: <strong className="text-slate-900 font-extrabold">${stats.netIncome.toLocaleString()}</strong> <span className="text-slate-400">(${stats.monthlyIncome.toLocaleString()} ing. / ${stats.totalExpenses.toLocaleString()} eg.)</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-2 xl:pt-1.5 border-t border-slate-100 mt-2 xl:mt-1.5 flex gap-2 shrink-0">
-              <Button variant="outline" size="sm" className="flex-1 h-11.5 xl:h-11 text-[11px] xl:text-[10px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#0097A7] hover:border-[#0097A7]/30 shadow-xs transition-all duration-300" asChild>
-                <Link href="/stock">Ver Inventario</Link>
-              </Button>
-              <Button variant="outline" size="sm" className="flex-1 h-11.5 xl:h-11 text-[11px] xl:text-[10px] font-black border-slate-200 text-slate-700 rounded-xl hover:bg-slate-50 hover:text-[#00C9E0] hover:border-[#00C9E0]/30 shadow-xs transition-all duration-300" asChild>
-                <Link href="/caja">Ver Caja</Link>
-              </Button>
-            </div>
-          </div>
         </div>
       </main>
 

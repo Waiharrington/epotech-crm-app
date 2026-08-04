@@ -804,7 +804,7 @@ export function GestionarDrawer({
               <SheetTitle className="text-base font-black text-white tracking-wide uppercase">
                 Panel de Recordatorios
               </SheetTitle>
-              <SheetDescription className="text-base text-slate-300">
+              <SheetDescription className="text-xs sm:text-sm text-slate-300">
                 Organiza la jornada de Sebastián: prioridades y vista semanal.
               </SheetDescription>
             </div>
@@ -816,21 +816,24 @@ export function GestionarDrawer({
             <TabsList className="grid grid-cols-3 w-full bg-slate-200/60 p-1 rounded-xl h-11">
               <TabsTrigger
                 value="today_tomorrow"
-                className="text-base font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1"
+                className="text-[10px] sm:text-xs font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 leading-tight"
               >
-                📅 Hoy vs. Mañana
+                <span className="sm:hidden">Hoy/Mañ</span>
+                <span className="hidden sm:inline">📅 Hoy/Mañana</span>
               </TabsTrigger>
               <TabsTrigger
                 value="week"
-                className="text-base font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1"
+                className="text-[10px] sm:text-xs font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 leading-tight"
               >
-                🗓️ Semanal
+                <span className="sm:hidden">Semana</span>
+                <span className="hidden sm:inline">🗓️ Semanal</span>
               </TabsTrigger>
               <TabsTrigger
                 value="history"
-                className="text-base font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1"
+                className="text-[10px] sm:text-xs font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 leading-tight"
               >
-                ✅ Completados
+                <span className="sm:hidden">Historial</span>
+                <span className="hidden sm:inline">✅ Completados</span>
               </TabsTrigger>
             </TabsList>
           </div>

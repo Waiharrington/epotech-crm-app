@@ -431,7 +431,7 @@ function DroppableDayCell({
         <div className="flex flex-col">
           <div className="flex items-center gap-1.5">
             <span className={cn(
-              "text-base sm:text-base font-bold flex items-center justify-center h-6 w-6 sm:h-11 sm:w-11 rounded-full",
+              "text-sm sm:text-[15px] font-bold flex items-center justify-center h-6 w-6 sm:h-9 sm:w-9 rounded-full",
               isToday 
                 ? "bg-gradient-to-br from-[#00C9E0] to-[#0097A7] text-white shadow-md shadow-cyan-500/20" 
                 : "text-slate-700"
@@ -439,7 +439,7 @@ function DroppableDayCell({
               {format(date, 'd')}
             </span>
             {date.getDate() === 1 && (
-              <span className="text-base sm:text-base font-bold text-slate-400 uppercase tracking-wider">
+              <span className="text-[12px] font-bold text-slate-400 uppercase tracking-wider">
                 {format(date, 'MMM', { locale: es })}
               </span>
             )}
@@ -745,7 +745,7 @@ export function CalendarView({
                     const dayName = format(day, 'EEEE', { locale: es })
                     
                     return (
-                      <div key={day.toISOString()} className="py-2.5 text-center text-sm font-bold text-slate-500 uppercase tracking-wider truncate px-1" title={dayName}>
+                      <div key={day.toISOString()} className="py-2.5 text-center text-[11px] font-bold text-slate-500 uppercase tracking-wider truncate px-1" title={dayName}>
                         {dayName}
                       </div>
                     )

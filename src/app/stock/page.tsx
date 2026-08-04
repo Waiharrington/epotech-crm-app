@@ -353,18 +353,21 @@ export default function StockPage() {
             <div className="w-full sm:w-auto">
               {/* Mobile Filter Dropdown */}
               <div className="sm:hidden relative mt-2 sm:mt-0">
-                <select 
-                  value={typeFilter}
-                  onChange={(e) => setTypeFilter(e.target.value)}
-                  className="w-full appearance-none bg-white border border-slate-200/60 rounded-xl pl-4 pr-10 py-2.5 text-xs font-bold text-slate-700 uppercase tracking-wider focus:outline-none focus:border-[#0097A7]/50 focus:ring-1 focus:ring-[#0097A7]/50 shadow-[0_1px_3px_rgba(0,0,0,0.02)]"
-                >
-                  {['todos', 'consumible', 'herramienta', 'maquinaria'].map((t) => (
-                    <option key={t} value={t}>{t === 'todos' ? 'Todas las Categorías' : t}</option>
-                  ))}
-                </select>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center h-6 w-6 rounded-lg bg-slate-50 text-slate-400">
-                  <Filter className="h-3.5 w-3.5" />
-                </div>
+                <Select value={typeFilter} onValueChange={setTypeFilter}>
+                  <SelectTrigger className="w-full bg-white border border-slate-200/60 rounded-xl h-10 px-4 text-xs font-bold text-slate-700 uppercase tracking-wider focus:ring-[#0097A7]/50 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                    <div className="flex items-center gap-2">
+                      <Filter className="h-3.5 w-3.5 text-slate-400" />
+                      <SelectValue />
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-slate-200 shadow-xl">
+                    {['todos', 'consumible', 'herramienta', 'maquinaria'].map((t) => (
+                      <SelectItem key={t} value={t} className="text-xs font-bold uppercase tracking-wider text-slate-700 focus:bg-[#0097A7]/10 focus:text-[#0097A7]">
+                        {t === 'todos' ? 'Todas las Categorías' : t}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Desktop Filter Pills */}

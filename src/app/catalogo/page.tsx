@@ -270,9 +270,9 @@ export default function CatalogoPage() {
           {/* Mobile Filter Dropdown */}
           <div className="sm:hidden relative mt-1 mb-2">
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-full bg-white border border-slate-200/60 rounded-xl h-16 px-6 text-base font-black text-slate-700 uppercase tracking-widest focus:ring-[#0097A7]/50 shadow-md">
+              <SelectTrigger className="w-full bg-white border border-slate-200/60 rounded-xl !h-14 !py-4 px-6 text-[13px] font-black text-slate-700 uppercase tracking-widest focus:ring-[#0097A7]/50 shadow-md">
                 <div className="flex items-center gap-3">
-                  <Filter className="h-5 w-5 text-slate-400" />
+                  <Filter className="h-5 w-5 text-[#00C9E0]" />
                   <SelectValue />
                 </div>
               </SelectTrigger>

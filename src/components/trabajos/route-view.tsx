@@ -10,6 +10,7 @@ type TrabajoWithDetails = {
   fecha_servicio: string | null
   hora_servicio: string | null
   estado?: string | null
+  precio_acordado?: number | null
   clientes: { nombre: string; apellido: string; direccion: string | null }
   catalogo_servicios: { nombre: string } | null
 }

@@ -590,11 +590,8 @@ export default function ReportesPage() {
                         return (
                           <div key={client.id} className="px-4 py-3 hover:bg-slate-50/50 transition-colors flex items-center justify-between">
                             <div className="flex items-center gap-2.5">
-                              <div className={cn(
-                                "h-10 w-10 rounded-full flex items-center justify-center font-bold text-base shrink-0",
-                                isStar ? "bg-gradient-to-br from-amber-400 to-amber-500 text-white shadow-sm" : "bg-slate-100 text-slate-500"
-                              )}>
-                                {isStar ? '👑' : idx + 1}
+                              <div className="h-10 w-10 rounded-full flex items-center justify-center font-bold text-base shrink-0 bg-slate-100 text-slate-500">
+                                {idx + 1}
                               </div>
                               <div>
                                 <h4 className="font-bold text-base text-slate-700">{client.nombre} {client.apellido}</h4>

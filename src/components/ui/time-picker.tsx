@@ -40,8 +40,8 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
       let left = rect.left
       if (left + 260 > window.innerWidth) left = window.innerWidth - 276
       if (left < 16) left = 16
-      if (top + 420 > window.innerHeight) {
-        top = rect.top - 420 - 4
+      if (top + 300 > window.innerHeight) {
+        top = rect.top - 300 - 4
       }
       setPos({ top, left })
     }
@@ -84,7 +84,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
       className="fixed z-[200]"
       style={{ top: pos.top, left: pos.left }}
     >
-      <div className="w-[260px] bg-white rounded-2xl border border-slate-200/60 shadow-2xl overflow-hidden">
+      <div className="w-[260px] bg-white rounded-2xl border border-slate-200/60 shadow-2xl overflow-hidden max-h-[60vh] overflow-y-auto">
         {/* Dark Navy Header */}
         <div className="bg-gradient-to-r from-[#0a1628] via-[#0d1f3c] to-[#0a1628] px-4 py-3 relative">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(0,201,224,0.08),transparent_60%)]" />

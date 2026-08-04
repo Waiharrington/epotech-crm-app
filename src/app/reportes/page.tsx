@@ -309,7 +309,7 @@ export default function ReportesPage() {
             <p className="text-xs text-slate-400 font-medium">Cargando reportes...</p>
           </div>
         ) : (
-          <div className="flex-1 overflow-y-auto min-h-0 pb-20 space-y-3">
+          <div className="flex-1 overflow-y-auto min-h-0 space-y-3">
             
             {/* Top 3 Financial KPIs - Hero Stats */}
             <div className="grid grid-cols-3 gap-3 shrink-0">

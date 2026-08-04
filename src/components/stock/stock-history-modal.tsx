@@ -69,42 +69,46 @@ export function StockHistoryModal({ item, onClose }: StockHistoryModalProps) {
           ) : movements.length > 0 ? (
             <div className="space-y-3">
               {movements.map((move) => (
-                <div key={move.id} className="relative pl-8 pb-3 border-l-2 border-slate-200 last:border-0 last:pb-0">
-                  <div className={`absolute -left-[9px] top-0 h-4 w-4 rounded-full flex items-center justify-center border-2 border-white ${
-                    move.tipo === 'entrada' ? 'bg-emerald-500' : 'bg-rose-500'
-                  }`}>
+                <div key={move.id} className="relative pl-8 pb-4 border-l-2 border-slate-200 last:border-0 last:pb-0">
+                  <div className={cn("absolute -left-[11px] top-1 h-5 w-5 rounded-full flex items-center justify-center border-2 border-white ring-2",
+                    move.tipo === 'entrada' ? 'bg-emerald-500 ring-emerald-100' : 'bg-rose-500 ring-rose-100'
+                  )}>
                     {move.tipo === 'entrada' ? (
-                      <ArrowUpRight className="h-2.5 w-2.5 text-white" />
+                      <ArrowUpRight className="h-3 w-3 text-white" />
                     ) : (
-                      <ArrowDownRight className="h-2.5 w-2.5 text-white" />
+                      <ArrowDownRight className="h-3 w-3 text-white" />
                     )}
                   </div>
                   
-                  <div className="bg-white rounded-xl border border-slate-200/60 p-3 shadow-sm">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-base font-black text-slate-800">
-                        {move.tipo === 'entrada' ? '+' : '-'}{move.cantidad} {item.unidad_medida}
+                  <div className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm hover:shadow-md transition-shadow group/card">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className={cn(
+                        "text-[15px] font-black",
+                        move.tipo === 'entrada' ? "text-emerald-500" : "text-rose-500"
+                      )}>
+                        {move.tipo === 'entrada' ? '+' : '-'}{Math.abs(move.cantidad)} {item.unidad_medida}
                       </span>
-                      <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-4 py-0.5 rounded-lg">
-{new Date(move.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })} {new Date(move.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}
+                      <span className="text-[10px] font-bold text-slate-400 bg-slate-50 border border-slate-100 px-2.5 py-1 rounded-lg">
+                        {new Date(move.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })} {new Date(move.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}
                       </span>
                     </div>
                     
                     {move.trabajo_id ? (
                       <Link 
                         href={`/trabajos?id=${move.trabajo_id}`}
-                        className="text-base text-[#0097A7] font-bold hover:underline flex items-center gap-1 group"
+                        className="text-[13px] text-slate-600 font-medium hover:text-[#0097A7] transition-colors flex items-start gap-1 group/link"
                         onClick={onClose}
                       >
-                        {move.motivo}
-                        <ExternalLink className="h-2.5 w-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <span className="line-clamp-2 leading-snug">{move.motivo}</span>
+                        <ExternalLink className="h-3 w-3 shrink-0 mt-0.5 opacity-0 group-hover/link:opacity-100 transition-opacity" />
                       </Link>
                     ) : (
-                      <p className="text-base text-slate-600 font-medium">{move.motivo}</p>
+                      <p className="text-[13px] text-slate-600 font-medium line-clamp-2 leading-snug">{move.motivo}</p>
                     )}
-                    <div className="flex items-center gap-1.5 mt-1.5">
-                       <span className="text-[10px] font-bold text-slate-400 uppercase">Balance:</span>
-                       <span className="text-[11px] font-black text-[#0097A7] bg-[#E6F9FB] px-1.5 py-0.5 rounded-md">{move.cantidad_resultante}</span>
+                    
+                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100">
+                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Balance Resultante</span>
+                       <span className="text-[12px] font-black text-slate-700">{move.cantidad_resultante} <span className="text-[10px] font-semibold text-slate-400">{item.unidad_medida}</span></span>
                     </div>
                   </div>
                 </div>

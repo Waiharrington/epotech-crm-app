@@ -150,12 +150,12 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
             <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
               <User className="h-4.5 w-4.5 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
             </div>
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 flex-1 pr-12">
               <DialogTitle className="text-base font-bold tracking-tight text-white">
                 Nuevo Cliente
               </DialogTitle>
-              <DialogDescription className="text-slate-300/80 text-base mt-0.5 font-medium">
-                Completa los datos para dar de alta al cliente.
+              <DialogDescription className="text-slate-300/80 text-base mt-0.5 font-medium truncate">
+                Completa los datos del nuevo cliente.
               </DialogDescription>
             </div>
           </div>
@@ -171,8 +171,8 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
         </DialogHeader>
 
         {/* Step Progress Indicators */}
-        <div className="px-6 py-3.5 flex items-center justify-between bg-slate-50/60 border-b border-slate-100">
-          <div className="flex items-center flex-1">
+        <div className="px-6 py-3.5 flex items-center justify-center bg-slate-50/60 border-b border-slate-100">
+          <div className="flex items-center w-full max-w-xs">
           {[
             { n: 1, label: 'Datos' },
             { n: 2, label: 'Propiedad' },
@@ -214,15 +214,6 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
             </div>
           ))}
           </div>
-
-          <button
-            type="button"
-            onClick={fillDemoData}
-            className="shrink-0 h-10 px-4.5 text-[11px] font-black rounded-lg bg-white border border-slate-200 text-[#0097A7] hover:bg-[#E6F9FB] hover:border-[#00C9E0]/40 hover:shadow-[0_2px_8px_rgba(0,201,224,0.1)] transition-all active:scale-95"
-            title="Rellenar con datos de prueba"
-          >
-            📋 Demo
-          </button>
         </div>
 
         <div className="p-5 md:p-6 max-h-[55vh] overflow-y-auto">

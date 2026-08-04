@@ -468,7 +468,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
       <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
         <DialogContent className="p-0 gap-0 max-w-lg rounded-2xl border-slate-200/60 shadow-2xl">
           {/* Dark Navy Header */}
-          <div className="sidebar-premium-bg px-6 py-4 relative">
+          <div className="sidebar-premium-bg px-6 py-4 relative rounded-t-2xl">
             <div className="relative z-10 flex items-center gap-3">
               <div className="h-9 w-9 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
                 <Sparkles className="h-4 w-4 text-[#00C9E0]" />

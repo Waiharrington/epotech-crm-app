@@ -7,11 +7,19 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Configurar web-push
-webpush.setVapidDetails(
-  'mailto:soporte@epotech.com', // Cambiar por correo real
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
-);
+if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+  try {
+    webpush.setVapidDetails(
+      'mailto:soporte@epotech.com',
+      process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+      process.env.VAPID_PRIVATE_KEY
+    );
+  } catch (e) {
+    console.error('Error configurando web-push:', e);
+  }
+} else {
+  console.warn('VAPID keys not found, web-push not configured.');
+}
 
 export async function GET(req: Request) {
   // Asegurarnos de que la llamada proviene de un Cron autorizado (ej. Vercel Cron)

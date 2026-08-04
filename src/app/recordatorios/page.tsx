@@ -466,7 +466,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
 
       {/* Create Reminder Modal */}
       <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
-        <DialogContent className="p-0 gap-0 max-w-lg rounded-2xl overflow-hidden border-slate-200/60 shadow-2xl">
+        <DialogContent className="p-0 gap-0 max-w-lg rounded-2xl border-slate-200/60 shadow-2xl">
           {/* Dark Navy Header */}
           <div className="sidebar-premium-bg px-6 py-4 relative">
             <div className="relative z-10 flex items-center gap-3">

@@ -384,17 +384,29 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                     className="h-8 pl-8 pr-3 rounded-xl bg-white border border-slate-200/60 text-[10px] font-medium text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0097A7]/30 focus:border-[#0097A7]/50 transition-all w-[140px]"
                   />
                 </div>
-                <select 
-                  value={priorityFilter}
-                  onChange={e => setPriorityFilter(e.target.value)}
-                  className="h-8 rounded-xl border border-slate-200/60 bg-white px-2.5 text-[10px] font-bold text-slate-600 focus:outline-none focus:ring-2 focus:ring-[#0097A7]/30 cursor-pointer"
-                >
-                  <option value="all">Todas</option>
-                  <option value="urgente">Urgente</option>
-                  <option value="alta">Alta</option>
-                  <option value="normal">Normal</option>
-                  <option value="baja">Baja</option>
-                </select>
+                <div className="flex gap-1">
+                  {[
+                    { key: 'all', label: 'Todas' },
+                    { key: 'urgente', label: 'Urgente', color: 'bg-rose-500' },
+                    { key: 'alta', label: 'Alta', color: 'bg-amber-500' },
+                    { key: 'normal', label: 'Normal', color: 'bg-slate-400' },
+                    { key: 'baja', label: 'Baja', color: 'bg-emerald-500' },
+                  ].map(p => (
+                    <button
+                      key={p.key}
+                      onClick={() => setPriorityFilter(p.key)}
+                      className={cn(
+                        "px-2 py-1 rounded-lg text-[9px] font-bold border transition-all cursor-pointer active:scale-[0.97] flex items-center gap-1 whitespace-nowrap",
+                        priorityFilter === p.key
+                          ? "border-[#0097A7] bg-[#0097A7]/5 text-[#0097A7]"
+                          : "border-slate-200/60 bg-white text-slate-500 hover:border-slate-300"
+                      )}
+                    >
+                      {p.color && <span className={cn("h-1.5 w-1.5 rounded-full shrink-0", p.color)} />}
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 

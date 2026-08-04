@@ -54,9 +54,8 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
         </button>
       </PopoverTrigger>
       <PopoverContent 
-        className="w-auto p-0 bg-white border border-slate-200/60 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] rounded-2xl" 
+        className="w-auto p-0 bg-white border border-slate-200/60 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] rounded-2xl z-50" 
         align="start"
-        side="top"
         sideOffset={8}
       >
         <div className="p-3 pb-0">

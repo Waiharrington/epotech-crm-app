@@ -85,7 +85,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
             )}
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-[280px] p-4 rounded-2xl border-slate-100 shadow-xl" align="start">
+        <PopoverContent className="w-[280px] p-4 rounded-2xl border-slate-100 shadow-xl z-50" align="start">
           
           {/* AM / PM Toggle */}
           <div className="flex p-1 bg-slate-100/80 rounded-xl mb-4">

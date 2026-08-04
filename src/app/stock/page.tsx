@@ -568,7 +568,7 @@ export default function StockPage() {
               </div>
 
               <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden">
-                <div className="overflow-auto">
+                <div className="hidden md:block overflow-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-slate-100">
@@ -584,10 +584,10 @@ export default function StockPage() {
                         <tr><td colSpan={5} className="text-center py-10"><Loader2 className="h-5 w-5 animate-spin mx-auto text-[#00C9E0]" /></td></tr>
                       ) : filteredHistory.length > 0 ? filteredHistory.map(move => (
                         <tr key={move.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                          <td className="px-4 py-3 text-base text-slate-400 whitespace-nowrap font-medium">
+                          <td className="px-4 py-3 text-sm text-slate-400 whitespace-nowrap font-medium">
 {new Date(move.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })} {new Date(move.created_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}
                           </td>
-                          <td className="px-4 py-3 text-base font-bold text-slate-700">
+                          <td className="px-4 py-3 text-sm font-bold text-slate-700">
                             {move.stock?.nombre || 'Item eliminado'}
                           </td>
                           <td className="px-4 py-3">
@@ -599,10 +599,10 @@ export default function StockPage() {
                                 {move.tipo === 'entrada' ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
                               </div>
                               <span className={cn(
-                                "text-base font-bold",
+                                "text-sm font-bold",
                                 move.tipo === 'entrada' ? 'text-emerald-600' : 'text-rose-600'
                               )}>
-                                {move.tipo === 'entrada' ? '+' : '-'}{move.cantidad} {move.stock?.unidad_medida}
+                                {move.tipo === 'entrada' ? '+' : '-'}{Math.abs(move.cantidad)} {move.stock?.unidad_medida}
                               </span>
                             </div>
                           </td>
@@ -610,20 +610,65 @@ export default function StockPage() {
                             {move.motivo}
                           </td>
                           <td className="px-4 py-3 text-right">
-                            <span className="text-base font-black text-[#0097A7] bg-[#E6F9FB] px-4 py-0.5 rounded-lg">
+                            <span className="text-sm font-black text-slate-700">
                               {move.cantidad_resultante}
                             </span>
                           </td>
                         </tr>
                       )) : (
                         <tr>
-                          <td colSpan={5} className="text-center py-16 text-slate-400 italic text-base">
+                          <td colSpan={5} className="text-center py-16 text-slate-400 italic text-sm">
                             No hay movimientos registrados.
                           </td>
                         </tr>
                       )}
                     </tbody>
                   </table>
+                </div>
+
+                {/* Mobile View */}
+                <div className="md:hidden flex flex-col gap-3 p-3 bg-slate-50/50">
+                  {loadingHistory ? (
+                    <div className="text-center py-10"><Loader2 className="h-5 w-5 animate-spin mx-auto text-[#00C9E0]" /></div>
+                  ) : filteredHistory.length > 0 ? filteredHistory.map(move => (
+                    <div key={move.id} className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm hover:shadow-md transition-shadow group/card">
+                      <div className="flex flex-col gap-2 mb-3">
+                        <div className="flex justify-between items-start">
+                          <span className="text-[14px] font-bold text-slate-700 leading-tight pr-2">{move.stock?.nombre || 'Item eliminado'}</span>
+                          <span className="text-[10px] font-bold text-slate-400 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-lg shrink-0">
+                            {new Date(move.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className={cn("h-6 w-6 rounded-full flex items-center justify-center border-2 border-white ring-2",
+                            move.tipo === 'entrada' ? 'bg-emerald-500 ring-emerald-100' : 'bg-rose-500 ring-rose-100'
+                          )}>
+                            {move.tipo === 'entrada' ? <ArrowUpRight className="h-3.5 w-3.5 text-white" /> : <ArrowDownRight className="h-3.5 w-3.5 text-white" />}
+                          </div>
+                          <span className={cn(
+                            "text-[15px] font-black",
+                            move.tipo === 'entrada' ? 'text-emerald-500' : 'text-rose-500'
+                          )}>
+                            {move.tipo === 'entrada' ? '+' : '-'}{Math.abs(move.cantidad)} {move.stock?.unidad_medida}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <p className="text-[13px] text-slate-600 font-medium line-clamp-2 leading-snug">{move.motivo}</p>
+                      
+                      <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100">
+                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Balance Resultante</span>
+                         <span className="text-[12px] font-black text-slate-700">{move.cantidad_resultante} <span className="text-[10px] font-semibold text-slate-400">{move.stock?.unidad_medida}</span></span>
+                      </div>
+                    </div>
+                  )) : (
+                    <div className="text-center py-10 text-slate-400 italic text-[13px]">
+                      No hay movimientos registrados.
+                    </div>
+                  )}
                 </div>
               </div>
             </>

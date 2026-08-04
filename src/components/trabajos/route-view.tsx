@@ -326,18 +326,18 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
 
         {/* Animated Truck - Mobile */}
         <div 
-          className="absolute left-[8px] z-20 transition-all duration-1000 ease-in-out"
+          className="absolute z-20 transition-all duration-1000 ease-in-out"
           style={{ 
-            top: `${16 + (nextJobIndex >= 0 ? nextJobIndex * 280 + 90 : sortedJobs.length * 280 + 20)}px`,
-            transform: 'translateY(-50%)'
+            left: '-8px',
+            top: `${16 + (nextJobIndex >= 0 ? nextJobIndex * 280 + 90 : sortedJobs.length * 280 + 20) - 30}px`
           }}
         >
-          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-[3px] border-white shadow-lg shadow-amber-300/50 flex items-center justify-center truck-animate">
-            <Truck className="h-5 w-5 text-white" />
+          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center truck-animate">
+            <Truck className="h-4 w-4 text-white" />
           </div>
           {nextJobIndex >= 0 && nextJobIndex < sortedJobs.length && (
-            <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap">
-              <span className="text-[7px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 shadow-sm">
+            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap">
+              <span className="text-[6px] font-black text-amber-600 bg-amber-50 px-1 py-0.5 rounded border border-amber-200 shadow-sm">
                 En ruta
               </span>
             </div>
@@ -494,12 +494,12 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
             <div 
               className="absolute z-30 transition-all duration-1000 ease-in-out pointer-events-none"
               style={{ 
-                left: `${48 + 64 + (nextJobIndex >= 0 ? nextJobIndex : sortedJobs.length) * 240 + 120 - 16}px`,
-                top: `${CARD_H + ROAD_H / 2 + 16 - 20}px`
+                left: `${48 + 64 + (nextJobIndex >= 0 ? nextJobIndex : sortedJobs.length) * 240 + 120 - 100}px`,
+                top: `${CARD_H + ROAD_H / 2 - 40}px`
               }}
             >
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-[3px] border-white shadow-lg shadow-amber-300/50 flex items-center justify-center truck-animate">
-                <Truck className="h-5 w-5 text-white" />
+              <div className="h-9 w-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center truck-animate">
+                <Truck className="h-4 w-4 text-white" />
               </div>
               {nextJobIndex >= 0 && nextJobIndex < sortedJobs.length && (
                 <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap">

@@ -360,13 +360,13 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                         {isActive && (
                           <div className="absolute inset-0 rounded-2xl sidebar-link-active z-0 animate-in fade-in zoom-in-95 duration-200" />
                         )}
+                        <div className={cn(
+                          "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out z-10",
+                          isActive 
+                            ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
+                            : "scale-y-0 opacity-0 group-hover:scale-y-[1.1] group-hover:opacity-40"
+                        )} />
                         <div className="flex items-center gap-4 relative z-10 w-full">
-                          <div className={cn(
-                            "absolute left-0 top-1/4 bottom-1/4 w-[3.5px] rounded-r-full bg-[#00C9E0] transition-all duration-300 origin-left ease-out z-10",
-                            isActive 
-                              ? "scale-y-[1.8] opacity-100 shadow-[0_0_10px_rgba(0,201,224,0.7)]" 
-                              : "scale-y-0 opacity-0 group-hover:scale-y-[1.1] group-hover:opacity-40"
-                          )} />
                           <item.icon className={cn(
                             "h-[20px] w-[20px] transition-all duration-300 relative z-10 flex-shrink-0",
                             isActive 

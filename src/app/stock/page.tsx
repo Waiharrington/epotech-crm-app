@@ -354,8 +354,8 @@ export default function StockPage() {
               {/* Mobile Filter Dropdown */}
               <div className="sm:hidden relative mt-2 sm:mt-0">
                 <Select value={typeFilter} onValueChange={setTypeFilter}>
-                  <SelectTrigger className="w-full bg-white border border-slate-200/60 rounded-xl h-11 px-4 text-xs font-bold text-slate-700 uppercase tracking-wider focus:ring-[#0097A7]/50 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-                    <div className="flex items-center gap-2">
+                  <SelectTrigger className="w-full bg-white border border-slate-200/60 rounded-xl h-14 px-5 text-sm font-bold text-slate-700 uppercase tracking-wider focus:ring-[#0097A7]/50 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                    <div className="flex items-center gap-3">
                       <Filter className="h-3.5 w-3.5 text-slate-400" />
                       <SelectValue />
                     </div>

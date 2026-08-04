@@ -763,11 +763,11 @@ export default function DashboardPage() {
                   className="text-[15px] xl:text-sm h-12 xl:h-11 px-4 rounded-xl border-slate-200/80 focus-visible:ring-[#0097A7] bg-white transition-all shadow-sm w-full font-medium placeholder:text-slate-400"
                 />
 
-                <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2.5">
+                  <div className="grid grid-cols-2 xl:flex xl:flex-row items-center gap-2 w-full xl:w-auto">
                     {/* Botón de Nota de Voz */}
-                    <div className="shrink-0">
-                      <VoiceReminderButton onCreated={() => fetchReminders()} />
+                    <div className="col-span-2 xl:col-span-1 shrink-0">
+                      <VoiceReminderButton onCreated={() => fetchReminders()} className="w-full" />
                     </div>
 
                     {/* Styled Popover Date Picker */}
@@ -775,7 +775,7 @@ export default function DashboardPage() {
                       <PopoverTrigger asChild>
                         <button
                           type="button"
-                          className="h-10 xl:h-9 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[13px] xl:text-xs font-bold text-slate-700 flex items-center gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                          className="w-full h-10 xl:h-9 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[13px] xl:text-xs font-bold text-slate-700 flex items-center justify-center xl:justify-start gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
                         >
                           <CalendarIcon className="h-3.5 w-3.5 xl:h-3 xl:w-3 text-[#0097A7]" />
                           <span>
@@ -805,7 +805,7 @@ export default function DashboardPage() {
                       <PopoverTrigger asChild>
                         <button
                           type="button"
-                          className="h-10 xl:h-9 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[13px] xl:text-xs font-bold text-slate-700 flex items-center gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                          className="w-full h-10 xl:h-9 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[13px] xl:text-xs font-bold text-slate-700 flex items-center justify-center xl:justify-start gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
                         >
                           <Clock className="h-3.5 w-3.5 xl:h-3 xl:w-3 text-[#0097A7]" />
                           <span>{formatTime12h(`${quickTime}:00`)}</span>

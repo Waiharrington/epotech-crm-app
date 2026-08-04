@@ -100,7 +100,7 @@ export default function CotizacionesPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen md:h-screen md:max-h-screen bg-[#F0F5FA] px-4.5 pb-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-5 xl:p-3.5 2xl:p-6 gap-3.5 xl:gap-2.5 2xl:gap-4 relative md:overflow-hidden">
+    <div className="flex flex-col min-h-screen md:h-screen md:max-h-screen bg-[#F0F5FA] px-4.5 pb-0 md:pb-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-5 xl:p-3.5 2xl:p-6 gap-3.5 xl:gap-2.5 2xl:gap-4 relative md:overflow-hidden">
       
       {/* Premium Dark Navy Header */}
       <header className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-3 md:p-4 shrink-0 relative z-30 shadow-xl">
@@ -204,7 +204,7 @@ export default function CotizacionesPage() {
         </div>
 
         {/* Modern List */}
-        <div className="flex-1 overflow-y-auto min-h-0 pt-1 pb-20 px-1 -mx-1">
+        <div className="flex-1 overflow-y-auto min-h-0 pt-1 pb-4 md:pb-2 px-1 -mx-1">
           <div className="flex flex-col gap-2.5">
             {loading && !cotizaciones.length ? (
               <div className="flex flex-col items-center justify-center h-40 gap-3">

@@ -374,14 +374,14 @@ export default function AjustesPage() {
             </div>
             
             <div className="space-y-2.5">
-              <div className="flex items-center justify-between p-3 bg-slate-50/50 rounded-xl border border-slate-100/60">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-slate-50/50 rounded-xl border border-slate-100/60">
                 <div className="space-y-0.5">
                   <Label className="text-xs font-bold text-slate-700">Sincronización con el Dispositivo</Label>
                   <p className="text-[10px] text-slate-400">Activa el permiso en el navegador para recibir avisos.</p>
                 </div>
                 <NotificationManager />
               </div>
-              <div className="flex items-center justify-between p-3 bg-slate-50/50 rounded-xl border border-slate-100/60">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-slate-50/50 rounded-xl border border-slate-100/60">
                 <div className="space-y-0.5">
                   <Label className="text-xs font-bold text-slate-700">Alertas de Stock</Label>
                   <p className="text-[10px] text-slate-400">Notificación cuando un insumo llegue al nivel crítico.</p>

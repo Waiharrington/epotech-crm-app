@@ -297,10 +297,10 @@ export default function LoginPage() {
           <div className="lg:hidden w-full max-w-[485px] text-center flex flex-col items-center pt-2 pb-2 sm:pt-5 sm:pb-5 px-4 z-20 flex-shrink-0 login-greeting-padding mb-4 sm:mb-0">
             {/* Accent Line - Resized for premium proportions */}
             <div className="w-16 h-[4px] bg-[#00C9E0] rounded-full mb-2 sm:mb-3" />
-            <span className="text-[20px] sm:text-[30px] md:text-[44px] font-black tracking-tight text-white uppercase block leading-tight">
+            <span className="text-[26px] sm:text-[30px] md:text-[44px] font-black tracking-tight text-white uppercase block leading-tight">
               Gestión Inteligente
             </span>
-            <p className="text-[10px] sm:text-[14px] font-black text-[#00C9E0] tracking-[0.28em] uppercase mt-1 sm:mt-2">
+            <p className="text-[12px] sm:text-[14px] font-black text-[#00C9E0] tracking-[0.28em] uppercase mt-1 sm:mt-2">
               Portal CRM
             </p>
           </div>

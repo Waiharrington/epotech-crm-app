@@ -338,7 +338,8 @@ export default function StockPage() {
 
       <main className="flex flex-col md:flex-1 md:min-h-0 gap-3 relative z-10">
         
-        {/* Statistics Grid */}
+        {/* Statistics Grid - only on Inventario tab */}
+        {activeTab === 'inventario' && (
         <div className="p-0.5 -m-0.5 overflow-visible shrink-0">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {[
@@ -377,6 +378,7 @@ export default function StockPage() {
             ))}
           </div>
         </div>
+        )}
 
         {/* Tab + Type Filter */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 shrink-0">
@@ -616,15 +618,26 @@ export default function StockPage() {
           ) : (
             /* History Tab */
             <>
-              {/* Stats Summary */}
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex flex-col justify-center shadow-sm">
-                  <span className="text-emerald-600/70 text-[11px] font-bold uppercase tracking-wider mb-1">Total Entradas</span>
-                  <span className="text-emerald-600 text-2xl font-black leading-none">+{parseFloat(historySummary.entradas.toFixed(2))}</span>
+              {/* Compact Stats Summary */}
+              <div className="flex items-center gap-3 mb-3 bg-white border border-slate-200/60 rounded-xl p-3">
+                <div className="flex items-center gap-2 flex-1">
+                  <div className="h-7 w-7 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
+                    <ArrowUpRight className="h-3.5 w-3.5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Entradas</span>
+                    <span className="text-[15px] font-black text-emerald-600 leading-none">+{parseFloat(historySummary.entradas.toFixed(2))}</span>
+                  </div>
                 </div>
-                <div className="bg-rose-50 border border-rose-100 rounded-2xl p-4 flex flex-col justify-center shadow-sm">
-                  <span className="text-rose-600/70 text-[11px] font-bold uppercase tracking-wider mb-1">Total Salidas</span>
-                  <span className="text-rose-600 text-2xl font-black leading-none">-{parseFloat(historySummary.salidas.toFixed(2))}</span>
+                <div className="w-px h-8 bg-slate-200" />
+                <div className="flex items-center gap-2 flex-1">
+                  <div className="h-7 w-7 rounded-lg bg-rose-100 flex items-center justify-center shrink-0">
+                    <ArrowDownRight className="h-3.5 w-3.5 text-rose-600" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Salidas</span>
+                    <span className="text-[15px] font-black text-rose-600 leading-none">-{parseFloat(historySummary.salidas.toFixed(2))}</span>
+                  </div>
                 </div>
               </div>
 

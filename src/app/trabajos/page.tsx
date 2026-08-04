@@ -263,7 +263,7 @@ function TrabajosContent() {
 
               <Link
                 href="/trabajos/archivo"
-                className="flex items-center gap-1.5 h-11 px-4 text-base font-bold rounded-xl text-white/80 bg-white/10 border border-white/15 hover:bg-white/20 hover:text-white transition-all backdrop-blur-md"
+                className="flex items-center gap-1.5 h-9 px-3.5 text-[13px] font-semibold rounded-lg text-white/80 bg-white/10 border border-white/15 hover:bg-white/20 hover:text-white transition-all backdrop-blur-md"
               >
                 <Archive className="h-4 w-4" /> <span className="hidden sm:inline">Archivo</span>
               </Link>
@@ -273,7 +273,7 @@ function TrabajosContent() {
                   setShowWizard(true)
                 }}
                 size="sm"
-                className="h-11 px-4 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
+                className="h-9 px-4 text-sm font-bold rounded-lg bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
               >
                 <Plus className="mr-1.5 h-4 w-4" />
                 Nuevo Trabajo
@@ -282,14 +282,14 @@ function TrabajosContent() {
           </div>
 
           {/* Search Bar + View Toggle */}
-          <div className="relative pt-3 border-t border-white/[0.06] flex flex-col md:flex-row gap-3 items-start md:items-center justify-between">
-            <div className="flex items-center gap-3 w-full md:w-auto flex-wrap">
-              <div className="flex items-center gap-1 bg-white/[0.06] p-1 rounded-xl border border-white/10 backdrop-blur-md shrink-0">
+          <div className="relative pt-3 border-t border-white/[0.06] flex flex-col xl:flex-row gap-3 items-start xl:items-center justify-between">
+            <div className="flex items-center gap-3 w-full xl:w-auto flex-wrap max-w-full">
+              <div className="flex items-center gap-0.5 sm:gap-1 bg-white/[0.06] p-1 rounded-xl border border-white/10 backdrop-blur-md shrink-0 max-w-full overflow-x-auto no-scrollbar">
                 <button
                   type="button"
                   onClick={() => setView('calendar')}
                   className={cn(
-                    "flex items-center gap-1.5 h-11 px-4 rounded-lg text-base font-bold uppercase tracking-wider transition-all",
+                    "flex items-center gap-1 sm:gap-1.5 h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all shrink-0 whitespace-nowrap",
                     view === 'calendar'
                       ? "bg-white/15 text-white shadow-sm"
                       : "text-slate-400 hover:text-white hover:bg-white/10"
@@ -301,7 +301,7 @@ function TrabajosContent() {
                   type="button"
                   onClick={() => setView('list')}
                   className={cn(
-                    "flex items-center gap-1.5 h-11 px-4 rounded-lg text-base font-bold uppercase tracking-wider transition-all",
+                    "flex items-center gap-1 sm:gap-1.5 h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all shrink-0 whitespace-nowrap",
                     view === 'list'
                       ? "bg-white/15 text-white shadow-sm"
                       : "text-slate-400 hover:text-white hover:bg-white/10"
@@ -313,7 +313,7 @@ function TrabajosContent() {
                   type="button"
                   onClick={() => setView('route')}
                   className={cn(
-                    "flex items-center gap-1.5 h-11 px-4 rounded-lg text-base font-bold uppercase tracking-wider transition-all",
+                    "flex items-center gap-1 sm:gap-1.5 h-8 sm:h-9 px-2.5 sm:px-3.5 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-wider transition-all shrink-0 whitespace-nowrap",
                     view === 'route'
                       ? "bg-white/15 text-white shadow-sm"
                       : "text-slate-400 hover:text-white hover:bg-white/10"
@@ -325,18 +325,18 @@ function TrabajosContent() {
 
               {/* Date picker for Route view */}
               {view === 'route' && (
-                <div suppressHydrationWarning className="flex items-center gap-2 bg-white/[0.06] p-1 pl-3 rounded-xl border border-white/10 backdrop-blur-md shrink-0">
-                  <span suppressHydrationWarning className="text-[11px] font-bold text-white/50 uppercase tracking-widest">Día</span>
+                <div suppressHydrationWarning className="flex items-center gap-1.5 sm:gap-2 bg-white/[0.06] p-1 pl-2 sm:pl-3 rounded-xl border border-white/10 backdrop-blur-md shrink-0 max-w-full overflow-x-auto no-scrollbar">
+                  <span suppressHydrationWarning className="text-[10px] sm:text-[11px] font-bold text-white/50 uppercase tracking-widest shrink-0">Día</span>
                   <DatePicker
                     value={format(routeDate, 'yyyy-MM-dd')}
                     onChange={(newDate) => {
                       if (newDate) setRouteDate(new Date(newDate + 'T00:00:00'))
                     }}
-                    className="bg-white/10 border-white/20 text-white h-11 text-base w-32 shadow-none"
+                    buttonClassName="bg-white/10 border-white/20 text-white h-8 sm:h-9 px-2 sm:px-3 text-xs sm:text-sm w-auto min-w-[105px] sm:min-w-[115px] shadow-none shrink-0"
                   />
                   <button
                     onClick={handleResetJobs}
-                    className="text-[10px] font-bold text-white/50 hover:text-white/80 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-all uppercase tracking-wider"
+                    className="text-[9px] sm:text-[10px] font-bold text-white/50 hover:text-white/80 bg-white/10 hover:bg-white/20 px-2.5 sm:px-3 py-1.5 h-8 sm:h-9 rounded-lg transition-all uppercase tracking-wider shrink-0"
                   >
                     Reset
                   </button>
@@ -345,7 +345,7 @@ function TrabajosContent() {
 
               {/* Period Tabs for Calendar */}
               {view === 'calendar' && (
-                <div className="flex items-center gap-1 bg-white/[0.03] p-1 rounded-xl border border-white/5 backdrop-blur-md">
+                <div className="flex items-center gap-1 bg-white/[0.03] p-1 rounded-xl border border-white/5 backdrop-blur-md max-w-full overflow-x-auto no-scrollbar shrink-0">
                   {[
                     { value: 'day', label: 'Día' },
                     { value: 'week', label: 'Sem' },
@@ -358,7 +358,7 @@ function TrabajosContent() {
                       type="button"
                       onClick={() => setCalendarViewMode(p.value as any)}
                       className={cn(
-                        "flex items-center h-11 px-4.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0",
+                        "flex items-center h-8 px-3.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0",
                         calendarViewMode === p.value
                           ? "bg-[#00C9E0]/20 text-[#00C9E0] border border-[#00C9E0]/30 shadow-sm"
                           : "text-slate-400 hover:text-white hover:bg-white/10 border border-transparent"
@@ -372,7 +372,7 @@ function TrabajosContent() {
 
               {/* Period Tabs for List */}
               {view === 'list' && (
-                <div className="flex items-center gap-1 bg-white/[0.03] p-1 rounded-xl border border-white/5 backdrop-blur-md">
+                <div className="flex items-center gap-1 bg-white/[0.03] p-1 rounded-xl border border-white/5 backdrop-blur-md max-w-full overflow-x-auto no-scrollbar shrink-0">
                   {[
                     { value: 'all', label: 'Todos' },
                     { value: 'week', label: 'Sem' },
@@ -385,7 +385,7 @@ function TrabajosContent() {
                       type="button"
                       onClick={() => setListDateFilter(p.value as any)}
                       className={cn(
-                        "flex items-center h-11 px-4.5 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0",
+                        "flex items-center h-8 px-3.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0",
                         listDateFilter === p.value
                           ? "bg-[#00C9E0]/20 text-[#00C9E0] border border-[#00C9E0]/30 shadow-sm"
                           : "text-slate-400 hover:text-white hover:bg-white/10 border border-transparent"
@@ -400,14 +400,14 @@ function TrabajosContent() {
               {/* Service Filter Dropdown */}
               {view === 'list' && (
                 <Select value={serviceFilter} onValueChange={setServiceFilter}>
-                  <SelectTrigger className="h-11 w-auto min-w-[120px] px-4.5 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white/[0.06] border border-white/10 text-white hover:bg-white/10 transition-all backdrop-blur-md data-[placeholder]:text-slate-400">
+                  <SelectTrigger className="h-9 w-auto min-w-[120px] px-3.5 rounded-lg text-[11px] font-bold uppercase tracking-wider bg-white/[0.06] border border-white/10 text-white hover:bg-white/10 transition-all backdrop-blur-md data-[placeholder]:text-slate-400">
                     <Filter className="h-3 w-3 mr-1 text-[#00C9E0]" />
                     <SelectValue placeholder="Servicio" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border border-slate-200/80 shadow-lg bg-white">
-                    <SelectItem value="all" className="text-base font-semibold rounded-lg">Todos los servicios</SelectItem>
+                    <SelectItem value="all" className="text-sm font-semibold rounded-lg">Todos los servicios</SelectItem>
                     {Array.from(new Set(trabajos.map(t => t.catalogo_servicios?.nombre).filter(Boolean))).map(service => (
-                      <SelectItem key={service} value={service!} className="text-base font-semibold rounded-lg">{service}</SelectItem>
+                      <SelectItem key={service} value={service!} className="text-sm font-semibold rounded-lg">{service}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -418,7 +418,7 @@ function TrabajosContent() {
                 <Popover>
                   <PopoverTrigger asChild>
                     <button
-                      className="flex items-center gap-2 h-11 px-4 rounded-xl bg-white/[0.06] border border-white/10 text-base font-bold text-white hover:bg-white/10 transition-all backdrop-blur-md"
+                      className="flex items-center gap-2 h-9 px-3.5 rounded-lg bg-white/[0.06] border border-white/10 text-[13px] font-semibold text-white hover:bg-white/10 transition-all backdrop-blur-md"
                     >
                       <CalendarDays className="h-3.5 w-3.5" />
                       {customDateRange?.start ? (
@@ -435,10 +435,11 @@ function TrabajosContent() {
                       )}
                     </button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 max-w-[calc(100vw-2rem)] overflow-x-auto" align="start">
+                  <PopoverContent className="w-auto p-0 max-w-[calc(100vw-2rem)] overflow-x-auto" align="end" sideOffset={8}>
                     <CalendarPicker
                       initialFocus
                       mode="range"
+                      numberOfMonths={2}
                       defaultMonth={customDateRange?.start}
                       selected={{
                         from: customDateRange?.start,
@@ -459,11 +460,11 @@ function TrabajosContent() {
               )}
             </div>
 
-            <div className="relative w-full md:max-w-xs shrink-0">
+            <div className="relative w-full xl:max-w-xs shrink-0">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#00C9E0]/70 pointer-events-none z-10" />
               <Input
                 placeholder="Buscar trabajo, cliente o servicio..."
-                className="pl-9 h-11 text-base rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
+                className="pl-9 h-9 text-[13px] rounded-lg bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />

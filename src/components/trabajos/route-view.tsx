@@ -310,7 +310,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
       const containerRect = mobileContainerRef.current.getBoundingClientRect()
       setTruckStyle({
         top: rect.top - containerRect.top + mobileContainerRef.current.scrollTop,
-        left: rect.left - containerRect.left + (rect.width - 32) / 2
+        left: rect.left - containerRect.left + (rect.width - 40) / 2
       })
     }
   }, [truckPosition])
@@ -328,8 +328,8 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
       if (container) {
         const containerRect = container.getBoundingClientRect()
         setDesktopTruckStyle({
-          top: rect.top - containerRect.top + (rect.height - 36) / 2,
-          left: rect.left - containerRect.left + (rect.width - 36) / 2 + container.scrollLeft
+          top: rect.top - containerRect.top + (rect.height - 44) / 2,
+          left: rect.left - containerRect.left + (rect.width - 44) / 2 + container.scrollLeft
         })
       }
     }
@@ -342,13 +342,16 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
     } else {
       targetEl = tabletNodeRefs.current[truckPosition]
     }
-    if (targetEl && tabletContainerRef.current) {
-      const rect = targetEl.getBoundingClientRect()
-      const containerRect = tabletContainerRef.current.getBoundingClientRect()
-      setTabletTruckStyle({
-        top: rect.top - containerRect.top + tabletContainerRef.current.scrollTop + (rect.height - 32) / 2,
-        left: rect.left - containerRect.left + (rect.width - 32) / 2
-      })
+    if (targetEl) {
+      const offsetParent = targetEl.closest('.relative.w-full') || tabletContainerRef.current?.firstElementChild
+      if (offsetParent) {
+        const parentRect = offsetParent.getBoundingClientRect()
+        const rect = targetEl.getBoundingClientRect()
+        setTabletTruckStyle({
+          top: rect.top - parentRect.top + (rect.height - 40) / 2,
+          left: rect.left - parentRect.left + (rect.width - 40) / 2
+        })
+      }
     }
   }, [truckPosition])
 
@@ -423,8 +426,8 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
         </div>
 
         {/* Start Point */}
-        <div ref={startRef} className="w-full flex items-center gap-3 mb-4 pl-[14px] relative z-10">
-          <div className={cn(
+        <div className="w-full flex items-center gap-3 mb-4 pl-[14px] relative z-10">
+          <div ref={startRef} className={cn(
             "h-10 w-10 shrink-0 rounded-full border-[3px] shadow-md flex items-center justify-center transition-all duration-500",
             truckPosition === -1 
               ? "bg-gradient-to-br from-amber-400 to-amber-500 border-amber-400 shadow-amber-200/50" 
@@ -528,13 +531,11 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
           </div>
 
           {/* Start node */}
-          <div 
-            ref={el => { tabletStartRef.current = el }}
-            className="absolute left-1/2 -translate-x-1/2 z-20" 
-            style={{ top: '10px' }}
-          >
-            <div className={cn(
-              "h-10 w-10 rounded-full border-[3px] shadow-md flex items-center justify-center transition-all duration-500",
+          <div className="absolute left-1/2 -translate-x-1/2 z-20 flex flex-col items-center" style={{ top: '10px' }}>
+            <div 
+              ref={el => { tabletStartRef.current = el }}
+              className={cn(
+                "h-10 w-10 rounded-full border-[3px] shadow-md flex items-center justify-center transition-all duration-500",
               truckPosition === -1 
                 ? "bg-gradient-to-br from-amber-400 to-amber-500 border-amber-400 shadow-amber-200/50" 
                 : "border-emerald-300 bg-emerald-100"

@@ -121,20 +121,52 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
     }
   }
 
+  const urlBase64ToUint8Array = (base64String: string) => {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4)
+    const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/')
+    const rawData = window.atob(base64)
+    const outputArray = new Uint8Array(rawData.length)
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i)
+    }
+    return outputArray
+  }
+
   const handleRequestPermission = async () => {
-    if (!('Notification' in window)) {
-      toast.error('Este navegador no soporta notificaciones de escritorio.')
+    if (!('Notification' in window) || !('serviceWorker' in navigator)) {
+      toast.error('Este navegador no soporta notificaciones push en segundo plano.')
       return
     }
     try {
       const result = await Notification.requestPermission()
       setNotificationPermission(result)
       if (result === 'granted') {
-        toast.success('¡Notificaciones de escritorio activadas!')
-        new Notification('Epotech CRM', { body: 'Las notificaciones del sistema están activadas.' })
+        const registration = await navigator.serviceWorker.ready
+        
+        let subscription = await registration.pushManager.getSubscription()
+        if (!subscription) {
+          const publicVapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+          if (!publicVapidKey) {
+            toast.success('Notificaciones locales activas (falta conf push)')
+            return
+          }
+          subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+          })
+        }
+        
+        await fetch('/api/push/subscribe', {
+          method: 'POST',
+          body: JSON.stringify(subscription),
+          headers: { 'Content-Type': 'application/json' }
+        })
+
+        toast.success('¡Notificaciones en segundo plano activadas!')
       }
     } catch (e) {
       console.error('Error requesting notification permission', e)
+      toast.error('Ocurrió un error al activar notificaciones.')
     }
   }
 
@@ -248,36 +280,22 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-none">
                   Gestión de Recordatorios
                 </h1>
-                <p className="text-slate-300/80 text-base hidden sm:block xl:text-[11px] 2xl:text-base mt-1 font-medium">
-                  Agenda alertas y notificaciones para no olvidar compromisos importantes.
+                <p className="text-slate-300/80 text-base hidden sm:block xl:text-[11px] 2xl:text-base mt-1 font-medium truncate max-w-[280px] md:max-w-md lg:max-w-xl">
+                  Organiza tus alertas y no olvides ningún compromiso.
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2 shrink-0 w-full lg:w-auto">
-              {notificationPermission === 'granted' ? (
-                <div className="flex items-center justify-center sm:justify-start gap-1.5 h-10 px-4 rounded-xl bg-emerald-500/10 border border-emerald-400/20 text-emerald-400 text-base font-bold flex-1 sm:flex-none">
-                  <Bell className="h-3.5 w-3.5" /> Notificaciones Activas
-                </div>
-              ) : (
-                <button 
-                  onClick={handleRequestPermission}
-                  className="flex items-center justify-center sm:justify-start gap-1.5 h-10 px-4 rounded-xl bg-white/10 border border-white/15 text-white/70 hover:text-white hover:bg-white/15 text-base font-bold transition-all backdrop-blur-md cursor-pointer flex-1 sm:flex-none"
-                >
-                  <BellOff className="h-3.5 w-3.5 animate-pulse" />
-                  Activar Avisos
-                </button>
-              )}
-
-              <div className="flex-1 sm:flex-none">
-                <VoiceReminderButton onCreated={fetchReminders} className="w-full" />
-              </div>
+            <div className="grid grid-cols-2 sm:flex sm:flex-row sm:flex-nowrap items-stretch sm:items-center gap-2.5 shrink-0 w-full lg:w-auto">
+              <VoiceReminderButton onCreated={fetchReminders} className="w-full sm:w-auto h-11 text-[13px] sm:text-base px-2 sm:px-4.5" />
 
               <button 
                 onClick={() => setShowCreateModal(true)}
-                className="flex items-center justify-center sm:justify-start gap-1.5 h-10 px-4.5 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] hover:from-[#00b4ca] hover:to-[#00d4f0] text-white text-base font-black shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98] flex-1 sm:flex-none"
+                className="flex items-center justify-center gap-1 sm:gap-1.5 h-11 px-2 sm:px-5 rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] hover:from-[#00b4ca] hover:to-[#00d4f0] text-white text-[13px] sm:text-base font-black shadow-lg shadow-[#00C9E0]/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] w-full sm:w-auto"
               >
-                <Plus className="h-3.5 w-3.5" /> Nuevo Recordatorio
+                <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> 
+                <span className="sm:hidden">Nuevo</span>
+                <span className="hidden sm:inline">Nuevo Recordatorio</span>
               </button>
             </div>
           </div>
@@ -292,6 +310,31 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
           </div>
         ) : (
           <div className="flex-1 overflow-y-auto min-h-0 pb-4 md:pb-4 md:pb-20 space-y-3">
+            {/* Notification Permission Banner */}
+            {notificationPermission !== 'granted' && (
+              <div className="bg-slate-50 border border-slate-200/60 rounded-2xl p-4 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-1 h-full bg-[#0097A7]" />
+                <div className="flex flex-col md:flex-row gap-3 items-start justify-between">
+                  <div className="flex items-start gap-3">
+                    <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-white border border-slate-200/60 shrink-0">
+                      <BellOff className="h-4 w-4 text-slate-500" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-base text-slate-800">Activa las notificaciones</h4>
+                      <p className="text-base text-slate-500 mt-1 leading-relaxed">
+                        Recibe avisos para no perder ningún seguimiento importante.
+                      </p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={handleRequestPermission}
+                    className="flex items-center gap-1.5 h-11 px-4 rounded-lg bg-slate-800 text-white text-base font-bold hover:bg-slate-700 transition-colors shrink-0 cursor-pointer w-full md:w-auto justify-center md:justify-start"
+                  >
+                    Activar Avisos
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Local Storage Warning */}
             {isUsingLocalStorage && (
@@ -319,38 +362,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
               </div>
             )}
 
-            {/* Stat Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0">
-              {[
-                { label: 'Pendientes', value: pendingCount, icon: ListTodo, color: 'amber', borderColor: '#f59e0b' },
-                { label: 'Completados', value: completedCount, icon: CheckCheck, color: 'emerald', borderColor: '#10b981' },
-                { label: 'Vencidos', value: overdueCount, icon: AlertOctagon, color: 'rose', borderColor: '#f43f5e' },
-              ].map((stat) => (
-                <div
-                  key={stat.label}
-                  className="bg-white border border-slate-200/60 rounded-2xl p-3.5 shadow-sm hover:shadow-md transition-all"
-                  style={{ borderLeftWidth: '4px', borderLeftColor: stat.borderColor }}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">{stat.label}</p>
-                    <div className={cn(
-                      "h-11 w-11 rounded-lg flex items-center justify-center border",
-                      stat.color === 'amber' ? 'bg-amber-50 border-amber-200/60 text-amber-600' :
-                      stat.color === 'emerald' ? 'bg-emerald-50 border-emerald-200/60 text-emerald-600' :
-                      'bg-rose-50 border-rose-200/60 text-rose-600'
-                    )}>
-                      <stat.icon className="h-3.5 w-3.5" />
-                    </div>
-                  </div>
-                  <p className={cn(
-                    "text-xl font-black",
-                    stat.color === 'amber' ? 'text-amber-600' :
-                    stat.color === 'emerald' ? 'text-emerald-600' :
-                    'text-rose-600'
-                  )}>{stat.value}</p>
-                </div>
-              ))}
-            </div>
+
 
             {/* Filters Row */}
             <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3 shrink-0">
@@ -470,7 +482,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
 
       {/* Create Reminder Modal */}
       <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
-        <DialogContent className="p-0 gap-0 max-w-lg rounded-2xl border-slate-200/60 shadow-2xl">
+        <DialogContent className="p-0 gap-0 sm:max-w-lg rounded-2xl border-slate-200/60 shadow-2xl">
           {/* Dark Navy Header */}
           <div className="sidebar-premium-bg px-6 py-4 relative rounded-t-2xl">
             <div className="relative z-10 flex items-center gap-3">
@@ -504,7 +516,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
             {/* Priority */}
             <div className="space-y-1.5">
               <label className="text-base font-bold uppercase tracking-wider text-slate-500">Prioridad</label>
-              <div className="flex gap-1.5">
+              <div className="flex flex-wrap gap-1.5">
                 {[
                   { value: 'baja', label: 'Baja', color: 'bg-emerald-500' },
                   { value: 'normal', label: 'Normal', color: 'bg-slate-400' },
@@ -530,7 +542,7 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
             </div>
 
             {/* Date + Time */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <label className="text-base font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                   <CalendarIcon className="h-3 w-3" /> Fecha

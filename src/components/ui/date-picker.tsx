@@ -13,10 +13,11 @@ interface DatePickerProps {
   onChange: (date: string) => void
   placeholder?: string
   className?: string
+  buttonClassName?: string
   disabled?: boolean
 }
 
-export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha', className, disabled }: DatePickerProps) {
+export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha', className, buttonClassName, disabled }: DatePickerProps) {
   const [open, setOpen] = React.useState(false)
   const [pos, setPos] = React.useState({ top: 0, left: 0 })
   const ref = React.useRef<HTMLDivElement>(null)
@@ -141,13 +142,14 @@ export function DatePicker({ value, onChange, placeholder = 'Seleccionar fecha',
         disabled={disabled}
         onClick={openPicker}
         className={cn(
-          "flex h-11 w-full items-center justify-between rounded-xl border border-slate-200/60 bg-white px-4 py-2 text-base font-semibold text-slate-700 transition-all hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-2 focus:ring-[#0097A7]/20 focus:outline-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
+          "flex h-11 w-full items-center justify-between gap-1.5 rounded-xl border border-slate-200/60 bg-white px-4 py-2 text-base font-semibold text-slate-700 transition-all hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-2 focus:ring-[#0097A7]/20 focus:outline-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
+          buttonClassName
         )}
       >
-        <span className={cn(!date && "text-slate-400")}>
+        <span className={cn("truncate", !date && "opacity-60")}>
           {date ? format(date, 'dd/MM/yyyy', { locale: es }) : placeholder}
         </span>
-        <CalendarIcon className="h-3.5 w-3.5 text-slate-400" />
+        <CalendarIcon className="h-3.5 w-3.5 shrink-0 opacity-50" />
       </button>
       {dropdown}
     </div>

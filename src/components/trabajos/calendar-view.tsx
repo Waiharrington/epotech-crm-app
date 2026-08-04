@@ -39,6 +39,13 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { 
   DndContext, 
   DragEndEvent,
@@ -83,13 +90,53 @@ const formatTime12h = (time: string) => {
 }
 
 // ----------------------------------------------------------------------
-// Draggable Job Pill Component
+// Draggable Job Pill (Normal & Compact)
 // ----------------------------------------------------------------------
-function DraggableJobPill({ job, onClick }: { job: Trabajo; onClick: () => void }) {
+function DraggableJobPill({ job, onClick, isCompact }: { job: TrabajoWithDetails, onClick: () => void, isCompact?: boolean }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: job.id,
     data: { job }
   })
+
+  if (isCompact) {
+    return (
+      <div 
+        ref={setNodeRef}
+        onClick={(e) => {
+          if (!isDragging) {
+            e.stopPropagation();
+            onClick();
+          }
+        }}
+        className={cn(
+          "group flex items-center gap-1.5 p-1 px-1.5 rounded border shadow-sm transition-all cursor-pointer relative min-w-0",
+          getStatusColor(job.estado),
+          isDragging 
+            ? "opacity-40 border-dashed bg-slate-100" 
+            : "hover:shadow-md hover:brightness-105"
+        )}
+        title={job.clientes?.nombre ? `${job.clientes.nombre} ${job.clientes.apellido || ''} - ${job.catalogo_servicios?.nombre || 'Personalizado'}` : 'Sin cliente'}
+      >
+        <button 
+          type="button" 
+          {...attributes} 
+          {...listeners} 
+          onClick={(e) => e.stopPropagation()} 
+          className="shrink-0 text-inherit/50 hover:text-inherit cursor-grab"
+        >
+          <GripVertical className="h-3 w-3" />
+        </button>
+        <div className="flex-1 min-w-0 flex items-center gap-1.5 truncate">
+          <span className="text-[10px] font-extrabold opacity-80 shrink-0 whitespace-nowrap">
+            {job.hora_servicio ? formatTime12h(job.hora_servicio).replace(/\s?(am|pm)/i, '') : '--'}
+          </span>
+          <span className="text-[10px] sm:text-[11px] font-bold truncate">
+            {job.clientes?.nombre ? `${job.clientes.nombre} ${job.clientes.apellido?.charAt(0) || ''}` : 'Sin cliente'}
+          </span>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div 
@@ -119,30 +166,32 @@ function DraggableJobPill({ job, onClick }: { job: Trabajo; onClick: () => void 
       </button>
 
       <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-        <p className="text-[13px] font-bold leading-tight break-words">
+        <p className="text-[11px] sm:text-[12px] font-bold leading-tight break-words whitespace-normal">
           {job.clientes?.nombre ? `${job.clientes.nombre} ${job.clientes.apellido || ''}` : 'Sin cliente'}
         </p>
         
-        <div className="flex items-start justify-between gap-1">
-          <p className="text-[11px] font-medium opacity-85 break-words line-clamp-2">
-            {job.catalogo_servicios?.nombre || 'Personalizado'}
-          </p>
+        <p className="text-[10px] sm:text-[10px] font-medium opacity-85 leading-tight break-words whitespace-normal">
+          {job.catalogo_servicios?.nombre || 'Personalizado'}
+        </p>
+
+        <div className="flex items-center justify-between gap-1 mt-0.5 flex-wrap">
+          <div className="flex items-center gap-1 shrink min-w-0 flex-wrap">
+            <div className="flex items-center gap-1 text-[9px] sm:text-[10px] font-bold opacity-75 bg-white/40 px-1.5 py-0.5 rounded-sm shrink min-w-0">
+              <Clock className="h-2.5 w-2.5 shrink-0" />
+              <span className="break-normal whitespace-normal text-left">
+                {job.hora_servicio ? formatTime12h(job.hora_servicio) : 'Sin hora'}
+              </span>
+            </div>
+            {job.ayudantes && (
+              <div className="flex items-center gap-1 text-[9px] sm:text-[10px] font-bold opacity-90 bg-black/10 px-1.5 py-0.5 rounded-sm shrink-0" title={`Equipo: ${job.ayudantes}`}>
+                <Users className="h-2.5 w-2.5" />
+              </div>
+            )}
+          </div>
           {job.precio_acordado && (
-            <span className="text-base font-black tabular-nums shrink-0 opacity-90">
+            <span className="text-[11px] sm:text-xs font-black tabular-nums shrink-0 opacity-90">
               ${job.precio_acordado}
             </span>
-          )}
-        </div>
-
-        <div className="flex items-center gap-1 mt-0.5">
-          <div className="flex items-center gap-1 text-[11px] font-bold opacity-75 bg-white/40 px-1.5 py-0.5 rounded-sm">
-            <Clock className="h-2.5 w-2.5" />
-            {job.hora_servicio ? formatTime12h(job.hora_servicio) : 'Sin hora'}
-          </div>
-          {job.ayudantes && (
-            <div className="flex items-center gap-1 text-[11px] font-bold opacity-90 bg-black/10 px-1.5 py-0.5 rounded-sm" title={`Equipo: ${job.ayudantes}`}>
-              <Users className="h-2.5 w-2.5" />
-            </div>
           )}
         </div>
       </div>
@@ -193,7 +242,7 @@ function DailyTimelineView({
 
   return (
     <div 
-      className="max-w-4xl mx-auto w-full p-2 sm:p-6 cursor-pointer"
+      className="max-w-5xl mx-auto w-full px-4 sm:px-8 md:px-12 py-4 sm:py-8 cursor-pointer"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           onDayClick?.(date)
@@ -208,8 +257,8 @@ function DailyTimelineView({
         return (
           <div key={job.id} className="relative flex group">
             {/* Timeline Column */}
-            <div className="w-16 sm:w-20 shrink-0 flex flex-col items-end pr-4 sm:pr-5 py-4 border-r-2 border-slate-100 relative">
-              <span className="text-base sm:text-base font-semibold text-slate-700 leading-none">
+            <div className="w-20 sm:w-28 shrink-0 flex flex-col items-end pr-4 sm:pr-7 py-4 border-r-2 border-slate-100 relative">
+              <span className="text-base sm:text-lg font-semibold text-slate-700 leading-none">
                 {timeVal}
               </span>
               <span className="text-[11px] sm:text-base font-bold text-slate-400 uppercase tracking-wider mt-0.5">
@@ -221,7 +270,7 @@ function DailyTimelineView({
             </div>
 
             {/* Content Column */}
-            <div className="flex-1 pl-3 sm:pl-6 py-2 sm:py-3 min-w-0">
+            <div className="flex-1 pl-4 sm:pl-8 py-2 sm:py-3 min-w-0 pr-2 sm:pr-4">
               <div 
                 onClick={() => onJobClick(job)}
                 className={cn(
@@ -318,6 +367,7 @@ function DroppableDayCell({
   isCurrentMonth, 
   isToday, 
   isWeeklyView, 
+  isCompact,
   onJobClick,
   onDayClick
 }: { 
@@ -326,6 +376,7 @@ function DroppableDayCell({
   isCurrentMonth: boolean
   isToday: boolean
   isWeeklyView: boolean
+  isCompact?: boolean
   onJobClick: (job: TrabajoWithDetails) => void
   onDayClick?: (date: Date) => void
 }) {
@@ -355,8 +406,8 @@ function DroppableDayCell({
         }
       }}
       className={cn(
-        "group border-r border-b border-slate-100 transition-colors relative cursor-pointer empty-space",
-        jobs.length > 0 ? "p-1.5 sm:p-2 flex flex-col gap-1 sm:gap-2 min-h-[120px]" : "p-1.5 sm:p-2 flex flex-col gap-1 min-h-[52px]",
+        "group border-r border-b border-slate-100 transition-colors relative cursor-pointer empty-space p-1.5 sm:p-2 flex flex-col min-h-[120px]",
+        jobs.length > 0 ? "gap-1 sm:gap-2" : "gap-1",
         !isCurrentMonth && "bg-slate-50/50",
         isToday && "bg-blue-50/30",
         isOver && "bg-cyan-50/80 ring-2 ring-inset ring-cyan-400",
@@ -416,6 +467,7 @@ function DroppableDayCell({
                   key={job.id} 
                   job={job} 
                   onClick={() => onJobClick(job)} 
+                  isCompact={isCompact}
                 />
               ))}
               {jobs.length > 5 && (
@@ -575,7 +627,7 @@ export function CalendarView({
       <div className="flex flex-col h-full bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-[0_4px_25px_rgba(0,0,0,0.015)] m-1 sm:m-0">
         
         {/* Calendar Header - Premium Design */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-5 sm:px-7 py-5 border-b border-slate-100 shrink-0 gap-4 bg-slate-50/50">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between px-4 sm:px-7 py-4 sm:py-5 border-b border-slate-100 shrink-0 gap-4 bg-slate-50/50">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-white shadow-sm border border-slate-200/60 text-[#00C9E0]">
               <CalendarIcon className="h-5 w-5" />
@@ -585,9 +637,24 @@ export function CalendarView({
             </h2>
           </div>
           
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
-            {/* Status Filters */}
-            <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200/60 shadow-sm">
+          <div className="flex flex-row items-center justify-between md:justify-end gap-3 w-full md:w-auto">
+            {/* Status Filters - Dropdown for screens smaller than Desktop (including iPad Pro) */}
+            <div className="xl:hidden flex-1 shrink min-w-0">
+              <Select value={statusFilter} onValueChange={(value: any) => setStatusFilter(value)}>
+                <SelectTrigger className="w-full h-11 bg-white border-slate-200/60 shadow-sm rounded-xl font-bold text-slate-700">
+                  <SelectValue placeholder="Estado" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border border-slate-200/80 shadow-lg bg-white">
+                  <SelectItem value="todos" className="text-base font-bold text-slate-600 rounded-lg">Todos</SelectItem>
+                  <SelectItem value="proximo" className="text-base font-bold text-amber-600 rounded-lg">Próximos</SelectItem>
+                  <SelectItem value="en_progreso" className="text-base font-bold text-blue-600 rounded-lg">En Progreso</SelectItem>
+                  <SelectItem value="completado" className="text-base font-bold text-emerald-600 rounded-lg">Listos</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Status Filters - Buttons for Large Desktop only */}
+            <div className="hidden xl:flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200/60 shadow-sm overflow-x-auto no-scrollbar w-full xl:w-auto max-w-full shrink-0">
               {[
                 { key: 'todos' as const, label: 'Todos', color: 'text-slate-600' },
                 { key: 'proximo' as const, label: 'Próximos', color: 'text-amber-600' },
@@ -598,7 +665,7 @@ export function CalendarView({
                   key={f.key}
                   onClick={() => setStatusFilter(f.key)}
                   className={cn(
-                    "px-4.5 py-2.5 text-base font-bold rounded-lg transition-all whitespace-nowrap",
+                    "px-3 lg:px-4.5 py-2 text-sm lg:text-base font-bold rounded-lg transition-all whitespace-nowrap",
                     statusFilter === f.key 
                       ? "bg-[#0B1E3F] text-white shadow-sm" 
                       : `${f.color} hover:bg-slate-50`
@@ -640,23 +707,9 @@ export function CalendarView({
         </div>
 
         {/* Calendar Grid OR Daily Timeline */}
-        <div className="flex-1 flex flex-col min-h-0 overflow-auto styled-scrollbar relative">
-          {/* We force mobile screen layout to DailyTimelineView of the currently active day */}
-          <div className="lg:hidden flex-1 flex flex-col min-h-0">
-            <DailyTimelineView 
-              jobs={getJobsForDay(currentDate)} 
-              onJobClick={onJobClick} 
-              onDayClick={onDayClick}
-              date={currentDate}
-              onStatusChange={onStatusChange}
-              onArchive={onArchive}
-              onJobEditClick={onJobEditClick}
-              onJobRescheduleClick={onJobRescheduleClick}
-            />
-          </div>
-
-          <div className="hidden lg:flex lg:flex-1 lg:flex-col lg:min-h-0">
-            {viewMode === 'day' ? (
+        <div className="flex-1 min-h-0 overflow-auto styled-scrollbar relative overflow-y-auto overflow-x-auto touch-pan-x touch-pan-y" style={{ WebkitOverflowScrolling: 'touch' }}>
+          {viewMode === 'day' ? (
+            <div className="min-h-full">
               <DailyTimelineView 
                 jobs={getJobsForDay(days[0])} 
                 onJobClick={onJobClick} 
@@ -667,53 +720,56 @@ export function CalendarView({
                 onJobEditClick={onJobEditClick}
                 onJobRescheduleClick={onJobRescheduleClick}
               />
-            ) : (
-              <div className="h-full flex flex-col w-full">
+            </div>
+          ) : (
+            <div className="w-full min-w-[1024px] p-4 sm:p-7 pt-0 sm:pt-0 min-h-full flex flex-col">
+              <div className="flex-1 flex flex-col border border-slate-200/70 rounded-xl overflow-hidden shadow-sm bg-white min-h-full">
                 <div 
-                className={cn("grid border-b border-slate-100 shrink-0 sticky top-0 z-10 bg-white/95 backdrop-blur-sm", gridColsClass)}
-                style={inlineStyles}
-              >
-                {days.slice(0, viewMode === 'custom' && days.length < 7 ? days.length : 7).map((day, idx) => {
-                  const dayName = format(day, 'EEEE', { locale: es })
-                  
-                  return (
-                    <div key={day.toISOString()} className="py-2.5 text-center text-base font-bold text-slate-400 uppercase tracking-wider truncate px-1" title={dayName}>
-                      {dayName}
-                    </div>
-                  )
-                })}
-              </div>
+                  className={cn("grid border-b border-slate-100 shrink-0 sticky top-0 z-10 bg-slate-50/80 backdrop-blur-sm", gridColsClass)}
+                  style={inlineStyles}
+                >
+                  {days.slice(0, viewMode === 'custom' && days.length < 7 ? days.length : 7).map((day, idx) => {
+                    const dayName = format(day, 'EEEE', { locale: es })
+                    
+                    return (
+                      <div key={day.toISOString()} className="py-2.5 text-center text-sm font-bold text-slate-500 uppercase tracking-wider truncate px-1" title={dayName}>
+                        {dayName}
+                      </div>
+                    )
+                  })}
+                </div>
 
-              <div 
-                className={cn(
-                  "grid", 
-                  viewMode === 'month' ? "auto-rows-auto" : "auto-rows-auto content-start",
-                  gridColsClass
-                )}
-                style={inlineStyles}
-              >
-                {days.map((day, i) => {
-                  const dayJobs = getJobsForDay(day)
-                  const isCurrentMonth = isSameMonth(day, currentDate)
-                  const isToday = isSameDay(day, new Date())
+                <div 
+                  className={cn(
+                    "grid", 
+                    viewMode === 'month' ? "auto-rows-auto" : "auto-rows-auto content-start",
+                    gridColsClass
+                  )}
+                  style={inlineStyles}
+                >
+                  {days.map((day, i) => {
+                    const dayJobs = getJobsForDay(day)
+                    const isCurrentMonth = isSameMonth(day, currentDate)
+                    const isToday = isSameDay(day, new Date())
 
-                  return (
-                    <DroppableDayCell 
-                      key={day.toISOString()}
-                      date={day}
-                      jobs={dayJobs}
-                      isCurrentMonth={isCurrentMonth}
-                      isToday={isToday}
-                      isWeeklyView={viewMode !== 'month'}
-                      onJobClick={onJobClick}
-                      onDayClick={onDayClick}
-                    />
-                  )
-                })}
+                    return (
+                      <DroppableDayCell 
+                        key={day.toISOString()}
+                        date={day}
+                        jobs={dayJobs}
+                        isCurrentMonth={isCurrentMonth}
+                        isToday={isToday}
+                        isWeeklyView={viewMode !== 'month'}
+                        isCompact={viewMode === 'month' || viewMode === 'fortnight'}
+                        onJobClick={onJobClick}
+                        onDayClick={onDayClick}
+                      />
+                    )
+                  })}
+                </div>
               </div>
             </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </DndContext>

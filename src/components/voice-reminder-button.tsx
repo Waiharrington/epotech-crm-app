@@ -178,7 +178,7 @@ export function VoiceReminderButton({ onCreated, className }: VoiceReminderButto
         onClick={isRecording ? stopRecording : startRecording}
         disabled={isProcessing}
         className={cn(
-          "flex items-center justify-center xl:justify-start gap-1.5 h-10 px-4.5 rounded-xl text-base font-black shadow-md transition-all active:scale-[0.98]",
+          "flex items-center justify-center xl:justify-start gap-1.5 h-11 px-4.5 rounded-xl text-base font-black shadow-md transition-all active:scale-[0.98]",
           isRecording
             ? "bg-[#0B1E3F] text-white shadow-[#0B1E3F]/30 animate-pulse"
             : isProcessing

@@ -381,18 +381,18 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
               </div>
 
               {/* Search + Priority */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                <div className="relative w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full xl:w-auto">
+                <div className="relative flex-1">
                   <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
                   <input 
                     placeholder="Buscar..." 
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    className="h-10 pl-8 pr-3 rounded-xl bg-white border border-slate-200/60 text-base font-medium text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0097A7]/30 focus:border-[#0097A7]/50 transition-all w-full sm:w-[140px]"
+                    className="h-10 pl-8 pr-3 rounded-xl bg-white border border-slate-200/60 text-base font-medium text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0097A7]/30 focus:border-[#0097A7]/50 transition-all w-full"
                   />
                 </div>
                 <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-                  <SelectTrigger className="w-full sm:w-[160px] h-10 rounded-xl bg-white border-slate-200/60 focus:ring-[#0097A7]/30 focus:border-[#0097A7]/50 text-slate-600 font-medium text-[13px]">
+                  <SelectTrigger className="w-full sm:w-[180px] shrink-0 h-10 rounded-xl bg-white border-slate-200/60 focus:ring-[#0097A7]/30 focus:border-[#0097A7]/50 text-slate-600 font-medium text-[13px]">
                     <SelectValue placeholder="Prioridad" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-slate-100 shadow-xl">

@@ -168,7 +168,7 @@ export default function ClienteProfilePage() {
   const tabTrigger = "!h-auto min-w-0 flex flex-col items-center justify-center text-center gap-1 !whitespace-normal px-1 py-2 text-[8.5px] md:text-[9.5px] leading-tight font-black uppercase tracking-wider rounded-xl transition-all disabled:pointer-events-none disabled:opacity-50 text-slate-400 hover:text-[#0097A7] hover:bg-slate-50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#00C9E0] data-[state=active]:to-[#0097A7] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:shadow-cyan-500/20"
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F0F5FA] px-4.5 pb-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-5 xl:p-3.5 2xl:p-6 gap-3.5">
+    <div className="flex flex-col min-h-screen bg-[#F0F5FA] px-4.5 pb-0 md:pb-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-5 xl:p-3.5 2xl:p-6 gap-3.5">
       {/* Premium Dark Navy Header Banner */}
       <header
         className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-4 md:p-5 shrink-0 relative z-30 animate-dashboard-item shadow-xl"

@@ -76,7 +76,7 @@ export default function ArchivoPage() {
   })
 
   return (
-    <div className="flex flex-col min-h-screen xl:h-screen xl:max-h-screen bg-[#F0F5FA] px-4.5 pb-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-5 xl:p-3.5 2xl:p-6 gap-3.5 xl:gap-2.5 2xl:gap-4 relative xl:overflow-hidden">
+    <div className="flex flex-col min-h-screen xl:h-screen xl:max-h-screen bg-[#F0F5FA] px-4.5 pb-0 md:pb-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-5 xl:p-3.5 2xl:p-6 gap-3.5 xl:gap-2.5 2xl:gap-4 relative xl:overflow-hidden">
 
       {/* Premium Dark Navy Header Banner */}
       <header
@@ -146,7 +146,7 @@ export default function ArchivoPage() {
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cargando archivados...</p>
             </div>
           ) : (
-            <div className="flex-1 overflow-y-auto pb-20">
+            <div className="flex-1 overflow-y-auto pb-4 md:pb-20">
               <JobList 
                 trabajos={filteredTrabajos} 
                 onCardClick={(job) => setSelectedJob(job as TrabajoWithDetails)}

@@ -33,7 +33,8 @@ import {
   ChevronRight,
   Lightbulb,
   Target,
-  Zap
+  Zap,
+  Star
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {

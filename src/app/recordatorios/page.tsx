@@ -24,7 +24,7 @@ import {
   Search
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
+import { cn, formatTime12 } from '@/lib/utils'
 
 export default function RecordatoriosPage() {
   const supabase = createClient() as any
@@ -700,7 +700,7 @@ function ReminderCard({ reminder, onToggleComplete, onDelete }: ReminderCardProp
               {reminder.hora && (
                 <span className="flex items-center gap-1 font-semibold">
                   <Clock className="h-3 w-3 shrink-0" />
-                  {reminder.hora.substring(0, 5)}
+                  {formatTime12(reminder.hora)}
                 </span>
               )}
               {reminder.notificado && !reminder.completado && (

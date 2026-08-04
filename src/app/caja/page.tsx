@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { 
   Plus, 
@@ -14,22 +13,13 @@ import {
   Wallet, 
   ArrowUpRight, 
   ArrowDownRight, 
-  Calendar,
   Search,
-  Filter,
-  Loader2
+  Loader2,
+  DollarSign
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from '@/components/ui/table'
-
 import { FinanceModal } from '@/components/caja/finance-modal'
+import { cn, formatTime12 } from '@/lib/utils'
 
 type CajaEntry = Database['public']['Tables']['caja']['Row']
 
@@ -39,6 +29,7 @@ export default function CajaPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [showModal, setShowModal] = useState<{ open: boolean, type: 'ingreso' | 'egreso' }>({ open: false, type: 'ingreso' })
+  const [typeFilter, setTypeFilter] = useState<string>('todos')
 
   useEffect(() => {
     fetchCaja()
@@ -55,151 +46,246 @@ export default function CajaPage() {
   const expenses = entries.filter(e => e.tipo === 'egreso').reduce((acc, curr) => acc + curr.monto, 0)
   const balance = income - expenses
 
-  const filteredEntries = entries.filter(e => 
-    e.notas?.toLowerCase().includes(search.toLowerCase()) ||
-    e.categoria.toLowerCase().includes(search.toLowerCase())
-  )
+  const filteredEntries = entries.filter(e => {
+    const matchesSearch = e.notas?.toLowerCase().includes(search.toLowerCase()) ||
+      e.categoria.toLowerCase().includes(search.toLowerCase())
+    const matchesType = typeFilter === 'todos' || e.tipo === typeFilter
+    return matchesSearch && matchesType
+  })
+
+  const ingresosCount = entries.filter(e => e.tipo === 'ingreso').length
+  const egresosCount = entries.filter(e => e.tipo === 'egreso').length
 
   return (
-    <div className="flex flex-col h-full bg-background overflow-hidden relative">
-      <header className="p-4 md:p-6 border-b bg-card">
-         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between max-w-7xl mx-auto w-full">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">Caja y Finanzas</h1>
-            <p className="text-muted-foreground text-sm">Control de flujo de caja, ingresos por servicios y gastos.</p>
-          </div>
-          <div className="flex gap-2">
-            <Button 
-                variant="outline" 
-                className="border-red-200 text-red-600 hover:bg-red-50"
+    <div className="flex flex-col min-h-screen md:h-screen md:max-h-screen bg-[#F0F5FA] px-4.5 pb-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-5 xl:p-3.5 2xl:p-6 gap-3.5 xl:gap-2.5 2xl:gap-4 relative md:overflow-hidden">
+      
+      {/* Premium Dark Navy Header */}
+      <header className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-3 md:p-4 shrink-0 relative z-30 shadow-xl">
+        <div className="relative z-10 flex flex-col gap-2.5">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <div className="h-9 w-9 xl:h-8 xl:w-8 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs shrink-0">
+                <Wallet className="h-4.5 w-4.5 xl:h-4 xl:w-4 text-[#00C9E0] filter drop-shadow-[0_0_8px_rgba(0,201,224,0.7)]" />
+              </div>
+              <div>
+                <h1 className="text-lg sm:text-xl xl:text-lg 2xl:text-2xl font-bold tracking-tight text-white leading-none">
+                  Caja y Finanzas
+                </h1>
+                <p className="text-slate-300/80 text-[10px] xl:text-[9px] 2xl:text-xs mt-1 font-medium">
+                  Control de flujo de caja, ingresos por servicios y gastos.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => setShowModal({ open: true, type: 'egreso' })}
-            >
-              <Minus className="mr-2 h-4 w-4" /> Registrar Gasto
-            </Button>
-            <Button 
-                className="bg-green-600 hover:bg-green-700"
+                className="h-8 px-3 text-[10px] font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-rose-500/20 hover:border-rose-400/40 backdrop-blur-md transition-all active:scale-[0.98]"
+              >
+                <Minus className="mr-1.5 h-3.5 w-3.5" />
+                Registrar Gasto
+              </Button>
+              <Button
                 onClick={() => setShowModal({ open: true, type: 'ingreso' })}
-            >
-              <Plus className="mr-2 h-4 w-4" /> Registrar Ingreso
-            </Button>
+                size="sm"
+                className="h-8 px-3.5 text-[10px] font-black rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white border-none shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all active:scale-[0.98]"
+              >
+                <Plus className="mr-1.5 h-3.5 w-3.5" />
+                Registrar Ingreso
+              </Button>
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="relative pt-2 border-t border-white/[0.06]">
+            <div className="flex flex-col md:flex-row gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#00C9E0]/70 pointer-events-none z-10" />
+                <Input
+                  placeholder="Buscar por descripción o categoría..."
+                  className="pl-9 h-8 text-[11px] rounded-xl bg-white/[0.06] border-white/10 text-white placeholder:text-slate-400/70 backdrop-blur-md focus-visible:ring-[#00C9E0]/40 transition-all"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </header>
 
-      <div className="p-4 md:p-6 max-w-7xl mx-auto w-full flex-1 flex flex-col gap-6 overflow-hidden">
+      <main className="flex flex-col md:flex-1 md:min-h-0 gap-3 relative z-10">
+        
         {/* Financial Summary */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-primary text-primary-foreground border-none shadow-lg">
-                <CardContent className="p-6">
-                    <div className="flex items-center justify-between font-bold text-sm uppercase tracking-wider opacity-80">
-                        <span>Balance General</span>
-                        <Wallet className="h-5 w-5" />
-                    </div>
-                    <p className="text-3xl font-bold mt-4">${balance.toLocaleString()}</p>
-                    <div className="mt-2 text-xs opacity-70 flex items-center">
-                        <TrendingUp className="mr-1 h-3 w-3" /> Neto acumulado
-                    </div>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardContent className="p-6">
-                    <div className="flex items-center justify-between font-bold text-sm uppercase mb-4 text-muted-foreground">
-                        <span>Ingresos Totales</span>
-                        <TrendingUp className="h-5 w-5 text-green-500" />
-                    </div>
-                    <p className="text-2xl font-bold text-green-600">${income.toLocaleString()}</p>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardContent className="p-6">
-                    <div className="flex items-center justify-between font-bold text-sm uppercase mb-4 text-muted-foreground">
-                        <span>Gastos Totales</span>
-                        <TrendingDown className="h-5 w-5 text-red-500" />
-                    </div>
-                    <p className="text-2xl font-bold text-red-600">${expenses.toLocaleString()}</p>
-                </CardContent>
-            </Card>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0">
+          {/* Balance */}
+          <div className="rounded-2xl bg-gradient-to-br from-[#0097A7] via-[#00b4ca] to-[#00C9E0] p-4 shadow-lg shadow-cyan-500/20 relative overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/60">Balance General</p>
+                <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-white/15 border border-white/20">
+                  <Wallet className="h-3.5 w-3.5 text-white" />
+                </div>
+              </div>
+              <p className="text-2xl font-black text-white">${balance.toLocaleString()}</p>
+              <div className="mt-1.5 flex items-center gap-1.5">
+                <TrendingUp className="h-3 w-3 text-white/50" />
+                <p className="text-[9px] text-white/50 font-medium">Neto acumulado</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Ingresos */}
+          <div className="rounded-2xl bg-white border border-slate-200/60 p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Ingresos Totales</p>
+              <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-emerald-50 border border-emerald-200/60">
+                <TrendingUp className="h-3.5 w-3.5 text-emerald-500" />
+              </div>
+            </div>
+            <p className="text-2xl font-black text-emerald-600">${income.toLocaleString()}</p>
+            <p className="text-[9px] text-slate-400 font-medium mt-1.5">{ingresosCount} transacciones</p>
+          </div>
+
+          {/* Gastos */}
+          <div className="rounded-2xl bg-white border border-slate-200/60 p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Gastos Totales</p>
+              <div className="h-7 w-7 rounded-lg flex items-center justify-center bg-rose-50 border border-rose-200/60">
+                <TrendingDown className="h-3.5 w-3.5 text-rose-500" />
+              </div>
+            </div>
+            <p className="text-2xl font-black text-rose-600">${expenses.toLocaleString()}</p>
+            <p className="text-[9px] text-slate-400 font-medium mt-1.5">{egresosCount} transacciones</p>
+          </div>
         </div>
 
-        {/* Filters */}
-        <div className="flex gap-3">
-             <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                placeholder="Buscar por descripción o categoría..."
-                className="pl-10 h-10 bg-card"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                />
-            </div>
-             <Button variant="outline" size="icon">
-                <Filter className="h-4 w-4" />
-             </Button>
+        {/* Filter Pills */}
+        <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1 shrink-0 scrollbar-none">
+          {[
+            { key: 'todos', label: 'Todos', count: entries.length },
+            { key: 'ingreso', label: 'Ingresos', count: ingresosCount },
+            { key: 'egreso', label: 'Egresos', count: egresosCount },
+          ].map(f => (
+            <button
+              key={f.key}
+              onClick={() => setTypeFilter(f.key)}
+              className={cn(
+                "px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97] flex items-center gap-1.5",
+                typeFilter === f.key
+                  ? f.key === 'ingreso' ? "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/20"
+                    : f.key === 'egreso' ? "bg-rose-500 text-white border-rose-500 shadow-md shadow-rose-500/20"
+                    : "bg-[#0097A7] text-white border-[#0097A7] shadow-md shadow-cyan-500/20"
+                  : "bg-white text-slate-500 border-slate-200/60 hover:border-[#0097A7]/40 hover:text-[#0097A7]"
+              )}
+            >
+              {f.label}
+              <span className={cn(
+                "text-[8px] px-1.5 py-0.5 rounded-full font-black",
+                typeFilter === f.key ? "bg-white/20" : "bg-slate-100 text-slate-400"
+              )}>{f.count}</span>
+            </button>
+          ))}
         </div>
 
         {/* History Table */}
-        <div className="border rounded-xl bg-card overflow-hidden flex-1 flex flex-col shadow-sm">
-            <div className="overflow-auto flex-1">
-                <Table>
-                    <TableHeader className="bg-muted/50">
-                        <TableRow>
-                            <TableHead>Fecha</TableHead>
-                            <TableHead>Descripción</TableHead>
-                            <TableHead>Categoría</TableHead>
-                            <TableHead className="text-right">Monto</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {loading ? (
-                           <TableRow><TableCell colSpan={4} className="text-center py-10"><Loader2 className="h-6 w-6 animate-spin mx-auto" /></TableCell></TableRow>
-                        ) : filteredEntries.length > 0 ? (
-                            filteredEntries.map(entry => (
-                                <TableRow key={entry.id} className="hover:bg-muted/30 transition-colors">
-                                    <TableCell className="w-40">
-                                        <div className="flex flex-col">
-                                            <span className="font-medium">{new Date(entry.fecha).toLocaleDateString()}</span>
-                                            <span className="text-[10px] text-muted-foreground uppercase">{new Date(entry.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center gap-2">
-                                            {entry.tipo === 'ingreso' ? (
-                                                <div className="h-6 w-6 rounded-full bg-green-100 flex items-center justify-center border border-green-200">
-                                                    <ArrowUpRight className="h-3 w-3 text-green-600" />
-                                                </div>
-                                            ) : (
-                                                <div className="h-6 w-6 rounded-full bg-red-100 flex items-center justify-center border border-red-200">
-                                                    <ArrowDownRight className="h-3 w-3 text-red-600" />
-                                                </div>
-                                            )}
-                                            <span className="text-sm">{entry.notas || 'Sin descripción'}</span>
-                                            {entry.es_automatico && (
-                                                <Badge variant="outline" className="text-[8px] h-4 leading-none uppercase px-1 border-primary/20 text-primary bg-primary/5">Auto</Badge>
-                                            )}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant="secondary" className="capitalize text-[10px]">{entry.categoria.replace('_', ' ')}</Badge>
-                                    </TableCell>
-                                    <TableCell className="text-right font-bold">
-                                        <span className={entry.tipo === 'ingreso' ? 'text-green-600' : 'text-red-600'}>
-                                            {entry.tipo === 'ingreso' ? '+' : '-'} ${entry.monto.toLocaleString()}
-                                        </span>
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell colSpan={4} className="text-center py-20 text-muted-foreground italic">
-                                    No se han registrado movimientos de caja aún.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+        <div className="flex-1 overflow-y-auto min-h-0 pt-1 pb-20 px-1 -mx-1">
+          {loading && !entries.length ? (
+            <div className="flex flex-col items-center justify-center h-40 gap-3">
+              <Loader2 className="h-6 w-6 animate-spin text-[#00C9E0]" />
+              <p className="text-xs text-slate-400 font-medium">Cargando movimientos...</p>
             </div>
+          ) : filteredEntries.length > 0 ? (
+            <div className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden">
+              <div className="overflow-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-slate-100">
+                      <th className="text-left text-[9px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Fecha</th>
+                      <th className="text-left text-[9px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Descripción</th>
+                      <th className="text-left text-[9px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Categoría</th>
+                      <th className="text-right text-[9px] font-bold uppercase tracking-wider text-slate-400 px-4 py-3">Monto</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredEntries.map(entry => (
+                      <tr key={entry.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors group">
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="flex flex-col">
+                            <span className="text-xs font-bold text-slate-700">{new Date(entry.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>
+                            <span className="text-[10px] text-slate-400 font-medium">{new Date(entry.fecha).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2.5">
+                            <div className={cn(
+                              "h-7 w-7 rounded-lg flex items-center justify-center shrink-0",
+                              entry.tipo === 'ingreso' ? 'bg-emerald-50 border border-emerald-200/60' : 'bg-rose-50 border border-rose-200/60'
+                            )}>
+                              {entry.tipo === 'ingreso' ? (
+                                <ArrowUpRight className="h-3.5 w-3.5 text-emerald-500" />
+                              ) : (
+                                <ArrowDownRight className="h-3.5 w-3.5 text-rose-500" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-bold text-slate-700 truncate group-hover:text-[#0097A7] transition-colors">
+                                {entry.notas || 'Sin descripción'}
+                              </p>
+                            </div>
+                            {entry.es_automatico && (
+                              <Badge className="text-[8px] font-black px-1.5 py-0 rounded-full bg-[#0097A7]/10 text-[#0097A7] border-[#0097A7]/20 shrink-0">
+                                AUTO
+                              </Badge>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <Badge className={cn(
+                            "text-[9px] font-bold px-2 py-0.5 rounded-full capitalize",
+                            entry.tipo === 'ingreso' 
+                              ? "bg-emerald-50 text-emerald-600 border-emerald-200/60" 
+                              : "bg-rose-50 text-rose-600 border-rose-200/60"
+                          )}>
+                            {entry.categoria.replace('_', ' ')}
+                          </Badge>
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <span className={cn(
+                            "text-sm font-black",
+                            entry.tipo === 'ingreso' ? 'text-emerald-600' : 'text-rose-600'
+                          )}>
+                            {entry.tipo === 'ingreso' ? '+' : '-'} ${entry.monto.toLocaleString()}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-20 bg-white/50 border border-slate-200/50 rounded-3xl border-dashed">
+              <DollarSign className="h-10 w-10 text-slate-300 mb-4" />
+              <p className="text-slate-400 font-medium text-sm">
+                {search || typeFilter !== 'todos' ? 'No se encontraron movimientos.' : 'No hay movimientos de caja.'}
+              </p>
+              {!search && typeFilter === 'todos' && (
+                <Button 
+                  variant="outline" 
+                  className="mt-4 rounded-xl border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50"
+                  onClick={() => setShowModal({ open: true, type: 'ingreso' })}
+                >
+                  <Plus className="mr-1.5 h-3.5 w-3.5" />
+                  Registrar el primero
+                </Button>
+              )}
+            </div>
+          )}
         </div>
-      </div>
+      </main>
 
       {showModal.open && (
         <FinanceModal 

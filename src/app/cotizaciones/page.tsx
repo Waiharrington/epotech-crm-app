@@ -4,14 +4,8 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
-import { Plus, Search, FileText, Download, Send, MoreVertical, Trash2, Loader2, User, ExternalLink, Check, Eye, Pencil, CheckCircle2, Clock, XCircle, TrendingUp } from 'lucide-react'
+import { Plus, Search, FileText, Send, Loader2, User, Check, Eye, Pencil, CheckCircle2, Clock, XCircle, TrendingUp, Filter, Download, ChevronRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { NewQuoteWizard } from '@/components/presupuestos/new-quote-wizard'
 import { QuoteDetailModal } from '@/components/presupuestos/quote-detail-modal'
 import dynamic from 'next/dynamic'
@@ -35,6 +29,7 @@ export default function CotizacionesPage() {
   const [search, setSearch] = useState('')
   const [selectedQuote, setSelectedQuote] = useState<Presupuesto | null>(null)
   const [quoteToEdit, setQuoteToEdit] = useState<Presupuesto | null>(null)
+  const [statusFilter, setStatusFilter] = useState<'todos' | 'aprobado' | 'pendiente' | 'rechazado'>('todos')
 
   useEffect(() => {
     fetchCotizaciones()
@@ -54,10 +49,12 @@ export default function CotizacionesPage() {
     setLoading(false)
   }
 
-  const filteredCotizaciones = cotizaciones.filter(c => 
-    `${c.clientes.nombre} ${c.clientes.apellido}`.toLowerCase().includes(search.toLowerCase()) ||
-    c.id.includes(search)
-  )
+  const filteredCotizaciones = cotizaciones.filter(c => {
+    const matchesSearch = `${c.clientes.nombre} ${c.clientes.apellido}`.toLowerCase().includes(search.toLowerCase()) ||
+      c.id.includes(search)
+    const matchesStatus = statusFilter === 'todos' || c.estado === statusFilter
+    return matchesSearch && matchesStatus
+  })
 
   const handleUpdateStatus = async (id: string, newStatus: string) => {
     const { error } = await (supabase as any)
@@ -161,25 +158,47 @@ export default function CotizacionesPage() {
         <div className="p-0.5 -m-0.5 overflow-visible shrink-0">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {[
-              { label: 'Aprobadas', value: aprobadas, icon: CheckCircle2 },
-              { label: 'Pendientes', value: pendientes, icon: Clock },
-              { label: 'Rechazadas', value: rechazadas, icon: XCircle },
-              { label: 'Emitidas', value: totalEmitidas, icon: TrendingUp },
+              { label: 'Aprobadas', value: aprobadas, icon: CheckCircle2, filterKey: 'aprobado' as const, active: 'bg-emerald-50 border-emerald-300 ring-1 ring-emerald-200', labelCls: 'text-emerald-600', iconBox: 'bg-emerald-100 border-emerald-200 text-emerald-600' },
+              { label: 'Pendientes', value: pendientes, icon: Clock, filterKey: 'pendiente' as const, active: 'bg-amber-50 border-amber-300 ring-1 ring-amber-200', labelCls: 'text-amber-600', iconBox: 'bg-amber-100 border-amber-200 text-amber-600' },
+              { label: 'Rechazadas', value: rechazadas, icon: XCircle, filterKey: 'rechazado' as const, active: 'bg-rose-50 border-rose-300 ring-1 ring-rose-200', labelCls: 'text-rose-600', iconBox: 'bg-rose-100 border-rose-200 text-rose-600' },
+              { label: 'Emitidas', value: totalEmitidas, icon: TrendingUp, filterKey: 'todos' as const, active: 'bg-cyan-50 border-cyan-300 ring-1 ring-cyan-200', labelCls: 'text-cyan-600', iconBox: 'bg-cyan-100 border-cyan-200 text-cyan-600' },
             ].map((stat) => (
-              <div
+              <button
                 key={stat.label}
-                className="bg-white rounded-2xl border border-slate-200/60 shadow-sm hover:border-[#0097A7]/40 hover:shadow-md transition-all group"
+                onClick={() => setStatusFilter(stat.filterKey)}
+                className={cn(
+                  "rounded-2xl border shadow-sm hover:shadow-md transition-all group text-left cursor-pointer active:scale-[0.97]",
+                  statusFilter === stat.filterKey
+                    ? stat.active
+                    : "bg-white border-slate-200/60 hover:border-[#0097A7]/40 hover:bg-slate-50/50"
+                )}
               >
                 <div className="p-2.5 px-3.5 flex items-center justify-between">
                   <div className="flex-1 min-w-0">
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider truncate">{stat.label}</p>
+                    <p className={cn(
+                      "text-[9px] font-bold uppercase tracking-wider truncate",
+                      statusFilter === stat.filterKey ? stat.labelCls : "text-slate-400"
+                    )}>{stat.label}</p>
                     <p className="text-xl font-black text-slate-900 leading-tight">{stat.value}</p>
                   </div>
-                  <div className="h-8 w-8 rounded-xl flex items-center justify-center bg-slate-50 border border-slate-100 shrink-0 group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 group-hover:text-[#0097A7] text-slate-400 transition-colors">
-                    <stat.icon className="h-4 w-4" />
+                  <div className="flex items-center gap-1.5">
+                    <div className={cn(
+                      "h-8 w-8 rounded-xl flex items-center justify-center border shrink-0 transition-colors",
+                      statusFilter === stat.filterKey
+                        ? stat.iconBox
+                        : "bg-slate-50 border-slate-100 text-slate-400 group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 group-hover:text-[#0097A7]"
+                    )}>
+                      <stat.icon className="h-4 w-4" />
+                    </div>
+                    <ChevronRight className={cn(
+                      "h-3.5 w-3.5 transition-all duration-200 shrink-0",
+                      statusFilter === stat.filterKey
+                        ? "opacity-70 -translate-x-0.5"
+                        : "opacity-0 -translate-x-1 group-hover:opacity-50 group-hover:translate-x-0"
+                    )} />
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -193,87 +212,82 @@ export default function CotizacionesPage() {
                 <p className="text-xs text-slate-400 font-medium">Cargando cotizaciones...</p>
               </div>
             ) : filteredCotizaciones.length > 0 ? (
-              filteredCotizaciones.map((c) => (
+              filteredCotizaciones.map((c) => {
+                const cardBorder = c.estado === 'aprobado' ? 'border-emerald-200/60 hover:border-emerald-400/50' : c.estado === 'rechazado' ? 'border-rose-200/60 hover:border-rose-400/50' : 'border-amber-200/60 hover:border-amber-400/50'
+                const iconBg = c.estado === 'aprobado' ? 'bg-emerald-50 border border-emerald-200/60' : c.estado === 'rechazado' ? 'bg-rose-50 border border-rose-200/60' : 'bg-amber-50 border border-amber-200/60'
+                const iconText = c.estado === 'aprobado' ? 'text-emerald-500' : c.estado === 'rechazado' ? 'text-rose-500' : 'text-amber-500'
+                const totalText = c.estado === 'aprobado' ? 'text-emerald-600' : c.estado === 'rechazado' ? 'text-rose-600' : 'text-amber-600'
+                const leftColor = c.estado === 'aprobado' ? '#10b981' : c.estado === 'rechazado' ? '#f43f5e' : '#f59e0b'
+                return (
                 <div
                   key={c.id}
-                  className="bg-white border border-slate-200/60 rounded-2xl p-3 sm:p-4 hover:shadow-md hover:border-[#0097A7]/30 transition-all cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                  className={cn(
+                    "bg-white border rounded-2xl p-4 hover:shadow-lg transition-all cursor-pointer group",
+                    cardBorder
+                  )}
+                  style={{ borderLeftWidth: '4px', borderLeftColor: leftColor }}
                   onClick={() => setSelectedQuote(c)}
                 >
-                  <div className="flex items-center gap-3.5 sm:w-1/3">
-                    <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200/80 border border-slate-200/60 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-300">
-                      <FileText className="h-5 w-5 text-slate-500 group-hover:text-[#00C9E0] transition-colors" />
+                  {/* Top row: Quote ID + Status */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className={cn(
+                        "h-9 w-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-300",
+                        iconBg
+                      )}>
+                        <FileText className={cn("h-4 w-4", iconText)} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-slate-800 leading-tight group-hover:text-[#0097A7] transition-colors">
+                          #{c.id.substring(0, 8).toUpperCase()}
+                        </p>
+                        <p className="text-[10px] font-medium text-slate-400 mt-0.5">
+                          {new Date(c.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex flex-col min-w-0">
-                      <p className="text-sm font-bold text-slate-800 truncate leading-tight group-hover:text-[#0097A7] transition-colors">
-                        #{c.id.substring(0, 8).toUpperCase()}
-                      </p>
-                      <p className="text-[11px] font-medium text-slate-500 mt-0.5 truncate">
-                        {new Date(c.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
-                      </p>
-                    </div>
+                    {getStatusBadge(c.estado)}
                   </div>
 
-                  <div className="flex items-center gap-2 sm:w-1/4 min-w-0">
-                     <div className="h-6 w-6 rounded-full bg-[#F0F5FA] flex items-center justify-center shrink-0 border border-slate-200">
-                       <User className="h-3 w-3 text-slate-500" />
-                     </div>
-                     <span className="text-xs font-semibold text-slate-700 truncate">
+                  {/* Client row */}
+                  <div className="flex items-center gap-2.5 mb-3 pl-[46px]">
+                    <div className="h-7 w-7 rounded-full bg-gradient-to-br from-[#0097A7] to-[#00C9E0] flex items-center justify-center shrink-0 shadow-sm">
+                      <span className="text-[10px] font-black text-white">
+                        {c.clientes.nombre?.[0]}{c.clientes.apellido?.[0]}
+                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-slate-700 truncate">
                         {c.clientes.nombre} {c.clientes.apellido}
-                     </span>
-                  </div>
-
-                  <div className="flex items-center justify-between sm:w-auto gap-4 sm:gap-6 mt-2 sm:mt-0">
-                    <div className="flex flex-col items-start sm:items-end min-w-24">
-                      <p className="text-xs font-medium text-slate-500">Monto Total</p>
-                      <p className="text-base font-black text-slate-900">${c.monto_total.toLocaleString()}</p>
-                    </div>
-
-                    <div className="flex items-center justify-end w-24 shrink-0">
-                      {getStatusBadge(c.estado)}
+                      </p>
+                      {c.clientes.telefono && (
+                        <p className="text-[10px] text-slate-400 truncate">{c.clientes.telefono}</p>
+                      )}
                     </div>
                   </div>
 
-                  <div className="hidden sm:flex items-center justify-end gap-1.5 shrink-0" onClick={e => e.stopPropagation()}>
-                    <QuotePDFDownload 
-                       quoteId={c.id}
-                       date={new Date(c.created_at).toLocaleDateString()}
-                       client={c.clientes}
-                       items={c.items_detalle as any}
-                       subtotal={c.monto_subtotal}
-                       descuento={c.monto_descuento}
-                       total={c.monto_total}
-                       showText={false}
-                    />
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors">
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48 rounded-xl shadow-lg border-slate-200/60 p-1">
-                        <DropdownMenuItem onClick={() => setSelectedQuote(c)} className="rounded-lg text-xs font-medium cursor-pointer">
-                          <Eye className="mr-2 h-3.5 w-3.5 text-slate-400" /> Ver Detalles
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => {
-                          setQuoteToEdit(c)
-                          setShowWizard(true)
-                        }} className="rounded-lg text-xs font-medium cursor-pointer">
-                          <Pencil className="mr-2 h-3.5 w-3.5 text-slate-400" /> Editar
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleUpdateStatus(c.id, 'aprobado')} className="rounded-lg text-xs font-medium cursor-pointer focus:bg-emerald-50 focus:text-emerald-600 text-emerald-600">
-                          <Check className="mr-2 h-3.5 w-3.5" /> Marcar Aprobado
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => shareOnWhatsApp(c)} className="rounded-lg text-xs font-medium cursor-pointer focus:bg-emerald-50 focus:text-emerald-600">
-                          <Send className="mr-2 h-3.5 w-3.5 text-emerald-500" /> WhatsApp
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleDelete(c.id)} className="rounded-lg text-xs font-medium cursor-pointer focus:bg-rose-50 focus:text-rose-600 text-rose-600">
-                          <Trash2 className="mr-2 h-3.5 w-3.5" /> Eliminar
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                  {/* Total row */}
+                  <div className="flex items-center justify-between pl-[46px] pt-2 border-t border-slate-100">
+                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Total</p>
+                    <div className="flex items-center gap-2">
+                      <p className={cn("text-lg font-black", totalText)}>${c.monto_total.toLocaleString()}</p>
+                      <div onClick={e => e.stopPropagation()}>
+                        <QuotePDFDownload 
+                          quoteId={c.id}
+                          date={new Date(c.created_at).toLocaleDateString()}
+                          client={c.clientes}
+                          items={c.items_detalle as any}
+                          subtotal={c.monto_subtotal}
+                          descuento={c.monto_descuento}
+                          total={c.monto_total}
+                          showText={false}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              ))
+                )
+              })
             ) : (
               <div className="flex flex-col items-center justify-center py-20 bg-white/50 border border-slate-200/50 rounded-3xl border-dashed">
                 <FileText className="h-10 w-10 text-slate-300 mb-4" />

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { MapPin, Navigation, Map as MapIcon, Loader2 } from 'lucide-react'
 import { format, isSameDay } from 'date-fns'
 import { es } from 'date-fns/locale'
+import { formatTime12 } from '@/lib/utils'
 
 type TrabajoWithDetails = {
   id: string
@@ -116,7 +117,7 @@ export function RouteModal({ isOpen, onClose, jobs }: RouteModalProps) {
                             {job.clientes.nombre} {job.clientes.apellido}
                           </p>
                           <span className="text-[11px] font-medium text-slate-500 bg-white px-2 py-0.5 rounded-md border border-slate-200 shrink-0">
-                            {job.hora_servicio ? job.hora_servicio.slice(0, 5) : 'Sin hora'}
+                            {formatTime12(job.hora_servicio)}
                           </span>
                         </div>
                         <p className="text-xs text-slate-600 mb-1 flex items-center gap-1.5">

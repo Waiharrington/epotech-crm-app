@@ -105,7 +105,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
       ctx.fillRect(0, canvas.height - 80, canvas.width, 80)
       ctx.fillStyle = '#ffffff'
       ctx.font = 'bold 40px sans-serif'
-      ctx.fillText('EPOTECH CRM', 40, canvas.height - 30)
+      ctx.fillText('EPOTECH SOLUTIONS', 40, canvas.height - 30)
 
       const link = document.createElement('a')
       link.download = `comparativa_${clientId}_${orientation}.png`

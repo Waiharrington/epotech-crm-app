@@ -4,7 +4,7 @@ import React from 'react'
 import { Database } from '@/types/supabase'
 import { Calendar, Clock, User, ChevronRight, Archive, CheckCircle2, Briefcase, MoreHorizontal, Pencil, CheckCircle, RotateCw, Users } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { parseISO, format } from 'date-fns'
+import { parseISO, format, startOfWeek, endOfWeek, startOfMonth, isSameMonth } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 const formatTime12h = (timeStr?: string | null) => {
@@ -69,28 +69,56 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
   const groupedJobs = trabajos.reduce((acc, job) => {
     if (!job.fecha_servicio) return acc
     const date = parseISO(job.fecha_servicio)
-    const monthKey = format(date, 'MMMM yyyy', { locale: es })
-    if (!acc[monthKey]) acc[monthKey] = []
-    acc[monthKey].push(job)
+    
+    // Group by week within the month
+    const weekStart = startOfWeek(date, { weekStartsOn: 1 }) // Monday start
+    const weekEnd = endOfWeek(date, { weekStartsOn: 1 })
+    
+    // Clamp to same month
+    const monthStart = startOfMonth(date)
+    const displayStart = weekStart < monthStart ? monthStart : weekStart
+    const displayEnd = !isSameMonth(weekEnd, date) ? monthStart : weekEnd
+    
+    const startDay = format(displayStart, 'd')
+    const endDay = format(displayEnd, 'd')
+    const monthName = format(date, 'MMMM', { locale: es })
+    
+    const weekKey = displayStart.getTime()
+    const label = startDay === endDay 
+      ? `${startDay} ${monthName}`
+      : `${startDay}-${endDay} ${monthName}`
+    
+    // Get service name
+    const serviceName = job.catalogo_servicios?.nombre || 'Personalizado'
+    
+    if (!acc[weekKey]) acc[weekKey] = { label, services: {} }
+    if (!acc[weekKey].services[serviceName]) acc[weekKey].services[serviceName] = []
+    acc[weekKey].services[serviceName].push(job)
     return acc
-  }, {} as Record<string, Trabajo[]>)
-
-  const sortedMonths = Object.keys(groupedJobs).sort((a, b) => {
-    const dateA = parseISO(groupedJobs[a][0].fecha_servicio)
-    const dateB = parseISO(groupedJobs[b][0].fecha_servicio)
-    return dateA.getTime() - dateB.getTime()
-  })
+  }, {} as Record<number, { label: string; services: Record<string, Trabajo[]> }>)
+  
+  const sortedWeeks = Object.keys(groupedJobs)
+    .map(Number)
+    .sort((a, b) => a - b)
 
   return (
     <div className="space-y-6 md:space-y-8">
-      {sortedMonths.map(monthStr => (
-        <div key={monthStr} className="space-y-3">
+      {sortedWeeks.map(weekKey => (
+        <div key={weekKey} className="space-y-4">
           <h3 className="text-xs md:text-sm font-black text-slate-700 capitalize tracking-tight flex items-center gap-2 px-1">
             <div className="w-1.5 h-1.5 rounded-full bg-[#00C9E0]" />
-            {monthStr}
+            {groupedJobs[weekKey].label}
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3">
-            {groupedJobs[monthStr].map((job) => {
+          
+          {Object.entries(groupedJobs[weekKey].services).map(([serviceName, jobs]) => (
+            <div key={serviceName} className="space-y-2">
+              <h4 className="text-[10px] md:text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 px-2">
+                <Briefcase className="h-3 w-3 text-[#0097A7]" />
+                {serviceName}
+                <span className="text-[9px] text-slate-400 font-normal">({jobs.length})</span>
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3">
+                {jobs.map((job) => {
               const status = statusConfig[job.estado as keyof typeof statusConfig] || statusConfig.proximo
               const priority = job.prioridad ? priorityConfig[job.prioridad as keyof typeof priorityConfig] : null
 
@@ -163,7 +191,7 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                         <button 
                           onClick={(e) => e.stopPropagation()}
                           className={cn(
-                            "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider cursor-pointer",
+                            "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider cursor-pointer whitespace-nowrap",
                             "border-2 border-dashed transition-all duration-200",
                             "hover:scale-[1.03] hover:shadow-md active:scale-[0.97]",
                             job.estado === 'completado' && "bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100 hover:border-emerald-400",
@@ -238,7 +266,9 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
               </div>
               )
             })}
-          </div>
+              </div>
+            </div>
+          ))}
         </div>
       ))}
     </div>

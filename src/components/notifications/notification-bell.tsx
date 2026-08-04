@@ -16,7 +16,7 @@ import {
   Sparkles,
   BellOff
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn, formatTime12 } from '@/lib/utils'
 import { toast } from 'sonner'
 import { useConfirm } from '@/components/ui/confirm-dialog'
 
@@ -274,7 +274,7 @@ export function NotificationBell() {
                         {reminder.hora && (
                           <span className="flex items-center gap-0.5 font-semibold">
                             <Clock className="h-3 w-3 shrink-0" />
-                            {reminder.hora.substring(0, 5)}
+                            {formatTime12(reminder.hora)}
                           </span>
                         )}
                         {reminder.completado ? (

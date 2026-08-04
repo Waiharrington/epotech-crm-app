@@ -42,13 +42,7 @@ function TrabajosContent() {
   const searchParams = useSearchParams()
   const [trabajos, setTrabajos] = useState<TrabajoWithDetails[]>([])
   const [loading, setLoading] = useState(true)
-  const [view, setView] = useState<'calendar' | 'list' | 'route'>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('trabajos-active-tab')
-      if (saved === 'calendar' || saved === 'list' || saved === 'route') return saved
-    }
-    return 'calendar'
-  })
+  const [view, setView] = useState<'calendar' | 'list' | 'route'>('calendar')
   const [search, setSearch] = useState('')
   const [listDateFilter, setListDateFilter] = useState<'all' | 'week' | 'month' | 'year' | 'custom'>('month')
   const [calendarViewMode, setCalendarViewMode] = useState<'day' | 'week' | 'fortnight' | 'month' | 'custom'>('month')
@@ -67,6 +61,15 @@ function TrabajosContent() {
   const [showRescheduleModal, setShowRescheduleModal] = useState(false)
   const [rescheduleDate, setRescheduleDate] = useState<string>('')
   const [rescheduleTime, setRescheduleTime] = useState<string>('')
+  const [serviceFilter, setServiceFilter] = useState<string>('all')
+
+  // Restore active tab from localStorage (client only)
+  useEffect(() => {
+    const saved = localStorage.getItem('trabajos-active-tab')
+    if (saved === 'calendar' || saved === 'list' || saved === 'route') {
+      setView(saved)
+    }
+  }, [])
 
   // Persist active tab to localStorage
   useEffect(() => {
@@ -208,7 +211,10 @@ function TrabajosContent() {
       }
     }
 
-    return matchesSearch && matchesDate
+    // 3. Service Filter
+    const matchesService = serviceFilter === 'all' || t.catalogo_servicios?.nombre === serviceFilter
+
+    return matchesSearch && matchesDate && matchesService
   })
 
   // Stats
@@ -391,6 +397,22 @@ function TrabajosContent() {
                 </div>
               )}
 
+              {/* Service Filter Dropdown */}
+              {view === 'list' && (
+                <Select value={serviceFilter} onValueChange={setServiceFilter}>
+                  <SelectTrigger className="h-7 w-auto min-w-[120px] px-2.5 rounded-lg text-[9px] font-bold uppercase tracking-wider bg-white/[0.06] border border-white/10 text-white hover:bg-white/10 transition-all backdrop-blur-md data-[placeholder]:text-slate-400">
+                    <Filter className="h-3 w-3 mr-1 text-[#00C9E0]" />
+                    <SelectValue placeholder="Servicio" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border border-slate-200/80 shadow-lg bg-white">
+                    <SelectItem value="all" className="text-[10px] font-semibold rounded-lg">Todos los servicios</SelectItem>
+                    {Array.from(new Set(trabajos.map(t => t.catalogo_servicios?.nombre).filter(Boolean))).map(service => (
+                      <SelectItem key={service} value={service!} className="text-[10px] font-semibold rounded-lg">{service}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+
               {/* Custom Date Range Picker */}
               {((view === 'calendar' && calendarViewMode === 'custom') || (view === 'list' && listDateFilter === 'custom')) && (
                 <Popover>
@@ -402,18 +424,18 @@ function TrabajosContent() {
                       {customDateRange?.start ? (
                         customDateRange.end ? (
                           <>
-                            {format(customDateRange.start, "LLL dd, y")} -{" "}
-                            {format(customDateRange.end, "LLL dd, y")}
+                            {format(customDateRange.start, "d 'de' LLLL, yyyy", { locale: es })} -{" "}
+                            {format(customDateRange.end, "d 'de' LLLL, yyyy", { locale: es })}
                           </>
                         ) : (
-                          format(customDateRange.start, "LLL dd, y")
+                          format(customDateRange.start, "d 'de' LLLL, yyyy", { locale: es })
                         )
                       ) : (
                         <span>Selecciona fechas</span>
                       )}
                     </button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="w-auto p-0 max-w-[calc(100vw-2rem)] overflow-x-auto" align="start">
                     <CalendarPicker
                       initialFocus
                       mode="range"

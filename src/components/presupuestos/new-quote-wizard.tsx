@@ -286,8 +286,8 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit }:
                   Servicios en Cotización ({lineItems.length})
                 </p>
                 <div className="space-y-1.5 max-h-[150px] overflow-y-auto">
-                  {lineItems.map(item => (
-                    <div key={item.id} className="flex items-center gap-2 p-2 bg-[#F0F5FA] rounded-lg">
+                  {lineItems.map((item, idx) => (
+                    <div key={item.id || idx} className="flex items-center gap-2 p-2 bg-[#F0F5FA] rounded-lg">
                       <div className="flex-1 min-w-0">
                         <p className="text-[10px] font-bold text-slate-700 truncate">{item.nombre}</p>
                         <p className="text-[9px] text-slate-400">${item.precio.toLocaleString()} c/u</p>

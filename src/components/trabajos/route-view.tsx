@@ -243,6 +243,7 @@ function JobCard({
 export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClick, onEditClick }: RouteViewProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [hasScrolled, setHasScrolled] = useState(false)
+  const [needsScroll, setNeedsScroll] = useState(false)
 
   const dayJobs = jobs.filter(job => {
     if (!job.fecha_servicio) return false
@@ -275,11 +276,26 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
   const [truckStyle, setTruckStyle] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
   const [truckReady, setTruckReady] = useState(false)
 
+  // Refs for tablet node positions (vertical zigzag)
+  const tabletContainerRef = useRef<HTMLDivElement | null>(null)
+  const tabletNodeRefs = useRef<(HTMLDivElement | null)[]>([])
+  const tabletStartRef = useRef<HTMLDivElement | null>(null)
+  const [tabletTruckStyle, setTabletTruckStyle] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
+  const [tabletTruckReady, setTabletTruckReady] = useState(false)
+
   // Refs for desktop node positions
   const desktopNodeRefs = useRef<(HTMLDivElement | null)[]>([])
   const desktopStartRef = useRef<HTMLDivElement | null>(null)
   const [desktopTruckStyle, setDesktopTruckStyle] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
   const [desktopTruckReady, setDesktopTruckReady] = useState(false)
+
+  // Check if scroll container has overflow
+  useEffect(() => {
+    if (scrollRef.current) {
+      const hasOverflow = scrollRef.current.scrollWidth > scrollRef.current.clientWidth
+      setNeedsScroll(hasOverflow)
+    }
+  }, [sortedJobs.length])
 
   const updateTruckPosition = useCallback(() => {
     let targetEl: HTMLDivElement | null = null
@@ -318,12 +334,31 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
     }
   }, [truckPosition])
 
+  const updateTabletTruckPosition = useCallback(() => {
+    let targetEl: HTMLDivElement | null = null
+    if (truckPosition === -1) {
+      targetEl = tabletStartRef.current
+    } else {
+      targetEl = tabletNodeRefs.current[truckPosition]
+    }
+    if (targetEl && tabletContainerRef.current) {
+      const rect = targetEl.getBoundingClientRect()
+      const containerRect = tabletContainerRef.current.getBoundingClientRect()
+      setTabletTruckStyle({
+        top: rect.top - containerRect.top + tabletContainerRef.current.scrollTop + (rect.height - 32) / 2,
+        left: rect.left - containerRect.left + (rect.width - 32) / 2
+      })
+    }
+  }, [truckPosition])
+
   useEffect(() => {
     updateTruckPosition()
     updateDesktopTruckPosition()
+    updateTabletTruckPosition()
     if (!truckReady) setTruckReady(true)
     if (!desktopTruckReady) setDesktopTruckReady(true)
-  }, [truckPosition, updateTruckPosition, updateDesktopTruckPosition, truckReady, desktopTruckReady])
+    if (!tabletTruckReady) setTabletTruckReady(true)
+  }, [truckPosition, updateTruckPosition, updateDesktopTruckPosition, updateTabletTruckPosition, truckReady, desktopTruckReady, tabletTruckReady])
 
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     if (scrollRef.current && e.deltaY !== 0) {
@@ -365,8 +400,8 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
       />
       <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/5 to-white/20 pointer-events-none" />
 
-      {/* MOBILE VIEW */}
-      <div ref={mobileContainerRef} className="xl:hidden w-full px-4 pt-3 pb-6 relative flex flex-col z-10 overflow-y-auto">
+      {/* MOBILE VIEW - phones only */}
+      <div ref={mobileContainerRef} className="max-md:flex hidden w-full px-4 pt-3 pb-6 relative flex-col z-10 overflow-y-auto">
         
         {/* Road SVG */}
         <div className="absolute inset-y-6 left-[22px] w-[36px] pointer-events-none z-0">
@@ -459,6 +494,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                     onRescheduleClick={onRescheduleClick}
                     onEditClick={onEditClick}
                     isNext={isNext}
+                    isTruckHere={isTruckHere}
                     eta={getETA(index, sortedJobs)}
                     index={index}
                   />
@@ -479,22 +515,138 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
         </div>
       </div>
 
+      {/* TABLET VIEW - vertical zigzag: cards alternate left/right of vertical road */}
+      <div ref={tabletContainerRef} className="hidden md:flex xl:hidden w-full flex-col z-10 overflow-y-auto py-4">
+        <div className="relative w-full" style={{ minHeight: `${sortedJobs.length * 220 + 140}px` }}>
+          
+          {/* Straight vertical road */}
+          <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[30px] pointer-events-none z-0">
+            <div className="w-full h-full rounded-full" style={{ background: BORDER_COLOR }} />
+            <div className="absolute inset-x-[5px] top-0 bottom-0 rounded-full" style={{ background: ROAD_COLOR }} />
+            <div className="absolute inset-x-[13px] top-0 bottom-0 rounded-full opacity-80" style={{ background: LINE_COLOR }} />
+          </div>
+
+          {/* Start node */}
+          <div 
+            ref={el => { tabletStartRef.current = el }}
+            className="absolute left-1/2 -translate-x-1/2 z-20" 
+            style={{ top: '10px' }}
+          >
+            <div className={cn(
+              "h-10 w-10 rounded-full border-[3px] shadow-md flex items-center justify-center transition-all duration-500",
+              truckPosition === -1 
+                ? "bg-gradient-to-br from-amber-400 to-amber-500 border-amber-400 shadow-amber-200/50" 
+                : "border-emerald-300 bg-emerald-100"
+            )}>
+              {truckPosition === -1 ? null : <Check className="h-4 w-4 text-emerald-600" />}
+            </div>
+            <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-white border border-slate-200 text-slate-700 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
+              <span className="text-[8px] font-black uppercase tracking-widest">Inicio</span>
+            </div>
+          </div>
+
+          {/* Floating Truck */}
+          <div 
+            className="absolute z-30 pointer-events-none"
+            style={{ 
+              top: tabletTruckStyle.top, 
+              left: tabletTruckStyle.left,
+              transition: tabletTruckReady ? 'all 700ms ease-in-out' : 'none'
+            }}
+          >
+            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center">
+              <Truck className="h-4 w-4 text-white truck-animate" />
+            </div>
+          </div>
+
+          {/* Stops - cards alternate left/right of center line */}
+          {sortedJobs.map((job, index) => {
+            const isLeft = index % 2 === 0
+            const isCompleted = job.estado === 'completado'
+            const isNext = index === nextJobIndex
+            const isTruckHere = truckPosition === index
+            const yPos = 60 + index * 220 + 110
+
+            return (
+              <div key={job.id}>
+                {/* Card - positioned left or right */}
+                <div
+                  className="absolute z-10"
+                  style={{ top: `${yPos - 55}px`, left: isLeft ? '4%' : '54%', width: '42%' }}
+                >
+                  <JobCard 
+                    job={job} 
+                    onStatusChange={onStatusChange} 
+                    onRescheduleClick={onRescheduleClick}
+                    onEditClick={onEditClick}
+                    isNext={isNext}
+                    isTruckHere={isTruckHere}
+                    eta={getETA(index, sortedJobs)}
+                    index={index}
+                  />
+                </div>
+
+                {/* Node circle - always centered on road */}
+                <div 
+                  ref={el => { tabletNodeRefs.current[index] = el }}
+                  className={cn(
+                    "absolute left-1/2 -translate-x-1/2 h-9 w-9 rounded-full border-[3px] shadow-md flex items-center justify-center z-20 transition-all duration-500",
+                    isTruckHere && "border-transparent bg-transparent shadow-none",
+                    !isTruckHere && isCompleted && "bg-white border-emerald-400",
+                    !isTruckHere && !isCompleted && isNext && "bg-white border-amber-400 shadow-amber-200/50",
+                    !isTruckHere && !isCompleted && !isNext && "bg-white border-[#0097A7]"
+                  )}
+                  style={{ top: `${yPos - 18}px` }}
+                >
+                  {isTruckHere ? null : isCompleted ? (
+                    <Check className="h-3.5 w-3.5 text-emerald-600" />
+                  ) : (
+                    <Home className={cn("h-4 w-4", isNext ? "text-amber-500" : "text-[#0097A7]")} />
+                  )}
+                  {!isTruckHere && (
+                    <div className={cn(
+                      "absolute -top-1 -right-1 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border-2 border-white shadow",
+                      isCompleted ? "bg-emerald-500" : isNext ? "bg-amber-500" : "bg-red-500"
+                    )}>
+                      {index + 1}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+
+          {/* End node */}
+          <div className="absolute left-1/2 -translate-x-1/2 z-20" style={{ top: `${sortedJobs.length * 220 + 60}px` }}>
+            <div className="h-10 w-10 rounded-full bg-white border-[3px] border-slate-300 shadow-md flex items-center justify-center">
+              <Flag className="h-4 w-4 text-[#0097A7]" />
+            </div>
+            <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-white border border-slate-200 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
+              <span className="text-[8px] font-black uppercase tracking-widest">Fin</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       {/* DESKTOP VIEW */}
       <div 
         className="hidden xl:block relative w-full z-10"
         style={{ minHeight: `${TOTAL_H}px` }}
       >
-        {/* Scroll hint */}
-        <div
-          className={`pointer-events-none absolute right-3 top-3 z-50 transition-all duration-700 ${
-            hasScrolled ? 'opacity-0 translate-x-2' : 'opacity-100 translate-x-0'
-          }`}
-        >
-          <div className="bg-slate-800/80 backdrop-blur rounded-full px-2.5 py-1.5 shadow-lg flex items-center gap-1.5 border border-slate-600/30">
-            <ChevronRight className="h-3.5 w-3.5" style={{ color: '#00C9E0' }} />
-            <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Scroll</span>
+        {/* Scroll hint - only shows when content overflows */}
+        {needsScroll && (
+          <div
+            className={`pointer-events-none absolute right-3 top-3 z-50 transition-all duration-700 ${
+              hasScrolled ? 'opacity-0 translate-x-2' : 'opacity-100 translate-x-0'
+            }`}
+          >
+            <div className="bg-slate-800/80 backdrop-blur rounded-full px-2.5 py-1.5 shadow-lg flex items-center gap-1.5 border border-slate-600/30">
+              <ChevronRight className="h-3.5 w-3.5" style={{ color: '#00C9E0' }} />
+              <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Scroll</span>
+            </div>
           </div>
-        </div>
+        )}
 
         <div
           ref={scrollRef}

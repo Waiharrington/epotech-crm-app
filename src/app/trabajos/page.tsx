@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, useCallback } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Calendar as CalendarPicker } from '@/components/ui/calendar'
-import { addDays, format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, isWithinInterval, parseISO } from 'date-fns'
+import { addDays, format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear, isWithinInterval, parseISO, isSameDay } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { CalendarView } from '@/components/trabajos/calendar-view'
 import { Input } from '@/components/ui/input'
@@ -42,7 +42,13 @@ function TrabajosContent() {
   const searchParams = useSearchParams()
   const [trabajos, setTrabajos] = useState<TrabajoWithDetails[]>([])
   const [loading, setLoading] = useState(true)
-  const [view, setView] = useState<'calendar' | 'list' | 'route'>('calendar')
+  const [view, setView] = useState<'calendar' | 'list' | 'route'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('trabajos-active-tab')
+      if (saved === 'calendar' || saved === 'list' || saved === 'route') return saved
+    }
+    return 'calendar'
+  })
   const [search, setSearch] = useState('')
   const [listDateFilter, setListDateFilter] = useState<'all' | 'week' | 'month' | 'year' | 'custom'>('month')
   const [calendarViewMode, setCalendarViewMode] = useState<'day' | 'week' | 'fortnight' | 'month' | 'custom'>('month')
@@ -62,6 +68,11 @@ function TrabajosContent() {
   const [rescheduleDate, setRescheduleDate] = useState<string>('')
   const [rescheduleTime, setRescheduleTime] = useState<string>('')
 
+  // Persist active tab to localStorage
+  useEffect(() => {
+    localStorage.setItem('trabajos-active-tab', view)
+  }, [view])
+
   const handleStatusChange = async (job: TrabajoWithDetails, newStatus: 'proximo' | 'en_progreso' | 'completado') => {
     if (newStatus === 'completado') {
       setJobToComplete(job)
@@ -78,6 +89,20 @@ function TrabajosContent() {
     } else {
       fetchTrabajos()
     }
+  }
+
+  const handleResetJobs = async () => {
+    const todayJobs = trabajos.filter(j => isSameDay(parseISO(j.fecha_servicio || ''), routeDate))
+    if (todayJobs.length === 0) return
+
+    for (const job of todayJobs) {
+      await (supabase as any)
+        .from('trabajos')
+        .update({ estado: 'proximo' })
+        .eq('id', job.id)
+    }
+    toast.success(`${todayJobs.length} trabajos reseteados`)
+    fetchTrabajos()
   }
 
   const handleJobReschedule = async (jobId: string, newDateStr: string, newTimeStr?: string) => {
@@ -294,8 +319,8 @@ function TrabajosContent() {
 
               {/* Date picker for Route view */}
               {view === 'route' && (
-                <div className="flex items-center gap-2 bg-white/[0.06] p-1 pl-3 rounded-xl border border-white/10 backdrop-blur-md shrink-0">
-                  <span className="text-[9px] font-bold text-white/50 uppercase tracking-widest">Día</span>
+                <div suppressHydrationWarning className="flex items-center gap-2 bg-white/[0.06] p-1 pl-3 rounded-xl border border-white/10 backdrop-blur-md shrink-0">
+                  <span suppressHydrationWarning className="text-[9px] font-bold text-white/50 uppercase tracking-widest">Día</span>
                   <DatePicker
                     value={format(routeDate, 'yyyy-MM-dd')}
                     onChange={(newDate) => {
@@ -303,6 +328,12 @@ function TrabajosContent() {
                     }}
                     className="bg-white/10 border-white/20 text-white h-7 text-[10px] w-32 shadow-none"
                   />
+                  <button
+                    onClick={handleResetJobs}
+                    className="text-[8px] font-bold text-white/50 hover:text-white/80 bg-white/10 hover:bg-white/20 px-2 py-1 rounded-lg transition-all uppercase tracking-wider"
+                  >
+                    Reset
+                  </button>
                 </div>
               )}
 
@@ -482,21 +513,21 @@ function TrabajosContent() {
                   </div>
                 ) : (
                   <div className="relative bg-[#F8FAFC] rounded-2xl flex-1 min-h-0 overflow-hidden flex flex-col">
-                     <RouteView 
-                       jobs={filteredTrabajos} 
-                       selectedDate={routeDate} 
-                       onStatusChange={handleStatusChange}
-                       onRescheduleClick={(job) => {
-                         setJobToReschedule(job as TrabajoWithDetails)
-                         setRescheduleDate(job.fecha_servicio)
-                         setRescheduleTime(job.hora_servicio || '')
-                         setShowRescheduleModal(true)
-                       }}
-                       onEditClick={(job) => {
-                         setJobToEdit(job as TrabajoWithDetails)
-                         setShowEditModal(true)
-                       }}
-                     />
+                      <RouteView 
+                        jobs={filteredTrabajos} 
+                        selectedDate={routeDate} 
+                        onStatusChange={handleStatusChange}
+                        onRescheduleClick={(job) => {
+                          setJobToReschedule(job as TrabajoWithDetails)
+                          setRescheduleDate(job.fecha_servicio)
+                          setRescheduleTime(job.hora_servicio || '')
+                          setShowRescheduleModal(true)
+                        }}
+                        onEditClick={(job) => {
+                          setJobToEdit(job as TrabajoWithDetails)
+                          setShowEditModal(true)
+                        }}
+                      />
                   </div>
                 )}
             </div>
@@ -557,6 +588,9 @@ function TrabajosContent() {
           onSuccess={() => {
             setJobToComplete(null)
             fetchTrabajos()
+          }}
+          onOptimisticUpdate={(jobId, updates) => {
+            setTrabajos(prev => prev.map(t => t.id === jobId ? { ...t, ...updates } : t))
           }}
         />
       )}

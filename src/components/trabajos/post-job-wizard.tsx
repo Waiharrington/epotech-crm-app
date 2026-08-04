@@ -38,9 +38,10 @@ interface PostJobWizardProps {
   job: TrabajoWithDetails
   onClose: () => void
   onSuccess: () => void
+  onOptimisticUpdate?: (jobId: string, updates: Partial<TrabajoWithDetails>) => void
 }
 
-export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
+export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: PostJobWizardProps) {
   const supabase = createClient()
   const { isOpen, isMounted, handleClose } = useDialogClose(onClose)
   const [loading, setLoading] = useState(false)
@@ -70,6 +71,7 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
   const [maquinasStock, setMaquinasStock] = useState<any[]>([])
   const [isCustomMaquina, setIsCustomMaquina] = useState(false)
   const [searchMaterial, setSearchMaterial] = useState('')
+  const [showDetails, setShowDetails] = useState(false)
 
   useEffect(() => {
     // Set default next visit date (e.g. +30 days)
@@ -155,6 +157,14 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
   const handleComplete = async () => {
     setLoading(true)
     
+    // Optimistic update: update local state immediately so truck animates
+    if (onOptimisticUpdate) {
+      onOptimisticUpdate(job.id, { estado: 'completado' })
+    }
+    
+    // Close modal immediately for smooth UX
+    handleClose()
+
     // 1. Update Job status and details
     const { error: jobError } = await (supabase as any)
       .from('trabajos')
@@ -384,12 +394,13 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
           </div>
         </div>
 
-        <div className="p-5 md:p-6 space-y-6 flex-1 overflow-y-auto">
+        <div className="p-5 md:p-6 space-y-5 flex-1 overflow-y-auto">
           <div className="space-y-4">
-            <div className="space-y-2 pb-2">
+            {/* ESSENTIAL: Price */}
+            <div className="space-y-2">
               <Label htmlFor="cobrado" className="flex items-center text-sm font-bold text-slate-700">
                 <DollarSign className="mr-1.5 h-4 w-4 text-emerald-500" />
-                Monto Cobrado Final
+                Monto Cobrado
               </Label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium text-lg">$</span>
@@ -403,303 +414,294 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label>Equipos / Herramientas Usados</Label>
-                    <div className="flex gap-2">
-                      {isCustomMaquina ? (
-                        <>
-                          <Input 
-                              id="maquina" 
-                              placeholder="Ej: Cepillo industrial"
-                              value={currentEquipo} 
-                              onChange={e => setCurrentEquipo(e.target.value)}
-                              className="flex-1"
-                              onKeyDown={e => {
-                                if (e.key === 'Enter') {
-                                  e.preventDefault()
-                                  addEquipo()
-                                }
-                              }}
-                          />
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            size="icon"
-                            onClick={() => {
-                              setIsCustomMaquina(false)
-                              setCurrentEquipo('')
-                            }}
-                          >
-                            Lista
-                          </Button>
-                        </>
-                      ) : (
-                        <Select 
-                          value={currentEquipo === '' ? 'placeholder' : currentEquipo} 
-                          onValueChange={v => {
-                            if (v === 'otro') {
-                              setIsCustomMaquina(true)
-                              setCurrentEquipo('')
-                            } else if (v !== 'placeholder') {
-                              setCurrentEquipo(v)
-                            }
-                          }}
-                        >
-                          <SelectTrigger className="flex-1">
-                             <SelectValue placeholder="Selecciona equipo..." />
-                          </SelectTrigger>
-                          <SelectContent>
-                             <SelectItem value="placeholder" disabled>Selecciona equipo...</SelectItem>
-                             {maquinasStock.map(m => (
-                                <SelectItem key={m.id} value={m.nombre}>{m.nombre}</SelectItem>
-                             ))}
-                             <SelectItem value="otro">Otro (Escribir manual)</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      )}
-                      <Button type="button" onClick={addEquipo} className="bg-[#0097A7] hover:bg-[#007f8c] text-white border-none rounded-lg">
-                        <Plus className="h-4 w-4 text-white" />
-                      </Button>
-                    </div>
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="presion">Presión Agua</Label>
-                    <Input 
-                        id="presion" 
-                        placeholder="Ej: 2500 PSI"
-                        value={presionAgua} 
-                        onChange={e => setPresionAgua(e.target.value)}
-                    />
-                </div>
-            </div>
-
-            {/* List of added tools */}
-            {equiposUsados.length > 0 && (
-              <div className="flex flex-wrap gap-2 pt-1">
-                {equiposUsados.map(eq => (
-                  <Badge key={eq} variant="secondary" className="flex items-center gap-1.5 py-1.5 px-3 bg-muted hover:bg-muted text-foreground border border-border">
-                    <span>{eq}</span>
-                    <button 
-                      type="button" 
-                      onClick={() => removeEquipo(eq)}
-                      className="text-muted-foreground hover:text-destructive rounded-full p-0.5 transition-colors"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-            )}
-
+            {/* ESSENTIAL: Notes */}
             <div className="space-y-2">
-              <Label htmlFor="quimicos">Químicos Aplicados</Label>
-              <Input 
-                id="quimicos" 
-                placeholder="Mezcla de Cloro / Jabón..."
-                value={quimicos} 
-                onChange={e => setQuimicos(e.target.value)}
+              <Label htmlFor="notas" className="text-sm font-bold text-slate-700">Notas</Label>
+              <Textarea 
+                id="notas" 
+                placeholder="Observaciones breves..."
+                value={notasPost}
+                onChange={e => setNotasPost(e.target.value)}
+                rows={2}
               />
             </div>
 
-            <div className="space-y-2">
-              <Label className="flex items-center text-slate-700 font-bold">
-                <Package className="mr-1.5 h-4 w-4 text-[#0097A7]" />
-                Materiales Utilizados (Stock)
-              </Label>
-              
-              {materials.length > 0 && (
-                <div className="space-y-2 mb-3">
-                  {materials.map(m => {
-                    const stockItem = availableStock.find(s => s.id === m.id)
-                    const unit = stockItem?.unidad_medida || 'ud'
-                    const precioCosto = stockItem?.precio_costo || 0
-                    const costoUso = precioCosto * m.cantidad
-                    return (
-                    <div key={m.id} className="flex flex-col gap-3 bg-white p-3.5 rounded-xl border border-slate-200/60 shadow-sm">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <span className="text-sm font-bold text-slate-800">{m.nombre}</span>
-                          <p className="text-[10px] text-slate-500 mt-0.5">
-                            Costo: ${precioCosto}/{unit} &middot; Subtotal: <span className="font-bold text-slate-700">${costoUso.toFixed(2)}</span>
-                          </p>
-                        </div>
-                        <Button variant="ghost" size="icon" className="h-7 w-7 text-red-500 hover:bg-red-50 hover:text-red-600 rounded-lg shrink-0" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
-                      </div>
-                      <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
-                        <Label className="text-[10px] text-slate-500 font-semibold shrink-0 uppercase tracking-wider">Cantidad usada</Label>
-                        <div className="relative flex-1">
-                          <Input 
-                            type="number" 
-                            step="0.01"
-                            min="0"
-                            className="h-9 text-sm font-bold pr-12 bg-white"
-                            value={m.cantidad}
-                            onChange={(e) => {
-                              setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: parseFloat(e.target.value) || 0 } : x))
-                            }}
-                          />
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400 uppercase tracking-wider">{unit}</span>
-                        </div>
-                      </div>
-                      {m.cantidad > (stockItem?.cantidad_actual || 0) && (
-                        <div className="flex flex-col gap-2 mt-1.5 p-2 bg-orange-50 border border-orange-100 rounded">
-                           <div className="flex items-center justify-between">
-                             <p className="text-[10px] text-orange-700 font-medium">
-                               ⚠️ Superas el stock ({stockItem?.cantidad_actual || 0} {unit} disponibles)
-                             </p>
-                             <span className="text-[9px] bg-orange-200 text-orange-800 px-1 rounded font-bold uppercase">Auto-compra</span>
-                           </div>
-                           <div className="grid grid-cols-2 gap-2 pt-1.5 border-t border-orange-100/60">
-                             <div className="space-y-1">
-                               <Label className="text-[9px] text-orange-800 font-bold">Costo Unitario Compra ($)</Label>
-                               <Input 
-                                 type="number"
-                                 step="0.01"
-                                 min="0"
-                                 className="h-7 text-[10px] bg-white border-orange-200 text-orange-950 font-bold"
-                                 value={m.precio_costo !== undefined ? m.precio_costo : precioCosto}
-                                 onChange={(e) => {
-                                   setMaterials(materials.map(x => x.id === m.id ? { ...x, precio_costo: parseFloat(e.target.value) || 0 } : x))
-                                 }}
-                               />
-                             </div>
-                             <div className="space-y-1">
-                               <Label className="text-[9px] text-orange-800 font-bold">Precio Venta Cliente ($)</Label>
-                               <Input 
-                                 type="number"
-                                 step="0.01"
-                                 min="0"
-                                 className="h-7 text-[10px] bg-white border-orange-200 text-orange-950 font-bold"
-                                 value={m.precio_cliente !== undefined ? m.precio_cliente : (stockItem?.precio_cliente || 0)}
-                                 onChange={(e) => {
-                                   setMaterials(materials.map(x => x.id === m.id ? { ...x, precio_cliente: parseFloat(e.target.value) || 0 } : x))
-                                 }}
-                               />
-                             </div>
-                           </div>
-                        </div>
-                      )}
-                    </div>
-                  )})}
-                </div>
-              )}
+            {/* TOGGLE: Show/Hide Details */}
+            <button
+              type="button"
+              onClick={() => setShowDetails(!showDetails)}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border-2 border-dashed border-slate-200 text-slate-500 hover:border-[#0097A7] hover:text-[#0097A7] transition-all text-xs font-bold uppercase tracking-wider"
+            >
+              <Plus className={cn("h-4 w-4 transition-transform", showDetails && "rotate-45")} />
+              {showDetails ? 'Ocultar detalles' : 'Agregar detalles'}
+            </button>
 
-              <div className="space-y-2">
-                <div className="relative">
-                  <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
-                  <Input 
-                    placeholder="Buscar material..." 
-                    value={searchMaterial}
-                    onChange={(e) => setSearchMaterial(e.target.value)}
-                    className="pl-8 h-8 text-xs"
-                  />
-                </div>
-                
-                {searchMaterial && (
-                  <div className="border rounded-md bg-card shadow-sm max-h-[150px] overflow-y-auto p-1 animate-in fade-in zoom-in-95 duration-200 z-50">
-                    {availableStock
-                      .filter(s => 
-                        !materials.find(m => m.id === s.id) && 
-                        s.nombre.toLowerCase().includes(searchMaterial.toLowerCase())
-                      )
-                      .map(s => (
-                        <button
-                          key={s.id}
-                          className="w-full text-left px-2 py-1.5 text-xs hover:bg-muted rounded flex items-center justify-between transition-colors"
+            {/* EXPANDABLE: Extra Details */}
+            {showDetails && (
+              <div className="space-y-4 animate-in slide-in-from-top-2 duration-300">
+
+                {/* Equipment */}
+                <div className="space-y-2">
+                  <Label>Equipos / Herramientas</Label>
+                  <div className="flex gap-2">
+                    {isCustomMaquina ? (
+                      <>
+                        <Input 
+                          placeholder="Ej: Cepillo industrial"
+                          value={currentEquipo} 
+                          onChange={e => setCurrentEquipo(e.target.value)}
+                          className="flex-1"
+                          onKeyDown={e => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault()
+                              addEquipo()
+                            }
+                          }}
+                        />
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="icon"
                           onClick={() => {
-                            setMaterials([...materials, { 
-                              id: s.id, 
-                              nombre: s.nombre, 
-                              cantidad: 1, 
-                              unidad: s.unidad_medida || 'ud',
-                              precio_costo: s.precio_costo || 0,
-                              precio_cliente: s.precio_cliente || 0
-                            }])
-                            setSearchMaterial('')
+                            setIsCustomMaquina(false)
+                            setCurrentEquipo('')
                           }}
                         >
-                          <span className="font-medium">{s.nombre}</span>
-                          <span className="text-[10px] opacity-60 bg-muted px-1.5 rounded">{s.cantidad_actual} {s.unidad_medida}</span>
+                          Lista
+                        </Button>
+                      </>
+                    ) : (
+                      <Select 
+                        value={currentEquipo === '' ? 'placeholder' : currentEquipo} 
+                        onValueChange={v => {
+                          if (v === 'otro') {
+                            setIsCustomMaquina(true)
+                            setCurrentEquipo('')
+                          } else if (v !== 'placeholder') {
+                            setCurrentEquipo(v)
+                          }
+                        }}
+                      >
+                        <SelectTrigger className="flex-1">
+                           <SelectValue placeholder="Selecciona equipo..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                           <SelectItem value="placeholder" disabled>Selecciona equipo...</SelectItem>
+                           {maquinasStock.map(m => (
+                              <SelectItem key={m.id} value={m.nombre}>{m.nombre}</SelectItem>
+                           ))}
+                           <SelectItem value="otro">Otro (Escribir manual)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                    <Button type="button" onClick={addEquipo} className="bg-[#0097A7] hover:bg-[#007f8c] text-white border-none rounded-lg">
+                      <Plus className="h-4 w-4 text-white" />
+                    </Button>
+                  </div>
+                </div>
+
+                {equiposUsados.length > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {equiposUsados.map(eq => (
+                      <Badge key={eq} variant="secondary" className="flex items-center gap-1.5 py-1.5 px-3 bg-muted hover:bg-muted text-foreground border border-border">
+                        <span>{eq}</span>
+                        <button 
+                          type="button" 
+                          onClick={() => removeEquipo(eq)}
+                          className="text-muted-foreground hover:text-destructive rounded-full p-0.5 transition-colors"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
                         </button>
-                      ))}
-                    {availableStock.filter(s => 
-                        !materials.find(m => m.id === s.id) && 
-                        s.nombre.toLowerCase().includes(searchMaterial.toLowerCase())
-                      ).length === 0 && (
-                        <p className="text-[10px] text-center py-2 text-muted-foreground italic">No se encontraron materiales</p>
-                      )}
+                      </Badge>
+                    ))}
                   </div>
                 )}
-              </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label className="flex items-center">
-                <Camera className="mr-2 h-4 w-4 text-primary" />
-                Fotos del Resultado
-              </Label>
-              <div className="grid grid-cols-3 gap-2">
-                 {uploadedPhotos.map(p => (
-                   <div key={p.id} className="aspect-square rounded-lg overflow-hidden border">
-                     <img src={p.url_foto} className="w-full h-full object-cover" />
-                   </div>
-                 ))}
-                 <div 
-                   className="aspect-square rounded-lg border-2 border-dashed border-muted flex flex-col items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
-                   onClick={() => setShowPhotoModal(true)}
-                 >
-                    <Plus className="h-6 w-6 text-muted-foreground" />
-                    <span className="text-[10px] text-muted-foreground mt-1">Añadir</span>
-                 </div>
-              </div>
-            </div>
+                {/* Pressure + Chemicals */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="presion">Presión Agua</Label>
+                    <Input 
+                      id="presion" 
+                      placeholder="Ej: 2500 PSI"
+                      value={presionAgua} 
+                      onChange={e => setPresionAgua(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="quimicos">Químicos</Label>
+                    <Input 
+                      id="quimicos" 
+                      placeholder="Cloro / Jabón..."
+                      value={quimicos} 
+                      onChange={e => setQuimicos(e.target.value)}
+                    />
+                  </div>
+                </div>
 
-            <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-4">
-              <div className="flex items-center justify-between">
-                <Label className="text-sm font-bold flex items-center gap-2">
-                   <DollarSign className="h-4 w-4 text-primary" /> Rentabilidad Estimada
-                </Label>
-                {(() => {
-                   const matCost = materials.reduce((acc, m) => {
-                     const item = availableStock.find(s => s.id === m.id)
-                     return acc + (item?.precio_costo || 0) * m.cantidad
-                   }, 0)
-                   const totalGastos = gastosAdicionales.reduce((sum, g) => sum + g.monto, 0)
-                   const net = precioCobrado - (matCost + totalGastos)
-                   return (
-                     <div className="text-right">
-                        <p className={cn("text-xl font-black", net >= 0 ? "text-green-600" : "text-destructive")}>
-                          ${net.toFixed(2)}
-                        </p>
-                        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Ganancia Neta</p>
-                     </div>
-                   )
-                })()}
-              </div>
+                {/* Materials */}
+                <div className="space-y-2">
+                  <Label className="flex items-center text-slate-700 font-bold">
+                    <Package className="mr-1.5 h-4 w-4 text-[#0097A7]" />
+                    Materiales (Stock)
+                  </Label>
+                  
+                  {materials.length > 0 && (
+                    <div className="space-y-2 mb-3">
+                      {materials.map(m => {
+                        const stockItem = availableStock.find(s => s.id === m.id)
+                        const unit = stockItem?.unidad_medida || 'ud'
+                        const precioCosto = stockItem?.precio_costo || 0
+                        const costoUso = precioCosto * m.cantidad
+                        return (
+                        <div key={m.id} className="flex flex-col gap-3 bg-white p-3.5 rounded-xl border border-slate-200/60 shadow-sm">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <span className="text-sm font-bold text-slate-800">{m.nombre}</span>
+                              <p className="text-[10px] text-slate-500 mt-0.5">
+                                Costo: ${precioCosto}/{unit} &middot; Subtotal: <span className="font-bold text-slate-700">${costoUso.toFixed(2)}</span>
+                              </p>
+                            </div>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-red-500 hover:bg-red-50 hover:text-red-600 rounded-lg shrink-0" onClick={() => setMaterials(materials.filter(x => x.id !== m.id))}>
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </Button>
+                          </div>
+                          <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                            <Label className="text-[10px] text-slate-500 font-semibold shrink-0 uppercase tracking-wider">Cantidad</Label>
+                            <div className="relative flex-1">
+                              <Input 
+                                type="number" 
+                                step="0.01"
+                                min="0"
+                                className="h-9 text-sm font-bold pr-12 bg-white"
+                                value={m.cantidad}
+                                onChange={(e) => {
+                                  setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: parseFloat(e.target.value) || 0 } : x))
+                                }}
+                              />
+                              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400 uppercase tracking-wider">{unit}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )})}
+                    </div>
+                  )}
 
-              <div className="space-y-3 pt-2 border-t border-primary/10">
-                 {gastosAdicionales.length > 0 && (
-                   <div className="space-y-2 mb-2">
-                     {gastosAdicionales.map((g, idx) => (
-                       <div key={idx} className="flex items-center justify-between bg-destructive/5 p-2 rounded-lg border border-destructive/10">
-                         <div className="flex flex-col">
-                           <span className="text-xs font-bold text-destructive">${g.monto.toFixed(2)}</span>
-                           <span className="text-[10px] text-muted-foreground">{g.motivo}</span>
+                  <div className="space-y-2">
+                    <div className="relative">
+                      <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                      <Input 
+                        placeholder="Buscar material..." 
+                        value={searchMaterial}
+                        onChange={(e) => setSearchMaterial(e.target.value)}
+                        className="pl-8 h-8 text-xs"
+                      />
+                    </div>
+                    
+                    {searchMaterial && (
+                      <div className="border rounded-md bg-card shadow-sm max-h-[150px] overflow-y-auto p-1 animate-in fade-in zoom-in-95 duration-200 z-50">
+                        {availableStock
+                          .filter(s => 
+                            !materials.find(m => m.id === s.id) && 
+                            s.nombre.toLowerCase().includes(searchMaterial.toLowerCase())
+                          )
+                          .map(s => (
+                            <button
+                              key={s.id}
+                              className="w-full text-left px-2 py-1.5 text-xs hover:bg-muted rounded flex items-center justify-between transition-colors"
+                              onClick={() => {
+                                setMaterials([...materials, { 
+                                  id: s.id, 
+                                  nombre: s.nombre, 
+                                  cantidad: 1, 
+                                  unidad: s.unidad_medida || 'ud',
+                                  precio_costo: s.precio_costo || 0,
+                                  precio_cliente: s.precio_cliente || 0
+                                }])
+                                setSearchMaterial('')
+                              }}
+                            >
+                              <span className="font-medium">{s.nombre}</span>
+                              <span className="text-[10px] opacity-60 bg-muted px-1.5 rounded">{s.cantidad_actual} {s.unidad_medida}</span>
+                            </button>
+                          ))}
+                        {availableStock.filter(s => 
+                            !materials.find(m => m.id === s.id) && 
+                            s.nombre.toLowerCase().includes(searchMaterial.toLowerCase())
+                          ).length === 0 && (
+                            <p className="text-[10px] text-center py-2 text-muted-foreground italic">No se encontraron materiales</p>
+                          )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Photos */}
+                <div className="space-y-2">
+                  <Label className="flex items-center">
+                    <Camera className="mr-2 h-4 w-4 text-primary" />
+                    Fotos del Resultado
+                  </Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {uploadedPhotos.map(p => (
+                      <div key={p.id} className="aspect-square rounded-lg overflow-hidden border">
+                        <img src={p.url_foto} className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                    <div 
+                      className="aspect-square rounded-lg border-2 border-dashed border-muted flex flex-col items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors"
+                      onClick={() => setShowPhotoModal(true)}
+                    >
+                      <Plus className="h-6 w-6 text-muted-foreground" />
+                      <span className="text-[10px] text-muted-foreground mt-1">Añadir</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Expenses */}
+                <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-sm font-bold flex items-center gap-2">
+                       <DollarSign className="h-4 w-4 text-primary" /> Rentabilidad Estimada
+                    </Label>
+                    {(() => {
+                       const matCost = materials.reduce((acc, m) => {
+                         const item = availableStock.find(s => s.id === m.id)
+                         return acc + (item?.precio_costo || 0) * m.cantidad
+                       }, 0)
+                       const totalGastos = gastosAdicionales.reduce((sum, g) => sum + g.monto, 0)
+                       const net = precioCobrado - (matCost + totalGastos)
+                       return (
+                         <div className="text-right">
+                            <p className={cn("text-xl font-black", net >= 0 ? "text-green-600" : "text-destructive")}>
+                              ${net.toFixed(2)}
+                            </p>
+                            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Ganancia Neta</p>
                          </div>
-                         <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => setGastosAdicionales(gastosAdicionales.filter((_, i) => i !== idx))}>
-                           <Trash2 className="h-3 w-3" />
-                         </Button>
-                       </div>
-                     ))}
-                   </div>
-                 )}
-                 <div className="flex items-end gap-2">
-                    <div className="flex-1 space-y-1">
-                       <Label className="text-[10px] uppercase text-muted-foreground">Gastos Adicionales ($)</Label>
-                       <div className="relative">
+                       )
+                    })()}
+                  </div>
+
+                  <div className="space-y-3 pt-2 border-t border-primary/10">
+                    {gastosAdicionales.length > 0 && (
+                      <div className="space-y-2 mb-2">
+                        {gastosAdicionales.map((g, idx) => (
+                          <div key={idx} className="flex items-center justify-between bg-destructive/5 p-2 rounded-lg border border-destructive/10">
+                            <div className="flex flex-col">
+                              <span className="text-xs font-bold text-destructive">${g.monto.toFixed(2)}</span>
+                              <span className="text-[10px] text-muted-foreground">{g.motivo}</span>
+                            </div>
+                            <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => setGastosAdicionales(gastosAdicionales.filter((_, i) => i !== idx))}>
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="flex items-end gap-2">
+                      <div className="flex-1 space-y-1">
+                        <Label className="text-[10px] uppercase text-muted-foreground">Gasto ($)</Label>
+                        <div className="relative">
                           <DollarSign className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
                           <Input 
                             type="number" 
@@ -708,137 +710,130 @@ export function PostJobWizard({ job, onClose, onSuccess }: PostJobWizardProps) {
                             onChange={e => setCostoVariable(parseFloat(e.target.value) || 0)}
                             placeholder="0.00"
                           />
-                       </div>
-                    </div>
-                    <div className="flex-[2] space-y-1">
-                       <Label className="text-[10px] uppercase text-muted-foreground">¿En qué se gastó?</Label>
-                       <Input 
-                        className="h-9 text-xs"
-                        value={motivoVariable}
-                        onChange={e => setMotivoVariable(e.target.value)}
-                        placeholder="Ej: Peajes..."
-                        onKeyDown={e => {
-                          if (e.key === 'Enter' && costoVariable > 0 && motivoVariable.trim()) {
-                            e.preventDefault()
-                            setGastosAdicionales([...gastosAdicionales, { monto: costoVariable, motivo: motivoVariable.trim() }])
-                            setCostoVariable(0)
-                            setMotivoVariable('')
-                          }
+                        </div>
+                      </div>
+                      <div className="flex-[2] space-y-1">
+                        <Label className="text-[10px] uppercase text-muted-foreground">Motivo</Label>
+                        <Input 
+                          className="h-9 text-xs"
+                          value={motivoVariable}
+                          onChange={e => setMotivoVariable(e.target.value)}
+                          placeholder="Ej: Peajes..."
+                          onKeyDown={e => {
+                            if (e.key === 'Enter' && costoVariable > 0 && motivoVariable.trim()) {
+                              e.preventDefault()
+                              setGastosAdicionales([...gastosAdicionales, { monto: costoVariable, motivo: motivoVariable.trim() }])
+                              setCostoVariable(0)
+                              setMotivoVariable('')
+                            }
+                          }}
+                        />
+                      </div>
+                      <Button 
+                        type="button"
+                        size="icon" 
+                        className="h-9 w-9 shrink-0" 
+                        disabled={!costoVariable || !motivoVariable.trim()}
+                        onClick={() => {
+                          setGastosAdicionales([...gastosAdicionales, { monto: costoVariable, motivo: motivoVariable.trim() }])
+                          setCostoVariable(0)
+                          setMotivoVariable('')
                         }}
-                       />
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
                     </div>
-                    <Button 
-                      type="button"
-                      size="icon" 
-                      className="h-9 w-9 shrink-0" 
-                      disabled={!costoVariable || !motivoVariable.trim()}
-                      onClick={() => {
-                        setGastosAdicionales([...gastosAdicionales, { monto: costoVariable, motivo: motivoVariable.trim() }])
-                        setCostoVariable(0)
-                        setMotivoVariable('')
-                      }}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                 </div>
-              </div>
-            </div>
+                  </div>
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="notas">Notas Finales</Label>
-              <Textarea 
-                id="notas" 
-                placeholder="Observaciones finales, recomendaciones al cliente..."
-                value={notasPost}
-                onChange={e => setNotasPost(e.target.value)}
-              />
-            </div>
-
-            <div className="pt-4 border-t space-y-4">
-               <div className="flex items-center justify-between p-4 bg-primary/5 rounded-xl border border-primary/10">
-                  <div className="flex items-center gap-3">
-                     <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                {/* Recurring */}
+                <div className="pt-4 border-t space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-primary/5 rounded-xl border border-primary/10">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
                         <Repeat className="h-5 w-5 text-primary" />
-                     </div>
-                     <div>
-                        <p className="text-sm font-bold">¿Es un servicio recurrente?</p>
-                        <p className="text-xs text-muted-foreground">Genera recordatorios automáticos</p>
-                     </div>
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold">¿Servicio recurrente?</p>
+                        <p className="text-xs text-muted-foreground">Genera recordatorios</p>
+                      </div>
+                    </div>
+                    <div className="flex bg-muted rounded-lg p-1">
+                      <button 
+                        className={cn("px-4 py-1 text-xs font-bold rounded-md transition-all", esRecurrente ? "bg-primary text-white shadow-sm" : "text-muted-foreground")}
+                        onClick={() => setEsRecurrente(true)}
+                      >SÍ</button>
+                      <button 
+                        className={cn("px-4 py-1 text-xs font-bold rounded-md transition-all", !esRecurrente ? "bg-zinc-600 text-white shadow-sm" : "text-muted-foreground")}
+                        onClick={() => setEsRecurrente(false)}
+                      >NO</button>
+                    </div>
                   </div>
-                  <div className="flex bg-muted rounded-lg p-1">
-                     <button 
-                       className={cn("px-4 py-1 text-xs font-bold rounded-md transition-all", esRecurrente ? "bg-primary text-white shadow-sm" : "text-muted-foreground")}
-                       onClick={() => setEsRecurrente(true)}
-                     >SÍ</button>
-                     <button 
-                       className={cn("px-4 py-1 text-xs font-bold rounded-md transition-all", !esRecurrente ? "bg-zinc-600 text-white shadow-sm" : "text-muted-foreground")}
-                       onClick={() => setEsRecurrente(false)}
-                     >NO</button>
-                  </div>
-               </div>
 
-               {esRecurrente && (
-                 <div className="grid grid-cols-2 gap-4 animate-in slide-in-from-top-2 duration-300">
-                    <div className="space-y-2">
-                       <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Frecuencia</Label>
-                       <Select 
-                         value={frecuencia} 
-                         onValueChange={(val) => {
+                  {esRecurrente && (
+                    <div className="grid grid-cols-2 gap-4 animate-in slide-in-from-top-2 duration-300">
+                      <div className="space-y-2">
+                        <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Frecuencia</Label>
+                        <Select 
+                          value={frecuencia} 
+                          onValueChange={(val) => {
                             setFrecuencia(val)
                             calculateNextDate(val, frecuenciaPersonalizada)
-                         }}
-                       >
+                          }}
+                        >
                           <SelectTrigger className="h-10">
-                             <SelectValue />
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                             <SelectItem value="semanal">Semanal</SelectItem>
-                             <SelectItem value="quincenal">Quincenal</SelectItem>
-                             <SelectItem value="mensual">Mensual</SelectItem>
-                             <SelectItem value="personalizado">Personalizado</SelectItem>
+                            <SelectItem value="semanal">Semanal</SelectItem>
+                            <SelectItem value="quincenal">Quincenal</SelectItem>
+                            <SelectItem value="mensual">Mensual</SelectItem>
+                            <SelectItem value="personalizado">Personalizado</SelectItem>
                           </SelectContent>
-                       </Select>
-                    </div>
-                    {frecuencia === 'personalizado' ? (
-                       <div className="space-y-2">
+                        </Select>
+                      </div>
+                      {frecuencia === 'personalizado' ? (
+                        <div className="space-y-2">
                           <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Cada cuántos días</Label>
                           <Input 
                             type="number" 
                             value={frecuenciaPersonalizada} 
                             onChange={(e) => {
-                               const val = parseInt(e.target.value) || 0
-                               setFrecuenciaPersonalizada(val)
-                               calculateNextDate('personalizado', val)
+                              const val = parseInt(e.target.value) || 0
+                              setFrecuenciaPersonalizada(val)
+                              calculateNextDate('personalizado', val)
                             }}
                             className="h-10"
                           />
-                       </div>
-                    ) : (
-                       <div className="space-y-2">
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
                           <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Próxima Visita</Label>
-                           <DatePicker 
+                          <DatePicker 
                             value={fechaProxima} 
                             onChange={setFechaProxima}
                             className="h-10"
                           />
-                       </div>
-                    )}
-                 </div>
-               )}
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-               {!esRecurrente && (
-                  <div className="space-y-2 animate-in fade-in duration-300">
-                     <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                        <Calendar className="h-3 w-3" /> Fecha Tentativa Próximo Servicio (Seguimiento)
-                     </Label>
+                  {!esRecurrente && (
+                    <div className="space-y-2 animate-in fade-in duration-300">
+                      <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                        <Calendar className="h-3 w-3" /> Próximo Servicio
+                      </Label>
                       <DatePicker 
                         value={fechaProxima} 
                         onChange={setFechaProxima}
                         className="h-10"
                       />
-                  </div>
-               )}
-            </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           
           <Button 

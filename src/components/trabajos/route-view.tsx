@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useMemo } from 'react'
+import { useRef, useState, useMemo, useCallback, useEffect } from 'react'
 import { MapPin, Truck, Home, Flag, ChevronRight, Calendar, Check, Play, Edit3, Clock, Navigation, Star } from 'lucide-react'
 import { isSameDay } from 'date-fns'
 import { cn } from '@/lib/utils'
@@ -97,6 +97,7 @@ function JobCard({
   onRescheduleClick, 
   onEditClick,
   isNext,
+  isTruckHere,
   eta,
   index
 }: { 
@@ -105,6 +106,7 @@ function JobCard({
   onRescheduleClick?: (job: TrabajoWithDetails) => void
   onEditClick?: (job: TrabajoWithDetails) => void
   isNext?: boolean
+  isTruckHere?: boolean
   eta?: string
   index?: number
 }) {
@@ -114,26 +116,36 @@ function JobCard({
     <div
       className={cn(
         "w-full rounded-xl bg-white border transition-all duration-200",
-        isNext 
+        isTruckHere
+          ? "border-amber-400 shadow-[0_0_24px_rgba(251,191,36,0.35)] ring-2 ring-amber-300/60"
+          : isNext 
           ? "border-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.25)] ring-2 ring-amber-200/50" 
           : "border-slate-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.05)]"
       )}
-      style={{ borderLeft: `3px solid ${isNext ? '#F59E0B' : st.borderColor}` }}
+      style={{ borderLeft: `3px solid ${isTruckHere ? '#D97706' : isNext ? '#F59E0B' : st.borderColor}` }}
     >
-      <div className="p-2 flex flex-col gap-1">
-        {/* Header: Name, Time, Status */}
-        <div className="flex items-start justify-between gap-1.5">
-          <div className="flex items-center gap-1.5 min-w-0">
+      <div className="p-2.5 flex flex-col gap-1.5">
+        
+        {/* Row 1: Name + Price + Status + Time */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 min-w-0 flex-1">
             {isNext && (
               <div className="shrink-0 h-4 w-4 rounded-full bg-amber-400 flex items-center justify-center shadow-sm">
                 <Star className="h-2.5 w-2.5 text-white fill-white" />
               </div>
             )}
-            <div className="min-w-0">
-              <p className="font-extrabold text-slate-800 text-[11px] leading-none mb-0.5 tracking-tight truncate">
-                {job.clientes.nombre} {job.clientes.apellido}
-              </p>
-              <p className="text-[8px] text-slate-400 font-bold uppercase tracking-wider truncate">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1.5">
+                <p className="font-extrabold text-slate-800 text-[11px] leading-none tracking-tight truncate">
+                  {job.clientes.nombre} {job.clientes.apellido}
+                </p>
+                {job.precio_acordado ? (
+                  <span className="text-[9px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 shrink-0">
+                    ${job.precio_acordado}
+                  </span>
+                ) : null}
+              </div>
+              <p className="text-[8px] text-slate-400 font-bold uppercase tracking-wider truncate mt-0.5">
                 {job.catalogo_servicios?.nombre || 'Personalizado'}
               </p>
             </div>
@@ -151,88 +163,74 @@ function JobCard({
           </div>
         </div>
 
-        {/* Address */}
-        <p className="text-[8.5px] text-slate-500 font-medium flex items-start gap-1 leading-tight">
-          <MapPin className="h-2.5 w-2.5 shrink-0 text-[#0097A7] mt-0.5" />
-          <span className="line-clamp-1">{job.clientes.direccion}</span>
-        </p>
-
-        {/* ETA between stops */}
-        {eta && (
-          <div className="flex items-center gap-1 text-[8px] font-bold text-[#0097A7]">
-            <Navigation className="h-2.5 w-2.5" />
-            <span>{eta}</span>
-          </div>
-        )}
-
-        {/* Bitácora Compacta */}
-        <div className="bg-slate-50/80 border border-slate-100 rounded-lg p-1.5">
-          <div className="flex items-center gap-1 mb-1">
-            <Clock className="h-2.5 w-2.5 text-slate-400" />
-            <span className="text-[7px] font-black text-slate-400 uppercase tracking-wider">Bitácora</span>
-          </div>
-          <p className="text-[8px] text-slate-500 font-medium leading-tight line-clamp-1 mb-1">
-            {st.description}
+        {/* Row 2: Address + ETA */}
+        <div className="flex items-center gap-2">
+          <p className="text-[8.5px] text-slate-500 font-medium flex items-center gap-1 leading-tight flex-1 min-w-0">
+            <MapPin className="h-2.5 w-2.5 shrink-0 text-[#0097A7]" />
+            <span className="truncate">{job.clientes.direccion}</span>
           </p>
-          
-          {/* Actions row */}
-          <div className="flex items-center gap-1">
-            {job.estado !== 'completado' ? (
-              job.estado === 'en_progreso' ? (
-                <button
-                  onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'completado') }}
-                  className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[8px] font-black text-white bg-emerald-600 hover:bg-emerald-700 py-1 rounded active:scale-95 transition-all cursor-pointer whitespace-nowrap px-1"
-                >
-                  <Check className="h-2 w-2 shrink-0" /> Listo
-                </button>
-              ) : (
-                <button
-                  onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'en_progreso') }}
-                  className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[8px] font-black text-white bg-sky-600 hover:bg-sky-700 py-1 rounded active:scale-95 transition-all cursor-pointer whitespace-nowrap px-1"
-                >
-                  <Play className="h-2 w-2 shrink-0" /> En Ruta
-                </button>
-              )
-            ) : (
-              <div className="flex-1 min-w-0 flex items-center justify-center text-[8px] font-black text-emerald-700 bg-emerald-50 rounded py-1 border border-emerald-100 whitespace-nowrap">
-                ✓ Listo
-              </div>
-            )}
+          {eta && (
+            <span className="text-[7px] font-bold text-[#0097A7] bg-[#0097A7]/10 px-1.5 py-0.5 rounded shrink-0 flex items-center gap-0.5">
+              <Navigation className="h-2 w-2" />{eta}
+            </span>
+          )}
+        </div>
 
+        {/* Row 3: Actions Grouped */}
+        <div className="flex items-center gap-1 mt-0.5">
+          {job.estado !== 'completado' ? (
+              <button
+                onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'completado') }}
+                className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[8px] font-black text-white bg-emerald-600 hover:bg-emerald-700 py-1.5 rounded-lg active:scale-95 transition-all cursor-pointer whitespace-nowrap px-2"
+              >
+                <Check className="h-2.5 w-2.5 shrink-0" /> Listo
+              </button>
+          ) : (
+            <div className="flex-1 min-w-0 flex items-center justify-center text-[8px] font-black text-emerald-700 bg-emerald-50 rounded-lg py-1.5 border border-emerald-100 whitespace-nowrap">
+              ✓ Servicio Finalizado
+            </div>
+          )}
+
+          <div className="flex items-center gap-0.5 shrink-0">
             <button
               onClick={(e) => { e.stopPropagation(); onRescheduleClick?.(job) }}
-              className="flex-1 min-w-0 flex items-center justify-center gap-0.5 text-[8px] font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 py-1 rounded active:scale-95 transition-all cursor-pointer border border-slate-200/80 whitespace-nowrap px-1"
+              className="flex items-center justify-center gap-0.5 text-[7px] font-bold text-slate-500 bg-slate-100 hover:bg-slate-200 py-1.5 px-2 rounded-lg active:scale-95 transition-all cursor-pointer border border-slate-200/80 whitespace-nowrap"
             >
               <Calendar className="h-2 w-2 shrink-0" /> Reagendar
             </button>
-
             <button
               onClick={(e) => { e.stopPropagation(); onEditClick?.(job) }}
-              className="h-5 w-5 flex items-center justify-center text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded active:scale-95 transition-all cursor-pointer border border-slate-200/80 shrink-0"
+              className="h-7 w-7 flex items-center justify-center text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg active:scale-95 transition-all cursor-pointer border border-slate-200/80 shrink-0"
               title="Editar"
             >
-              <Edit3 className="h-2 w-2 shrink-0" />
+              <Edit3 className="h-3 w-3 shrink-0" />
             </button>
           </div>
         </div>
 
-        {/* GPS Links */}
-        <div className="flex gap-0.5">
+        {/* Row 4: GPS Links - compact */}
+        <div className="flex gap-1">
           <a
             href={`http://maps.apple.com/?daddr=${encodeURIComponent(job.clientes.direccion || '')}`}
             target="_blank" rel="noopener noreferrer"
-            className="flex-1 text-center text-[8px] font-bold text-slate-500 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 py-0.5 rounded transition-all border border-slate-200/50"
-          >Apple</a>
+            className="flex-1 flex items-center justify-center gap-1 text-[7px] font-bold text-slate-500 hover:text-[#0097A7] bg-slate-50 hover:bg-[#0097A7]/5 py-1 rounded-md transition-all border border-slate-200/50"
+          >
+            <Navigation className="h-2 w-2" />Apple
+          </a>
           <a
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(job.clientes.direccion || '')}`}
             target="_blank" rel="noopener noreferrer"
-            className="flex-1 text-center text-[8px] font-bold text-slate-500 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 py-0.5 rounded transition-all border border-slate-200/50"
-          >Google</a>
+            className="flex-1 flex items-center justify-center gap-1 text-[7px] font-bold text-slate-500 hover:text-[#0097A7] bg-slate-50 hover:bg-[#0097A7]/5 py-1 rounded-md transition-all border border-slate-200/50"
+          >
+            <Navigation className="h-2 w-2" />Google
+          </a>
           <a
             href={`https://waze.com/ul?q=${encodeURIComponent(job.clientes.direccion || '')}`}
             target="_blank" rel="noopener noreferrer"
-            className="flex-1 text-center text-[8px] font-bold text-slate-500 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 py-0.5 rounded transition-all border border-slate-200/50"
-          >Waze</a>
+            className="flex-1 flex items-center justify-center gap-1 text-[7px] font-bold text-slate-500 hover:text-[#0097A7] bg-slate-50 hover:bg-[#0097A7]/5 py-1 rounded-md transition-all border border-slate-200/50"
+          >
+            <Navigation className="h-2 w-2" />Waze
+          </a>
         </div>
       </div>
     </div>
@@ -262,6 +260,70 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
   const nextJobIndex = useMemo(() => {
     return sortedJobs.findIndex(j => j.estado !== 'completado')
   }, [sortedJobs])
+
+  // Truck position: -1 = at INICIO, 0+ = at that node
+  const truckPosition = useMemo(() => {
+    if (nextJobIndex === -1) return sortedJobs.length - 1 // All completed, truck at last stop
+    if (nextJobIndex === 0) return -1 // None completed, truck at start
+    return nextJobIndex - 1 // Some completed, truck at last completed
+  }, [nextJobIndex, sortedJobs.length])
+
+  // Refs for node positions (mobile)
+  const nodeRefs = useRef<(HTMLDivElement | null)[]>([])
+  const startRef = useRef<HTMLDivElement | null>(null)
+  const mobileContainerRef = useRef<HTMLDivElement | null>(null)
+  const [truckStyle, setTruckStyle] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
+  const [truckReady, setTruckReady] = useState(false)
+
+  // Refs for desktop node positions
+  const desktopNodeRefs = useRef<(HTMLDivElement | null)[]>([])
+  const desktopStartRef = useRef<HTMLDivElement | null>(null)
+  const [desktopTruckStyle, setDesktopTruckStyle] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
+  const [desktopTruckReady, setDesktopTruckReady] = useState(false)
+
+  const updateTruckPosition = useCallback(() => {
+    let targetEl: HTMLDivElement | null = null
+    if (truckPosition === -1) {
+      targetEl = startRef.current
+    } else {
+      targetEl = nodeRefs.current[truckPosition]
+    }
+    if (targetEl && mobileContainerRef.current) {
+      const rect = targetEl.getBoundingClientRect()
+      const containerRect = mobileContainerRef.current.getBoundingClientRect()
+      setTruckStyle({
+        top: rect.top - containerRect.top + mobileContainerRef.current.scrollTop,
+        left: rect.left - containerRect.left + (rect.width - 32) / 2
+      })
+    }
+  }, [truckPosition])
+
+  const updateDesktopTruckPosition = useCallback(() => {
+    let targetEl: HTMLDivElement | null = null
+    if (truckPosition === -1) {
+      targetEl = desktopStartRef.current
+    } else {
+      targetEl = desktopNodeRefs.current[truckPosition]
+    }
+    if (targetEl) {
+      const rect = targetEl.getBoundingClientRect()
+      const container = targetEl.closest('.route-scroll')
+      if (container) {
+        const containerRect = container.getBoundingClientRect()
+        setDesktopTruckStyle({
+          top: rect.top - containerRect.top + (rect.height - 36) / 2,
+          left: rect.left - containerRect.left + (rect.width - 36) / 2 + container.scrollLeft
+        })
+      }
+    }
+  }, [truckPosition])
+
+  useEffect(() => {
+    updateTruckPosition()
+    updateDesktopTruckPosition()
+    if (!truckReady) setTruckReady(true)
+    if (!desktopTruckReady) setDesktopTruckReady(true)
+  }, [truckPosition, updateTruckPosition, updateDesktopTruckPosition, truckReady, desktopTruckReady])
 
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     if (scrollRef.current && e.deltaY !== 0) {
@@ -294,7 +356,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
   const TOTAL_H = CARD_H * 2 + ROAD_H
 
   return (
-    <div className="w-full flex-1 min-h-0 relative overflow-hidden rounded-2xl bg-[#f0f6fa] flex flex-col justify-center">
+    <div className="w-full flex-1 min-h-0 relative overflow-hidden rounded-2xl bg-[#f0f6fa] flex flex-col justify-start">
       
       {/* Background Map */}
       <div 
@@ -304,7 +366,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
       <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/5 to-white/20 pointer-events-none" />
 
       {/* MOBILE VIEW */}
-      <div className="xl:hidden w-full px-4 py-6 relative flex flex-col z-10">
+      <div ref={mobileContainerRef} className="xl:hidden w-full px-4 pt-3 pb-6 relative flex flex-col z-10 overflow-y-auto">
         
         {/* Road SVG */}
         <div className="absolute inset-y-6 left-[22px] w-[36px] pointer-events-none z-0">
@@ -324,36 +386,16 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
           </svg>
         </div>
 
-        {/* Animated Truck - Mobile (only show when there's a next job) */}
-        {sortedJobs.length > 0 && nextJobIndex >= 0 && nextJobIndex < sortedJobs.length && (
-          <div 
-            className="absolute z-20 transition-all duration-1000 ease-in-out"
-            style={{ 
-              left: '-8px',
-              top: `${16 + nextJobIndex * 280 + 90 - 30}px`
-            }}
-          >
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center truck-animate">
-              <Truck className="h-4 w-4 text-white" />
-            </div>
-            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap">
-              <span className="text-[6px] font-black text-amber-600 bg-amber-50 px-1 py-0.5 rounded border border-amber-200 shadow-sm">
-                En ruta
-              </span>
-            </div>
-          </div>
-        )}
-
         {/* Start Point */}
-        <div className="w-full flex items-center gap-3 mb-6 pl-[14px] relative z-10">
+        <div ref={startRef} className="w-full flex items-center gap-3 mb-4 pl-[14px] relative z-10">
           <div className={cn(
-            "h-10 w-10 shrink-0 rounded-full border-[3px] shadow-md flex items-center justify-center",
-            nextJobIndex > 0 ? "border-emerald-300 bg-emerald-100" : "border-white bg-gradient-to-br from-[#0097A7] to-[#00acc1]"
+            "h-10 w-10 shrink-0 rounded-full border-[3px] shadow-md flex items-center justify-center transition-all duration-500",
+            truckPosition === -1 
+              ? "bg-gradient-to-br from-amber-400 to-amber-500 border-amber-400 shadow-amber-200/50" 
+              : "border-emerald-300 bg-emerald-100"
           )}>
-            {nextJobIndex > 0 ? (
-              <Check className="h-4 w-4 text-emerald-600" />
-            ) : (
-              <Truck className="h-4 w-4 text-white" />
+            {truckPosition === -1 ? null : (
+              <Check className="h-5 w-5 text-emerald-600" />
             )}
           </div>
           <div className="bg-white border border-slate-200/80 text-slate-700 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider shadow-sm">
@@ -361,37 +403,69 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
           </div>
         </div>
 
+        {/* Floating Truck */}
+        <div 
+          className="absolute z-30 pointer-events-none"
+          style={{ 
+            top: truckStyle.top, 
+            left: truckStyle.left,
+            transition: truckReady ? 'all 700ms ease-in-out' : 'none'
+          }}
+        >
+          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center">
+            <Truck className="h-4 w-4 text-white truck-animate" />
+          </div>
+        </div>
+
         {/* Cards */}
         <div className="w-full flex flex-col gap-5 relative z-10 pl-[2px]">
-          {sortedJobs.map((job, index) => (
-            <div key={job.id} className="w-full flex items-start gap-3">
-              <div className="flex flex-col items-center shrink-0 w-10 mt-2">
-                <div className={cn(
-                  "h-8 w-8 rounded-full bg-white border-[3px] shadow-md flex items-center justify-center relative",
-                  index === nextJobIndex ? "border-amber-400 shadow-amber-200/50" : "border-[#0097A7]"
-                )}>
-                  <Home className={cn("h-3.5 w-3.5", index === nextJobIndex ? "text-amber-500" : "text-[#0097A7]")} />
+          {sortedJobs.map((job, index) => {
+            const isCompleted = job.estado === 'completado'
+            const isNext = index === nextJobIndex
+            const isTruckHere = truckPosition === index
+            
+            return (
+              <div key={job.id} className="w-full flex items-start gap-3">
+                <div 
+                  ref={el => { nodeRefs.current[index] = el }}
+                  className="flex flex-col items-center shrink-0 w-10 mt-2"
+                >
                   <div className={cn(
-                    "absolute -top-1 -right-1 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border border-white shadow",
-                    index === nextJobIndex ? "bg-amber-500" : "bg-red-500"
+                    "h-8 w-8 rounded-full border-[3px] shadow-md flex items-center justify-center relative transition-all duration-500",
+                    isTruckHere && "border-transparent bg-transparent shadow-none",
+                    !isTruckHere && isCompleted && "bg-white border-emerald-400",
+                    !isTruckHere && !isCompleted && isNext && "bg-white border-amber-400 shadow-amber-200/50",
+                    !isTruckHere && !isCompleted && !isNext && "bg-white border-[#0097A7]"
                   )}>
-                    {index + 1}
+                    {isTruckHere ? null : isCompleted ? (
+                      <Check className="h-3.5 w-3.5 text-emerald-600" />
+                    ) : (
+                      <Home className={cn("h-3.5 w-3.5", isNext ? "text-amber-500" : "text-[#0097A7]")} />
+                    )}
+                    {!isTruckHere && (
+                      <div className={cn(
+                        "absolute -top-1 -right-1 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border border-white shadow",
+                        isCompleted ? "bg-emerald-500" : isNext ? "bg-amber-500" : "bg-red-500"
+                      )}>
+                        {index + 1}
+                      </div>
+                    )}
                   </div>
                 </div>
+                <div className="flex-1 min-w-0 pr-1">
+                  <JobCard 
+                    job={job} 
+                    onStatusChange={onStatusChange} 
+                    onRescheduleClick={onRescheduleClick}
+                    onEditClick={onEditClick}
+                    isNext={isNext}
+                    eta={getETA(index, sortedJobs)}
+                    index={index}
+                  />
+                </div>
               </div>
-              <div className="flex-1 min-w-0 pr-1">
-                <JobCard 
-                  job={job} 
-                  onStatusChange={onStatusChange} 
-                  onRescheduleClick={onRescheduleClick}
-                  onEditClick={onEditClick}
-                  isNext={index === nextJobIndex}
-                  eta={getETA(index, sortedJobs)}
-                  index={index}
-                />
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* End Point */}
@@ -472,17 +546,18 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
 
             {/* START */}
             <div
-              className="shrink-0 w-16 relative z-10 flex flex-col items-center justify-center gap-1.5"
+              ref={desktopStartRef}
+              className="shrink-0 relative z-10 flex flex-col items-center justify-center gap-1.5"
               style={{ width: '64px', height: `${TOTAL_H}px` }}
             >
               <div className={cn(
-                "h-10 w-10 rounded-full border-[3px] shadow-lg flex items-center justify-center",
-                nextJobIndex > 0 ? "border-emerald-300 bg-emerald-100" : "border-white bg-gradient-to-br from-[#0097A7] to-[#00acc1]"
+                "h-10 w-10 rounded-full border-[3px] shadow-lg flex items-center justify-center transition-all duration-500",
+                truckPosition === -1 
+                  ? "bg-gradient-to-br from-amber-400 to-amber-500 border-amber-400 shadow-amber-200/50" 
+                  : "border-emerald-300 bg-emerald-100"
               )}>
-                {nextJobIndex > 0 ? (
+                {truckPosition === -1 ? null : (
                   <Check className="h-4 w-4 text-emerald-600" />
-                ) : (
-                  <Truck className="h-4 w-4 text-white" />
                 )}
               </div>
               <div className="bg-white border border-slate-200 text-slate-700 px-2 py-0.5 rounded-lg whitespace-nowrap shadow-md">
@@ -490,33 +565,27 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
               </div>
             </div>
 
-            {/* Animated Truck - Desktop (only show when there are jobs) */}
-            {sortedJobs.length > 0 && (
-              <div 
-                className="absolute z-30 transition-all duration-1000 ease-in-out pointer-events-none"
-                style={{ 
-                  left: `${48 + 64 + (nextJobIndex >= 0 ? nextJobIndex : sortedJobs.length) * 240 + 120 - 100}px`,
-                  top: `${CARD_H + ROAD_H / 2 - 40}px`
-                }}
-              >
-                <div className="h-9 w-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center truck-animate">
-                  <Truck className="h-4 w-4 text-white" />
-                </div>
-                {nextJobIndex >= 0 && nextJobIndex < sortedJobs.length && (
-                  <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                    <span className="text-[7px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 shadow-sm">
-                      Próxima parada
-                    </span>
-                  </div>
-                )}
+            {/* Floating Truck - Desktop */}
+            <div 
+              className="absolute z-30 pointer-events-none"
+              style={{ 
+                top: desktopTruckStyle.top, 
+                left: desktopTruckStyle.left,
+                transition: desktopTruckReady ? 'all 700ms ease-in-out' : 'none'
+              }}
+            >
+              <div className="h-9 w-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 border-2 border-white shadow-lg shadow-amber-300/50 flex items-center justify-center">
+                <Truck className="h-4 w-4 text-white truck-animate" />
               </div>
-            )}
+            </div>
 
             {/* STOPS */}
             {sortedJobs.map((job, index) => {
               const isTop = index % 2 === 0
               const curveOffset = isTop ? -20 : 20
-              const isNextStop = index === nextJobIndex
+              const isCompleted = job.estado === 'completado'
+              const isNext = index === nextJobIndex
+              const isTruckHere = truckPosition === index
 
               return (
                 <div
@@ -532,7 +601,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                           onStatusChange={onStatusChange} 
                           onRescheduleClick={onRescheduleClick}
                           onEditClick={onEditClick}
-                          isNext={isNextStop}
+                          isNext={isNext}
                           eta={getETA(index, sortedJobs)}
                           index={index}
                         />
@@ -545,20 +614,30 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                   </div>
 
                   <div 
+                    ref={el => { desktopNodeRefs.current[index] = el }}
                     className="flex items-center justify-center relative" 
                     style={{ height: ROAD_H, transform: `translateY(${curveOffset}px)` }}
                   >
                     <div className={cn(
-                      "h-9 w-9 rounded-full bg-white border-[3px] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center relative cursor-pointer hover:scale-110 transition-transform",
-                      isNextStop ? "border-amber-400 shadow-amber-200/50" : "border-[#0097A7]"
+                      "h-9 w-9 rounded-full border-[3px] shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center justify-center relative cursor-pointer hover:scale-110 transition-all duration-500",
+                      isTruckHere && "border-transparent bg-transparent shadow-none",
+                      !isTruckHere && isCompleted && "bg-white border-emerald-400",
+                      !isTruckHere && !isCompleted && isNext && "bg-white border-amber-400 shadow-amber-200/50",
+                      !isTruckHere && !isCompleted && !isNext && "bg-white border-[#0097A7]"
                     )}>
-                      <Home className={cn("h-4 w-4", isNextStop ? "text-amber-500" : "text-[#0097A7]")} />
-                      <div className={cn(
-                        "absolute -top-1 -right-1 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border-2 border-white shadow",
-                        isNextStop ? "bg-amber-500" : "bg-red-500"
-                      )}>
-                        {index + 1}
-                      </div>
+                      {isTruckHere ? null : isCompleted ? (
+                        <Check className="h-3.5 w-3.5 text-emerald-600" />
+                      ) : (
+                        <Home className={cn("h-4 w-4", isNext ? "text-amber-500" : "text-[#0097A7]")} />
+                      )}
+                      {!isTruckHere && (
+                        <div className={cn(
+                          "absolute -top-1 -right-1 text-white text-[8px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border-2 border-white shadow",
+                          isCompleted ? "bg-emerald-500" : isNext ? "bg-amber-500" : "bg-red-500"
+                        )}>
+                          {index + 1}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -574,7 +653,7 @@ export function RouteView({ jobs, selectedDate, onStatusChange, onRescheduleClic
                           onStatusChange={onStatusChange} 
                           onRescheduleClick={onRescheduleClick}
                           onEditClick={onEditClick}
-                          isNext={isNextStop}
+                          isNext={isNext}
                           eta={getETA(index, sortedJobs)}
                           index={index}
                         />

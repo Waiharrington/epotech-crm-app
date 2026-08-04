@@ -33,6 +33,8 @@ import { NotificationManager } from '@/components/notifications/notification-man
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
+import { ChangePasswordModal } from '@/components/ajustes/change-password-modal'
+
 export default function AjustesPage() {
   const supabase = createClient()
   const router = useRouter()
@@ -52,6 +54,7 @@ export default function AjustesPage() {
 
   const [profilePic, setProfilePic] = useState('/assets/profile.jpg')
   const [editMode, setEditMode] = useState(false)
+  const [showPasswordModal, setShowPasswordModal] = useState(false)
   const [selectedImg, setSelectedImg] = useState<string | null>(null)
   const [zoom, setZoom] = useState(1)
   const [pan, setPan] = useState({ x: 0, y: 0 })
@@ -454,7 +457,10 @@ export default function AjustesPage() {
               <h3 className="text-xs font-black uppercase tracking-wider text-rose-700">Seguridad</h3>
             </div>
             <div className="flex flex-col sm:flex-row gap-2">
-              <button className="flex items-center justify-center gap-1.5 h-9 px-5 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-600 text-[10px] font-bold hover:bg-slate-200 transition-all cursor-pointer">
+              <button 
+                onClick={() => setShowPasswordModal(true)}
+                className="flex items-center justify-center gap-1.5 h-9 px-5 rounded-xl bg-slate-100 border border-slate-200/60 text-slate-600 text-[10px] font-bold hover:bg-slate-200 transition-all cursor-pointer"
+              >
                 <Lock className="h-3 w-3" /> Cambiar Contraseña
               </button>
               <button 
@@ -477,6 +483,11 @@ export default function AjustesPage() {
 
         </div>
       </main>
+
+      {/* Modals */}
+      {showPasswordModal && (
+        <ChangePasswordModal onClose={() => setShowPasswordModal(false)} />
+      )}
     </div>
   )
 }

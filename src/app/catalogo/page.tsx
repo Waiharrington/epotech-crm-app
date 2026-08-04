@@ -179,7 +179,7 @@ export default function CatalogoPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowCategoriesModal(true)}
-                className="h-10 px-4 text-sm font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-white/20 hover:border-white/25 backdrop-blur-md transition-all active:scale-[0.98]"
+                className="h-10 px-4 text-sm font-bold rounded-xl bg-white/10 border-white/15 text-white hover:text-white hover:bg-white/20 hover:border-white/25 backdrop-blur-md transition-all active:scale-[0.98]"
               >
                 <FolderOpen className="mr-1.5 h-3.5 w-3.5" />
                 Categorías

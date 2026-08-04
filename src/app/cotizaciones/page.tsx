@@ -156,7 +156,7 @@ export default function CotizacionesPage() {
         
         {/* Statistics Grid */}
         <div className="pb-1">
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
             {[
               { label: 'Aprobadas', value: aprobadas, icon: CheckCircle2, filterKey: 'aprobado' as const, active: 'bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/20', inactive: 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300' },
               { label: 'Pendientes', value: pendientes, icon: Clock, filterKey: 'pendiente' as const, active: 'bg-amber-500 text-white border-amber-500 shadow-md shadow-amber-500/20', inactive: 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300' },
@@ -167,7 +167,7 @@ export default function CotizacionesPage() {
                 key={stat.label}
                 onClick={() => setStatusFilter(stat.filterKey)}
                 className={cn(
-                  "flex items-center gap-2 px-4 py-2.5 rounded-full border shadow-sm transition-all duration-200 active:scale-95 whitespace-nowrap",
+                  "flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2.5 rounded-full border shadow-sm transition-all duration-200 active:scale-95 whitespace-nowrap",
                   statusFilter === stat.filterKey ? stat.active : stat.inactive
                 )}
               >

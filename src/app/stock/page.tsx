@@ -19,9 +19,9 @@ import {
   DollarSign,
   Boxes,
   Wrench,
-  Cog,
-  Filter
+  Cog
 } from 'lucide-react'
+import { normalizeSearch } from '@/lib/utils'
 import { useConfirm } from '@/components/ui/confirm-dialog'
 import { Input } from '@/components/ui/input'
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip'
@@ -202,13 +202,14 @@ export default function StockPage() {
     setLoading(false)
   }
 
-  const filteredHistory = globalMovements.filter(m => 
-    m.stock?.nombre?.toLowerCase().includes(historySearch.toLowerCase()) ||
-    m.motivo?.toLowerCase().includes(historySearch.toLowerCase())
-  )
+  const filteredHistory = globalMovements.filter(m => {
+    const searchNorm = normalizeSearch(historySearch)
+    return normalizeSearch(m.stock?.nombre).includes(searchNorm) ||
+      normalizeSearch(m.motivo).includes(searchNorm)
+  })
 
   const filteredItems = items.filter(i => {
-    const matchesSearch = i.nombre.toLowerCase().includes(search.toLowerCase())
+    const matchesSearch = normalizeSearch(i.nombre).includes(normalizeSearch(search))
     const matchesType = typeFilter === 'todos' || i.tipo === typeFilter
     return matchesSearch && matchesType
   })

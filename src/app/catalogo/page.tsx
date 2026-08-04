@@ -5,7 +5,8 @@ import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Plus, Briefcase, Settings, Trash2, Edit, Loader2, FolderOpen, Search, Package, DollarSign, Tag, Filter } from 'lucide-react'
+import { Plus, Briefcase, Settings, Trash2, Edit, Loader2, FolderOpen, Search, Package, DollarSign, Tag, Filter, MoreHorizontal } from 'lucide-react'
+import { normalizeSearch } from '@/lib/utils'
 import { 
   Dialog, 
   DialogContent, 
@@ -128,8 +129,9 @@ export default function CatalogoPage() {
     : ['lavado', 'limpieza', 'epoxico', 'pintura', 'otro']
 
   const filteredServicios = servicios.filter(s => {
-    const matchesSearch = s.nombre.toLowerCase().includes(search.toLowerCase()) ||
-      (s.descripcion_interna || '').toLowerCase().includes(search.toLowerCase())
+    const searchNorm = normalizeSearch(search)
+    const matchesSearch = normalizeSearch(s.nombre).includes(searchNorm) ||
+      normalizeSearch(s.descripcion_interna || '').includes(searchNorm)
     const matchesCategory = categoryFilter === 'todos' || s.categoria === categoryFilter
     return matchesSearch && matchesCategory
   })

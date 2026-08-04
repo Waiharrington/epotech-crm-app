@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Search, User, Trash2, Plus, Check, Loader2, X, FileText, ChevronLeft, ChevronRight } from 'lucide-react'
+import { normalizeSearch } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import { useDialogClose } from '@/hooks/use-dialog-close'
 
@@ -111,10 +112,11 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit, d
     }
   }
 
-  const filteredClients = clients.filter(c => 
-    `${c.nombre} ${c.apellido}`.toLowerCase().includes(searchClient.toLowerCase()) ||
-    c.telefono?.includes(searchClient)
-  )
+  const filteredClients = clients.filter(c => {
+    const searchNorm = normalizeSearch(searchClient)
+    return normalizeSearch(`${c.nombre} ${c.apellido}`).includes(searchNorm) ||
+      normalizeSearch(c.telefono).includes(searchNorm)
+  })
 
   if (!isMounted) return null
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
+import { normalizeSearch } from '@/lib/utils'
 import { Database } from '@/types/supabase'
 import { ArrowLeft, Archive, Search, ArchiveRestore } from 'lucide-react'
 import { JobList } from '@/components/trabajos/job-list'
@@ -66,12 +67,12 @@ export default function ArchivoPage() {
   }
 
   const filteredTrabajos = trabajos.filter(t => {
-    const searchLower = search.toLowerCase()
+    const searchNorm = normalizeSearch(search)
     return (
-      t.clientes.nombre.toLowerCase().includes(searchLower) ||
-      t.clientes.apellido.toLowerCase().includes(searchLower) ||
-      t.catalogo_servicios?.nombre.toLowerCase().includes(searchLower) ||
-      t.clientes.telefono.includes(search)
+      normalizeSearch(t.clientes.nombre).includes(searchNorm) ||
+      normalizeSearch(t.clientes.apellido).includes(searchNorm) ||
+      normalizeSearch(t.catalogo_servicios?.nombre || '').includes(searchNorm) ||
+      normalizeSearch(t.clientes.telefono).includes(searchNorm)
     )
   })
 

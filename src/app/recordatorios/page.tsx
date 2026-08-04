@@ -28,8 +28,10 @@ import {
   ListTodo,
   CheckCheck,
   AlertOctagon,
-  Timer
+  Timer,
+  MessageSquare,
 } from 'lucide-react'
+import { normalizeSearch } from '@/lib/utils'
 import { toast } from 'sonner'
 import { cn, formatTime12 } from '@/lib/utils'
 import { VoiceReminderButton } from '@/components/voice-reminder-button'
@@ -251,8 +253,8 @@ CREATE POLICY "Allow ALL on recordatorios" ON public.recordatorios FOR ALL USING
     if (filterTab === 'completed' && !reminder.completado) return false
     if (priorityFilter !== 'all' && reminder.prioridad !== priorityFilter) return false
     if (searchQuery.trim() !== '') {
-      const query = searchQuery.toLowerCase()
-      return reminder.titulo?.toLowerCase().includes(query) || reminder.descripcion?.toLowerCase().includes(query)
+      const searchNorm = normalizeSearch(searchQuery)
+      return normalizeSearch(reminder.titulo).includes(searchNorm) || normalizeSearch(reminder.descripcion).includes(searchNorm)
     }
     return true
   })

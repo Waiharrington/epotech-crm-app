@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { normalizeSearch } from '@/lib/utils'
 import { useDialogClose } from '@/hooks/use-dialog-close'
 
 type TrabajoWithDetails = Database['public']['Tables']['trabajos']['Row'] & {
@@ -518,10 +519,11 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                     {searchMaterial && (
                       <div className="border border-slate-100 rounded-xl bg-white shadow-lg max-h-[140px] overflow-y-auto p-1 animate-in fade-in zoom-in-95 duration-200 z-[100]">
                         {availableStock
-                          .filter(s => 
-                            !materials.find(m => m.id === s.id) && 
-                            s.nombre.toLowerCase().includes(searchMaterial.toLowerCase())
-                          )
+                          .filter(s => {
+                            const searchNorm = normalizeSearch(searchMaterial)
+                            return !materials.find(m => m.id === s.id) && 
+                              normalizeSearch(s.nombre).includes(searchNorm)
+                          })
                           .map(s => (
                             <button
                               key={s.id}

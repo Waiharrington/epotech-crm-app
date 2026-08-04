@@ -16,7 +16,8 @@ import { Input } from '@/components/ui/input'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Plus, Check, Camera, Package, DollarSign, Loader2, Trash2, Calendar, Repeat, Search, X } from 'lucide-react'
+import { Plus, Check, Camera, Package, DollarSign, Loader2, Trash2, Calendar, Repeat, Search, Clock } from 'lucide-react'
+import { normalizeSearch } from '@/lib/utils'
 import {
   Select,
   SelectContent,
@@ -601,10 +602,11 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                     {searchMaterial && (
                       <div className="border rounded-md bg-card shadow-sm max-h-[150px] overflow-y-auto p-1 animate-in fade-in zoom-in-95 duration-200 z-50">
                         {availableStock
-                          .filter(s => 
-                            !materials.find(m => m.id === s.id) && 
-                            s.nombre.toLowerCase().includes(searchMaterial.toLowerCase())
-                          )
+                          .filter(s => {
+                            const searchNorm = normalizeSearch(searchMaterial)
+                            return !materials.find(m => m.id === s.id) && 
+                              normalizeSearch(s.nombre).includes(searchNorm)
+                          })
                           .map(s => (
                             <button
                               key={s.id}
@@ -625,10 +627,11 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                               <span className="text-base opacity-60 bg-muted px-1.5 rounded">{s.cantidad_actual} {s.unidad_medida}</span>
                             </button>
                           ))}
-                        {availableStock.filter(s => 
-                            !materials.find(m => m.id === s.id) && 
-                            s.nombre.toLowerCase().includes(searchMaterial.toLowerCase())
-                          ).length === 0 && (
+                        {availableStock.filter(s => {
+                            const searchNorm = normalizeSearch(searchMaterial)
+                            return !materials.find(m => m.id === s.id) && 
+                              normalizeSearch(s.nombre).includes(searchNorm)
+                          }).length === 0 && (
                             <p className="text-base text-center py-2 text-muted-foreground italic">No se encontraron materiales</p>
                           )}
                       </div>

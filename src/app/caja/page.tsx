@@ -15,8 +15,10 @@ import {
   ArrowDownRight, 
   Search,
   Loader2,
+  FileDown,
   DollarSign
 } from 'lucide-react'
+import { normalizeSearch } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import { FinanceModal } from '@/components/caja/finance-modal'
 import { cn, formatTime12 } from '@/lib/utils'
@@ -47,8 +49,9 @@ export default function CajaPage() {
   const balance = income - expenses
 
   const filteredEntries = entries.filter(e => {
-    const matchesSearch = e.notas?.toLowerCase().includes(search.toLowerCase()) ||
-      e.categoria.toLowerCase().includes(search.toLowerCase())
+    const searchNorm = normalizeSearch(search)
+    const matchesSearch = normalizeSearch(e.notas || '').includes(searchNorm) ||
+      normalizeSearch(e.categoria).includes(searchNorm)
     const matchesType = typeFilter === 'todos' || e.tipo === typeFilter
     return matchesSearch && matchesType
   })

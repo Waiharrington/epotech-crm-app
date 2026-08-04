@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Search, User, Briefcase, Calendar as CalendarIcon, Loader2, Check, ChevronLeft, X, DollarSign, Clock } from 'lucide-react'
+import { normalizeSearch } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import { useDialogClose } from '@/hooks/use-dialog-close'
 
@@ -76,18 +77,20 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
     if (data) setServices(data)
   }
 
-  const filteredClients = clients.filter(c => 
-    `${c.nombre} ${c.apellido}`.toLowerCase().includes(searchClient.toLowerCase()) ||
-    c.telefono.includes(searchClient)
-  )
+  const filteredClients = clients.filter(c => {
+    const searchNorm = normalizeSearch(searchClient)
+    return normalizeSearch(`${c.nombre} ${c.apellido}`).includes(searchNorm) ||
+      normalizeSearch(c.telefono).includes(searchNorm)
+  })
 
   const selectedClient = clients.find(c => c.id === formData.cliente_id)
   const selectedService = services.find(s => s.id === formData.servicio_id)
 
-  const filteredServices = services.filter(s => 
-    s.nombre.toLowerCase().includes(searchService.toLowerCase()) ||
-    ((s as any).descripcion && (s as any).descripcion.toLowerCase().includes(searchService.toLowerCase()))
-  )
+  const filteredServices = services.filter(s => {
+    const searchNorm = normalizeSearch(searchService)
+    return normalizeSearch(s.nombre).includes(searchNorm) ||
+      ((s as any).descripcion && normalizeSearch((s as any).descripcion).includes(searchNorm))
+  })
 
   const handleServiceSelect = (serviceId: string) => {
     const service = services.find(s => s.id === serviceId)

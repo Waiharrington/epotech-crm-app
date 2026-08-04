@@ -612,7 +612,7 @@ function TrabajosContent() {
             fetchTrabajos()
           }}
           onOptimisticUpdate={(jobId, updates) => {
-            setTrabajos(prev => prev.map(t => t.id === jobId ? { ...t, ...updates } : t))
+            setTrabajos(prev => prev.map(t => t.id === jobId ? { ...t, ...updates } as TrabajoWithDetails : t))
           }}
         />
       )}

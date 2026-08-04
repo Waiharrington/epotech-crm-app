@@ -191,7 +191,7 @@ export default function CajaPage() {
         </div>
 
         {/* History Table */}
-        <div className="flex-1 overflow-y-auto min-h-0 pt-1 pb-20 px-1 -mx-1">
+        <div className="flex-1 overflow-y-auto min-h-0 px-1 -mx-1">
           {loading && !entries.length ? (
             <div className="flex flex-col items-center justify-center h-40 gap-3">
               <Loader2 className="h-6 w-6 animate-spin text-[#00C9E0]" />

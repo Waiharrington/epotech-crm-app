@@ -347,9 +347,9 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                   {moreNavItems.map((item) => {
                     const isActive = pathname.startsWith(item.href)
                     return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
+                      <SheetClose asChild key={item.href}>
+                        <Link
+                          href={item.href}
                         className={cn(
                           "flex items-center justify-between gap-4 px-4 py-4.5 text-base font-medium transition-[transform,color] duration-300 ease-out group relative overflow-hidden rounded-2xl border border-white/[0.01]",
                           isActive
@@ -385,7 +385,8 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
                             : "text-sidebar-foreground/20 group-hover:text-sidebar-foreground/50 group-hover:translate-x-1"
                         )} />
                       </Link>
-                    )
+                    </SheetClose>
+                  )
                   })}
                 </div>
                 {/* Logout in sheet */}

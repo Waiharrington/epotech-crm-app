@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { 
   format, 
   startOfMonth, 
@@ -42,10 +42,8 @@ import {
 import { 
   DndContext, 
   DragEndEvent,
-  DragStartEvent,
   useDraggable,
   useDroppable,
-  DragOverlay,
   pointerWithin
 } from '@dnd-kit/core'
 
@@ -67,11 +65,11 @@ interface CalendarViewProps {
 
 const getStatusColor = (estado: string) => {
   switch (estado) {
-    case 'completado': return 'bg-emerald-50 border-emerald-200 text-emerald-700'
-    case 'en_progreso': return 'bg-blue-50 border-blue-200 text-blue-700'
-    case 'proximo': return 'bg-amber-50 border-amber-200 text-amber-700'
-    case 'cancelado': return 'bg-rose-50 border-rose-200 text-rose-700'
-    default: return 'bg-slate-50 border-slate-200 text-slate-700'
+    case 'completado': return 'bg-emerald-50 border border-emerald-200 text-emerald-700 border-l-[3px] border-l-emerald-500'
+    case 'en_progreso': return 'bg-blue-50 border border-blue-200 text-blue-700 border-l-[3px] border-l-blue-500'
+    case 'proximo': return 'bg-amber-50 border border-amber-200 text-amber-700 border-l-[3px] border-l-amber-500'
+    case 'cancelado': return 'bg-rose-50 border border-rose-200 text-rose-700 border-l-[3px] border-l-rose-500'
+    default: return 'bg-slate-50 border border-slate-200 text-slate-700 border-l-[3px] border-l-slate-400'
   }
 }
 
@@ -85,51 +83,6 @@ const formatTime12h = (time: string) => {
 }
 
 // ----------------------------------------------------------------------
-// Static Pill (For DragOverlay)
-// ----------------------------------------------------------------------
-function StaticJobPill({ job, isDragging }: { job: Trabajo; isDragging?: boolean }) {
-  return (
-    <div
-      className={cn(
-        "group flex items-start gap-1 p-2 rounded-lg border shadow-sm transition-all cursor-pointer relative",
-        getStatusColor(job.estado),
-        isDragging && "shadow-2xl ring-2 ring-primary/50 opacity-90"
-      )}
-    >
-      <button 
-        type="button"
-        onClick={(e) => e.stopPropagation()} 
-        className="mt-0.5 shrink-0 text-inherit/50 hover:text-inherit transition-colors cursor-grab active:cursor-grabbing"
-      >
-        <GripVertical className="h-3.5 w-3.5" />
-      </button>
-
-      <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-        <p className="text-[11px] font-bold leading-tight break-words">
-          {job.clientes?.nombre ? `${job.clientes.nombre} ${job.clientes.apellido || ''}` : 'Sin cliente'}
-        </p>
-        
-        <div className="flex items-start justify-between gap-1">
-          <p className="text-[9px] font-medium opacity-85 break-words line-clamp-2">
-            {job.catalogo_servicios?.nombre || 'Personalizado'}
-          </p>
-          {job.precio_acordado && (
-            <span className="text-[10px] font-black tabular-nums shrink-0 opacity-90">
-              ${job.precio_acordado}
-            </span>
-          )}
-        </div>
-
-        <div className="flex items-center gap-1 mt-0.5 text-[9px] font-bold opacity-75 bg-white/40 self-start px-1.5 py-0.5 rounded-sm">
-          <Clock className="h-2.5 w-2.5" />
-          {job.hora_servicio ? formatTime12h(job.hora_servicio) : 'Sin hora'}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ----------------------------------------------------------------------
 // Draggable Job Pill Component
 // ----------------------------------------------------------------------
 function DraggableJobPill({ job, onClick }: { job: Trabajo; onClick: () => void }) {
@@ -138,23 +91,21 @@ function DraggableJobPill({ job, onClick }: { job: Trabajo; onClick: () => void 
     data: { job }
   })
 
-  if (isDragging) {
-    return (
-      <div ref={setNodeRef} className="opacity-30 rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 min-h-[60px]" />
-    )
-  }
-
   return (
     <div 
       ref={setNodeRef}
       onClick={(e) => {
-        e.stopPropagation();
-        onClick();
+        if (!isDragging) {
+          e.stopPropagation();
+          onClick();
+        }
       }}
       className={cn(
         "group flex items-start gap-1 p-2 rounded-lg border shadow-sm transition-all cursor-pointer relative",
         getStatusColor(job.estado),
-        "hover:shadow-md hover:brightness-105"
+        isDragging 
+          ? "opacity-40 scale-95 border-dashed border-slate-300 bg-slate-100 shadow-none" 
+          : "hover:shadow-md hover:brightness-105"
       )}
     >
       <button 
@@ -393,6 +344,8 @@ function DroppableDayCell({
 
   const isOverbooked = jobs.length > 5
 
+  const dayRevenue = jobs.reduce((sum, j) => sum + (j.precio_acordado || 0), 0)
+
   return (
     <div 
       ref={setNodeRef}
@@ -402,14 +355,15 @@ function DroppableDayCell({
         }
       }}
       className={cn(
-        "group min-h-[100px] border-r border-b border-slate-100 p-1 sm:p-2 flex flex-col gap-1 sm:gap-2 transition-colors relative cursor-pointer empty-space",
+        "group border-r border-b border-slate-100 transition-colors relative cursor-pointer empty-space",
+        jobs.length > 0 ? "p-1.5 sm:p-2 flex flex-col gap-1 sm:gap-2 min-h-[120px]" : "p-1.5 sm:p-2 flex flex-col gap-1 min-h-[52px]",
         !isCurrentMonth && "bg-slate-50/50",
         isToday && "bg-blue-50/30",
         isOver && "bg-cyan-50/80 ring-2 ring-inset ring-cyan-400",
         "hover:bg-slate-50/30"
       )}
     >
-      <div className="flex items-center justify-between shrink-0 mb-1">
+      <div className="flex items-center justify-between shrink-0 mb-0.5">
         <div className="flex flex-col">
           <div className="flex items-center gap-1.5">
             <span className={cn(
@@ -425,9 +379,11 @@ function DroppableDayCell({
                 {format(date, 'MMM', { locale: es })}
               </span>
             )}
-            <span className="opacity-0 group-hover:opacity-100 transition-opacity ml-1 bg-[#00C9E0]/10 text-[#0097A7] rounded-md px-1.5 py-0.5 text-[9px] font-bold flex items-center gap-1 whitespace-nowrap shrink-0">
-              <Plus className="h-3 w-3 shrink-0" /> <span className="hidden xl:inline">Crear cita</span>
-            </span>
+            {jobs.length === 0 && (
+              <span className="opacity-0 group-hover:opacity-100 transition-opacity ml-1 bg-[#00C9E0]/10 text-[#0097A7] rounded-md px-1.5 py-0.5 text-[9px] font-bold flex items-center gap-1 whitespace-nowrap shrink-0">
+                <Plus className="h-3 w-3 shrink-0" /> <span className="hidden xl:inline">Crear cita</span>
+              </span>
+            )}
           </div>
           
           {isOverbooked && (
@@ -445,21 +401,33 @@ function DroppableDayCell({
       </div>
 
       <div className={cn(
-        "flex-1 pr-1 styled-scrollbar min-h-0 overflow-x-hidden",
-        jobs.length > 0 ? "overflow-y-auto space-y-1.5 py-1" : "flex flex-col items-center justify-center overflow-hidden"
+        "flex-1 min-h-0 overflow-x-hidden",
+        jobs.length > 0 ? "overflow-y-auto space-y-1.5 py-1 pr-1 styled-scrollbar" : "flex flex-col items-center justify-center overflow-hidden"
       )}>
         {jobs.length === 0 ? (
-          <div className="opacity-30">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Día libre</span>
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center gap-1">
+            <span className="text-[8px] font-bold uppercase tracking-wider text-slate-400">Libre</span>
           </div>
         ) : (
-          sortedJobs.map(job => (
-            <DraggableJobPill 
-              key={job.id} 
-              job={job} 
-              onClick={() => onJobClick(job)} 
-            />
-          ))
+          <>
+            <div className={cn("space-y-1.5", jobs.length > 5 && "relative")}>
+              {sortedJobs.map(job => (
+                <DraggableJobPill 
+                  key={job.id} 
+                  job={job} 
+                  onClick={() => onJobClick(job)} 
+                />
+              ))}
+              {jobs.length > 5 && (
+                <div className="sticky bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
+              )}
+            </div>
+            {dayRevenue > 0 && (
+              <div className="text-[8px] font-extrabold text-[#0097A7] text-right pr-1 pt-0.5 border-t border-slate-100/60 mt-1">
+                ${dayRevenue.toLocaleString()}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -482,9 +450,14 @@ export function CalendarView({
   onJobRescheduleClick
 }: CalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [statusFilter, setStatusFilter] = useState<'todos' | 'proximo' | 'en_progreso' | 'completado'>('todos')
+  const [currentTime, setCurrentTime] = useState(new Date())
   
-  // Drag State
-  const [activeJob, setActiveJob] = useState<Trabajo | null>(null)
+  // Update current time every minute for the "now" indicator
+  useEffect(() => {
+    const interval = setInterval(() => setCurrentTime(new Date()), 60000)
+    return () => clearInterval(interval)
+  }, [])
 
   const days = useMemo(() => {
     if (viewMode === 'month') {
@@ -540,17 +513,13 @@ export function CalendarView({
   const getJobsForDay = (date: Date) => {
     return trabajos.filter(job => {
       if (!job.fecha_servicio) return false
-      return isSameDay(parseISO(job.fecha_servicio), date)
+      if (!isSameDay(parseISO(job.fecha_servicio), date)) return false
+      if (statusFilter !== 'todos' && job.estado !== statusFilter) return false
+      return true
     })
   }
 
-  const handleDragStart = (event: DragStartEvent) => {
-    const { active } = event
-    setActiveJob(active.data.current?.job as Trabajo)
-  }
-
   const handleDragEnd = (event: DragEndEvent) => {
-    setActiveJob(null)
     const { active, over } = event
     if (!over) return
 
@@ -600,7 +569,6 @@ export function CalendarView({
 
   return (
     <DndContext 
-      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd} 
       collisionDetection={pointerWithin}
     >
@@ -617,7 +585,31 @@ export function CalendarView({
             </h2>
           </div>
           
-          <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
+            {/* Status Filters */}
+            <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200/60 shadow-sm">
+              {[
+                { key: 'todos' as const, label: 'Todos', color: 'text-slate-600' },
+                { key: 'proximo' as const, label: 'Próximos', color: 'text-amber-600' },
+                { key: 'en_progreso' as const, label: 'En Progreso', color: 'text-blue-600' },
+                { key: 'completado' as const, label: 'Listos', color: 'text-emerald-600' },
+              ].map(f => (
+                <button
+                  key={f.key}
+                  onClick={() => setStatusFilter(f.key)}
+                  className={cn(
+                    "px-2.5 py-1.5 text-[10px] font-bold rounded-lg transition-all whitespace-nowrap",
+                    statusFilter === f.key 
+                      ? "bg-[#0B1E3F] text-white shadow-sm" 
+                      : `${f.color} hover:bg-slate-50`
+                  )}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Navigation */}
             <div className="flex items-center bg-white p-1 rounded-xl border border-slate-200/60 shadow-sm">
               <button 
                 onClick={prevPeriod}
@@ -695,7 +687,7 @@ export function CalendarView({
               <div 
                 className={cn(
                   "grid", 
-                  viewMode === 'month' ? "flex-1 auto-rows-fr" : "auto-rows-auto content-start",
+                  viewMode === 'month' ? "auto-rows-auto" : "auto-rows-auto content-start",
                   gridColsClass
                 )}
                 style={inlineStyles}
@@ -714,6 +706,7 @@ export function CalendarView({
                       isToday={isToday}
                       isWeeklyView={viewMode !== 'month'}
                       onJobClick={onJobClick}
+                      onDayClick={onDayClick}
                     />
                   )
                 })}
@@ -723,12 +716,6 @@ export function CalendarView({
           </div>
         </div>
       </div>
-
-      <DragOverlay dropAnimation={{ duration: 250, easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)' }}>
-        {activeJob ? (
-          <StaticJobPill job={activeJob} isDragging />
-        ) : null}
-      </DragOverlay>
     </DndContext>
   )
 }

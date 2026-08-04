@@ -6,6 +6,18 @@ import { Calendar, Clock, User, ChevronRight, Archive, CheckCircle2, Briefcase, 
 import { cn } from '@/lib/utils'
 import { parseISO, format } from 'date-fns'
 import { es } from 'date-fns/locale'
+
+const formatTime12h = (timeStr?: string | null) => {
+  if (!timeStr) return ''
+  const parts = timeStr.split(':')
+  if (parts.length < 2) return timeStr
+  let hours = parseInt(parts[0], 10)
+  const minutes = parts[1]
+  const ampm = hours >= 12 ? 'PM' : 'AM'
+  hours = hours % 12
+  hours = hours ? hours : 12
+  return `${hours}:${minutes} ${ampm}`
+}
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -129,63 +141,86 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                     </div>
 
                     <div className="flex flex-col items-end gap-1.5 shrink-0">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <button 
-                            onClick={(e) => e.stopPropagation()}
-                            className={cn(
-                              "px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-wider",
-                              status.color, "text-white cursor-pointer hover:opacity-80 transition-opacity flex items-center gap-0.5"
-                            )}
-                          >
-                            {status.label} <span className="text-[10px] leading-none">▾</span>
-                          </button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48 rounded-xl border border-slate-200/80 shadow-lg bg-white p-1" onClick={(e) => e.stopPropagation()}>
-                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onEditClick?.(job) }} className="cursor-pointer gap-2 font-semibold text-slate-700 hover:bg-slate-100/70 focus:bg-slate-100/70 focus:text-slate-800 py-2 rounded-lg">
-                            <Pencil className="h-3.5 w-3.5 text-slate-500 shrink-0" />
-                            <span className="text-xs">Editar detalles</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onRescheduleClick?.(job) }} className="cursor-pointer gap-2 font-semibold text-slate-700 hover:bg-slate-100/70 focus:bg-slate-100/70 focus:text-slate-800 py-2 rounded-lg">
-                            <Calendar className="h-3.5 w-3.5 text-slate-500 shrink-0" />
-                            <span className="text-xs">Reagendar</span>
-                          </DropdownMenuItem>
-                          
-                          <DropdownMenuSeparator className="bg-slate-100 my-1" />
-                          
-                          {job.estado !== 'completado' && (
-                            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'completado') }} className="cursor-pointer gap-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 focus:bg-emerald-50 focus:text-emerald-700 py-2 rounded-lg font-semibold">
-                              <CheckCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-                              <span className="text-xs">Marcar como Listo</span>
-                            </DropdownMenuItem>
-                          )}
-                          {job.estado !== 'en_progreso' && (
-                            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'en_progreso') }} className="cursor-pointer gap-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 focus:bg-blue-50 focus:text-blue-700 py-2 rounded-lg font-semibold">
-                              <RotateCw className="h-3.5 w-3.5 text-blue-600 shrink-0" />
-                              <span className="text-xs">En Progreso</span>
-                            </DropdownMenuItem>
-                          )}
-                          {job.estado !== 'proximo' && (
-                            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'proximo') }} className="cursor-pointer gap-2 text-amber-600 hover:text-amber-700 hover:bg-amber-50 focus:bg-amber-50 focus:text-amber-700 py-2 rounded-lg font-semibold">
-                              <Calendar className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-                              <span className="text-xs">Marcar como Próximo</span>
-                            </DropdownMenuItem>
-                          )}
-                          
-                          <DropdownMenuSeparator className="bg-slate-100 my-1" />
-                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onArchive?.(job) }} className="cursor-pointer gap-2 text-red-600 hover:text-red-700 hover:bg-red-50 focus:bg-red-50 focus:text-red-700 py-2 rounded-lg font-semibold">
-                            <Archive className="h-3.5 w-3.5 text-red-500 shrink-0" />
-                            <span className="text-xs">Archivar / Cancelar</span>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
                       <p className="text-[13px] font-black text-[#0097A7]">
                         ${job.precio_acordado?.toLocaleString()}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-slate-100">
+                  {/* Status Section */}
+                  <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <div className="flex flex-col gap-0.5">
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Estado del servicio</p>
+                      <p className="text-[10px] font-semibold text-slate-600">
+                        {job.estado === 'completado' && 'Trabajo finalizado exitosamente'}
+                        {job.estado === 'en_progreso' && 'El equipo está trabajando en el servicio'}
+                        {job.estado === 'proximo' && 'Servicio programado, pendiente de inicio'}
+                        {!job.estado && 'Sin estado definido'}
+                      </p>
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button 
+                          onClick={(e) => e.stopPropagation()}
+                          className={cn(
+                            "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider cursor-pointer",
+                            "border-2 border-dashed transition-all duration-200",
+                            "hover:scale-[1.03] hover:shadow-md active:scale-[0.97]",
+                            job.estado === 'completado' && "bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100 hover:border-emerald-400",
+                            job.estado === 'en_progreso' && "bg-blue-50 text-blue-700 border-blue-300 hover:bg-blue-100 hover:border-blue-400",
+                            job.estado === 'proximo' && "bg-amber-50 text-amber-700 border-amber-300 hover:bg-amber-100 hover:border-amber-400",
+                            (!job.estado || !statusConfig[job.estado as keyof typeof statusConfig]) && "bg-slate-50 text-slate-600 border-slate-300 hover:bg-slate-100"
+                          )}
+                        >
+                          {job.estado === 'completado' && <CheckCircle2 className="h-3 w-3" />}
+                          {job.estado === 'en_progreso' && <RotateCw className="h-3 w-3" />}
+                          {job.estado === 'proximo' && <Calendar className="h-3 w-3" />}
+                          <span>{status.label}</span>
+                          <span className="text-[10px] leading-none ml-0.5">▾</span>
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-48 rounded-xl border border-slate-200/80 shadow-lg bg-white p-1" onClick={(e) => e.stopPropagation()}>
+                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onEditClick?.(job) }} className="cursor-pointer gap-2 font-semibold text-slate-700 hover:bg-slate-100/70 focus:bg-slate-100/70 focus:text-slate-800 py-2 rounded-lg">
+                          <Pencil className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+                          <span className="text-xs">Editar detalles</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onRescheduleClick?.(job) }} className="cursor-pointer gap-2 font-semibold text-slate-700 hover:bg-slate-100/70 focus:bg-slate-100/70 focus:text-slate-800 py-2 rounded-lg">
+                          <Calendar className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+                          <span className="text-xs">Reagendar</span>
+                        </DropdownMenuItem>
+                        
+                        <DropdownMenuSeparator className="bg-slate-100 my-1" />
+                        
+                        {job.estado !== 'completado' && (
+                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'completado') }} className="cursor-pointer gap-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 focus:bg-emerald-50 focus:text-emerald-700 py-2 rounded-lg font-semibold">
+                            <CheckCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                            <span className="text-xs">Marcar como Listo</span>
+                          </DropdownMenuItem>
+                        )}
+                        {job.estado !== 'en_progreso' && (
+                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'en_progreso') }} className="cursor-pointer gap-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 focus:bg-blue-50 focus:text-blue-700 py-2 rounded-lg font-semibold">
+                            <RotateCw className="h-3.5 w-3.5 text-blue-600 shrink-0" />
+                            <span className="text-xs">En Progreso</span>
+                          </DropdownMenuItem>
+                        )}
+                        {job.estado !== 'proximo' && (
+                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'proximo') }} className="cursor-pointer gap-2 text-amber-600 hover:text-amber-700 hover:bg-amber-50 focus:bg-amber-50 focus:text-amber-700 py-2 rounded-lg font-semibold">
+                            <Calendar className="h-3.5 w-3.5 text-amber-600 shrink-0" />
+                            <span className="text-xs">Marcar como Próximo</span>
+                          </DropdownMenuItem>
+                        )}
+                        
+                        <DropdownMenuSeparator className="bg-slate-100 my-1" />
+                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onArchive?.(job) }} className="cursor-pointer gap-2 text-red-600 hover:text-red-700 hover:bg-red-50 focus:bg-red-50 focus:text-red-700 py-2 rounded-lg font-semibold">
+                          <Archive className="h-3.5 w-3.5 text-red-500 shrink-0" />
+                          <span className="text-xs">Archivar / Cancelar</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+
+                  {/* Date & Time Footer */}
+                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-1 text-[9px] font-semibold text-slate-400">
                         <Calendar className="h-3 w-3" />
@@ -194,7 +229,7 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
                       {job.hora_servicio && (
                         <div className="flex items-center gap-1 text-[9px] font-semibold text-slate-400">
                           <Clock className="h-3 w-3" />
-                          {job.hora_servicio}
+                          {formatTime12h(job.hora_servicio)}
                         </div>
                       )}
                     </div>

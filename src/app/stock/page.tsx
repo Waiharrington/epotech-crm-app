@@ -19,7 +19,8 @@ import {
   DollarSign,
   Boxes,
   Wrench,
-  Cog
+  Cog,
+  Filter
 } from 'lucide-react'
 import { useConfirm } from '@/components/ui/confirm-dialog'
 import { Input } from '@/components/ui/input'
@@ -348,23 +349,41 @@ export default function StockPage() {
               </button>
             ))}
           </div>
-
           {activeTab === 'inventario' && (
-            <div className="flex gap-1.5 flex-wrap pb-1">
-              {['todos', 'consumible', 'herramienta', 'maquinaria'].map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setTypeFilter(t)}
-                  className={cn(
-                    "px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97]",
-                    typeFilter === t
-                      ? "bg-[#0097A7] text-white border-[#0097A7] shadow-md shadow-cyan-500/20"
-                      : "bg-white text-slate-500 border-slate-200/60 hover:border-[#0097A7]/40 hover:text-[#0097A7]"
-                  )}
+            <div className="w-full sm:w-auto">
+              {/* Mobile Filter Dropdown */}
+              <div className="sm:hidden relative mt-2 sm:mt-0">
+                <select 
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                  className="w-full appearance-none bg-white border border-slate-200/60 rounded-xl pl-4 pr-10 py-2.5 text-xs font-bold text-slate-700 uppercase tracking-wider focus:outline-none focus:border-[#0097A7]/50 focus:ring-1 focus:ring-[#0097A7]/50 shadow-[0_1px_3px_rgba(0,0,0,0.02)]"
                 >
-                  {t === 'todos' ? 'Todos' : t}
-                </button>
-              ))}
+                  {['todos', 'consumible', 'herramienta', 'maquinaria'].map((t) => (
+                    <option key={t} value={t}>{t === 'todos' ? 'Todas las Categorías' : t}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center h-6 w-6 rounded-lg bg-slate-50 text-slate-400">
+                  <Filter className="h-3.5 w-3.5" />
+                </div>
+              </div>
+
+              {/* Desktop Filter Pills */}
+              <div className="hidden sm:flex gap-1.5 flex-wrap pb-1">
+                {['todos', 'consumible', 'herramienta', 'maquinaria'].map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setTypeFilter(t)}
+                    className={cn(
+                      "px-3 py-1.5 rounded-xl text-[13px] font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97]",
+                      typeFilter === t
+                        ? "bg-[#0097A7] text-white border-[#0097A7] shadow-md shadow-cyan-500/20"
+                        : "bg-white text-slate-500 border-slate-200/60 hover:border-[#0097A7]/40 hover:text-[#0097A7]"
+                    )}
+                  >
+                    {t === 'todos' ? 'Todos' : t}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>

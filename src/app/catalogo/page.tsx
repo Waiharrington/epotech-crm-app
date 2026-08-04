@@ -5,7 +5,7 @@ import { createClient } from '@/utils/supabase/client'
 import { Database } from '@/types/supabase'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Plus, Briefcase, Settings, Trash2, Edit, Loader2, FolderOpen, Search, Package, DollarSign, Tag } from 'lucide-react'
+import { Plus, Briefcase, Settings, Trash2, Edit, Loader2, FolderOpen, Search, Package, DollarSign, Tag, Filter } from 'lucide-react'
 import { 
   Dialog, 
   DialogContent, 
@@ -266,21 +266,40 @@ export default function CatalogoPage() {
         </div>
 
         {/* Category Filter Buttons */}
-        <div className="flex gap-1.5 flex-wrap shrink-0 pb-1">
-          {['todos', ...categoryOptions].map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setCategoryFilter(cat)}
-              className={cn(
-                "px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97]",
-                categoryFilter === cat
-                  ? "bg-[#0097A7] text-white border-[#0097A7] shadow-md shadow-cyan-500/20"
-                  : "bg-white text-slate-500 border-slate-200/60 hover:border-[#0097A7]/40 hover:text-[#0097A7]"
-              )}
+        <div className="w-full sm:w-auto">
+          {/* Mobile Filter Dropdown */}
+          <div className="sm:hidden relative mt-1 mb-2">
+            <select 
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="w-full appearance-none bg-white border border-slate-200/60 rounded-xl pl-4 pr-10 py-2.5 text-xs font-bold text-slate-700 uppercase tracking-wider focus:outline-none focus:border-[#0097A7]/50 focus:ring-1 focus:ring-[#0097A7]/50 shadow-[0_1px_3px_rgba(0,0,0,0.02)]"
             >
-              {cat === 'epoxico' ? 'Epóxico' : cat === 'todos' ? 'Todos' : cat}
-            </button>
-          ))}
+              {['todos', ...categoryOptions].map((cat) => (
+                <option key={cat} value={cat}>{cat === 'epoxico' ? 'Epóxico' : cat === 'todos' ? 'Todas las Categorías' : cat}</option>
+              ))}
+            </select>
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center h-6 w-6 rounded-lg bg-slate-50 text-slate-400">
+              <Filter className="h-3.5 w-3.5" />
+            </div>
+          </div>
+
+          {/* Desktop Filter Pills */}
+          <div className="hidden sm:flex gap-1.5 flex-wrap shrink-0 pb-1">
+            {['todos', ...categoryOptions].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setCategoryFilter(cat)}
+                className={cn(
+                  "px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97]",
+                  categoryFilter === cat
+                    ? "bg-[#0097A7] text-white border-[#0097A7] shadow-md shadow-cyan-500/20"
+                    : "bg-white text-slate-500 border-slate-200/60 hover:border-[#0097A7]/40 hover:text-[#0097A7]"
+                )}
+              >
+                {cat === 'epoxico' ? 'Epóxico' : cat === 'todos' ? 'Todos' : cat}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Services Grid */}

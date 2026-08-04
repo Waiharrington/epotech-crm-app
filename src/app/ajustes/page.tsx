@@ -24,7 +24,8 @@ import {
   Save,
   Building2,
   Globe,
-  Mail
+  Mail,
+  DollarSign
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Switch } from '@/components/ui/switch'

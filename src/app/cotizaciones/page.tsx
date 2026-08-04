@@ -155,49 +155,30 @@ export default function CotizacionesPage() {
       <main className="flex flex-col md:flex-1 md:min-h-0 gap-3 relative z-10">
         
         {/* Statistics Grid */}
-        <div className="p-0.5 -m-0.5 overflow-visible shrink-0">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="overflow-x-auto no-scrollbar pb-1 -mx-4 px-4 lg:mx-0 lg:px-0">
+          <div className="flex items-center gap-2.5 w-max">
             {[
-              { label: 'Aprobadas', value: aprobadas, icon: CheckCircle2, filterKey: 'aprobado' as const, active: 'bg-emerald-50 border-emerald-300 ring-1 ring-emerald-200', labelCls: 'text-emerald-600', iconBox: 'bg-emerald-100 border-emerald-200 text-emerald-600' },
-              { label: 'Pendientes', value: pendientes, icon: Clock, filterKey: 'pendiente' as const, active: 'bg-amber-50 border-amber-300 ring-1 ring-amber-200', labelCls: 'text-amber-600', iconBox: 'bg-amber-100 border-amber-200 text-amber-600' },
-              { label: 'Rechazadas', value: rechazadas, icon: XCircle, filterKey: 'rechazado' as const, active: 'bg-rose-50 border-rose-300 ring-1 ring-rose-200', labelCls: 'text-rose-600', iconBox: 'bg-rose-100 border-rose-200 text-rose-600' },
-              { label: 'Emitidas', value: totalEmitidas, icon: TrendingUp, filterKey: 'todos' as const, active: 'bg-cyan-50 border-cyan-300 ring-1 ring-cyan-200', labelCls: 'text-cyan-600', iconBox: 'bg-cyan-100 border-cyan-200 text-cyan-600' },
+              { label: 'Aprobadas', value: aprobadas, icon: CheckCircle2, filterKey: 'aprobado' as const, active: 'bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/20', inactive: 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300' },
+              { label: 'Pendientes', value: pendientes, icon: Clock, filterKey: 'pendiente' as const, active: 'bg-amber-500 text-white border-amber-500 shadow-md shadow-amber-500/20', inactive: 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300' },
+              { label: 'Rechazadas', value: rechazadas, icon: XCircle, filterKey: 'rechazado' as const, active: 'bg-rose-500 text-white border-rose-500 shadow-md shadow-rose-500/20', inactive: 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300' },
+              { label: 'Todas', value: totalEmitidas, icon: TrendingUp, filterKey: 'todos' as const, active: 'bg-cyan-600 text-white border-cyan-600 shadow-md shadow-cyan-600/20', inactive: 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300' },
             ].map((stat) => (
               <button
                 key={stat.label}
                 onClick={() => setStatusFilter(stat.filterKey)}
                 className={cn(
-                  "rounded-2xl border shadow-sm hover:shadow-md transition-all group text-left cursor-pointer active:scale-[0.97]",
-                  statusFilter === stat.filterKey
-                    ? stat.active
-                    : "bg-white border-slate-200/60 hover:border-[#0097A7]/40 hover:bg-slate-50/50"
+                  "flex items-center gap-2 px-4 py-2.5 rounded-full border shadow-sm transition-all duration-200 active:scale-95 whitespace-nowrap",
+                  statusFilter === stat.filterKey ? stat.active : stat.inactive
                 )}
               >
-                <div className="p-2.5 px-4.5 flex items-center justify-between">
-                  <div className="flex-1 min-w-0">
-                    <p className={cn(
-                      "text-[11px] font-bold uppercase tracking-wider truncate",
-                      statusFilter === stat.filterKey ? stat.labelCls : "text-slate-400"
-                    )}>{stat.label}</p>
-                    <p className="text-xl font-black text-slate-900 leading-tight">{stat.value}</p>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <div className={cn(
-                      "h-10 w-10 rounded-xl flex items-center justify-center border shrink-0 transition-colors",
-                      statusFilter === stat.filterKey
-                        ? stat.iconBox
-                        : "bg-slate-50 border-slate-100 text-slate-400 group-hover:bg-[#E6F9FB] group-hover:border-[#0097A7]/20 group-hover:text-[#0097A7]"
-                    )}>
-                      <stat.icon className="h-4 w-4" />
-                    </div>
-                    <ChevronRight className={cn(
-                      "h-3.5 w-3.5 transition-all duration-200 shrink-0",
-                      statusFilter === stat.filterKey
-                        ? "opacity-70 -translate-x-0.5"
-                        : "opacity-0 -translate-x-1 group-hover:opacity-50 group-hover:translate-x-0"
-                    )} />
-                  </div>
-                </div>
+                <stat.icon className={cn("h-4 w-4 shrink-0", statusFilter === stat.filterKey ? "opacity-100" : "text-slate-400")} />
+                <span className="text-[13px] font-bold tracking-wide">{stat.label}</span>
+                <span className={cn(
+                  "ml-1 px-2 py-0.5 rounded-full text-[11px] font-black",
+                  statusFilter === stat.filterKey ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
+                )}>
+                  {stat.value}
+                </span>
               </button>
             ))}
           </div>

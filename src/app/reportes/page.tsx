@@ -52,10 +52,11 @@ export default function ReportesPage() {
 
   // Auto-scroll logic for mobile KPI carousel
   useEffect(() => {
+    // Only setup interval if not loading and container exists
+    if (loading) return
     const container = carouselRef.current
     if (!container) return
 
-    let scrollAmount = 0
     const interval = setInterval(() => {
       // Only scroll if we are on mobile (where scrollWidth > clientWidth)
       if (container.scrollWidth <= container.clientWidth) return
@@ -63,12 +64,13 @@ export default function ReportesPage() {
       if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
         container.scrollTo({ left: 0, behavior: 'smooth' })
       } else {
+        // scroll enough to trigger the next snap point
         container.scrollBy({ left: container.clientWidth * 0.8, behavior: 'smooth' })
       }
     }, 4000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [loading])
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
   const [rawData, setRawData] = useState<any>({

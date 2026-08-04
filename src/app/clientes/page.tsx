@@ -66,7 +66,7 @@ export default function ClientesPage() {
       return (
         normalizeSearch(cliente.nombre).includes(searchNorm) ||
         normalizeSearch(cliente.apellido).includes(searchNorm) ||
-        normalizeSearch(cliente.email || '').includes(searchNorm) ||
+        normalizeSearch(cliente.telefono).includes(searchNorm) ||
         normalizeSearch(cliente.ciudad || '').includes(searchNorm)
       )
     })

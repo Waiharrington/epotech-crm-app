@@ -235,7 +235,7 @@ export default function CajaPage() {
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-bold text-slate-700 truncate group-hover:text-[#0097A7] transition-colors">
+                              <p className="text-sm font-bold text-slate-700 truncate max-w-[250px] group-hover:text-[#0097A7] transition-colors">
                                 {entry.notas || 'Sin descripción'}
                               </p>
                             </div>
@@ -287,7 +287,7 @@ export default function CajaPage() {
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-[13px] font-bold text-slate-700 leading-tight line-clamp-2">
+                          <p className="text-[13px] font-bold text-slate-700 leading-tight line-clamp-1">
                             {entry.notas || 'Sin descripción'}
                           </p>
                         </div>

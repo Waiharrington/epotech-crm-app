@@ -274,7 +274,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                 categoria: 'materiales',
                 trabajo_id: job.id,
                 stock_id: mat.id,
-                notas: `Compra automática de stock (${difference} ${freshItem.unidad_medida || 'unidades'} de ${freshItem.nombre}) por falta de stock en servicio para ${job.clientes.nombre}`,
+                notas: `Restock: ${difference} ${freshItem.unidad_medida || 'u.'} de ${freshItem.nombre}`,
                 es_automatico: true
               })
             }

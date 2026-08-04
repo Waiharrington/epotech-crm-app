@@ -155,8 +155,8 @@ export default function CotizacionesPage() {
       <main className="flex flex-col md:flex-1 md:min-h-0 gap-3 relative z-10">
         
         {/* Statistics Grid */}
-        <div className="overflow-x-auto no-scrollbar pb-1 -mx-4 px-4 lg:mx-0 lg:px-0">
-          <div className="flex items-center gap-2.5 w-max">
+        <div className="pb-1">
+          <div className="flex flex-wrap items-center gap-2">
             {[
               { label: 'Aprobadas', value: aprobadas, icon: CheckCircle2, filterKey: 'aprobado' as const, active: 'bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/20', inactive: 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300' },
               { label: 'Pendientes', value: pendientes, icon: Clock, filterKey: 'pendiente' as const, active: 'bg-amber-500 text-white border-amber-500 shadow-md shadow-amber-500/20', inactive: 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300' },

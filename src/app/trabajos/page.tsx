@@ -508,6 +508,7 @@ function TrabajosContent() {
                       setRescheduleDate(job.fecha_servicio)
                       setRescheduleTime(job.hora_servicio || '')
                       setShowRescheduleModal(true)
+                    }}
                     viewMode={calendarViewMode}
                     customDateRange={customDateRange}
                   />

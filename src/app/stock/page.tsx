@@ -19,7 +19,8 @@ import {
   DollarSign,
   Boxes,
   Wrench,
-  Cog
+  Cog,
+  Filter
 } from 'lucide-react'
 import { normalizeSearch } from '@/lib/utils'
 import { useConfirm } from '@/components/ui/confirm-dialog'

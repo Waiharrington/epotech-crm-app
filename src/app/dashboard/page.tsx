@@ -336,13 +336,17 @@ export default function DashboardPage() {
       setIsDbOffline(true)
       const localData = localStorage.getItem('epotech_recordatorios')
       if (localData) {
-        const parsed = JSON.parse(localData)
-        const uncompleted = parsed.filter((r: any) => !r.completado)
-        const sorted = uncompleted.sort((a: any, b: any) => {
-          if (a.fecha !== b.fecha) return a.fecha.localeCompare(b.fecha)
-          return (a.hora || '').localeCompare(b.hora || '')
-        })
-        setReminders(sorted.slice(0, 4))
+        try {
+          const parsed = JSON.parse(localData)
+          const uncompleted = parsed.filter((r: any) => !r.completado)
+          const sorted = uncompleted.sort((a: any, b: any) => {
+            if (a.fecha !== b.fecha) return a.fecha.localeCompare(b.fecha)
+            return (a.hora || '').localeCompare(b.hora || '')
+          })
+          setReminders(sorted.slice(0, 4))
+        } catch (parseErr) {
+          console.error("Failed to parse local reminders", parseErr)
+        }
       }
     }
   }
@@ -365,10 +369,12 @@ export default function DashboardPage() {
     } catch (e) {
       const localData = localStorage.getItem('epotech_recordatorios')
       if (localData) {
-        const parsed = JSON.parse(localData)
-        const updated = parsed.map((r: any) => r.id === id ? { ...r, completado: true } : r)
-        localStorage.setItem('epotech_recordatorios', JSON.stringify(updated))
-        window.dispatchEvent(new Event('recordatoriosChanged'))
+        try {
+          const parsed = JSON.parse(localData)
+          const updated = parsed.map((r: any) => r.id === id ? { ...r, completado: true } : r)
+          localStorage.setItem('epotech_recordatorios', JSON.stringify(updated))
+          window.dispatchEvent(new Event('recordatoriosChanged'))
+        } catch (parseErr) {}
       }
     }
   }
@@ -383,10 +389,12 @@ export default function DashboardPage() {
     } catch (e) {
       const localData = localStorage.getItem('epotech_recordatorios')
       if (localData) {
-        const parsed = JSON.parse(localData)
-        const updated = parsed.filter((r: any) => r.id !== id)
-        localStorage.setItem('epotech_recordatorios', JSON.stringify(updated))
-        window.dispatchEvent(new Event('recordatoriosChanged'))
+        try {
+          const parsed = JSON.parse(localData)
+          const updated = parsed.filter((r: any) => r.id !== id)
+          localStorage.setItem('epotech_recordatorios', JSON.stringify(updated))
+          window.dispatchEvent(new Event('recordatoriosChanged'))
+        } catch (parseErr) {}
       }
     }
   }
@@ -440,9 +448,13 @@ export default function DashboardPage() {
       window.dispatchEvent(new Event('recordatoriosChanged'))
     } catch (err) {
       const localData = localStorage.getItem('epotech_recordatorios') || '[]'
-      const parsed = JSON.parse(localData)
-      parsed.unshift(newReminderObj)
-      localStorage.setItem('epotech_recordatorios', JSON.stringify(parsed))
+      try {
+        const parsed = JSON.parse(localData)
+        parsed.unshift(newReminderObj)
+        localStorage.setItem('epotech_recordatorios', JSON.stringify(parsed))
+      } catch (parseErr) {
+        localStorage.setItem('epotech_recordatorios', JSON.stringify([newReminderObj]))
+      }
       
       toast.success('Recordatorio guardado')
       fetchReminders()

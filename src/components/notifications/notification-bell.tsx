@@ -69,7 +69,11 @@ export function NotificationBell() {
       setIsUsingLocalStorage(true)
       const localData = localStorage.getItem('epotech_recordatorios')
       if (localData) {
-        setReminders(JSON.parse(localData))
+        try {
+          setReminders(JSON.parse(localData))
+        } catch (parseErr) {
+          setReminders([])
+        }
       } else {
         setReminders([])
       }
@@ -179,7 +183,7 @@ export function NotificationBell() {
 
       {/* Dropdown Container */}
       {isOpen && (
-        <div className="absolute -right-12 sm:right-0 mt-3.5 w-[calc(100vw-32px)] sm:w-[350px] rounded-2xl border border-black/5 dark:border-white/10 bg-white/95 dark:bg-[#030b17]/95 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)] z-[100] animate-in fade-in-50 slide-in-from-top-3 duration-200 overflow-hidden">
+        <div className="fixed inset-x-4 top-[80px] sm:absolute sm:inset-auto sm:right-0 sm:mt-3.5 sm:w-[350px] rounded-2xl border border-black/5 dark:border-white/10 bg-white/95 dark:bg-[#030b17]/95 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)] z-[100] animate-in fade-in-50 slide-in-from-top-3 duration-200 overflow-hidden">
           
           {/* Header */}
           <div className="p-4 border-b border-black/5 dark:border-white/10 flex items-center justify-between bg-white/40 dark:bg-white/[0.02] backdrop-blur-md">

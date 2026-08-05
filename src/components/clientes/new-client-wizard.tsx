@@ -594,7 +594,7 @@ function SortableReminderItem({
         </button>
 
         <div className="min-w-0 flex-1">
-          <p className="font-bold text-base text-slate-800 truncate">{reminder.titulo}</p>
+          <p className="font-bold text-base text-slate-800 break-words pr-2">{reminder.titulo}</p>
           <div className="flex items-center gap-2 mt-0.5 text-[11px] text-slate-400 font-medium">
             {reminder.hora && (
               <span className="flex items-center gap-0.5">
@@ -986,7 +986,7 @@ export function GestionarDrawer({
                           key={item.id}
                           className="flex items-center justify-between text-base p-1.5 rounded-lg bg-slate-50 border border-slate-100"
                         >
-                          <span className="font-semibold text-slate-700 text-[13px] truncate">
+                          <span className="font-semibold text-slate-700 text-[13px] break-words pr-2">
                             {item.titulo}
                           </span>
                           {item.hora && (
@@ -1020,7 +1020,7 @@ export function GestionarDrawer({
                         <Check className="h-3.5 w-3.5 stroke-[3]" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-bold text-base text-slate-700 line-through truncate">{item.titulo}</p>
+                        <p className="font-bold text-base text-slate-700 line-through break-words pr-2">{item.titulo}</p>
                         <div className="flex items-center gap-2 mt-0.5 text-[11px] text-slate-400 font-medium">
                           {item.fecha && (
                             <span className="flex items-center gap-0.5">

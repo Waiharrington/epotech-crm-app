@@ -179,18 +179,20 @@ export function NotificationBell() {
 
       {/* Dropdown Container */}
       {isOpen && (
-        <div className="absolute right-0 mt-3.5 w-[320px] sm:w-[350px] rounded-2xl border border-black/5 dark:border-white/10 bg-white/95 dark:bg-[#030b17]/95 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)] z-[100] animate-in fade-in-50 slide-in-from-top-3 duration-200 overflow-hidden">
+        <div className="absolute -right-12 sm:right-0 mt-3.5 w-[calc(100vw-32px)] sm:w-[350px] rounded-2xl border border-black/5 dark:border-white/10 bg-white/95 dark:bg-[#030b17]/95 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.5)] z-[100] animate-in fade-in-50 slide-in-from-top-3 duration-200 overflow-hidden">
           
           {/* Header */}
-          <div className="p-4 border-b border-black/5 dark:border-white/10 flex items-center justify-between bg-zinc-50/50 dark:bg-white/[0.02]">
-            <div className="flex items-center gap-1.5">
-              <Sparkles className="h-4 w-4 text-[#00C9E0]" />
-              <span className="text-base font-black uppercase tracking-wider text-slate-800 dark:text-white">
+          <div className="p-4 border-b border-black/5 dark:border-white/10 flex items-center justify-between bg-white/40 dark:bg-white/[0.02] backdrop-blur-md">
+            <div className="flex items-center gap-2">
+              <div className="bg-[#00C9E0]/10 p-1.5 rounded-lg border border-[#00C9E0]/20">
+                <Sparkles className="h-4 w-4 text-[#00C9E0]" />
+              </div>
+              <span className="text-[14px] font-black uppercase tracking-widest text-slate-800 dark:text-white">
                 Notificaciones
               </span>
             </div>
             {hasUnread && (
-              <span className="text-base font-bold bg-[#00C9E0]/15 text-[#00C9E0] px-4 py-0.5 rounded-full">
+              <span className="text-[11px] font-black bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white px-2.5 py-1 rounded-full shadow-sm">
                 {unreadReminders.length} activas
               </span>
             )}
@@ -198,19 +200,19 @@ export function NotificationBell() {
 
           {/* Quick Actions Panel */}
           {reminders.length > 0 && (
-            <div className="px-4 py-2 border-b border-black/5 dark:border-white/5 bg-zinc-50/20 dark:bg-white/[0.01] flex items-center justify-between gap-2 text-base">
+            <div className="px-4 py-2.5 border-b border-black/5 dark:border-white/5 bg-slate-50/80 dark:bg-white/[0.01] flex items-center justify-between gap-2 text-[12px]">
               <button 
                 onClick={handleMarkAllRead}
                 disabled={!hasUnread}
-                className="flex items-center gap-1 font-bold text-[#00C9E0] hover:text-[#00B4C8] disabled:opacity-50 disabled:pointer-events-none transition-colors"
+                className="flex items-center gap-1.5 font-extrabold text-[#00C9E0] hover:text-[#00B4C8] disabled:opacity-40 disabled:pointer-events-none transition-colors"
               >
-                <Check className="h-3.5 w-3.5" /> Marcar leídas
+                <CheckCircle2 className="h-4 w-4" /> Marcar leídas
               </button>
               <button 
                 onClick={handleClearAll}
-                className="flex items-center gap-1 font-bold text-red-500 hover:text-red-400 transition-colors"
+                className="flex items-center gap-1.5 font-extrabold text-red-500 hover:text-red-400 transition-colors"
               >
-                <Trash2 className="h-3.5 w-3.5" /> Eliminar todas
+                <Trash2 className="h-4 w-4" /> Eliminar todas
               </button>
             </div>
           )}
@@ -247,10 +249,10 @@ export function NotificationBell() {
                     )} />
 
                     {/* Content */}
-                    <div className="flex-1 min-w-0 pl-1.5">
+                    <div className="flex-1 min-w-0 pl-1.5 py-0.5">
                       <div className="flex items-start justify-between gap-1.5">
                         <h4 className={cn(
-                          "text-base font-bold leading-tight truncate text-slate-800 dark:text-slate-100",
+                          "text-[14px] font-bold leading-tight break-words pr-2 text-slate-800 dark:text-slate-100",
                           reminder.completado && "line-through text-slate-400 dark:text-slate-500"
                         )}>
                           {reminder.titulo}
@@ -258,7 +260,7 @@ export function NotificationBell() {
                       </div>
                       
                       {reminder.descripcion && (
-                        <p className="text-base text-slate-500 dark:text-slate-400 mt-1 leading-relaxed line-clamp-2">
+                        <p className="text-[12px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed line-clamp-2">
                           {reminder.descripcion}
                         </p>
                       )}
@@ -297,15 +299,15 @@ export function NotificationBell() {
           </div>
 
           {/* Footer Access Button */}
-          <div className="p-3 border-t border-black/5 dark:border-white/10 bg-zinc-50/50 dark:bg-white/[0.02]">
+          <div className="p-3 border-t border-black/5 dark:border-white/10 bg-white/40 dark:bg-white/[0.02] backdrop-blur-md">
             <button 
               onClick={() => {
                 setIsOpen(false)
                 router.push('/recordatorios')
               }}
-              className="w-full py-2 rounded-xl text-base font-black uppercase tracking-wider text-white bg-[#00C9E0] hover:bg-[#00B4C8] flex items-center justify-center gap-1.5 transition-all shadow-[0_4px_12px_rgba(0,201,224,0.2)] hover:shadow-[0_6px_16px_rgba(0,201,224,0.3)] active:scale-98"
+              className="w-full h-11 rounded-xl text-[12px] font-black uppercase tracking-widest text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#007f8e] flex items-center justify-center gap-2 transition-all shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 hover:-translate-y-0.5 active:scale-98"
             >
-              <ExternalLink className="h-3.5 w-3.5 stroke-[2.5]" /> Ver todas las notificaciones
+              <ExternalLink className="h-4 w-4 stroke-[2.5]" /> Ver todas
             </button>
           </div>
 

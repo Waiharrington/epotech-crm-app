@@ -243,7 +243,8 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
         >
            <button
               type="button"
-              className="absolute top-4 right-4 z-[10000] h-10 w-10 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
+              className="absolute right-4 z-[10000] h-10 w-10 rounded-lg flex items-center justify-center bg-white/10 border border-white/15 text-slate-300 hover:text-white hover:border-[#00C9E0]/50 hover:bg-white/15 backdrop-blur-md transition-all active:scale-95"
+              style={{ top: 'calc(1rem + env(safe-area-inset-top))' }}
               onClick={() => setSelectedPhoto(null)}
               aria-label="Cerrar"
            >
@@ -251,7 +252,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
            </button>
 
            {/* Image Container */}
-           <div className="flex-1 flex items-center justify-center p-4 min-h-0 overflow-hidden" onClick={() => setSelectedPhoto(null)}>
+           <div className="flex-1 flex items-center justify-center p-4 min-h-0 overflow-hidden" style={{ paddingTop: 'calc(1rem + env(safe-area-inset-top))' }} onClick={() => setSelectedPhoto(null)}>
               <img
                 src={selectedPhoto.url_foto}
                 alt="Preview"
@@ -261,7 +262,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
            </div>
 
            {/* Metadata Sidebar */}
-           <div className="sidebar-premium-bg w-full md:w-80 border-t md:border-t-0 md:border-l border-white/10 p-5 flex flex-col gap-4 text-white overflow-y-auto shrink-0">
+           <div className="sidebar-premium-bg w-full md:w-80 border-t md:border-t-0 md:border-l border-white/10 p-5 flex flex-col gap-4 text-white overflow-y-auto shrink-0" style={{ paddingBottom: 'calc(1.25rem + env(safe-area-inset-bottom))' }}>
               <div className="space-y-1.5 relative z-10">
                  <p className="text-[11px] font-extrabold text-[#00C9E0] uppercase tracking-wider">Estado / Categoría</p>
                  <Badge className="h-5 px-4 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-[#00C9E0]/15 text-[#00C9E0] border-[#00C9E0]/30 shadow-none capitalize">

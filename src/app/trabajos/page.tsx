@@ -512,6 +512,8 @@ function TrabajosContent() {
                       setRescheduleTime(job.hora_servicio || '')
                       setShowRescheduleModal(true)
                     }}
+                    onStatusChange={handleStatusChange}
+                    onArchive={(job) => handleArchive(job as TrabajoWithDetails)}
                     viewMode={calendarViewMode}
                     customDateRange={customDateRange}
                   />

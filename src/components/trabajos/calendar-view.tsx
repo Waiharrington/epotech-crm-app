@@ -92,11 +92,67 @@ const formatTime12h = (time: string) => {
 // ----------------------------------------------------------------------
 // Draggable Job Pill (Normal & Compact)
 // ----------------------------------------------------------------------
-function DraggableJobPill({ job, onClick, isCompact }: { job: TrabajoWithDetails, onClick: () => void, isCompact?: boolean }) {
+function DraggableJobPill({ job, onClick, isCompact, onStatusChange, onArchive, onJobEditClick, onJobRescheduleClick }: { 
+  job: TrabajoWithDetails
+  onClick: () => void
+  isCompact?: boolean
+  onStatusChange?: (job: TrabajoWithDetails, newStatus: 'proximo' | 'en_progreso' | 'completado') => void
+  onArchive?: (job: TrabajoWithDetails) => void
+  onJobEditClick?: (job: TrabajoWithDetails) => void
+  onJobRescheduleClick?: (job: TrabajoWithDetails) => void
+}) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: job.id,
     data: { job }
   })
+
+  const contextMenu = (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button 
+          type="button"
+          onClick={(e) => e.stopPropagation()}
+          className="opacity-0 group-hover:opacity-100 shrink-0 h-5 w-5 flex items-center justify-center rounded text-inherit/60 hover:text-inherit hover:bg-white/50 transition-all cursor-pointer"
+        >
+          <MoreHorizontal className="h-3.5 w-3.5" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48 rounded-xl border border-slate-200/70 shadow-lg bg-white p-1" onClick={(e) => e.stopPropagation()}>
+        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onJobEditClick?.(job) }} className="cursor-pointer gap-2 font-semibold text-slate-700 p-2 rounded-lg text-xs">
+          <Pencil className="h-3.5 w-3.5 text-slate-500" />
+          Editar
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onJobRescheduleClick?.(job) }} className="cursor-pointer gap-2 font-semibold text-slate-700 p-2 rounded-lg text-xs">
+          <CalendarIcon className="h-3.5 w-3.5 text-slate-500" />
+          Reagendar
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-slate-100 my-0.5" />
+        {job.estado !== 'completado' && (
+          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'completado') }} className="cursor-pointer gap-2 font-bold text-emerald-700 p-2 rounded-lg text-xs">
+            <CheckCircle className="h-3.5 w-3.5 text-emerald-600" />
+            Marcar Listo
+          </DropdownMenuItem>
+        )}
+        {job.estado !== 'en_progreso' && (
+          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'en_progreso') }} className="cursor-pointer gap-2 font-bold text-blue-700 p-2 rounded-lg text-xs">
+            <RotateCw className="h-3.5 w-3.5 text-blue-600" />
+            En Progreso
+          </DropdownMenuItem>
+        )}
+        {job.estado !== 'proximo' && (
+          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onStatusChange?.(job, 'proximo') }} className="cursor-pointer gap-2 font-bold text-amber-700 p-2 rounded-lg text-xs">
+            <CalendarIcon className="h-3.5 w-3.5 text-amber-600" />
+            Marcar Próximo
+          </DropdownMenuItem>
+        )}
+        <DropdownMenuSeparator className="bg-slate-100 my-0.5" />
+        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onArchive?.(job) }} className="cursor-pointer gap-2 font-bold text-red-600 p-2 rounded-lg text-xs">
+          <Archive className="h-3.5 w-3.5 text-red-500" />
+          Archivar / Cancelar
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
 
   if (isCompact) {
     return (
@@ -134,6 +190,7 @@ function DraggableJobPill({ job, onClick, isCompact }: { job: TrabajoWithDetails
             {job.clientes?.nombre ? `${job.clientes.nombre} ${job.clientes.apellido?.charAt(0) || ''}` : 'Sin cliente'}
           </span>
         </div>
+        {contextMenu}
       </div>
     )
   }
@@ -166,9 +223,12 @@ function DraggableJobPill({ job, onClick, isCompact }: { job: TrabajoWithDetails
       </button>
 
       <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-        <p className="text-[11px] sm:text-[12px] font-bold leading-tight break-words whitespace-normal">
-          {job.clientes?.nombre ? `${job.clientes.nombre} ${job.clientes.apellido || ''}` : 'Sin cliente'}
-        </p>
+        <div className="flex items-center justify-between gap-1">
+          <p className="text-[11px] sm:text-[12px] font-bold leading-tight break-words whitespace-normal flex-1 min-w-0">
+            {job.clientes?.nombre ? `${job.clientes.nombre} ${job.clientes.apellido || ''}` : 'Sin cliente'}
+          </p>
+          {contextMenu}
+        </div>
         
         <p className="text-[10px] sm:text-[10px] font-medium opacity-85 leading-tight break-words whitespace-normal">
           {job.catalogo_servicios?.nombre || 'Personalizado'}
@@ -382,7 +442,11 @@ function DroppableDayCell({
   isWeeklyView, 
   isCompact,
   onJobClick,
-  onDayClick
+  onDayClick,
+  onStatusChange,
+  onArchive,
+  onJobEditClick,
+  onJobRescheduleClick
 }: { 
   date: Date
   jobs: TrabajoWithDetails[]
@@ -392,6 +456,10 @@ function DroppableDayCell({
   isCompact?: boolean
   onJobClick: (job: TrabajoWithDetails) => void
   onDayClick?: (date: Date) => void
+  onStatusChange?: (job: TrabajoWithDetails, newStatus: 'proximo' | 'en_progreso' | 'completado') => void
+  onArchive?: (job: TrabajoWithDetails) => void
+  onJobEditClick?: (job: TrabajoWithDetails) => void
+  onJobRescheduleClick?: (job: TrabajoWithDetails) => void
 }) {
   const dateStr = date.toISOString().split('T')[0]
   const { setNodeRef, isOver } = useDroppable({
@@ -481,6 +549,10 @@ function DroppableDayCell({
                   job={job} 
                   onClick={() => onJobClick(job)} 
                   isCompact={isCompact}
+                  onStatusChange={onStatusChange}
+                  onArchive={onArchive}
+                  onJobEditClick={onJobEditClick}
+                  onJobRescheduleClick={onJobRescheduleClick}
                 />
               ))}
               {jobs.length > 5 && (
@@ -776,6 +848,10 @@ export function CalendarView({
                         isCompact={viewMode === 'month' || viewMode === 'fortnight'}
                         onJobClick={onJobClick}
                         onDayClick={onDayClick}
+                        onStatusChange={onStatusChange}
+                        onArchive={onArchive}
+                        onJobEditClick={onJobEditClick}
+                        onJobRescheduleClick={onJobRescheduleClick}
                       />
                     )
                   })}

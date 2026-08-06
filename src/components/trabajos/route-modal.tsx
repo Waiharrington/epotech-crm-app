@@ -5,6 +5,7 @@ import { MapPin, Navigation, Map as MapIcon, Loader2 } from 'lucide-react'
 import { format, isSameDay } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { formatTime12 } from '@/lib/utils'
+import { DatePicker } from '@/components/ui/date-picker'
 
 type TrabajoWithDetails = {
   id: string
@@ -83,12 +84,14 @@ export function RouteModal({ isOpen, onClose, jobs }: RouteModalProps) {
 
         <div className="py-4 flex flex-col gap-4">
           <div className="flex items-center justify-between bg-slate-50 p-2 rounded-xl border border-slate-100">
-            <span className="text-base font-semibold text-slate-700 ml-2">Día de la ruta</span>
-            <input 
-              type="date" 
+            <DatePicker 
               value={format(selectedDate, 'yyyy-MM-dd')} 
-              onChange={(e) => setSelectedDate(new Date(e.target.value + 'T00:00:00'))}
-              className="px-4 py-2.5 text-base font-bold text-slate-800 bg-white border border-slate-200 rounded-lg shadow-sm"
+              onChange={(dateStr) => {
+                if (dateStr) {
+                  setSelectedDate(new Date(dateStr + 'T00:00:00'))
+                }
+              }}
+              className="w-[160px]"
             />
           </div>
 

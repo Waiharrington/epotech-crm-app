@@ -36,7 +36,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[520px] max-h-[95vh] overflow-y-auto md:overflow-y-hidden p-0 gap-0 border-0 shadow-[0_25px_60px_rgba(0,0,0,0.15)] rounded-3xl bg-[#F0F5FA]">
+      <DialogContent className="sm:max-w-[520px] max-h-[90vh] overflow-y-auto p-0 gap-0 border-0 shadow-[0_25px_60px_rgba(0,0,0,0.15)] rounded-3xl bg-[#F0F5FA]">
         {/* ── Header con gradiente ── */}
         <div className="relative overflow-hidden rounded-t-3xl">
           <div className="absolute inset-0 bg-gradient-to-br from-[#00C9E0] via-[#0097A7] to-[#006570]" />

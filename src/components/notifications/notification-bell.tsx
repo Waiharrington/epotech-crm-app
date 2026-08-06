@@ -226,7 +226,7 @@ export function NotificationBell() {
             {loading ? (
               <div className="flex flex-col items-center justify-center py-10 gap-2">
                 <Clock className="h-6 w-6 text-[#00C9E0] animate-spin" />
-                <span className="text-base text-slate-400 font-bold uppercase tracking-wider">Cargando alertas...</span>
+                <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Cargando alertas...</span>
               </div>
             ) : reminders.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 px-4 text-center">

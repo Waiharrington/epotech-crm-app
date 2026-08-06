@@ -105,7 +105,7 @@ export function JobList({ trabajos, onCardClick, onArchive, onUnarchive, onStatu
     <div className="space-y-6 md:space-y-8">
       {sortedWeeks.map(weekKey => (
         <div key={weekKey} className="space-y-4">
-          <h3 className="text-base md:text-base font-black text-slate-700 capitalize tracking-tight flex items-center gap-2 px-1">
+          <h3 className="text-base font-black text-slate-700 capitalize tracking-tight flex items-center gap-2 px-1">
             <div className="w-1.5 h-1.5 rounded-full bg-[#00C9E0]" />
             {groupedJobs[weekKey].label}
           </h3>

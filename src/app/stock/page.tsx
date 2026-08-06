@@ -414,7 +414,7 @@ export default function StockPage() {
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-slate-200 shadow-xl">
                     {['todos', 'consumible', 'herramienta', 'maquinaria'].map((t) => (
-                      <SelectItem key={t} value={t} className="text-base font-bold uppercase tracking-wider text-slate-700 focus:bg-[#0097A7]/10 focus:text-[#0097A7]">
+                      <SelectItem key={t} value={t} className="text-xs font-bold uppercase tracking-wider text-slate-700 focus:bg-[#0097A7]/10 focus:text-[#0097A7]">
                         {t === 'todos' ? 'Todas las Categorías' : t}
                       </SelectItem>
                     ))}
@@ -825,8 +825,8 @@ export default function StockPage() {
 
       {/* Add Item Modal */}
       <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
-        <DialogContent className="w-[calc(100%-24px)] sm:w-full p-0 gap-0 rounded-2xl overflow-hidden max-w-lg border-slate-200/60 shadow-2xl">
-          <div className="sidebar-premium-bg px-6 py-4 relative">
+        <DialogContent className="w-[calc(100%-24px)] sm:w-full p-0 gap-0 rounded-2xl overflow-hidden max-w-lg max-h-[90vh] border-slate-200/60 shadow-2xl flex flex-col">
+          <div className="sidebar-premium-bg px-6 py-4 relative shrink-0">
             <div className="relative z-10 flex items-center gap-3">
               <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
                 <Plus className="h-4 w-4 text-[#00C9E0]" />
@@ -841,7 +841,7 @@ export default function StockPage() {
               </div>
             </div>
           </div>
-          <form onSubmit={handleSave} className="space-y-4 p-6 bg-white">
+          <form onSubmit={handleSave} className="space-y-4 p-6 bg-white overflow-y-auto flex-1 min-h-0">
              <div className="space-y-2">
                 <Label htmlFor="nombre" className="text-[13px] font-bold uppercase tracking-wider text-slate-500">Nombre</Label>
                 <Input 
@@ -923,8 +923,8 @@ export default function StockPage() {
 
       {/* Edit Item Modal */}
       <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
-        <DialogContent className="w-[calc(100%-24px)] sm:w-full p-0 gap-0 rounded-2xl overflow-hidden max-w-lg border-slate-200/60 shadow-2xl">
-          <div className="sidebar-premium-bg px-6 py-4 relative">
+        <DialogContent className="w-[calc(100%-24px)] sm:w-full p-0 gap-0 rounded-2xl overflow-hidden max-w-lg max-h-[90vh] border-slate-200/60 shadow-2xl flex flex-col">
+          <div className="sidebar-premium-bg px-6 py-4 relative shrink-0">
             <div className="relative z-10 flex items-center gap-3">
               <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
                 <Pencil className="h-4 w-4 text-[#00C9E0]" />
@@ -940,7 +940,7 @@ export default function StockPage() {
             </div>
           </div>
           {editingItem && (
-            <form onSubmit={handleUpdate} className="space-y-4 p-6 bg-white">
+            <form onSubmit={handleUpdate} className="space-y-4 p-6 bg-white overflow-y-auto flex-1 min-h-0">
                <div className="space-y-2">
                   <Label htmlFor="edit-nombre" className="text-[13px] font-bold uppercase tracking-wider text-slate-500">Nombre</Label>
                   <Input 

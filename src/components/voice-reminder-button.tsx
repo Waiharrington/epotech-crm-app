@@ -205,9 +205,9 @@ export function VoiceReminderButton({ onCreated, className }: VoiceReminderButto
 
       {/* Preview Dialog */}
       <Dialog open={showPreview} onOpenChange={(open) => !open && handleClose()}>
-        <DialogContent className="max-w-md p-0 gap-0 overflow-hidden">
+        <DialogContent className="max-w-md p-0 gap-0 overflow-hidden max-h-[90vh] flex flex-col">
           {/* Dark Navy Header */}
-          <div className="sidebar-premium-bg px-6 py-4 relative rounded-t-2xl">
+          <div className="sidebar-premium-bg px-6 py-4 relative rounded-t-2xl shrink-0">
             <div className="relative z-10 flex items-center gap-3">
               <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
                 <Sparkles className="h-4 w-4 text-[#00C9E0]" />
@@ -223,7 +223,7 @@ export function VoiceReminderButton({ onCreated, className }: VoiceReminderButto
             </div>
           </div>
 
-          <div className="p-5 space-y-4">
+          <div className="p-5 space-y-4 overflow-y-auto flex-1 min-h-0">
             {/* Transcription */}
             <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
               <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1">
@@ -365,7 +365,7 @@ export function VoiceReminderButton({ onCreated, className }: VoiceReminderButto
                 <button
                   type="button"
                   onClick={handleConfirm}
-                  className="flex items-center gap-1.5 h-11 px-5 text-base font-black uppercase tracking-wider text-white rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
+                  className="flex items-center gap-1.5 h-11 px-5 text-xs font-black uppercase tracking-wider text-white rounded-xl bg-gradient-to-r from-[#0097A7] to-[#00C9E0] shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all active:scale-[0.98]"
                 >
                   <Check className="h-3.5 w-3.5" /> Guardar
                 </button>

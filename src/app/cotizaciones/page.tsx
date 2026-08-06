@@ -254,7 +254,7 @@ export default function CotizacionesPage() {
 
                   {/* Total row */}
                   <div className="flex items-center justify-between pl-[46px] pt-2 border-t border-slate-100">
-                    <p className="text-base font-semibold text-slate-400 uppercase tracking-wider">Total</p>
+                    <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total</p>
                     <div className="flex items-center gap-2">
                       <p className={cn("text-lg font-black", totalText)}>${c.monto_total.toLocaleString()}</p>
                       <div onClick={e => e.stopPropagation()}>

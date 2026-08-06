@@ -430,9 +430,9 @@ export default function CatalogoPage() {
       </main>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="w-[calc(100%-24px)] sm:w-full p-0 gap-0 rounded-2xl overflow-hidden max-w-lg border-slate-200/60 shadow-2xl">
+        <DialogContent className="w-[calc(100%-24px)] sm:w-full p-0 gap-0 rounded-2xl overflow-hidden max-w-lg max-h-[90vh] border-slate-200/60 shadow-2xl flex flex-col">
           {/* Dark Navy Header */}
-          <div className="sidebar-premium-bg px-6 py-4 relative">
+          <div className="sidebar-premium-bg px-6 py-4 relative shrink-0">
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
@@ -462,7 +462,7 @@ export default function CatalogoPage() {
             }
             return null
           })()}
-          <form onSubmit={handleSave} className="space-y-4 p-6 bg-white">
+          <form onSubmit={handleSave} className="space-y-4 p-6 bg-white overflow-y-auto flex-1 min-h-0">
              <div className="space-y-2">
                 <Label htmlFor="nombre" className="text-[13px] font-bold uppercase tracking-wider text-slate-500">Nombre del Servicio</Label>
                 <Input 
@@ -494,8 +494,8 @@ export default function CatalogoPage() {
                     <Input 
                         id="precio" 
                         type="number" 
-                        value={formData.precio_venta} 
-                        onChange={e => setFormData({ ...formData, precio_venta: parseFloat(e.target.value) || 0 })} 
+                        value={formData.precio_venta === 0 ? '' : formData.precio_venta}
+                        onChange={e => setFormData({ ...formData, precio_venta: parseFloat(e.target.value) || 0 })}
                         required 
                         className="h-11 text-base rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40"
                     />
@@ -510,7 +510,7 @@ export default function CatalogoPage() {
                     type="button" 
                     variant="outline" 
                     size="sm" 
-                    className="h-11 text-base font-bold rounded-lg border-[#0097A7]/30 text-[#0097A7] hover:bg-[#E6F9FB]"
+                    className="h-11 text-xs font-bold rounded-lg border-[#0097A7]/30 text-[#0097A7] hover:bg-[#E6F9FB]"
                     onClick={() => {
                       const current = (formData.materiales_receta as any[]) || []
                       setFormData({ ...formData, materiales_receta: [...current, { stock_id: '', cantidad: 1 }] })
@@ -546,7 +546,7 @@ export default function CatalogoPage() {
                             <Input 
                               type="number" 
                               className="h-10 text-[13px] rounded-lg border-slate-200/60" 
-                              value={item.cantidad} 
+                              value={item.cantidad === 0 ? '' : item.cantidad}
                               onChange={(e) => {
                                 const current = [...((formData.materiales_receta as any[]) || [])]
                                 current[idx].cantidad = parseFloat(e.target.value) || 0
@@ -581,8 +581,8 @@ export default function CatalogoPage() {
                     <Input 
                         id="costo_var" 
                         type="number" 
-                        value={formData.costo_variable_est || 0} 
-                        onChange={e => setFormData({ ...formData, costo_variable_est: parseFloat(e.target.value) || 0 })} 
+                        value={formData.costo_variable_est || ''}
+                        onChange={e => setFormData({ ...formData, costo_variable_est: parseFloat(e.target.value) || 0 })}
                         placeholder="Gasolina, peajes..."
                         className="h-11 text-base rounded-xl border-slate-200/60 focus-visible:ring-[#00C9E0]/40"
                     />

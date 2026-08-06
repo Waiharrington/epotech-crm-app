@@ -442,7 +442,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
             variant="ghost"
             onClick={handleClose}
             disabled={loading}
-            className="h-11 px-4 text-base font-bold rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100/80 transition-all active:scale-[0.98]"
+            className="h-11 px-4 text-xs font-bold rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100/80 transition-all active:scale-[0.98]"
           >
             Cancelar
           </Button>
@@ -452,7 +452,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
                 variant="ghost"
                 onClick={handleBack}
                 disabled={loading}
-                className="h-11 px-4.5 text-base font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
+                className="h-11 px-4.5 text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
               >
                 <ChevronLeft className="mr-1 h-3.5 w-3.5" /> Atrás
               </Button>
@@ -475,6 +475,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
+  SheetClose,
 } from '@/components/ui/sheet'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
@@ -482,7 +483,10 @@ import {
   Clock,
   Trash2,
   GripVertical,
-  Bell
+  Bell,
+  CalendarClock,
+  CalendarRange,
+  CheckCircle2
 } from 'lucide-react'
 import { useEffect } from 'react'
 import {
@@ -794,13 +798,13 @@ export function GestionarDrawer({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full sm:max-w-md p-0 flex flex-col bg-white border-l border-slate-100 z-[120]">
+      <SheetContent showCloseButton={false} side="right" className="w-full sm:max-w-md p-0 flex flex-col bg-white border-l border-slate-100 z-[120]">
         <SheetHeader className="p-4 pb-3 border-b border-slate-100 bg-gradient-to-r from-[#030b17] to-[#0B1E3F] text-white">
-          <div className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-xl bg-[#00C9E0]/20 border border-[#00C9E0]/30 flex items-center justify-center text-[#00C9E0]">
+          <div className="flex items-start gap-2">
+            <div className="h-10 w-10 rounded-xl bg-[#00C9E0]/20 border border-[#00C9E0]/30 flex items-center justify-center text-[#00C9E0] shrink-0">
               <Bell className="h-4 w-4" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1 pr-2">
               <SheetTitle className="text-base font-black text-white tracking-wide uppercase">
                 Panel de Recordatorios
               </SheetTitle>
@@ -808,6 +812,14 @@ export function GestionarDrawer({
                 Organiza la jornada de Sebastián: prioridades y vista semanal.
               </SheetDescription>
             </div>
+            <SheetClose asChild>
+              <button
+                type="button"
+                className="h-8 w-8 shrink-0 rounded-lg flex items-center justify-center bg-white/10 hover:bg-white/20 text-white/80 hover:text-white border border-white/15 backdrop-blur-md transition-all active:scale-95"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </SheetClose>
           </div>
         </SheetHeader>
 
@@ -819,21 +831,21 @@ export function GestionarDrawer({
                 className="text-[10px] sm:text-xs font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 leading-tight"
               >
                 <span className="sm:hidden">Hoy/Mañ</span>
-                <span className="hidden sm:inline">📅 Hoy/Mañana</span>
+                <span className="hidden sm:inline-flex items-center gap-1"><CalendarClock className="h-3 w-3" /> Hoy/Mañana</span>
               </TabsTrigger>
               <TabsTrigger
                 value="week"
                 className="text-[10px] sm:text-xs font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 leading-tight"
               >
                 <span className="sm:hidden">Semana</span>
-                <span className="hidden sm:inline">🗓️ Semanal</span>
+                <span className="hidden sm:inline-flex items-center gap-1"><CalendarRange className="h-3 w-3" /> Semanal</span>
               </TabsTrigger>
               <TabsTrigger
                 value="history"
                 className="text-[10px] sm:text-xs font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#0097A7] data-[state=active]:shadow-xs px-1 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 leading-tight"
               >
                 <span className="sm:hidden">Historial</span>
-                <span className="hidden sm:inline">✅ Completados</span>
+                <span className="hidden sm:inline-flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> Completados</span>
               </TabsTrigger>
             </TabsList>
           </div>
@@ -1037,9 +1049,19 @@ export function GestionarDrawer({
                         </div>
                       </div>
                     </div>
-                    <Badge variant="outline" className="text-[7.5px] px-1.5 py-0.5 font-bold bg-emerald-50 text-emerald-700 border-emerald-200 uppercase tracking-wider shrink-0">
-                      Completado
-                    </Badge>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <Badge variant="outline" className="text-[7.5px] px-1.5 py-0.5 font-bold bg-emerald-50 text-emerald-700 border-emerald-200 uppercase tracking-wider">
+                        Completado
+                      </Badge>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(item.id)}
+                        className="h-6.5 w-6.5 rounded-lg flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all cursor-pointer"
+                        title="Eliminar recordatorio"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>

@@ -148,7 +148,7 @@ export default function ClienteProfilePage() {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-[#F0F5FA] gap-3">
         <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
-        <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Cargando cliente</p>
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Cargando cliente</p>
       </div>
     )
   }
@@ -266,8 +266,8 @@ export default function ClienteProfilePage() {
           <TabsContent value="datos" className="space-y-3.5 animate-in fade-in duration-500">
             <div className="grid gap-3.5 md:grid-cols-2">
               <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden">
-                <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-2.5 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
-                  <h2 className="text-base font-black text-white uppercase tracking-[0.15em]">Datos Personales</h2>
+                <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-2 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+                  <h2 className="text-[13px] font-black text-white uppercase tracking-[0.1em]">Datos Personales</h2>
                 </div>
                 <div className="p-4 space-y-3">
                   <div className="grid grid-cols-2 gap-1 border-b border-slate-50 pb-2.5">
@@ -294,8 +294,8 @@ export default function ClienteProfilePage() {
               </div>
 
               <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden">
-                <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-2.5 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
-                  <h2 className="text-base font-black text-white uppercase tracking-[0.15em]">Información de la Propiedad</h2>
+                <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-2 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+                  <h2 className="text-[13px] font-black text-white uppercase tracking-[0.1em]">Información de la Propiedad</h2>
                 </div>
                 <div className="p-4 space-y-3">
                   <div className="grid grid-cols-2 gap-1 border-b border-slate-50 pb-2.5">
@@ -323,8 +323,8 @@ export default function ClienteProfilePage() {
             </div>
 
             <div className="bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden">
-              <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-2.5 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
-                <h2 className="text-base font-black text-white uppercase tracking-[0.15em]">Notas Estratégicas</h2>
+              <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 py-2 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+                <h2 className="text-[13px] font-black text-white uppercase tracking-[0.1em]">Notas Estratégicas</h2>
                 <p className="text-[11px] text-slate-300/80 font-medium mt-0.5">Oportunidades de servicios futuros identificadas por Sebastián.</p>
               </div>
               <div className="p-4">
@@ -450,7 +450,7 @@ export default function ClienteProfilePage() {
                             <div className="pt-2.5 border-t border-slate-50 flex gap-2">
                                <Button
                                  size="sm"
-                                 className="flex-1 h-10 text-base font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
+                                 className="flex-1 h-10 text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
                                  onClick={() => {
                                     setSelectedPlan(plan)
                                     setShowEditPlanModal(true)
@@ -460,7 +460,7 @@ export default function ClienteProfilePage() {
                                </Button>
                                <Button
                                  size="sm"
-                                 className="flex-1 h-10 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]"
+                                 className="flex-1 h-10 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]"
                                  onClick={() => {
                                     setRecurringJobData({
                                        cliente_id: id,
@@ -498,7 +498,7 @@ export default function ClienteProfilePage() {
                    <h3 className="text-[13px] font-bold text-slate-800">Bitácora de Notas</h3>
                    <p className="text-[10.5px] text-slate-400 font-medium">Registros y observaciones internas del cliente.</p>
                 </div>
-                <Button onClick={() => setShowAddNoteModal(true)} className="h-10 px-4.5 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
+                <Button onClick={() => setShowAddNoteModal(true)} className="h-10 px-4.5 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
                    <Plus className="mr-1.5 h-3.5 w-3.5" /> Nueva Nota
                 </Button>
              </div>
@@ -537,7 +537,7 @@ export default function ClienteProfilePage() {
                   <p className="text-[10.5px] text-slate-400 font-medium max-w-sm mt-1">
                     Agrega comentarios o recordatorios específicos para este cliente.
                   </p>
-                  <Button onClick={() => setShowAddNoteModal(true)} className="mt-4 h-10 px-4.5 text-base font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
+                  <Button onClick={() => setShowAddNoteModal(true)} className="mt-4 h-10 px-4.5 text-xs font-black rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] hover:from-[#00b4ca] hover:to-[#035bb3] text-white border-none shadow-md shadow-cyan-500/20 transition-all duration-300 active:scale-[0.98]">
                      Comenzar a anotar
                   </Button>
                 </div>
@@ -551,11 +551,11 @@ export default function ClienteProfilePage() {
                    <p className="text-[10.5px] text-slate-400 font-medium hidden sm:block">Historial de presupuestos y propuestas enviadas.</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <Button onClick={() => setShowQuoteWizard(true)} className="h-10 px-3 sm:px-4 text-[13px] sm:text-base font-bold rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white hover:opacity-90 transition-all shadow-md shadow-cyan-500/20 active:scale-95">
+                  <Button onClick={() => setShowQuoteWizard(true)} className="h-10 px-3 sm:px-4 text-xs font-bold rounded-xl bg-gradient-to-r from-[#00C9E0] to-[#0097A7] text-white hover:opacity-90 transition-all shadow-md shadow-cyan-500/20 active:scale-95">
                      <Plus className="mr-1.5 h-3.5 w-3.5 sm:h-4 sm:w-4" /> Nueva
                   </Button>
                   <Link href="/cotizaciones">
-                     <Button className="h-10 px-3 sm:px-4 text-[13px] sm:text-base font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-95">
+                     <Button className="h-10 px-3 sm:px-4 text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-95">
                         <ExternalLinkIcon className="sm:mr-1.5 h-3 w-3" /> <span className="hidden sm:inline">Ver Todas</span>
                      </Button>
                   </Link>

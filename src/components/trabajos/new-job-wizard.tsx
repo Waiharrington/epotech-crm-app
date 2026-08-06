@@ -454,7 +454,7 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
                 type="button"
                 onClick={handleSave}
                 disabled={loading || !formData.fecha_servicio}
-                className="flex items-center justify-center gap-2 h-10 px-5 text-base font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                className="flex items-center justify-center gap-2 h-10 px-5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
               >
                 {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
                 Agendar Trabajo

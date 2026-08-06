@@ -146,7 +146,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                 ) : (
                   <div className="text-center p-2">
                     <Plus className="mx-auto h-5 w-5 text-muted-foreground mb-1" />
-                    <p className="text-base font-bold uppercase">Antes</p>
+                    <p className="text-xs font-bold uppercase">Antes</p>
                   </div>
                 )}
                 {beforePhoto && <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />}
@@ -165,7 +165,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                 ) : (
                   <div className="text-center p-2">
                     <Plus className="mx-auto h-5 w-5 text-muted-foreground mb-1" />
-                    <p className="text-base font-bold uppercase">Después</p>
+                    <p className="text-xs font-bold uppercase">Después</p>
                   </div>
                 )}
                 {afterPhoto && <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />}
@@ -256,10 +256,10 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
               </div>
 
               {/* Labels */}
-              <div className="absolute bottom-4 left-4 z-20 px-4 py-2.5 bg-black/60 backdrop-blur-md rounded-full text-base font-bold text-white uppercase tracking-wider">
+              <div className="absolute bottom-4 left-4 z-20 px-4 py-2.5 bg-black/60 backdrop-blur-md rounded-full text-xs font-bold text-white uppercase tracking-wider">
                 Antes - {new Date(beforePhoto.fecha_foto || beforePhoto.created_at).toLocaleDateString()}
               </div>
-              <div className="absolute bottom-4 right-4 z-20 px-4 py-2.5 bg-primary/80 backdrop-blur-md rounded-full text-base font-bold text-white uppercase tracking-wider">
+              <div className="absolute bottom-4 right-4 z-20 px-4 py-2.5 bg-primary/80 backdrop-blur-md rounded-full text-xs font-bold text-white uppercase tracking-wider">
                 Después - {new Date(afterPhoto.fecha_foto || afterPhoto.created_at).toLocaleDateString()}
               </div>
            </div>
@@ -280,7 +280,7 @@ export function BeforeAfterCollage({ clientId, existingPhotos = [] }: BeforeAfte
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
                 <div className="relative px-6 py-5 flex items-center justify-between">
                   <div>
-                    <p className="text-base font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                    <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                       {showPicker === 'before' ? 'Foto Antes' : 'Foto Después'}
                     </p>
                     <h3 className="text-lg font-black text-white leading-tight">Selecciona una foto</h3>

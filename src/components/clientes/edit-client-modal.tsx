@@ -91,7 +91,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
                   <User className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-base font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                  <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                     Cliente
                   </p>
                   <h3 className="text-lg font-black text-white leading-tight">
@@ -260,7 +260,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
             type="button"
             onClick={handleClose}
             disabled={loading}
-            className="px-4 py-2.5 text-base font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-[0.98]"
+            className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-[0.98]"
           >
             Cancelar
           </button>
@@ -268,7 +268,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
             type="button"
             onClick={handleSave}
             disabled={loading}
-            className="flex items-center gap-2 px-5 py-2.5 text-base font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50"
+            className="flex items-center gap-2 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50"
           >
             {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
             Guardar

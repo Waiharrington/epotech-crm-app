@@ -111,7 +111,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
           <div className="relative px-6 py-5">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-base font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                   Plan Recurrente
                 </p>
                 <h3 className="text-lg font-black text-white leading-tight">
@@ -206,7 +206,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
                 </Label>
                 <Input 
                   type="number" 
-                  value={frecuenciaPersonalizada} 
+                  value={frecuenciaPersonalizada === 0 ? '' : frecuenciaPersonalizada}
                   onChange={e => setFrecuenciaPersonalizada(parseInt(e.target.value) || 0)}
                   className="bg-white border-slate-200 rounded-xl h-11 text-[12px] font-semibold text-slate-700 hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-[#0097A7]/20 transition-all"
                 />
@@ -220,7 +220,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[12px] font-bold text-slate-400">$</span>
                   <Input 
                     type="number" 
-                    value={monto} 
+                    value={monto === 0 ? '' : monto}
                     onChange={e => setMonto(parseFloat(e.target.value) || 0)}
                     className="bg-white border-slate-200 rounded-xl h-11 text-[12px] font-semibold text-slate-700 pl-7 hover:border-[#0097A7]/40 focus:border-[#0097A7] focus:ring-[#0097A7]/20 transition-all"
                   />
@@ -246,7 +246,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
             type="button"
             onClick={handleDelete}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2.5 text-base font-black uppercase tracking-wider text-red-500 bg-red-50 border border-red-200 rounded-xl hover:bg-red-100 hover:border-red-300 transition-all active:scale-[0.98] disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-red-500 bg-red-50 border border-red-200 rounded-xl hover:bg-red-100 hover:border-red-300 transition-all active:scale-[0.98] disabled:opacity-50"
           >
             <Trash2 className="h-3.5 w-3.5" /> Eliminar
           </button>
@@ -256,7 +256,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
               type="button"
               onClick={handleClose}
               disabled={loading}
-              className="px-4 py-2.5 text-base font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-[0.98]"
+              className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-[0.98]"
             >
               Cancelar
             </button>
@@ -264,7 +264,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
               type="button"
               onClick={handleUpdate}
               disabled={loading}
-              className="flex items-center gap-2 px-5 py-2.5 text-base font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50"
+              className="flex items-center gap-2 px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:from-[#00b4ca] hover:to-[#035bb3] transition-all active:scale-[0.98] disabled:opacity-50"
             >
               {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
               Guardar

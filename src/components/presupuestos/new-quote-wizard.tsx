@@ -375,7 +375,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit, d
                 type="button"
                 onClick={() => setStep(2)}
                 disabled={!selectedClient}
-                className="flex items-center gap-1.5 h-11 px-5 text-base font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                className="flex items-center gap-1.5 h-11 px-5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
               >
                 Continuar <ChevronRight className="h-3.5 w-3.5" />
               </button>
@@ -393,7 +393,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit, d
                 type="button"
                 onClick={handleSave}
                 disabled={loading || lineItems.length === 0}
-                className="flex items-center gap-2 h-11 px-5 text-base font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                className="flex items-center gap-2 h-11 px-5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
               >
                 {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
                 Guardar

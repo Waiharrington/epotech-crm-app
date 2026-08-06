@@ -132,7 +132,7 @@ export default function ArchivoPage() {
           <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 xl:px-4 py-2.5 xl:py-2 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
             <div className="flex items-center gap-2">
               <ArchiveRestore className="h-3.5 w-3.5 text-[#00C9E0]" />
-              <h2 className="text-base font-bold text-white uppercase tracking-wider">
+              <h2 className="text-[13px] font-bold text-white uppercase tracking-wider">
                 Archivados
               </h2>
             </div>

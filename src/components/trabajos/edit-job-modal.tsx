@@ -351,8 +351,8 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                 <Input 
                   type="number"
                   className="h-[38px] text-[12px] font-semibold rounded-xl border-slate-200"
-                  value={formData.precio_acordado || 0} 
-                  onChange={e => updateFields({ precio_acordado: parseFloat(e.target.value) || 0 })} 
+                  value={formData.precio_acordado || ''}
+                  onChange={e => updateFields({ precio_acordado: parseFloat(e.target.value) || 0 })}
                 />
               </div>
               <div className="space-y-1.5">
@@ -360,8 +360,8 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                 <Input 
                   type="number"
                   className="h-[38px] text-[12px] font-semibold rounded-xl border-slate-200"
-                  value={formData.precio_cobrado || 0} 
-                  onChange={e => updateFields({ precio_cobrado: parseFloat(e.target.value) || 0 })} 
+                  value={formData.precio_cobrado || ''}
+                  onChange={e => updateFields({ precio_cobrado: parseFloat(e.target.value) || 0 })}
                 />
               </div>
             </div>
@@ -477,7 +477,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                                        step="0.01"
                                        min="0"
                                        className="h-11 text-base bg-white border-amber-200 text-amber-950 font-bold rounded-lg"
-                                       value={m.precio_costo !== undefined ? m.precio_costo : precioCosto}
+                                       value={(m.precio_costo !== undefined ? m.precio_costo : precioCosto) || ''}
                                        onChange={(e) => {
                                          setMaterials(materials.map(x => x.id === m.id ? { ...x, precio_costo: parseFloat(e.target.value) || 0 } : x))
                                        }}
@@ -490,7 +490,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
                                        step="0.01"
                                        min="0"
                                        className="h-11 text-base bg-white border-amber-200 text-amber-950 font-bold rounded-lg"
-                                       value={m.precio_cliente !== undefined ? m.precio_cliente : precioCliente}
+                                       value={(m.precio_cliente !== undefined ? m.precio_cliente : precioCliente) || ''}
                                        onChange={(e) => {
                                          setMaterials(materials.map(x => x.id === m.id ? { ...x, precio_cliente: parseFloat(e.target.value) || 0 } : x))
                                        }}

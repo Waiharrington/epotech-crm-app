@@ -291,26 +291,26 @@ export default function ReportesPage() {
 
             <div className="flex items-center gap-2 shrink-0">
               <Select value={dateRange} onValueChange={setDateRange}>
-                <SelectTrigger className="w-[180px] h-10 text-base font-bold rounded-xl bg-white/10 border-white/15 text-white backdrop-blur-md">
+                <SelectTrigger className="w-[180px] h-10 text-xs font-bold rounded-xl bg-white/10 border-white/15 text-white backdrop-blur-md">
                   <Calendar className="mr-1.5 h-3.5 w-3.5 text-[#00C9E0]" />
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="hoy" className="text-base">Hoy</SelectItem>
-                  <SelectItem value="semana" className="text-base">Últimos 7 días</SelectItem>
-                  <SelectItem value="mes" className="text-base">Últimos 30 días</SelectItem>
-                  <SelectItem value="mes_actual" className="text-base">Este Mes</SelectItem>
-                  <SelectItem value="trimestre" className="text-base">Últimos 90 días</SelectItem>
-                  <SelectItem value="todo" className="text-base">Todos los registros</SelectItem>
-                  <SelectItem value="personalizado" className="text-base">Rango Personalizado</SelectItem>
+                  <SelectItem value="hoy" className="text-sm">Hoy</SelectItem>
+                  <SelectItem value="semana" className="text-sm">Últimos 7 días</SelectItem>
+                  <SelectItem value="mes" className="text-sm">Últimos 30 días</SelectItem>
+                  <SelectItem value="mes_actual" className="text-sm">Este Mes</SelectItem>
+                  <SelectItem value="trimestre" className="text-sm">Últimos 90 días</SelectItem>
+                  <SelectItem value="todo" className="text-sm">Todos los registros</SelectItem>
+                  <SelectItem value="personalizado" className="text-sm">Rango Personalizado</SelectItem>
                 </SelectContent>
               </Select>
 
               {dateRange === 'personalizado' && (
                 <div className="flex items-center gap-1.5 animate-in slide-in-from-right-2 duration-200">
-                  <DatePicker value={customStartDate} onChange={setCustomStartDate} className="h-10 w-[120px] text-base rounded-xl" />
-                  <span className="text-base text-slate-400 font-medium">a</span>
-                  <DatePicker value={customEndDate} onChange={setCustomEndDate} className="h-10 w-[120px] text-base rounded-xl" />
+                  <DatePicker value={customStartDate} onChange={setCustomStartDate} className="h-10 w-[120px] text-xs rounded-xl" />
+                  <span className="text-xs text-slate-400 font-medium">a</span>
+                  <DatePicker value={customEndDate} onChange={setCustomEndDate} className="h-10 w-[120px] text-xs rounded-xl" />
                 </div>
               )}
 
@@ -318,7 +318,7 @@ export default function ReportesPage() {
                 variant="outline"
                 size="sm"
                 onClick={fetchReportesData}
-                className="h-10 px-4 text-base font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-white/20 backdrop-blur-md transition-all active:scale-[0.98]"
+                className="h-10 px-4 text-xs font-bold rounded-xl bg-white/10 border-white/15 text-white hover:bg-white/20 backdrop-blur-md transition-all active:scale-[0.98]"
               >
                 <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
                 Recargar
@@ -380,7 +380,7 @@ export default function ReportesPage() {
                   <div className="h-11 w-11 rounded-lg flex items-center justify-center bg-slate-100 border border-slate-200/60">
                     <Target className="h-3.5 w-3.5 text-slate-500" />
                   </div>
-                  <span className="text-base font-black uppercase tracking-wider text-slate-600">Métricas Secundarias</span>
+                  <span className="text-[13px] font-black uppercase tracking-wider text-slate-600">Métricas Secundarias</span>
                   <span className="text-[11px] text-slate-400 font-medium">Gastos, cobros, fidelidad, leads</span>
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -432,7 +432,7 @@ export default function ReportesPage() {
                   <div className="h-11 w-11 rounded-lg flex items-center justify-center bg-[#0097A7]/10 border border-[#0097A7]/20">
                     <Lightbulb className="h-3.5 w-3.5 text-[#0097A7]" />
                   </div>
-                  <h3 className="text-base font-black uppercase tracking-wider text-slate-700">Insights Automáticos</h3>
+                  <h3 className="text-[13px] font-black uppercase tracking-wider text-slate-700">Insights Automáticos</h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
                   {bestSellingService && (
@@ -441,7 +441,7 @@ export default function ReportesPage() {
                         <Star className="h-4 w-4 text-[#0097A7]" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Más Vendido</p>
+                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Más Vendido</p>
                         <p className="text-base font-bold text-slate-700 truncate">{bestSellingService.nombre}</p>
                         <p className="text-base text-[#0097A7] font-bold">{bestSellingService.ventasCount} servicios</p>
                       </div>
@@ -453,7 +453,7 @@ export default function ReportesPage() {
                         <Clock className="h-4 w-4 text-amber-500" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Día Más Activo</p>
+                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Día Más Activo</p>
                         <p className="text-base font-bold text-slate-700">{busiestDay.name}</p>
                         <p className="text-base text-amber-600 font-bold">{busiestDay.trabajosCount} servicios</p>
                       </div>
@@ -465,7 +465,7 @@ export default function ReportesPage() {
                         <Users className="h-4 w-4 text-[#0097A7]" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Mejor Cliente</p>
+                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Mejor Cliente</p>
                         <p className="text-base font-bold text-slate-700 truncate">{bestClient.nombre} {bestClient.apellido}</p>
                         <p className="text-base text-[#0097A7] font-bold">${bestClient.gastado.toLocaleString()}</p>
                       </div>
@@ -493,8 +493,8 @@ export default function ReportesPage() {
                         <Clock className="h-3.5 w-3.5 text-[#0097A7]" />
                       </div>
                       <div>
-                        <h3 className="text-base font-black uppercase tracking-wider text-slate-700">Mapa de Calor Operativo</h3>
-                        <p className="text-base text-slate-400">Jornadas más activas de la semana</p>
+                        <h3 className="text-[13px] font-black uppercase tracking-wider text-slate-700">Mapa de Calor Operativo</h3>
+                        <p className="text-[13px] text-slate-400">Jornadas más activas de la semana</p>
                       </div>
                     </div>
                     {busiestDay && busiestDay.trabajosCount > 0 && (
@@ -521,7 +521,7 @@ export default function ReportesPage() {
                                 : "bg-slate-50 border-slate-200/60"
                             )}
                           >
-                            <p className="text-base font-bold uppercase tracking-wider text-slate-400">{day.name.substring(0, 3)}</p>
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{day.name.substring(0, 3)}</p>
                             <p className={cn(
                               "text-lg font-black mt-1",
                               day.trabajosCount > 0 ? 'text-slate-800' : 'text-slate-300'
@@ -556,8 +556,8 @@ export default function ReportesPage() {
                           <Briefcase className="h-3.5 w-3.5 text-[#0097A7]" />
                         </div>
                         <div>
-                          <h3 className="text-base font-black uppercase tracking-wider text-slate-700">Rentabilidad por Servicio</h3>
-                          <p className="text-base text-slate-400">Márgenes de ganancia reales</p>
+                          <h3 className="text-[13px] font-black uppercase tracking-wider text-slate-700">Rentabilidad por Servicio</h3>
+                          <p className="text-[13px] text-slate-400">Márgenes de ganancia reales</p>
                         </div>
                       </div>
                       <Sparkles className="h-4 w-4 text-[#0097A7]" />
@@ -606,8 +606,8 @@ export default function ReportesPage() {
                           <Users className="h-3.5 w-3.5 text-[#0097A7]" />
                         </div>
                         <div>
-                          <h3 className="text-base font-black uppercase tracking-wider text-slate-700">Mejores Clientes</h3>
-                          <p className="text-base text-slate-400">Mayor facturación acumulada</p>
+                          <h3 className="text-[13px] font-black uppercase tracking-wider text-slate-700">Mejores Clientes</h3>
+                          <p className="text-[13px] text-slate-400">Mayor facturación acumulada</p>
                         </div>
                       </div>
                       <Heart className="h-4 w-4 text-rose-400" />
@@ -648,8 +648,8 @@ export default function ReportesPage() {
                         <TrendingUp className="h-3.5 w-3.5 text-[#0097A7]" />
                       </div>
                       <div>
-                        <h3 className="text-base font-black uppercase tracking-wider text-slate-700">Tendencia de Facturación Diaria</h3>
-                        <p className="text-base text-slate-400">Ingresos por fecha de servicio</p>
+                        <h3 className="text-[13px] font-black uppercase tracking-wider text-slate-700">Tendencia de Facturación Diaria</h3>
+                        <p className="text-[13px] text-slate-400">Ingresos por fecha de servicio</p>
                       </div>
                     </div>
                     <div className="p-4 h-56">

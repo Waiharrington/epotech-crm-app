@@ -154,7 +154,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
           <button
             type="button"
             onClick={() => setShowCollageMode(false)}
-            className="flex items-center gap-1.5 h-10 px-4 text-base font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
+            className="flex items-center gap-1.5 h-10 px-4 text-xs font-bold rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-[#0097A7] hover:border-[#00C9E0]/40 hover:bg-[#E6F9FB]/40 transition-all active:scale-[0.98]"
           >
             <X className="h-3.5 w-3.5" /> Cancelar Comparativa
           </button>
@@ -194,7 +194,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-12 gap-3">
           <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
-          <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Cargando galería</p>
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Cargando galería</p>
         </div>
       ) : photos.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
@@ -309,7 +309,7 @@ export function PhotoGallery({ clientId }: PhotoGalleryProps) {
               <div className="mt-auto pt-4 relative z-10">
                  <button
                     type="button"
-                    className="w-full flex items-center justify-center gap-2 h-11 px-4 text-base font-black uppercase tracking-wider rounded-xl bg-red-500/15 border border-red-400/30 text-red-300 hover:bg-red-500/25 hover:border-red-400/50 hover:text-red-200 backdrop-blur-md transition-all active:scale-[0.98]"
+                    className="w-full flex items-center justify-center gap-2 h-11 px-4 text-xs font-black uppercase tracking-wider rounded-xl bg-red-500/15 border border-red-400/30 text-red-300 hover:bg-red-500/25 hover:border-red-400/50 hover:text-red-200 backdrop-blur-md transition-all active:scale-[0.98]"
                     onClick={(e) => {
                        e.stopPropagation();
                        handleDelete(selectedPhoto);

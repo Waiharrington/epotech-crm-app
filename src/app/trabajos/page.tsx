@@ -487,7 +487,7 @@ function TrabajosContent() {
           {loading ? (
             <div className="flex flex-col items-center justify-center flex-1 min-h-64 gap-3">
               <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
-              <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Cargando trabajos...</p>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Cargando trabajos...</p>
             </div>
           ) : (
             <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
@@ -629,7 +629,7 @@ function TrabajosContent() {
           }
         }}
       >
-        <DialogContent className="max-w-md rounded-3xl p-0 border-none overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-white duration-200">
+        <DialogContent className="max-w-md rounded-3xl p-0 border-none overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] bg-white duration-200 max-h-[90vh] flex flex-col">
           {/* Accessibility requirements: DialogTitle & DialogDescription */}
           <DialogHeader className="sr-only">
             <DialogTitle>Reagendar Servicio</DialogTitle>
@@ -639,20 +639,20 @@ function TrabajosContent() {
           </DialogHeader>
 
           {/* Header element styled identically to Finalizar Trabajo (check-out modal) */}
-          <div className="bg-[#0097A7] p-5 text-white relative">
-            <span className="text-base font-bold uppercase tracking-wider opacity-85">Reagendar</span>
+          <div className="bg-[#0097A7] p-5 text-white relative shrink-0">
+            <span className="text-[11px] font-bold uppercase tracking-wider opacity-85">Reagendar</span>
             <h2 className="text-lg font-bold mt-0.5">Reagendar Servicio</h2>
             <p className="text-base font-semibold opacity-90 mt-1">
               Para {jobToReschedule ? `${jobToReschedule.clientes.nombre} ${jobToReschedule.clientes.apellido}` : ''}
             </p>
           </div>
 
-          <div className="p-5 flex flex-col gap-4">
+          <div className="p-5 flex flex-col gap-4 overflow-y-auto flex-1 min-h-0">
             {jobToReschedule && (
               <>
                 {/* 1. Date selection section */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-base font-bold text-slate-400 uppercase tracking-widest">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
                     Selecciona el nuevo día
                   </span>
                   <div className="grid grid-cols-5 gap-2 max-h-36 overflow-y-auto no-scrollbar pr-0.5">
@@ -700,7 +700,7 @@ function TrabajosContent() {
 
                 {/* 2. Time selection section using the imported TimePicker */}
                 <div className="flex flex-col gap-1.5 mt-1">
-                  <span className="text-base font-bold text-slate-400 uppercase tracking-widest">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
                     Selecciona la hora del servicio
                   </span>
                   <TimePicker

@@ -185,7 +185,7 @@ export function QuoteDetailModal({
                 type="button"
                 disabled={loading || quote.estado === 'aprobado'}
                 className={cn(
-                  "flex-1 flex items-center justify-center gap-1.5 h-10 text-base font-black uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none",
+                  "flex-1 flex items-center justify-center gap-1.5 h-10 text-xs font-black uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none",
                   quote.estado === 'aprobado'
                     ? "bg-emerald-500 text-white border border-emerald-500"
                     : "text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100"
@@ -198,7 +198,7 @@ export function QuoteDetailModal({
                 type="button"
                 disabled={loading || quote.estado === 'rechazado'}
                 className={cn(
-                  "flex-1 flex items-center justify-center gap-1.5 h-10 text-base font-black uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none",
+                  "flex-1 flex items-center justify-center gap-1.5 h-10 text-xs font-black uppercase tracking-wider rounded-xl transition-all active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none",
                   quote.estado === 'rechazado'
                     ? "bg-rose-500 text-white border border-rose-500"
                     : "text-rose-700 bg-rose-50 border border-rose-200 hover:bg-rose-100"

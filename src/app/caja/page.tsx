@@ -176,7 +176,7 @@ export default function CajaPage() {
               key={f.key}
               onClick={() => setTypeFilter(f.key)}
               className={cn(
-                "px-4 py-2.5 rounded-xl text-base font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97] flex items-center gap-1.5",
+                "px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all border cursor-pointer active:scale-[0.97] flex items-center gap-1.5",
                 typeFilter === f.key
                   ? f.key === 'ingreso' ? "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/20"
                     : f.key === 'egreso' ? "bg-rose-500 text-white border-rose-500 shadow-md shadow-rose-500/20"

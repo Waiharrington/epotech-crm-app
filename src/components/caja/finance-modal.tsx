@@ -62,9 +62,9 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="p-0 gap-0 rounded-2xl overflow-hidden max-w-md border-slate-200/60 shadow-2xl">
+      <DialogContent className="p-0 gap-0 rounded-2xl overflow-hidden max-w-md max-h-[90vh] border-slate-200/60 shadow-2xl flex flex-col">
         {/* Dark Navy Header */}
-        <div className="sidebar-premium-bg px-6 py-4 relative">
+        <div className="sidebar-premium-bg px-6 py-4 relative shrink-0">
           <div className="relative z-10 flex items-center gap-3">
             <div className="h-11 w-11 rounded-xl flex items-center justify-center bg-white/10 border border-white/15 backdrop-blur-md shadow-xs">
               {type === 'ingreso' ? <TrendingUp className="h-4 w-4 text-emerald-400" /> : <TrendingDown className="h-4 w-4 text-rose-400" />}
@@ -81,7 +81,7 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
         </div>
 
         {/* Content */}
-        <div className="bg-white px-6 py-5 space-y-4">
+        <div className="bg-white px-6 py-5 space-y-4 overflow-y-auto flex-1 min-h-0">
           <div className="space-y-2">
             <Label className="text-[13px] font-bold uppercase tracking-wider text-slate-500">
               Monto ($)
@@ -145,7 +145,7 @@ export function FinanceModal({ type, onClose, onSuccess }: FinanceModalProps) {
         </div>
 
         {/* Footer */}
-        <div className="bg-[#F0F5FA] px-6 py-3 border-t border-slate-200/60 flex justify-end">
+        <div className="bg-[#F0F5FA] px-6 py-3 border-t border-slate-200/60 flex justify-end shrink-0">
           <button 
             type="button"
             onClick={handleSave}

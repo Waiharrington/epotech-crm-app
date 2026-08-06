@@ -242,7 +242,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
                   <div className="space-y-2 pt-1">
                     {(job as any).costo_variable > 0 && (
                       <div className="flex justify-between items-center p-3 bg-amber-50/80 rounded-xl border border-amber-100/80">
-                        <span className="text-base font-black text-amber-700 uppercase tracking-wider">Gastos Adicionales</span>
+                        <span className="text-xs font-black text-amber-700 uppercase tracking-wider">Gastos Adicionales</span>
                         <span className="text-base font-black text-amber-600">-${(job as any).costo_variable}</span>
                       </div>
                     )}
@@ -257,7 +257,7 @@ export function JobDetailModal({ job, onClose, onEdit, onArchive }: JobDetailMod
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_60%)]" />
                       <div className="relative flex justify-between items-center p-4">
                         <div>
-                          <span className="text-base font-black text-white/70 uppercase tracking-wider block">Ganancia Neta</span>
+                          <span className="text-xs font-black text-white/70 uppercase tracking-wider block">Ganancia Neta</span>
                           <p className="text-[11px] text-white/40 mt-0.5">Cobrado - Gastos</p>
                         </div>
                         <span className="text-2xl font-black text-white">

@@ -108,7 +108,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
               type="button"
               onClick={() => updateTime(currentHour, currentMinute, false)}
               className={cn(
-                "flex-1 py-2.5 rounded-[10px] text-base font-black uppercase tracking-wider transition-all cursor-pointer",
+                "flex-1 py-2.5 rounded-[10px] text-xs font-black uppercase tracking-wider transition-all cursor-pointer",
                 !isPM && value
                   ? "bg-[#0097A7] text-white shadow-md shadow-[#0097A7]/20"
                   : "text-slate-500 hover:text-slate-700"
@@ -120,7 +120,7 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
               type="button"
               onClick={() => updateTime(currentHour, currentMinute, true)}
               className={cn(
-                "flex-1 py-2.5 rounded-[10px] text-base font-black uppercase tracking-wider transition-all cursor-pointer",
+                "flex-1 py-2.5 rounded-[10px] text-xs font-black uppercase tracking-wider transition-all cursor-pointer",
                 isPM && value
                   ? "bg-[#0097A7] text-white shadow-md shadow-[#0097A7]/20"
                   : "text-slate-500 hover:text-slate-700"

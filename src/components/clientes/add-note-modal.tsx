@@ -62,7 +62,7 @@ export function AddNoteModal({ clientId, onClose, onSuccess }: AddNoteModalProps
           <div className="relative px-6 py-5">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-base font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                   Clientes
                 </p>
                 <h3 className="text-lg font-black text-white leading-tight flex items-center gap-2">

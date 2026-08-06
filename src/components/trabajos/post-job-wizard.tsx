@@ -409,7 +409,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                   id="cobrado" 
                   type="number" 
                   className="pl-8 text-xl h-14 font-bold text-slate-800 bg-white border-slate-200 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-500 rounded-xl transition-all shadow-sm"
-                  value={precioCobrado} 
+                  value={precioCobrado === 0 ? '' : precioCobrado}
                   onChange={e => setPrecioCobrado(parseFloat(e.target.value) || 0)}
                 />
               </div>
@@ -431,7 +431,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
             <button
               type="button"
               onClick={() => setShowDetails(!showDetails)}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border-2 border-dashed border-slate-200 text-slate-500 hover:border-[#0097A7] hover:text-[#0097A7] transition-all text-base font-bold uppercase tracking-wider"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border-2 border-dashed border-slate-200 text-slate-500 hover:border-[#0097A7] hover:text-[#0097A7] transition-all text-xs font-bold uppercase tracking-wider"
             >
               <Plus className={cn("h-4 w-4 transition-transform", showDetails && "rotate-45")} />
               {showDetails ? 'Ocultar detalles' : 'Agregar detalles'}
@@ -568,14 +568,14 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                             </Button>
                           </div>
                           <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
-                            <Label className="text-base text-slate-500 font-semibold shrink-0 uppercase tracking-wider">Cantidad</Label>
+                            <Label className="text-[11px] text-slate-500 font-semibold shrink-0 uppercase tracking-wider">Cantidad</Label>
                             <div className="relative flex-1">
                               <Input 
                                 type="number" 
                                 step="0.01"
                                 min="0"
                                 className="h-11 text-base font-bold pr-12 bg-white"
-                                value={m.cantidad}
+                                value={m.cantidad === 0 ? '' : m.cantidad}
                                 onChange={(e) => {
                                   setMaterials(materials.map(x => x.id === m.id ? { ...x, cantidad: parseFloat(e.target.value) || 0 } : x))
                                 }}
@@ -679,7 +679,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                             <p className={cn("text-xl font-black", net >= 0 ? "text-green-600" : "text-destructive")}>
                               ${net.toFixed(2)}
                             </p>
-                            <p className="text-base text-muted-foreground uppercase font-bold tracking-wider">Ganancia Neta</p>
+                            <p className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Ganancia Neta</p>
                          </div>
                        )
                     })()}
@@ -703,7 +703,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                     )}
                     <div className="flex items-end gap-2">
                       <div className="flex-1 space-y-1">
-                        <Label className="text-base uppercase text-muted-foreground">Gasto ($)</Label>
+                        <Label className="text-[11px] uppercase text-muted-foreground">Gasto ($)</Label>
                         <div className="relative">
                           <DollarSign className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
                           <Input 
@@ -716,7 +716,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                         </div>
                       </div>
                       <div className="flex-[2] space-y-1">
-                        <Label className="text-base uppercase text-muted-foreground">Motivo</Label>
+                        <Label className="text-[11px] uppercase text-muted-foreground">Motivo</Label>
                         <Input 
                           className="h-11 text-base"
                           value={motivoVariable}
@@ -758,16 +758,16 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                       </div>
                       <div>
                         <p className="text-base font-bold">¿Servicio recurrente?</p>
-                        <p className="text-base text-muted-foreground">Genera recordatorios</p>
+                        <p className="text-xs text-muted-foreground">Genera recordatorios</p>
                       </div>
                     </div>
                     <div className="flex bg-muted rounded-lg p-1">
                       <button 
-                        className={cn("px-4 py-2 text-base font-bold rounded-md transition-all", esRecurrente ? "bg-primary text-white shadow-sm" : "text-muted-foreground")}
+                        className={cn("px-4 py-2 text-xs font-bold rounded-md transition-all", esRecurrente ? "bg-primary text-white shadow-sm" : "text-muted-foreground")}
                         onClick={() => setEsRecurrente(true)}
                       >SÍ</button>
                       <button 
-                        className={cn("px-4 py-2 text-base font-bold rounded-md transition-all", !esRecurrente ? "bg-zinc-600 text-white shadow-sm" : "text-muted-foreground")}
+                        className={cn("px-4 py-2 text-xs font-bold rounded-md transition-all", !esRecurrente ? "bg-zinc-600 text-white shadow-sm" : "text-muted-foreground")}
                         onClick={() => setEsRecurrente(false)}
                       >NO</button>
                     </div>
@@ -776,7 +776,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                   {esRecurrente && (
                     <div className="grid grid-cols-2 gap-4 animate-in slide-in-from-top-2 duration-300">
                       <div className="space-y-2">
-                        <Label className="text-base font-bold uppercase tracking-wider text-muted-foreground">Frecuencia</Label>
+                        <Label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Frecuencia</Label>
                         <Select 
                           value={frecuencia} 
                           onValueChange={(val) => {
@@ -797,10 +797,10 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                       </div>
                       {frecuencia === 'personalizado' ? (
                         <div className="space-y-2">
-                          <Label className="text-base font-bold uppercase tracking-wider text-muted-foreground">Cada cuántos días</Label>
+                          <Label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Cada cuántos días</Label>
                           <Input 
                             type="number" 
-                            value={frecuenciaPersonalizada} 
+                            value={frecuenciaPersonalizada === 0 ? '' : frecuenciaPersonalizada}
                             onChange={(e) => {
                               const val = parseInt(e.target.value) || 0
                               setFrecuenciaPersonalizada(val)
@@ -811,7 +811,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
                         </div>
                       ) : (
                         <div className="space-y-2">
-                          <Label className="text-base font-bold uppercase tracking-wider text-muted-foreground">Próxima Visita</Label>
+                          <Label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Próxima Visita</Label>
                           <DatePicker 
                             value={fechaProxima} 
                             onChange={setFechaProxima}
@@ -824,7 +824,7 @@ export function PostJobWizard({ job, onClose, onSuccess, onOptimisticUpdate }: P
 
                   {!esRecurrente && (
                     <div className="space-y-2 animate-in fade-in duration-300">
-                      <Label className="text-base font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                      <Label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                         <Calendar className="h-3 w-3" /> Próximo Servicio
                       </Label>
                       <DatePicker 

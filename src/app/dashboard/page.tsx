@@ -234,6 +234,7 @@ export default function DashboardPage() {
     lowStock: 0,
     lowestItemName: ''
   })
+  const [lowStockItems, setLowStockItems] = useState<any[]>([])
   const [recentJobs, setRecentJobs] = useState<any[]>([])
   
   // Reminders state
@@ -488,6 +489,7 @@ export default function DashboardPage() {
       const lowStockList = (stockItems as any[])?.filter(i => (i.cantidad_actual || 0) <= (i.cantidad_minima || 0)) || []
       const lowStockCount = lowStockList.length
       const lowestItem = lowStockList.length > 0 ? lowStockList[0].nombre : ''
+      setLowStockItems(lowStockList.slice(0, 6))
 
       setStats({
         totalClients: clientsCount || 0,
@@ -537,20 +539,20 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen xl:h-screen xl:max-h-screen bg-[#F0F5FA] px-4.5 pb-0 md:pb-12 pt-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-5 xl:p-3.5 2xl:p-6 gap-3.5 xl:gap-2.5 2xl:gap-4 relative xl:overflow-hidden">
+    <div className="flex flex-col min-h-screen bg-[#F0F5FA] px-4.5 pb-0 md:pb-12 pt-12 pt-[calc(1.125rem+env(safe-area-inset-top,24px))] lg:p-5 xl:p-3.5 2xl:p-6 gap-3.5 xl:gap-2.5 2xl:gap-4 relative">
 
       {/* Premium Dark Navy Header Banner */}
       <header className="sidebar-premium-bg border border-slate-800/80 rounded-2xl p-4 md:p-5 xl:p-3.5 2xl:p-5 shrink-0 relative z-30 animate-dashboard-item shadow-xl" style={{ animationDelay: '100ms' }}>
         <div className="relative z-10 flex flex-col gap-3 xl:gap-2 2xl:gap-3">
           {/* Top Row: Logo & Icons (Mobile only) */}
           <div className="flex items-center justify-between md:hidden">
-            <div className="flex items-center gap-2">
-              <img 
-                src="/assets/logo.png" 
-                alt="Epotech Solutions" 
-                className="h-11 w-auto object-contain logo-premium" 
+            <div className="flex items-center gap-1.5 min-w-0">
+              <img
+                src="/assets/logo.png"
+                alt="Epotech Solutions"
+                className="h-8 w-auto object-contain logo-premium shrink-0"
               />
-              <span className="text-[11px] font-black tracking-[0.25em] text-[#00C9E0] uppercase border-l border-slate-700/80 pl-2">Portal CRM</span>
+              <span className="text-[9px] font-black tracking-[0.1em] text-[#00C9E0] uppercase border-l border-slate-700/80 pl-1.5 whitespace-nowrap">Portal CRM</span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -669,7 +671,7 @@ export default function DashboardPage() {
       </header>
 
       {/* Main Content layout */}
-      <main className="flex flex-col xl:flex-1 xl:min-h-0 gap-3.5 xl:gap-2.5 2xl:gap-4 relative z-10">
+      <main className="flex flex-col gap-3.5 xl:gap-2.5 2xl:gap-4 relative z-10">
         
         {/* Conditional Stock Alert Banner */}
         {stats.lowStock > 0 && (
@@ -771,13 +773,13 @@ export default function DashboardPage() {
         </div>
 
         {/* Middle Row Section */}
-        <div className="grid gap-3.5 xl:gap-2.5 2xl:gap-4 xl:grid-cols-7 xl:flex-1 xl:min-h-0">
+        <div className="grid gap-3.5 xl:gap-2.5 2xl:gap-4 xl:grid-cols-7">
           {/* Próximos Servicios */}
-          <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col xl:min-h-0 xl:h-full animate-dashboard-item" style={{ animationDelay: '350ms' }}>
+          <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col animate-dashboard-item" style={{ animationDelay: '350ms' }}>
             {/* Header */}
             <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 xl:px-4 py-2.5 xl:py-2 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
               <div>
-                <h3 className="text-sm sm:text-base font-bold text-white tracking-wide uppercase">Próximos Servicios</h3>
+                <h3 className="text-[13px] font-bold text-white tracking-wide uppercase">Próximos Servicios</h3>
                 <p className="text-xs font-semibold text-[#00C9E0]/90">Compromisos más cercanos.</p>
               </div>
               <Link href="/trabajos" className="text-xs sm:text-sm font-bold text-[#00C9E0] hover:text-white hover:underline flex items-center gap-0.5 transition-colors">
@@ -785,7 +787,7 @@ export default function DashboardPage() {
               </Link>
             </div>
             
-            <div className="p-3 xl:p-2 space-y-2 xl:space-y-1.5 bg-gradient-to-b from-white to-slate-50/30 xl:flex-1 xl:overflow-y-auto no-scrollbar">
+            <div className="p-3 xl:p-2 space-y-2 xl:space-y-1.5 bg-gradient-to-b from-white to-slate-50/30 max-h-[420px] overflow-y-auto">
               {loading ? (
                 <div className="flex justify-center py-4"><Loader2 className="h-4 w-4 text-[#0097A7] animate-spin" /></div>
               ) : recentJobs.length > 0 ? (
@@ -826,13 +828,13 @@ export default function DashboardPage() {
           </div>
 
           {/* Acciones Rápidas */}
-          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3.5 xl:p-2.5 2xl:p-4 flex flex-col gap-2 xl:gap-1.5 animate-dashboard-item xl:min-h-0 xl:h-full" style={{ animationDelay: '400ms' }}>
-            <div className="flex flex-col gap-2 xl:gap-1.5">
+          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_4px_25px_rgba(0,0,0,0.015)] p-3.5 xl:p-2.5 2xl:p-4 flex flex-col gap-2 xl:gap-1.5 animate-dashboard-item" style={{ animationDelay: '400ms' }}>
+            <div className="flex flex-col gap-2 xl:gap-3">
               <div>
-                <h3 className="text-sm sm:text-base font-bold text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
+                <h3 className="text-[13px] font-bold text-[#0B1E3F] tracking-wide uppercase">Acciones Rápidas</h3>
                 <p className="text-xs sm:text-sm text-slate-500 font-medium">Accesos directos operacionales.</p>
               </div>
-              
+
               <div className="grid grid-cols-3 gap-2">
                 <button 
                   onClick={() => setShowClientWizard(true)}
@@ -868,14 +870,14 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Lower Row: Reminders & Alerts */}
-        <div className="grid gap-3.5 xl:gap-2.5 2xl:gap-4 xl:grid-cols-7 xl:flex-1 xl:min-h-0">
+        {/* Lower Row: Reminders & Stock Alerts */}
+        <div className="grid gap-3.5 xl:gap-2.5 2xl:gap-4 xl:grid-cols-7">
           {/* Reminders Widget */}
-          <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 xl:p-2.5 flex flex-col justify-between xl:min-h-0 xl:h-full animate-dashboard-item" style={{ animationDelay: '450ms' }}>
-            <div className="min-h-0 flex flex-col flex-1 h-auto">
+          <div className="xl:col-span-4 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 xl:p-3.5 flex flex-col animate-dashboard-item" style={{ animationDelay: '450ms' }}>
+            <div className="flex flex-col">
               <div className="flex items-center justify-between pb-1.5 border-b border-slate-50 shrink-0">
                 <div>
-                  <h3 className="text-sm sm:text-base font-bold text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
+                  <h3 className="text-[13px] font-bold text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
                     <Bell className="h-4 w-4 text-[#0097A7]" />
                     Recordatorios y Pendientes
                   </h3>
@@ -908,10 +910,10 @@ export default function DashboardPage() {
                   className="text-sm h-10 px-4 rounded-xl border-slate-200/80 focus-visible:ring-[#0097A7] bg-white transition-all shadow-sm w-full font-medium placeholder:text-slate-400"
                 />
 
-                <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-2.5">
-                  <div className="grid grid-cols-2 xl:flex xl:flex-row items-center gap-2 w-full xl:w-auto">
+                <div className="flex flex-col gap-2.5">
+                  <div className="grid grid-cols-2 gap-2 w-full">
                     {/* Botón de Nota de Voz */}
-                    <div className="col-span-2 xl:col-span-1 shrink-0">
+                    <div className="col-span-2 shrink-0">
                       <VoiceReminderButton onCreated={() => fetchReminders()} className="w-full" />
                     </div>
 
@@ -920,7 +922,7 @@ export default function DashboardPage() {
                       <PopoverTrigger asChild>
                         <button
                           type="button"
-                          className="w-full h-10 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 flex items-center justify-center xl:justify-start gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                          className="w-full h-10 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
                         >
                           <CalendarIcon className="h-3.5 w-3.5 text-[#0097A7]" />
                           <span>
@@ -928,7 +930,7 @@ export default function DashboardPage() {
                           </span>
                         </button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 border border-slate-100 shadow-xl rounded-2xl bg-white z-[100]" align="start" sideOffset={8}>
+                      <PopoverContent className="w-auto p-0 border border-slate-100 shadow-xl rounded-2xl bg-white z-[300]" align="start" sideOffset={8}>
                         <CalendarUI
                           mode="single"
                           selected={new Date(quickDate + 'T00:00:00')}
@@ -950,13 +952,13 @@ export default function DashboardPage() {
                       <PopoverTrigger asChild>
                         <button
                           type="button"
-                          className="w-full h-10 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs sm:text-sm font-bold text-slate-700 flex items-center justify-center xl:justify-start gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
+                          className="w-full h-10 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:border-[#00C9E0]/40 cursor-pointer"
                         >
                           <Clock className="h-3.5 w-3.5 text-[#0097A7]" />
                           <span>{formatTime12h(`${quickTime}:00`)}</span>
                         </button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-64 p-3 border border-slate-100 shadow-xl rounded-2xl bg-white z-[100] space-y-3" align="end" sideOffset={8}>
+                      <PopoverContent className="w-64 p-3 border border-slate-100 shadow-xl rounded-2xl bg-white z-[300] space-y-3" align="end" sideOffset={8}>
                         <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                           <span className="text-[13px] font-black text-[#0B1E3F] flex items-center gap-1">
                             <Clock className="h-3.5 w-3.5 text-[#0097A7]" /> Selección de Hora
@@ -1048,7 +1050,7 @@ export default function DashboardPage() {
                     </Popover>
                   </div>
 
-                  <Button type="submit" size="sm" className="h-10 xl:h-9 text-[13px] xl:text-xs font-black gap-1.5 px-4 bg-[#0B1E3F] hover:bg-[#1a3668] text-white rounded-xl shadow-md border-none shrink-0 transition-all duration-300 active:scale-[0.98] w-full sm:w-auto mt-2 sm:mt-0">
+                  <Button type="submit" size="sm" className="h-10 text-xs font-black gap-1.5 px-4 bg-[#0B1E3F] hover:bg-[#1a3668] text-white rounded-xl shadow-md border-none shrink-0 transition-all duration-300 active:scale-[0.98] w-full">
                     <Plus className="h-3.5 w-3.5 stroke-[3]" /> Agregar
                   </Button>
                 </div>
@@ -1058,17 +1060,17 @@ export default function DashboardPage() {
               </div>
 
               {/* Listado */}
-              <div className="space-y-1.5 mt-1.5 overflow-y-auto pr-1 pb-1 no-scrollbar flex-1 min-h-0 h-auto">
+              <div className="space-y-1.5 mt-1.5 max-h-[280px] overflow-y-auto pr-1">
                 {reminders.length > 0 ? (
                   reminders.map((reminder) => {
                     return (
-                      <div key={reminder.id} className="flex items-center justify-between p-2 xl:p-1.5 rounded-xl border border-slate-100/80 bg-white hover:bg-slate-50/40 transition-all duration-200 group shadow-2xs">
+                      <div key={reminder.id} className="flex items-center justify-between p-2 xl:p-2 rounded-xl border border-slate-100/80 bg-white hover:bg-slate-50/40 transition-all duration-200 group shadow-2xs">
                         <div className="flex items-start gap-2 min-w-0 flex-1">
                           <button type="button" onClick={() => handleToggleReminder(reminder.id)} className="h-4.5 w-4.5 rounded-full border border-slate-300 hover:border-[#0097A7] bg-slate-50/50 hover:bg-[#E6F9FB] flex items-center justify-center shrink-0 mt-0.5 transition-all cursor-pointer">
                             <Check className="h-2.5 w-2.5 stroke-[3] text-slate-300 hover:text-[#0097A7]" />
                           </button>
                           <div className="min-w-0">
-                            <p className="font-bold text-[10.5px] xl:text-base text-slate-800 truncate">{reminder.titulo}</p>
+                            <p className="font-bold text-[10.5px] xl:text-[13px] text-slate-800 truncate">{reminder.titulo}</p>
                             <div className="flex items-center gap-1.5 mt-0.2 text-[10px] xl:text-[7.5px] text-slate-400 font-medium">
                               <span>{new Date(reminder.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>
                               {reminder.hora && <span>{formatTime12h(reminder.hora)}</span>}
@@ -1082,7 +1084,7 @@ export default function DashboardPage() {
                     )
                   })
                 ) : (
-                  <div className="text-center py-3 xl:py-2 text-[10px] xl:text-[10px] text-slate-400 italic border border-dashed rounded-xl bg-slate-50/30">
+                  <div className="text-center py-3 xl:py-4 text-[10px] xl:text-xs text-slate-400 italic border border-dashed rounded-xl bg-slate-50/30">
                     No hay recordatorios pendientes.
                   </div>
                 )}
@@ -1090,7 +1092,43 @@ export default function DashboardPage() {
             </div>
           </div>
 
+          {/* Alertas de Stock Widget */}
+          <div className="xl:col-span-3 bg-white rounded-2xl border border-slate-100 shadow-[0_2px_15px_rgba(0,0,0,0.01)] p-3 xl:p-3.5 flex flex-col animate-dashboard-item" style={{ animationDelay: '480ms' }}>
+            <div className="flex items-center justify-between pb-1.5 border-b border-slate-50 shrink-0">
+              <div>
+                <h3 className="text-[13px] font-bold text-[#0B1E3F] flex items-center gap-1.5 tracking-wide uppercase">
+                  <Package className="h-4 w-4 text-[#0097A7]" />
+                  Alertas de Stock
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Productos a reponer.</p>
+              </div>
+              <Link href="/stock" className="text-xs sm:text-sm font-bold text-[#0097A7] hover:text-[#00C9E0] hover:underline flex items-center gap-0.5 transition-colors shrink-0">
+                Ver todos <ChevronRight className="h-3 w-3" />
+              </Link>
+            </div>
 
+            <div className="space-y-1.5 mt-2.5 max-h-[280px] overflow-y-auto pr-1">
+              {lowStockItems.length > 0 ? (
+                lowStockItems.map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-2 rounded-xl border border-red-100 bg-red-50/40">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="h-6 w-6 rounded-lg flex items-center justify-center bg-red-100 text-red-500 shrink-0">
+                        <AlertTriangle className="h-3 w-3" />
+                      </div>
+                      <p className="font-bold text-[12px] text-slate-800 truncate">{item.nombre}</p>
+                    </div>
+                    <span className="text-[11px] font-bold text-red-600 shrink-0">
+                      {item.cantidad_actual ?? 0}/{item.cantidad_minima ?? 0}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-3 xl:py-4 text-[10px] xl:text-xs text-slate-400 italic border border-dashed rounded-xl bg-slate-50/30">
+                  Stock sano, nada por reponer.
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </main>
 

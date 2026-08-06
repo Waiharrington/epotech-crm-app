@@ -123,14 +123,14 @@ export function StockAdjustModal({ item, type, onClose, onSuccess }: StockAdjust
             <Input 
               type="number" 
               className="w-24 text-center h-11 bg-slate-50 border-slate-200/60 rounded-xl text-base font-bold text-slate-700 focus-visible:ring-[#00C9E0]/40" 
-              value={adjustment} 
-              onChange={e => setAdjustment(parseFloat(e.target.value) || 0)} 
+              value={adjustment === 0 ? '' : adjustment}
+              onChange={e => setAdjustment(parseFloat(e.target.value) || 0)}
             />
           </div>
 
           {/* Reason */}
           <div className="space-y-2">
-            <Label className="text-base font-bold uppercase tracking-wider text-slate-500">
+            <Label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Motivo (Opcional)
             </Label>
             <Input 

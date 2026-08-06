@@ -75,7 +75,7 @@ export function ChangePasswordModal({ onClose }: ChangePasswordModalProps) {
 
           <div className="p-5 space-y-4">
             <div className="space-y-1.5">
-              <Label className="text-base font-bold uppercase tracking-wider text-slate-500">Nueva Contraseña</Label>
+              <Label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Nueva Contraseña</Label>
               <Input
                 type="password"
                 required
@@ -87,7 +87,7 @@ export function ChangePasswordModal({ onClose }: ChangePasswordModalProps) {
             </div>
             
             <div className="space-y-1.5">
-              <Label className="text-base font-bold uppercase tracking-wider text-slate-500">Confirmar Contraseña</Label>
+              <Label className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Confirmar Contraseña</Label>
               <Input
                 type="password"
                 required

@@ -210,7 +210,7 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
           <div className="relative px-6 py-5">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-base font-black uppercase tracking-[0.15em] text-white/60 mb-1">
+                <p className="text-[11px] font-black uppercase tracking-[0.15em] text-white/60 mb-1">
                   Catálogo
                 </p>
                 <h3 className="text-lg font-black text-white leading-tight flex items-center gap-2">
@@ -288,7 +288,7 @@ CREATE POLICY "Allow ALL on categorias_servicios" ON public.categorias_servicios
                 </div>
                 <button 
                   type="submit" 
-                  className="h-11 px-4 flex items-center justify-center gap-1.5 text-base font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+                  className="h-11 px-4 flex items-center justify-center gap-1.5 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-[#00C9E0] to-[#0097A7] rounded-xl shadow-md shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
                   disabled={loading || !newCategory.trim()}
                 >
                   {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-4 w-4" />}

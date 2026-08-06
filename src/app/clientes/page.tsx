@@ -186,7 +186,7 @@ export default function ClientesPage() {
           <div className="bg-gradient-to-r from-[#030b17] via-[#0B1E3F] to-[#030b17] px-4.5 xl:px-4 py-2.5 xl:py-2 flex items-center justify-between shrink-0 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
             <div className="flex items-center gap-2">
               <Users className="h-3.5 w-3.5 text-[#00C9E0]" />
-              <h2 className="text-base font-bold text-white uppercase tracking-wider">
+              <h2 className="text-[13px] font-bold text-white uppercase tracking-wider">
                 Listado de Clientes
               </h2>
             </div>
@@ -198,7 +198,7 @@ export default function ClientesPage() {
           {loading ? (
             <div className="flex flex-col items-center justify-center flex-1 min-h-64 gap-3">
               <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#E6F9FB] border-t-[#00C9E0]" />
-              <p className="text-base font-bold text-slate-400 uppercase tracking-wider">Cargando clientes</p>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Cargando clientes</p>
             </div>
           ) : filteredClientes.length > 0 ? (
             <div className="overflow-auto flex-1 min-h-0">
@@ -227,7 +227,7 @@ export default function ClientesPage() {
                             </span>
                           </div>
                           <div className="flex flex-col min-w-0">
-                            <span className="text-[13px] xl:text-[10.5px] font-bold text-slate-800 truncate group-hover:text-[#0097A7] transition-colors">
+                            <span className="text-[13px] font-bold text-slate-800 truncate group-hover:text-[#0097A7] transition-colors">
                               {cliente.nombre} {cliente.apellido}
                             </span>
                             <span className="text-[11px] text-slate-400 font-medium md:hidden flex items-center gap-1">
@@ -237,11 +237,11 @@ export default function ClientesPage() {
                           </div>
                         </div>
                       </td>
-                      <td className="hidden md:table-cell px-4.5 xl:px-4 py-2 xl:py-2.5 text-[10.5px] xl:text-base font-medium text-slate-600 tabular-nums">
+                      <td className="hidden md:table-cell px-4.5 xl:px-4 py-2 xl:py-2.5 text-[12px] font-medium text-slate-600 tabular-nums">
                         {cliente.telefono}
                       </td>
                       <td className="hidden sm:table-cell px-4.5 xl:px-4 py-2 xl:py-2.5">
-                        <div className="flex items-center gap-1 text-[10.5px] xl:text-base font-medium text-slate-500">
+                        <div className="flex items-center gap-1 text-[12px] font-medium text-slate-500">
                           <MapPin className="h-3 w-3 text-slate-300 group-hover:text-[#00C9E0] transition-colors shrink-0" />
                           <span className="truncate">{cliente.ciudad || '—'}</span>
                         </div>

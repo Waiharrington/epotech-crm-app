@@ -235,7 +235,7 @@ function DailyTimelineView({
       >
         <CalendarIcon className="h-12 w-12 opacity-20" />
         <p className="font-medium text-base">No hay trabajos agendados para este día.</p>
-        <p className="text-base uppercase font-bold tracking-wider opacity-70">Clic para añadir trabajo</p>
+        <p className="text-xs uppercase font-bold tracking-wider opacity-70">Clic para añadir trabajo</p>
       </div>
     )
   }
@@ -261,7 +261,7 @@ function DailyTimelineView({
               <span className="text-base sm:text-lg font-semibold text-slate-700 leading-none">
                 {timeVal}
               </span>
-              <span className="text-[11px] sm:text-base font-bold text-slate-400 uppercase tracking-wider mt-0.5">
+              <span className="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider mt-0.5">
                 {timePeriod}
               </span>
               
@@ -645,7 +645,7 @@ export function CalendarView({
             <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-white shadow-sm border border-slate-200/60 text-[#00C9E0]">
               <CalendarIcon className="h-5 w-5" />
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-800 capitalize tracking-tight">
+            <h2 className="text-lg sm:text-xl font-black text-slate-800 capitalize tracking-tight">
               {getHeaderTitle()}
             </h2>
           </div>
@@ -658,10 +658,10 @@ export function CalendarView({
                   <SelectValue placeholder="Estado" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border border-slate-200/80 shadow-lg bg-white">
-                  <SelectItem value="todos" className="text-base font-bold text-slate-600 rounded-lg">Todos</SelectItem>
-                  <SelectItem value="proximo" className="text-base font-bold text-amber-600 rounded-lg">Próximos</SelectItem>
-                  <SelectItem value="en_progreso" className="text-base font-bold text-blue-600 rounded-lg">En Progreso</SelectItem>
-                  <SelectItem value="completado" className="text-base font-bold text-emerald-600 rounded-lg">Listos</SelectItem>
+                  <SelectItem value="todos" className="text-sm font-bold text-slate-600 rounded-lg">Todos</SelectItem>
+                  <SelectItem value="proximo" className="text-sm font-bold text-amber-600 rounded-lg">Próximos</SelectItem>
+                  <SelectItem value="en_progreso" className="text-sm font-bold text-blue-600 rounded-lg">En Progreso</SelectItem>
+                  <SelectItem value="completado" className="text-sm font-bold text-emerald-600 rounded-lg">Listos</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -678,7 +678,7 @@ export function CalendarView({
                   key={f.key}
                   onClick={() => setStatusFilter(f.key)}
                   className={cn(
-                    "px-3 lg:px-4.5 py-2 text-sm lg:text-base font-bold rounded-lg transition-all whitespace-nowrap",
+                    "px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all whitespace-nowrap",
                     statusFilter === f.key 
                       ? "bg-[#0B1E3F] text-white shadow-sm" 
                       : `${f.color} hover:bg-slate-50`
@@ -702,7 +702,7 @@ export function CalendarView({
               
               <button 
                 onClick={() => setCurrentDate(new Date())}
-                className="h-full px-3 sm:px-4 text-sm sm:text-base font-bold text-slate-600 hover:text-[#00C9E0] hover:bg-cyan-50/50 rounded-lg transition-all flex items-center justify-center"
+                className="h-full px-3 sm:px-4 text-xs font-bold text-slate-600 hover:text-[#00C9E0] hover:bg-cyan-50/50 rounded-lg transition-all flex items-center justify-center"
               >
                 HOY
               </button>

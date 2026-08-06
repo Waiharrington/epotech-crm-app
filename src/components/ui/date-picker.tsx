@@ -44,12 +44,28 @@ export function DatePicker({ value = '', onChange, className, buttonClassName, d
   }, [value])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value
-    setInputValue(raw)
+    let raw = e.target.value
     
-    // If it looks like a complete DD/MM/YYYY date, try to parse it
-    if (/^\d{2}\/\d{2}\/\d{4}$/.test(raw)) {
-      const dbVal = toDb(raw)
+    // Strip everything except digits and slashes
+    let digits = raw.replace(/[^\d]/g, '')
+    
+    // Limit to 8 digits (DDMMYYYY)
+    if (digits.length > 8) digits = digits.slice(0, 8)
+    
+    // Auto-insert slashes
+    let formatted = digits
+    if (digits.length > 2) {
+      formatted = digits.slice(0, 2) + '/' + digits.slice(2)
+    }
+    if (digits.length > 4) {
+      formatted = digits.slice(0, 2) + '/' + digits.slice(2, 4) + '/' + digits.slice(4)
+    }
+    
+    setInputValue(formatted)
+    
+    // If complete date, parse and send to parent
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(formatted)) {
+      const dbVal = toDb(formatted)
       onChange(dbVal)
     }
   }

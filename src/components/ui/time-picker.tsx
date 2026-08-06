@@ -42,16 +42,51 @@ export function TimePicker({ value = '', onChange, className }: TimePickerProps)
   }, [value])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value
-    setInputValue(raw)
-    const converted = to24h(raw)
+    let raw = e.target.value
+
+    // Detect if user typed 'a' or 'p' for AM/PM
+    const lastChar = raw.slice(-1).toLowerCase()
+    const hasAmPm = /[ap]/i.test(lastChar)
+
+    // Strip everything except digits, colon, and a/p
+    let cleaned = raw.replace(/[^\d:apAP]/g, '')
+
+    // Only allow one 'a' or 'p' at the end
+    const ampmMatch = cleaned.match(/^(.*?)([apAP])$/)
+    let digitsPart = cleaned
+    let ampmPart = ''
+    if (ampmMatch) {
+      digitsPart = ampmMatch[1]
+      ampmPart = ampmMatch[2].toLowerCase() === 'a' ? 'AM' : 'PM'
+    }
+
+    // Strip non-digits from the digits part
+    let digits = digitsPart.replace(/[^\d]/g, '')
+
+    // Limit to 4 digits (HHMM)
+    if (digits.length > 4) digits = digits.slice(0, 4)
+
+    // Auto-insert colon after 2+ digits
+    let formatted = digits
+    if (digits.length > 2) {
+      formatted = digits.slice(0, 2) + ':' + digits.slice(2)
+    }
+
+    // Add AM/PM back
+    if (ampmPart) {
+      formatted = formatted + ' ' + ampmPart
+    }
+
+    setInputValue(formatted)
+
+    // Try to convert and send to parent
+    const converted = to24h(formatted)
     if (converted) {
       onChange(converted)
     }
   }
 
   const handleBlur = () => {
-    // On blur, try to parse and reformat
     const converted = to24h(inputValue)
     if (converted) {
       onChange(converted)

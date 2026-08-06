@@ -256,14 +256,7 @@ export function EditClientModal({ cliente, onClose, onSuccess }: EditClientModal
 
         {/* Footer con acciones */}
         <div className="bg-white px-6 py-4 border-t border-slate-100 flex justify-end gap-2 shrink-0">
-          <button
-            type="button"
-            onClick={handleClose}
-            disabled={loading}
-            className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-[0.98]"
-          >
-            Cancelar
-          </button>
+
           <button
             type="button"
             onClick={handleSave}

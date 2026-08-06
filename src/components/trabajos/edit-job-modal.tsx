@@ -553,14 +553,7 @@ export function EditJobModal({ job, onClose, onSuccess }: EditJobModalProps) {
 
           {/* Footer */}
           <div className="flex justify-end gap-2.5 p-5 pt-0">
-            <button
-              type="button"
-              onClick={handleClose}
-              disabled={loading}
-              className="h-11 px-4 text-[13px] font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all"
-            >
-              Cancelar
-            </button>
+
             <button
               type="button"
               onClick={handleSave}

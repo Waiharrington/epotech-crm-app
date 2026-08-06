@@ -132,13 +132,7 @@ export function EditNoteModal({ note, onClose, onSuccess }: EditNoteModalProps) 
           </button>
           
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handleClose}
-              className="flex items-center gap-2 text-base font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
-            >
-              Cancelar
-            </button>
+
             <button 
               type="button"
               onClick={handleUpdate}

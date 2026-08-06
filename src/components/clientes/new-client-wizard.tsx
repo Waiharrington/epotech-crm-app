@@ -438,14 +438,7 @@ export function NewClientWizard({ open = true, onClose, onSuccess }: NewClientWi
         </div>
 
         <div className="px-5 md:px-6 py-3.5 bg-slate-50/60 border-t border-slate-100 flex items-center justify-between">
-          <Button
-            variant="ghost"
-            onClick={handleClose}
-            disabled={loading}
-            className="h-11 px-4 text-xs font-bold rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100/80 transition-all active:scale-[0.98]"
-          >
-            Cancelar
-          </Button>
+          <div></div>
           <div className="flex gap-2">
             {step > 1 && step < 3 && (
               <Button

@@ -252,14 +252,7 @@ export function EditRecurringPlanModal({ plan, onClose, onSuccess }: EditRecurri
           </button>
           
           <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={handleClose}
-              disabled={loading}
-              className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:text-slate-700 transition-all active:scale-[0.98]"
-            >
-              Cancelar
-            </button>
+
             <button
               type="button"
               onClick={handleUpdate}

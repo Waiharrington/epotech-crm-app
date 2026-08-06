@@ -364,13 +364,7 @@ export function NewQuoteWizard({ open = true, onClose, onSuccess, quoteToEdit, d
         <div className="bg-white px-5 py-3 border-t border-slate-100 shrink-0">
           {step === 1 ? (
             <div className="flex items-center justify-between">
-              <button
-                type="button"
-                onClick={handleClose}
-                className="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
-              >
-                <X className="h-3 w-3" /> Cancelar
-              </button>
+              <div></div>
               <button
                 type="button"
                 onClick={() => setStep(2)}

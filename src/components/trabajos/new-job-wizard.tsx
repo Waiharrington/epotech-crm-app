@@ -440,8 +440,8 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
         </div>
 
         {/* Footer */}
-        <div className="bg-white px-5 py-3 border-t border-slate-100 shrink-0">
-          {step === 3 ? (
+        {step === 3 && (
+          <div className="bg-white px-5 py-3 border-t border-slate-100 shrink-0">
             <div className="flex items-center justify-between">
               <button 
                 type="button" 
@@ -460,18 +460,8 @@ export function NewJobWizard({ open = true, onClose, onSuccess, initialClientId,
                 Agendar Trabajo
               </button>
             </div>
-          ) : (
-            <div className="flex justify-center">
-              <button
-                type="button"
-                onClick={handleClose}
-                className="flex items-center gap-2 text-base font-bold text-slate-400 hover:text-[#0097A7] transition-colors"
-              >
-                <X className="h-3.5 w-3.5" /> Cancelar
-              </button>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   )

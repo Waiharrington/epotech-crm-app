@@ -234,6 +234,8 @@ export default function DashboardPage() {
     lowStock: 0,
     lowestItemName: ''
   })
+  const [allClients, setAllClients] = useState<any[]>([])
+  const [allJobs, setAllJobs] = useState<any[]>([])
   const [lowStockItems, setLowStockItems] = useState<any[]>([])
   const [recentJobs, setRecentJobs] = useState<any[]>([])
   
@@ -255,68 +257,48 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!searchQuery.trim()) {
       setSearchResults([])
+      setIsSearching(false)
       return
     }
 
-    const delayDebounceFn = setTimeout(async () => {
-      setIsSearching(true)
-      try {
-        const q = searchQuery.trim().toLowerCase()
-        
-        const { data: clients } = await supabase
-          .from('clientes')
-          .select('id, nombre, apellido, empresa, telefono')
-          .limit(20)
+    const delayDebounceFn = setTimeout(() => {
+      const q = searchQuery.trim().toLowerCase()
+      const results: any[] = []
 
-        const { data: jobs } = await supabase
-          .from('trabajos')
-          .select('id, cliente_id, vehiculo, patente, numero_orden, clientes(nombre, apellido)')
-          .limit(20)
+      allClients
+        .filter((c: any) => {
+          const full = `${c.nombre || ''} ${c.apellido || ''} ${c.empresa || ''} ${c.telefono || ''}`.toLowerCase()
+          return full.includes(q)
+        })
+        .slice(0, 5)
+        .forEach((c: any) => results.push({
+          id: c.id,
+          type: 'cliente',
+          title: `${c.nombre || ''} ${c.apellido || ''}`.trim(),
+          subtitle: c.empresa || c.telefono || 'Cliente',
+          link: `/clientes/${c.id}`
+        }))
 
-        const results: any[] = []
-        
-        if (clients) {
-          clients
-            .filter((c: any) => {
-              const full = `${c.nombre || ''} ${c.apellido || ''} ${c.empresa || ''} ${c.telefono || ''}`.toLowerCase()
-              return full.includes(q)
-            })
-            .slice(0, 5)
-            .forEach((c: any) => results.push({
-              id: c.id,
-              type: 'cliente',
-              title: `${c.nombre || ''} ${c.apellido || ''}`.trim(),
-              subtitle: c.empresa || c.telefono || 'Cliente',
-              link: `/clientes/${c.id}`
-            }))
-        }
+      allJobs
+        .filter((j: any) => {
+          const full = `${j.vehiculo || ''} ${j.patente || ''} ${j.numero_orden || ''} ${j.clientes?.nombre || ''} ${j.clientes?.apellido || ''}`.toLowerCase()
+          return full.includes(q)
+        })
+        .slice(0, 5)
+        .forEach((j: any) => results.push({
+          id: j.id,
+          type: 'trabajo',
+          title: j.numero_orden ? `Orden #${j.numero_orden} - ${j.vehiculo || ''}` : j.vehiculo || 'Trabajo',
+          subtitle: `${j.clientes?.nombre || ''} ${j.clientes?.apellido || ''}`.trim() || 'Sin cliente',
+          link: `/trabajos`
+        }))
 
-        if (jobs) {
-          jobs
-            .filter((j: any) => {
-              const full = `${j.vehiculo || ''} ${j.patente || ''} ${j.numero_orden || ''} ${j.clientes?.nombre || ''} ${j.clientes?.apellido || ''}`.toLowerCase()
-              return full.includes(q)
-            })
-            .slice(0, 5)
-            .forEach((j: any) => results.push({
-              id: j.id,
-              type: 'trabajo',
-              title: j.numero_orden ? `Orden #${j.numero_orden} - ${j.vehiculo || ''}` : j.vehiculo || 'Trabajo',
-              subtitle: `${j.clientes?.nombre || ''} ${j.clientes?.apellido || ''}`.trim() || 'Sin cliente',
-              link: `/trabajos`
-            }))
-        }
-
-        setSearchResults(results.slice(0, 8))
-      } catch (err) {
-        console.error('Search error:', err)
-      } finally {
-        setIsSearching(false)
-      }
-    }, 300)
+      setSearchResults(results.slice(0, 8))
+      setIsSearching(false)
+    }, 200)
 
     return () => clearTimeout(delayDebounceFn)
-  }, [searchQuery, supabase])
+  }, [searchQuery, allClients, allJobs])
 
   useEffect(() => {
     fetchReminders()
@@ -534,6 +516,14 @@ export default function DashboardPage() {
         console.error("Jobs query error:", errJobs)
         setRecentJobs([])
       }
+
+      try {
+        const { data: allC } = await supabase.from('clientes').select('id, nombre, apellido, empresa, telefono').limit(100)
+        const { data: allJ } = await supabase.from('trabajos').select('id, cliente_id, vehiculo, patente, numero_orden, clientes(nombre, apellido)').limit(100)
+        setAllClients(allC || [])
+        setAllJobs(allJ || [])
+      } catch {}
+
     } catch (e) {
       console.error(e)
     } finally {

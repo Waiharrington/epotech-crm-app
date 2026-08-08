@@ -33,7 +33,10 @@ import {
   Sunset,
   Sparkles,
   Trash2,
-  Search
+  Search,
+  User,
+  DollarSign,
+  StickyNote,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import Link from 'next/link'
@@ -55,8 +58,9 @@ const formatTime12h = (timeStr?: string | null) => {
   return `${hours}:${minutes} ${ampm}`
 }
 
+const supabase = createClient() as any
+
 export default function DashboardPage() {
-  const supabase = createClient() as any
   const [loading, setLoading] = useState(true)
   const [showWelcomeLoader, setShowWelcomeLoader] = useState(true)
   const [mounted, setMounted] = useState(false)
@@ -70,7 +74,7 @@ export default function DashboardPage() {
   // Global Search State
   const [searchQuery, setSearchQuery] = useState('')
   const [isSearching, setIsSearching] = useState(false)
-  const [searchResults, setSearchResults] = useState<{ id: string; type: 'cliente'|'trabajo'; title: string; subtitle: string; link: string }[]>([])
+  const [searchResults, setSearchResults] = useState<{ id: string; type: string; title: string; subtitle: string; link: string; icon?: string }[]>([])
 
   useEffect(() => {
     setMounted(true)
@@ -236,6 +240,10 @@ export default function DashboardPage() {
   })
   const [allClients, setAllClients] = useState<any[]>([])
   const [allJobs, setAllJobs] = useState<any[]>([])
+  const [allServices, setAllServices] = useState<any[]>([])
+  const [allStock, setAllStock] = useState<any[]>([])
+  const [allReminders, setAllReminders] = useState<any[]>([])
+  const [allCaja, setAllCaja] = useState<any[]>([])
   const [lowStockItems, setLowStockItems] = useState<any[]>([])
   const [recentJobs, setRecentJobs] = useState<any[]>([])
   
@@ -265,40 +273,78 @@ export default function DashboardPage() {
       const q = searchQuery.trim().toLowerCase()
       const results: any[] = []
 
+      // Clientes
       allClients
-        .filter((c: any) => {
-          const full = `${c.nombre || ''} ${c.apellido || ''} ${c.empresa || ''} ${c.telefono || ''}`.toLowerCase()
-          return full.includes(q)
-        })
-        .slice(0, 5)
+        .filter((c: any) => `${c.nombre || ''} ${c.apellido || ''} ${c.telefono || ''} ${c.direccion || ''} ${c.ciudad || ''}`.toLowerCase().includes(q))
+        .slice(0, 3)
         .forEach((c: any) => results.push({
-          id: c.id,
-          type: 'cliente',
-          title: `${c.nombre || ''} ${c.apellido || ''}`.trim(),
-          subtitle: c.empresa || c.telefono || 'Cliente',
-          link: `/clientes/${c.id}`
+          id: c.id, type: 'cliente',
+          title: `${c.nombre} ${c.apellido}`.trim(),
+          subtitle: c.telefono || c.direccion || 'Cliente',
+          link: `/clientes/${c.id}`, icon: 'user'
         }))
 
+      // Trabajos
       allJobs
-        .filter((j: any) => {
-          const full = `${j.vehiculo || ''} ${j.patente || ''} ${j.numero_orden || ''} ${j.clientes?.nombre || ''} ${j.clientes?.apellido || ''}`.toLowerCase()
-          return full.includes(q)
-        })
-        .slice(0, 5)
+        .filter((j: any) => `${j.vehiculo || ''} ${j.patente || ''} ${j.numero_orden || ''} ${j.clientes?.nombre || ''} ${j.clientes?.apellido || ''} ${j.notas_pre || ''} ${j.notas_post || ''}`.toLowerCase().includes(q))
+        .slice(0, 3)
         .forEach((j: any) => results.push({
-          id: j.id,
-          type: 'trabajo',
-          title: j.numero_orden ? `Orden #${j.numero_orden} - ${j.vehiculo || ''}` : j.vehiculo || 'Trabajo',
-          subtitle: `${j.clientes?.nombre || ''} ${j.clientes?.apellido || ''}`.trim() || 'Sin cliente',
-          link: `/trabajos`
+          id: j.id, type: 'trabajo',
+          title: j.numero_orden ? `#${j.numero_orden} - ${j.vehiculo || 'Trabajo'}` : j.vehiculo || 'Trabajo',
+          subtitle: `${j.clientes?.nombre || ''} ${j.clientes?.apellido || ''} · ${j.fecha_servicio}`,
+          link: '/trabajos', icon: 'briefcase'
         }))
 
-      setSearchResults(results.slice(0, 8))
+      // Servicios
+      allServices
+        .filter((s: any) => `${s.nombre || ''} ${s.categoria || ''} ${s.descripcion_interna || ''}`.toLowerCase().includes(q))
+        .slice(0, 2)
+        .forEach((s: any) => results.push({
+          id: s.id, type: 'servicio',
+          title: s.nombre,
+          subtitle: `$${s.precio_venta} · ${s.categoria || ''}`,
+          link: '/catalogo', icon: 'briefcase'
+        }))
+
+      // Stock
+      allStock
+        .filter((s: any) => `${s.nombre || ''} ${s.tipo || ''}`.toLowerCase().includes(q))
+        .slice(0, 2)
+        .forEach((s: any) => results.push({
+          id: s.id, type: 'stock',
+          title: s.nombre,
+          subtitle: `${s.cantidad_actual || 0} ${s.unidad_medida || ''} · ${s.tipo}`,
+          link: '/stock', icon: 'package'
+        }))
+
+      // Recordatorios
+      allReminders
+        .filter((r: any) => `${r.titulo || ''} ${r.descripcion || ''}`.toLowerCase().includes(q))
+        .slice(0, 2)
+        .forEach((r: any) => results.push({
+          id: r.id, type: 'recordatorio',
+          title: r.titulo,
+          subtitle: `${r.fecha} · ${r.prioridad}${r.completado ? ' · Completado' : ''}`,
+          link: '/recordatorios', icon: 'bell'
+        }))
+
+      // Caja
+      allCaja
+        .filter((c: any) => `${c.categoria || ''} ${c.notas || ''} ${c.tipo || ''}`.toLowerCase().includes(q))
+        .slice(0, 2)
+        .forEach((c: any) => results.push({
+          id: c.id, type: 'caja',
+          title: `${c.tipo === 'ingreso' ? '+' : '-'}$${c.monto} · ${c.categoria}`,
+          subtitle: c.notas || c.fecha,
+          link: '/caja', icon: 'dollar'
+        }))
+
+      setSearchResults(results.slice(0, 10))
       setIsSearching(false)
-    }, 200)
+    }, 150)
 
     return () => clearTimeout(delayDebounceFn)
-  }, [searchQuery, allClients, allJobs])
+  }, [searchQuery, allClients, allJobs, allServices, allStock, allReminders, allCaja])
 
   useEffect(() => {
     fetchReminders()
@@ -518,10 +564,20 @@ export default function DashboardPage() {
       }
 
       try {
-        const { data: allC } = await supabase.from('clientes').select('id, nombre, apellido, empresa, telefono').limit(100)
-        const { data: allJ } = await supabase.from('trabajos').select('id, cliente_id, vehiculo, patente, numero_orden, clientes(nombre, apellido)').limit(100)
-        setAllClients(allC || [])
-        setAllJobs(allJ || [])
+        const [cRes, jRes, sRes, skRes, rRes, caRes] = await Promise.all([
+          supabase.from('clientes').select('id, nombre, apellido, telefono, direccion, ciudad').limit(200),
+          supabase.from('trabajos').select('id, cliente_id, vehiculo, patente, numero_orden, estado, notas_pre, notas_post, fecha_servicio, precio_acordado, clientes(nombre, apellido)').limit(200),
+          supabase.from('catalogo_servicios').select('id, nombre, categoria, precio_venta, descripcion_interna').eq('activo', true).limit(100),
+          supabase.from('stock').select('id, nombre, tipo, cantidad_actual, unidad_medida').limit(100),
+          supabase.from('recordatorios').select('id, titulo, descripcion, fecha, prioridad, completado').limit(100),
+          supabase.from('caja').select('id, tipo, monto, fecha, categoria, notas').limit(100),
+        ])
+        setAllClients(cRes.data || [])
+        setAllJobs(jRes.data || [])
+        setAllServices(sRes.data || [])
+        setAllStock(skRes.data || [])
+        setAllReminders(rRes.data || [])
+        setAllCaja(caRes.data || [])
       } catch {}
 
     } catch (e) {
@@ -638,7 +694,7 @@ export default function DashboardPage() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
               <Input 
-                placeholder="Buscar clientes o trabajos..." 
+                placeholder="Buscar todo... clientes, trabajos, servicios, stock..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9 h-10 bg-white/10 border-white/10 shadow-inner rounded-xl text-[13px] font-medium text-white placeholder:text-slate-400 focus-visible:ring-[#00C9E0]"
@@ -649,19 +705,40 @@ export default function DashboardPage() {
             </div>
             
             {searchQuery.trim() && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-100 overflow-hidden z-50">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-50 max-h-[70vh] overflow-y-auto">
                 {searchResults.length > 0 ? (
                   <div className="py-2">
-                    {searchResults.map(result => (
-                      <Link key={`${result.type}-${result.id}`} href={result.link} className="flex flex-col px-4 py-2 hover:bg-slate-50 border-b border-slate-50 last:border-0 transition-colors">
-                        <span className="text-[13px] font-bold text-slate-900">{result.title}</span>
-                        <span className="text-[11px] text-slate-500 font-medium">{result.subtitle}</span>
-                      </Link>
-                    ))}
+                    {searchResults.map((result, i) => {
+                      const typeConfig: Record<string, { color: string; label: string; icon: any }> = {
+                        cliente: { color: 'bg-blue-100 text-blue-600', label: 'Cliente', icon: User },
+                        trabajo: { color: 'bg-[#E6F9FB] text-[#0097A7]', label: 'Trabajo', icon: Briefcase },
+                        servicio: { color: 'bg-purple-100 text-purple-600', label: 'Servicio', icon: FileText },
+                        stock: { color: 'bg-amber-100 text-amber-600', label: 'Stock', icon: Package },
+                        recordatorio: { color: 'bg-rose-100 text-rose-600', label: 'Recordatorio', icon: Bell },
+                        caja: { color: 'bg-emerald-100 text-emerald-600', label: 'Caja', icon: DollarSign },
+                      }
+                      const cfg = typeConfig[result.type] || typeConfig.cliente
+                      const Icon = cfg.icon
+                      return (
+                        <Link key={`${result.type}-${result.id}-${i}`} href={result.link} className="flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors">
+                          <div className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${cfg.color}`}>
+                            <Icon className="h-3.5 w-3.5" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[13px] font-bold text-slate-900 truncate">{result.title}</span>
+                              <span className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded ${cfg.color} shrink-0`}>{cfg.label}</span>
+                            </div>
+                            <span className="text-[11px] text-slate-500 font-medium truncate block">{result.subtitle}</span>
+                          </div>
+                        </Link>
+                      )
+                    })}
                   </div>
                 ) : (
-                  <div className="p-4 text-center text-slate-500 text-[12px] font-medium">
-                    {isSearching ? 'Buscando...' : 'No se encontraron resultados'}
+                  <div className="p-6 text-center text-slate-400">
+                    <Search className="h-8 w-8 mx-auto mb-2 text-slate-300" />
+                    <p className="text-[13px] font-medium">No se encontraron resultados para "{searchQuery}"</p>
                   </div>
                 )}
               </div>

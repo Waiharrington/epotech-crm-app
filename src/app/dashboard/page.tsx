@@ -261,60 +261,59 @@ export default function DashboardPage() {
     const delayDebounceFn = setTimeout(async () => {
       setIsSearching(true)
       try {
-        const searchTerm = `%${searchQuery.trim()}%`
+        const q = searchQuery.trim().toLowerCase()
         
         const { data: clients } = await supabase
           .from('clientes')
-          .select('id, nombre, empresa, telefono')
-          .ilike('nombre', searchTerm)
-          .limit(3)
-
-        const { data: clientsByPhone } = await supabase
-          .from('clientes')
-          .select('id, nombre, empresa, telefono')
-          .ilike('telefono', searchTerm)
-          .limit(3)
+          .select('id, nombre, apellido, empresa, telefono')
+          .limit(20)
 
         const { data: jobs } = await supabase
           .from('trabajos')
-          .select('id, cliente_id,vehiculo, patente, status, numero_orden, clientes(nombre, apellido)')
-          .ilike('vehiculo', searchTerm)
-          .limit(3)
+          .select('id, cliente_id, vehiculo, patente, numero_orden, clientes(nombre, apellido)')
+          .limit(20)
 
-        const seen = new Set<string>()
         const results: any[] = []
         
-        const allClients = [...(clients || []), ...(clientsByPhone || [])]
-        allClients.forEach((c: any) => {
-          if (!seen.has(c.id)) {
-            seen.add(c.id)
-            results.push({
+        if (clients) {
+          clients
+            .filter((c: any) => {
+              const full = `${c.nombre || ''} ${c.apellido || ''} ${c.empresa || ''} ${c.telefono || ''}`.toLowerCase()
+              return full.includes(q)
+            })
+            .slice(0, 5)
+            .forEach((c: any) => results.push({
               id: c.id,
               type: 'cliente',
-              title: c.nombre,
+              title: `${c.nombre || ''} ${c.apellido || ''}`.trim(),
               subtitle: c.empresa || c.telefono || 'Cliente',
               link: `/clientes/${c.id}`
-            })
-          }
-        })
-
-        if (jobs) {
-          jobs.forEach((j: any) => results.push({
-            id: j.id,
-            type: 'trabajo',
-            title: j.numero_orden ? `Orden #${j.numero_orden} - ${j.vehiculo}` : j.vehiculo,
-            subtitle: `${j.clientes?.nombre || ''} ${j.clientes?.apellido || ''}`.trim() || 'Sin cliente',
-            link: `/trabajos`
-          }))
+            }))
         }
 
-        setSearchResults(results.slice(0, 6))
+        if (jobs) {
+          jobs
+            .filter((j: any) => {
+              const full = `${j.vehiculo || ''} ${j.patente || ''} ${j.numero_orden || ''} ${j.clientes?.nombre || ''} ${j.clientes?.apellido || ''}`.toLowerCase()
+              return full.includes(q)
+            })
+            .slice(0, 5)
+            .forEach((j: any) => results.push({
+              id: j.id,
+              type: 'trabajo',
+              title: j.numero_orden ? `Orden #${j.numero_orden} - ${j.vehiculo || ''}` : j.vehiculo || 'Trabajo',
+              subtitle: `${j.clientes?.nombre || ''} ${j.clientes?.apellido || ''}`.trim() || 'Sin cliente',
+              link: `/trabajos`
+            }))
+        }
+
+        setSearchResults(results.slice(0, 8))
       } catch (err) {
         console.error('Search error:', err)
       } finally {
         setIsSearching(false)
       }
-    }, 400)
+    }, 300)
 
     return () => clearTimeout(delayDebounceFn)
   }, [searchQuery, supabase])

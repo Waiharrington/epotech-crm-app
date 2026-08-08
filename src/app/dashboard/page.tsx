@@ -263,41 +263,52 @@ export default function DashboardPage() {
       try {
         const searchTerm = `%${searchQuery.trim()}%`
         
-        const { data: clients, error: errC } = await supabase
+        const { data: clients } = await supabase
           .from('clientes')
           .select('id, nombre, empresa, telefono')
-          .or(`nombre.ilike.${searchTerm},empresa.ilike.${searchTerm},telefono.ilike.${searchTerm}`)
+          .ilike('nombre', searchTerm)
           .limit(3)
 
-        const { data: jobs, error: errJ } = await supabase
+        const { data: clientsByPhone } = await supabase
+          .from('clientes')
+          .select('id, nombre, empresa, telefono')
+          .ilike('telefono', searchTerm)
+          .limit(3)
+
+        const { data: jobs } = await supabase
           .from('trabajos')
-          .select('id, cliente_id, vehiculo, patente, status, numero_orden, clientes(nombre)')
-          .or(`vehiculo.ilike.${searchTerm},patente.ilike.${searchTerm},numero_orden.ilike.${searchTerm}`)
+          .select('id, cliente_id,vehiculo, patente, status, numero_orden, clientes(nombre, apellido)')
+          .ilike('vehiculo', searchTerm)
           .limit(3)
 
+        const seen = new Set<string>()
         const results: any[] = []
         
-        if (clients) {
-          clients.forEach((c: any) => results.push({
-            id: c.id,
-            type: 'cliente',
-            title: c.nombre,
-            subtitle: c.empresa || c.telefono || 'Cliente',
-            link: `/clientes/${c.id}`
-          }))
-        }
+        const allClients = [...(clients || []), ...(clientsByPhone || [])]
+        allClients.forEach((c: any) => {
+          if (!seen.has(c.id)) {
+            seen.add(c.id)
+            results.push({
+              id: c.id,
+              type: 'cliente',
+              title: c.nombre,
+              subtitle: c.empresa || c.telefono || 'Cliente',
+              link: `/clientes/${c.id}`
+            })
+          }
+        })
 
         if (jobs) {
           jobs.forEach((j: any) => results.push({
             id: j.id,
             type: 'trabajo',
             title: j.numero_orden ? `Orden #${j.numero_orden} - ${j.vehiculo}` : j.vehiculo,
-            subtitle: j.clientes?.nombre || 'Sin cliente',
+            subtitle: `${j.clientes?.nombre || ''} ${j.clientes?.apellido || ''}`.trim() || 'Sin cliente',
             link: `/trabajos`
           }))
         }
 
-        setSearchResults(results)
+        setSearchResults(results.slice(0, 6))
       } catch (err) {
         console.error('Search error:', err)
       } finally {
